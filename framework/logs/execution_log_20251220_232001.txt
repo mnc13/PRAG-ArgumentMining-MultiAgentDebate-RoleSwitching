@@ -1,0 +1,49 @@
+1. Loading Data...
+   [CLAIM ID: 5f92a4cb04ded09dac378bc2_1]
+   Claim Text: Children under 18 are at much lower risk of severe symptoms or death from COVID-19 than older adults.
+
+2. Preprocessing & Extraction...
+   Extracted: Children under 18 are at much lower risk of severe symptoms or death from COVID-19 than older adults.
+
+3. Argument Mining (Decomposition)...
+   Using Groq GPT LLM Client (openai/gpt-oss-20b)...
+   Decomposed Premises:
+   - **Premise‑level decomposition of the claim**
+   - 1. **Definition of the age groups**
+   - 1.1. “Children under 18” means individuals whose age is **less than 18 years**.
+   - 1.2. “Older adults” means individuals whose age is **typically 65 years or older** (or, in some studies, 50 + years).
+   - 2. **Age is a risk factor for COVID‑19 severity and mortality**
+   - 2.1. Epidemiological data show that the **probability of developing severe symptoms** from SARS‑CoV‑2 infection **increases with age**.
+   - 2.2. Epidemiological data show that the **case‑fatality rate** for COVID‑19 **increases with age**.
+   - 3. **Empirical evidence for children’s lower risk**
+   - 3.1. Studies of COVID‑19 cases report that the **incidence of severe disease** among individuals < 18 years is **significantly lower** than among older adults.
+   - 3.2. Studies of COVID‑19 cases report that the **mortality rate** among individuals < 18 years is **significantly lower** than among older adults.
+   - 4. **Magnitude of the difference**
+   - 4.1. The reported risk ratios (or odds ratios) for severe outcomes in children vs. older adults are **substantially below 1** (e.g., < 0.1 or < 0.2).
+   - 4.2. The absolute difference in risk (e.g., 0.1 % vs. 5 %) is large enough that the term **“much lower”** is justified.
+   - 5. **Conclusion drawn from premises**
+   - 5.1. Because children < 18 years are younger than older adults and because age is positively correlated with risk, **children under 18 have a lower risk** of severe symptoms or death from COVID‑19.
+   - 5.2. The empirical data show that this lower risk is **significantly larger** than a trivial difference, supporting the qualifier **“much lower.”**
+   - These premises collectively support the claim that children under 18 are at a much lower risk of severe symptoms or death from COVID‑19 than older adults.
+
+4. Initial RAG Retrieval (New PubMed RAG)...
+Loading embedding model: sentence-transformers/all-MiniLM-L6-v2...
+Loading FAISS index from pubmed_faiss.index...
+Loading offsets from pubmed_meta_offsets.npy...
+   Retrieved 5 potential evidence items.
+   [0] Score: 0.7753 | Source: 33747533
+   [1] Score: 0.7717 | Source: 35895714
+   [2] Score: 0.7666 | Source: 34673675
+   [3] Score: 0.7649 | Source: 34538426
+   [4] Score: 0.7566 | Source: 34753538
+   Saved evidence_pool.json
+
+5. Evidence-First Debate (Shared Set Negotiation)...
+   Final Shared Evidence Set (2 items):
+   - 33747533: [New microbes and new infections 2021] Claims and reasons about mild COVID-19 in children.
+
+The elde...
+   - 35895714: [Proceedings of the National Academy of Sciences of the United States of America 2022] Risk of sever...
+   Saved shared_evidence.json
+
+6. Initializing Courtroom Simulation...

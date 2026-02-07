@@ -1,0 +1,57 @@
+1. Loading Data...
+   Loaded Claim (Random Selection): Ultraviolet light is associated with higher COVID-19 growth rates.
+
+2. Preprocessing & Extraction...
+   Extracted: Ultraviolet light is associated with higher COVID-19 growth rates.
+
+3. Argument Mining (Decomposition)...
+   Using Groq GPT LLM Client (openai/gpt-oss-20b)...
+   Decomposed Premises:
+   - **Premise‑level decomposition of the claim**
+   - 1. **UV light can be quantified.**
+   - - UV intensity is measured (e.g., via the UV index, spectral irradiance, or other standardized metrics).
+   - 2. **COVID‑19 growth rates can be quantified.**
+   - - Growth rates are expressed as the change in confirmed cases per unit time (e.g., daily or weekly percent increase).
+   - 3. **Data exist that pair UV measurements with COVID‑19 growth rates.**
+   - - Observational datasets (regional, national, or global) contain simultaneous records of UV levels and case counts over the same time periods.
+   - 4. **Statistical analysis shows a positive correlation.**
+   - - Calculated correlation coefficients (Pearson, Spearman, etc.) indicate that higher UV values tend to co‑occur with higher growth rates.
+   - 5. **The correlation is statistically significant.**
+   - - P‑values or confidence intervals demonstrate that the observed association is unlikely to be due to random chance.
+   - 6. **The association persists after controlling for confounders.**
+   - - Multivariate regression, propensity‑score matching, or other methods account for variables such as temperature, humidity, population density, public‑health interventions, and still find a positive relationship.
+   - 7. **The claim is about association, not causation.**
+   - - The language “associated with” acknowledges that UV light may correlate with growth rates but does not assert that UV causes the increase.
+   - These premises together underpin the statement: *“Ultraviolet light is associated with higher COVID‑19 growth rates.”*
+
+4. Initial RAG Retrieval (New PubMed RAG)...
+Loading embedding model: sentence-transformers/all-MiniLM-L6-v2...
+Loading FAISS index from pubmed_faiss.index...
+Loading offsets from pubmed_meta_offsets.npy...
+   Retrieved 5 potential evidence items.
+   [0] Score: 0.7481 | Source: 33323525
+   [1] Score: 0.7292 | Source: 33323525
+   [2] Score: 0.7222 | Source: 32573919
+   [3] Score: 0.6717 | Source: 33077792
+   [4] Score: 0.6716 | Source: 33834487
+   Saved evidence_pool.json
+
+5. Evidence-First Debate (Shared Set Negotiation)...
+   Final Shared Evidence Set (2 items):
+   - 33323525: [Proceedings of the National Academy of Sciences of the United States of America 2021] Global eviden...
+   - 33323525: [Proceedings of the National Academy of Sciences of the United States of America 2021] Global eviden...
+   Saved shared_evidence.json
+
+6. Expertise Extraction & Persona Assignment...
+   Generated 4 dynamic expertise roles
+   - 1. Epidemiologist (Dr. Alex Martinez)
+   - 2. Environmental Epidemiologist (Dr. Maya Patel)
+   - 3. Virologist (Dr. Li Wei)
+   - 4. Critical Analyst (Dr. Casey Morgan)
+   Assigned Personas (Ready for MAD):
+   - Agent 1: Epidemiologist using gpt-4o-mini (openai)
+   - Agent 2: Environmental Epidemiologist using llama-3.1-8b-instant (groq)
+   - Agent 3: Virologist using openai/gpt-oss-20b (groq)
+   - Agent 4: Critical Analyst using qwen/qwen3-32b (groq)
+
+7. Initializing Multi-Agent Debate System...
