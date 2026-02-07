@@ -1,0 +1,8 @@
+sentence-transformers
+faiss-cpu
+google-generativeai
+python-dotenv
+numpy
+openai>=1.0.0
+requests
+groq
