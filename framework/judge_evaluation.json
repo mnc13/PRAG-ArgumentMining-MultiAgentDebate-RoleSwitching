@@ -6,20 +6,20 @@
       "model": "meta-llama/llama-4-maverick-17b-128e-instruct",
       "proponent_scores": {
         "evidence_quality": 7,
-        "logical_consistency": 8,
-        "persuasiveness": 7,
-        "scientific_accuracy": 6,
-        "total": 28
+        "logical_consistency": 6,
+        "persuasiveness": 6,
+        "scientific_accuracy": 5,
+        "total": 24
       },
       "opponent_scores": {
         "evidence_quality": 9,
         "logical_consistency": 9,
-        "persuasiveness": 8.5,
+        "persuasiveness": 9,
         "scientific_accuracy": 9,
-        "total": 35.5
+        "total": 36
       },
       "winner": "opponent",
-      "reasoning": "The opponent won this debate because they effectively challenged the proponent's claim by questioning the accuracy of the antigen tests, rather than just their speed. The opponent presented a more nuanced argument by citing a systematic review and meta-analysis, which added credibility to their position. This shifted the focus from the test's speed to its reliability, undermining the proponent's assertion."
+      "reasoning": "The opponent won this debate because they successfully challenged the proponent's claim by pointing out that the evidence cited did not directly support the assertion that a COVID-19 test can identify coronavirus proteins in \"a few seconds\". The opponent effectively highlighted that the evidence only supported results being delivered in \"minutes\", not seconds. This discrepancy undermined the proponent's argument."
     },
     {
       "judge_name": "Evidence Quality Expert",
@@ -52,20 +52,20 @@
         "total": 28
       },
       "opponent_scores": {
-        "evidence_quality": 8,
-        "logical_consistency": 9,
-        "persuasiveness": 8,
-        "scientific_accuracy": 9,
-        "total": 34
+        "evidence_quality": 6,
+        "logical_consistency": 7,
+        "persuasiveness": 6,
+        "scientific_accuracy": 5,
+        "total": 24
       },
-      "winner": "opponent",
-      "reasoning": "The opponent won the debate by effectively challenging the accuracy of the proponent's claim regarding the rapidity of COVID-19 tests. They emphasized that while antigen tests can deliver results quickly, the overall diagnostic accuracy is variable and not consistently reliable, citing a systematic review to support their argument. This reliance on evidence from peer-reviewed literature strengthens the opponent's position, highlighting the need for caution in interpreting rapid test results."
+      "winner": "proponent",
+      "reasoning": "The proponent won the debate by effectively highlighting the advancements in rapid antigen testing technologies that allow for quick identification of coronavirus proteins, emphasizing the significant reduction in diagnostic time compared to traditional methods. While the opponent raised valid concerns about the specific timeframe of \"a few seconds,\" the proponent's arguments were grounded in the established efficacy and speed of these tests, which are widely recognized and supported by scientific evidence. Thus, the proponent's focus on the rapid nature of antigen tests resonated more strongly in the context of the debate."
     }
   ],
   "aggregate_scores": {
-    "proponent": 84,
-    "opponent": 97.5
+    "proponent": 80,
+    "opponent": 88
   },
   "provisional_winner": "opponent",
-  "confidence": 0.074
+  "confidence": 0.048
 }
