@@ -25,11 +25,25 @@ def main():
     os.makedirs(logs_dir, exist_ok=True)
 
     # 1. Determine which claim to process (Serial Processing)
-    processed_claims_path = f"{base_dir}/framework/processed_claims.txt"
+    # 1. Determine which claim to process (Serial Processing)
+    # Track progress by reading existing verdicts
+    processed_claims_path = f"{base_dir}/framework/all_verdicts.jsonl"
     processed_ids = set()
+    
     if os.path.exists(processed_claims_path):
-        with open(processed_claims_path, "r", encoding="utf-8") as f:
-            processed_ids = set(line.strip() for line in f if line.strip())
+        try:
+            with open(processed_claims_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    if line.strip():
+                        try:
+                            record = json.loads(line)
+                            # Support both string and int IDs
+                            if 'claim_id' in record:
+                                processed_ids.add(str(record['claim_id']))
+                        except json.JSONDecodeError:
+                            continue
+        except Exception as e:
+            print(f"Warning: Could not read existing verdicts: {e}")
 
     print("1. Loading Data...")
     loader = DataLoader(data_dir)
@@ -170,11 +184,7 @@ def main():
         with open(verdicts_path, "a", encoding="utf-8") as f:
             f.write(json.dumps(record) + "\n")
             
-        with open(processed_claims_path, "a", encoding="utf-8") as f:
-            f.write(f"{input_claim.id}\n")
-            
         log(f"\n   [SAVED] Verdict appended to {verdicts_path}")
-        log(f"   [UPDATED] Claim {input_claim.id} marked as processed.")
         
     finally:
         sys.stdout = dual_logger.terminal
