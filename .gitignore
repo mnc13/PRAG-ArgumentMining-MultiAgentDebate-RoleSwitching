@@ -167,3 +167,14 @@ framework/pubmed_faiss.index
 framework/pubmed_covid_2020_2024_edat.jsonl.gz
 framework/pubmed_covid_2020_2024_edat_upto_2024.jsonl.gz
 framework/pubmed_meta.jsonl
+
+framework/prag_history.json
+framework/debate_transcript.json
+framework/debate_transcript_switched.json
+framework/role_switch_report.json
+framework/judge_evaluation.json
+framework/self_reflection.json
+framework/final_verdict.json
+
+
+

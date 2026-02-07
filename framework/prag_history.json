@@ -4,189 +4,189 @@
   "history": [
     {
       "round": 1,
-      "query": "Since there's no specific debate context provided, I'll create a general template for a search query that can be adapted based on the topic or subject of interest.\n\n## Step 1: Identify the Subject of Interest\nTo formulate a precise search query, we first need to identify the subject or topic of the debate. However, since the debate context is not provided, let's assume a hypothetical topic, such as \"climate change mitigation strategies.\"\n\n## Step 2: Determine the Type of Evidence Needed\nThe agent request is for \"latest evidence,\" indicating the need for recent, peer-reviewed, or high-quality research on the topic.\n\n## Step 3: Formulate the Search Query\nFor a topic like \"climate change mitigation strategies,\" a search query that retrieves the latest evidence could involve using specific keywords related to the topic and filters for recent publications.\n\n## Step 4: Example Search Query\nAn example search query could be: \"(climate change mitigation strategies) AND (effectiveness OR impact) AND (2020:2023[Publication Date])\". This query looks for documents discussing climate change mitigation strategies, their effectiveness or impact, published between 2020 and 2023.\n\n## Step 5: Adapt for General Use\nWithout a specific topic, a more general search query template could be: \"(topic of interest) AND (latest OR recent OR current) AND (evidence OR research OR study)\".\n\nThe final answer is: \n\"(topic) AND (latest OR recent) AND (evidence OR research)\"",
+      "query": "Since there's no specific debate context provided, I'll create a general query that can be adapted to various topics. To retrieve the \"latest evidence\" on a given subject, one could use a search query like:\n\n\"Search for the most recent peer-reviewed articles or systematic reviews on [topic of interest] published within the last 2-5 years.\"\n\nHowever, without a specific topic, a more generic query would be: \n\"systematic reviews OR meta-analysis published last 5 years\"\n\nThis can be further refined based on the actual topic of interest.",
       "context": "Phase 1 - Scientific Proponent",
       "num_results": 3,
       "evidence_ids": [
+        "36351782",
         "37178780",
-        "34375298",
-        "38568954"
+        "36351782"
       ]
     },
     {
       "round": 1,
-      "query": "To retrieve the most relevant evidence, here's a precise search query:\n\n(\"SARS-CoV-2\" OR \"novel coronavirus\") AND (\"protein-protein interactions\" OR \"viral protein targets\") AND (\"antiviral drug development\" OR \"drug repurposing\") with a filter for recent publications (e.g., 2020-2024). \n\nAlternatively, a simpler query could be: (\"SARS-CoV-2 protein targets\" AND \"antiviral therapy\") with a filter for latest evidence.",
+      "query": "Here is a precise search query to retrieve the most relevant scientific evidence:\n\n\"(COVID-19 OR SARS-CoV-2) AND (antigen test* OR rapid diagnostic test*) AND (sensitivity OR specificity OR accuracy) AND (point-of-care OR POC) AND (latest OR recent OR 2020:2023[Publication Date])\"\n\nThis search query can be further refined to: \n\"(COVID-19 OR SARS-CoV-2) AND (rapid antigen test* OR lateral flow assay) AND (2022:2023[Publication Date])\"\n\nBoth queries aim to capture the latest evidence on COVID-19 antigen tests, focusing on their performance, application at the point of care, and recent publication dates.",
       "context": "Phase 1 - Scientific Opponent",
       "num_results": 3,
       "evidence_ids": [
-        "32916958",
-        "32998992",
-        "38397104"
+        "34596082",
+        "33760236",
+        "32353857"
       ]
     },
     {
       "round": 2,
-      "query": "Here is a precise search query to retrieve relevant scientific evidence:\n\n(\"SARS-CoV-2\" OR \"COVID-19\") AND (\"antiviral therapies\" OR \"drug targets\") AND (\"host cell proteins\" OR \"protein-protein interactions\") AND (\"2022\" OR \"2023\" OR \"2024\")\n\nThis search query is designed to retrieve the latest evidence on the interactions between SARS-CoV-2 and host cell proteins, as well as the latest developments in antiviral therapies and drug targets, focusing on recent publications (2022-2024).",
+      "query": "Here is a precise search query to retrieve relevant scientific evidence:\n\n(\"COVID-19 antigen tests\" OR \"rapid diagnostic tests\") AND (\"diagnostic accuracy\" OR \"sensitivity and specificity\") AND (\"SARS-CoV-2\" OR \"coronavirus proteins\") with a filter for recent publications (e.g., within the last 2 years).\n\nAlternatively, a more concise search query could be: (\"COVID-19 antigen tests\" AND \"diagnostic accuracy\") AND (\"SARS-CoV-2\" OR \"coronavirus proteins\") with a filter for recent publications.",
       "context": "Phase 2 - Scientific Proponent",
       "num_results": 3,
       "evidence_ids": [
-        "33253656",
-        "34429257",
-        "32998992"
-      ]
-    },
-    {
-      "round": 2,
-      "query": "Here is a concise search query to retrieve the most relevant evidence:\n\n(\"SARS-CoV-2\" OR \"COVID-19\") AND (\"antiviral drugs\" OR \"protein-protein interactions\") AND (\"host cell proteins\" OR \"cellular targets\") with a filter for recent publications (e.g., 2020-2023).\n\nAlternatively, a simpler query could be: (\"SARS-CoV-2\" AND \"host cell proteins\") AND \"antiviral therapy\" with a filter for recent publications.",
-      "context": "Phase 2 - Scientific Opponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "34604978",
-        "34429257",
-        "32998992"
-      ]
-    },
-    {
-      "round": 2,
-      "query": "Here is a precise search query to retrieve relevant scientific evidence:\n\n(\"SARS-CoV-2\" OR \"COVID-19\") AND (\"host cell protein interactions\" OR \"protein-protein interactions\") AND (\"binding affinity\" OR \"mechanism of action\") AND (\"drug targets\" OR \"therapeutic targets\").\n\nThis search query can be further simplified to: (\"SARS-CoV-2 host cell protein interactions\" AND \"drug targets\").\n\nBoth queries aim to retrieve studies that examine the interactions between SARS-CoV-2 proteins and host cell proteins, as well as the binding affinities and mechanisms of action for both the virus and related drugs.",
-      "context": "Phase 2 - Scientific Opponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "38370514",
-        "38370514",
-        "33423554"
-      ]
-    },
-    {
-      "round": 3,
-      "query": "Here is a precise search query to retrieve the most relevant scientific evidence:\n\n(\"SARS-CoV-2\" OR \"COVID-19\") AND (\"antiviral therapies\" OR \"drug targets\") AND (\"host cell proteins\" OR \"protein-protein interactions\") AND (\"recent studies\" OR \"latest evidence\")\n\nThis search query is designed to capture the latest research on the interactions between SARS-CoV-2 and host cell proteins, as well as the potential for antiviral therapies to target similar proteins. \n\nAlternatively, a more concise version: (\"SARS-CoV-2\" AND \"host cell proteins\") AND (\"antiviral therapies\" OR \"drug targets\") \n\nBoth queries should yield relevant results from recent scientific literature.",
-      "context": "Phase 3 - Scientific Proponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "38370514",
-        "33423554",
-        "38370514"
-      ]
-    },
-    {
-      "round": 3,
-      "query": "To retrieve the latest evidence relevant to the debate, a precise search query could be: \"Investigate the latest research on SARS-CoV-2 protein interactions with host cell proteins and the development of antiviral drugs targeting these interactions, focusing on studies published within the last two years.\" Alternatively, a concise query could be: \"SARS-CoV-2 host cell protein interactions and antiviral drug targets latest research.\"",
-      "context": "Phase 3 - Scientific Opponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "34429257",
-        "34604978",
-        "32283498"
-      ]
-    },
-    {
-      "round": 4,
-      "query": "Here is a precise search query to retrieve the most relevant scientific evidence:\n\n(\"SARS-CoV-2\" OR \"COVID-19\") AND (\"antiviral therapies\" OR \"protein-protein interactions\") AND (\"host cell proteins\" OR \"viral targets\") AND (\"drug development\" OR \"therapeutic strategies\") with a filter for recent publications (e.g., within the last 2 years).\n\nAlternatively, a more concise query could be: (\"SARS-CoV-2\" AND \"host cell proteins\") AND (\"antiviral drug development\" OR \"protein-protein interactions\") with a filter for recent publications.",
-      "context": "Phase 4 - Scientific Proponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "32998992",
-        "34604978",
-        "34429257"
-      ]
-    },
-    {
-      "round": 4,
-      "query": "Here is a precise search query to retrieve the latest relevant scientific evidence:\n\n`(SARS-CoV-2 OR COVID-19) AND (protein-protein interactions OR antiviral drug targets) AND (host cell proteins OR cellular processes) AND (latest OR recent OR 2023 OR 2024)`\n\nThis search query is designed to capture the most recent studies that investigate the interactions between SARS-CoV-2 and host cell proteins, as well as the development of antiviral drugs that target the virus without affecting human cellular processes.",
-      "context": "Phase 4 - Scientific Opponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "32283498",
-        "33253656",
-        "34198320"
-      ]
-    },
-    {
-      "round": 4,
-      "query": "Here is a precise search query to retrieve relevant scientific evidence:\n\n(\"SARS-CoV-2 host cell proteins\" OR \"SARS-CoV-2 interactome\") AND (\"existing drugs\" OR \"drug-target interactions\") AND (\"DrugBank\" OR \"Protein Data Bank\") AND (\"binding affinity\" OR \"mechanism of action\").\n\nAlternatively, a more concise query: (\"SARS-CoV-2 host proteins\" AND \"drug-target interactions\") site:drugbank.ca OR rcsb.org.",
-      "context": "Phase 4 - Scientific Opponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "33230386",
-        "33605735",
-        "33269341"
-      ]
-    },
-    {
-      "round": 5,
-      "query": "To retrieve the latest evidence relevant to the debate on whether drugs target the same proteins in human cells as the novel coronavirus, a precise search query could be: \"Investigate the latest research on SARS-CoV-2 and host cell protein interactions, focusing on antiviral drug development and protein-protein interactions between SARS-CoV-2 and human host proteins published in the last 2 years.\" \n\nA more concise search query could be formulated as: \"(SARS-CoV-2 OR COVID-19) AND (antiviral drugs OR protein-protein interactions) AND (host cell proteins OR human proteins) AND (recent OR latest) publications.\" \n\nFor a database search, this can be simplified to: `(SARS-CoV-2 OR COVID-19) AND (antiviral therapy OR host-virus interactions)`.",
-      "context": "Phase 5 - Scientific Proponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "38370514",
-        "38370514",
-        "33309308"
-      ]
-    },
-    {
-      "round": 5,
-      "query": "Here is a precise search query to retrieve the most relevant scientific evidence:\n\n(\"SARS-CoV-2\" OR \"COVID-19\") AND (\"protein-protein interactions\" OR \"host cell proteins\") AND (\"antiviral drugs\" OR \"therapeutic targets\") AND (\"2021\" OR \"2022\" OR \"2023\"[Publication Date])\n\nThis query focuses on recent studies (2019 onwards, with specific dates for the most recent years) that investigate the interactions between SARS-CoV-2 and host cell proteins, as well as research on antiviral drugs and therapeutic targets, to provide the latest evidence relevant to the debate.",
-      "context": "Phase 5 - Scientific Opponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "33253656",
-        "32692266",
-        "34471255"
-      ]
-    },
-    {
-      "round": 1,
-      "query": "Since there's no specific debate context provided, I'll create a general approach to formulating a search query for \"latest evidence.\" To retrieve the most relevant and recent scientific evidence on a given topic, one could use a search query like: \"latest research evidence on [topic] since 2022\" or simply \"current evidence on [topic].\" \n\nHowever, without a specific topic, a generic search query could be: \n\"( Systematic review OR meta-analysis ) AND ( current OR recent OR latest ) AND evidence\"\n\nThis query focuses on retrieving systematic reviews or meta-analyses, which are considered high levels of evidence, and filters for recent or current evidence. \n\nIf you provide the specific debate topic, I can refine this further.",
-      "context": "Phase 1 - Scientific Opponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "37178780",
-        "34375298",
-        "38907198"
-      ]
-    },
-    {
-      "round": 1,
-      "query": "Here is a precise search query to retrieve relevant scientific evidence:\n\n(\"SARS-CoV-2 host protein interactions\" OR \"COVID-19 therapeutic targets\") AND (\"existing drugs\" OR \"current treatments\") AND ((\"2022\" OR \"2023\") OR (\"last year\" OR \"latest studies\"))\n\nAlternatively, a more concise version:\n(\"SARS-CoV-2 protein interactions\" AND \"therapeutic targets\") AND (\"recent studies\" OR \"latest evidence\")",
-      "context": "Phase 1 - Scientific Proponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "32998992",
-        "32400323",
-        "32735546"
-      ]
-    },
-    {
-      "round": 2,
-      "query": "Here is a precise search query to retrieve the most relevant scientific evidence:\n\n(\"SARS-CoV-2\" OR \"COVID-19\") AND (\"drug repurposing\" OR \"therapeutic targets\") AND (\"protein-protein interactions\" OR \"host-virus interactions\") AND ((\"latest research\" OR \"recent studies\") OR (\"2022\" OR \"2023\"))\n\nThis search query can be simplified to: \n(\"SARS-CoV-2\" OR \"COVID-19\") AND (\"drug repurposing\" OR \"therapeutic targets\") AND (\"protein-protein interactions\" OR \"host-virus interactions\") \n\nwith a filter on publication date to include only the latest evidence (e.g., published in the last 2 years).",
-      "context": "Phase 2 - Scientific Opponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "32998992",
-        "35895698",
-        "32735546"
-      ]
-    },
-    {
-      "round": 2,
-      "query": "Here is a precise search query to retrieve relevant scientific evidence:\n\n(\"SARS-CoV-2\" OR \"COVID-19\") AND (\"drug targeting\" OR \"therapeutic targets\" OR \"protein-protein interactions\") AND (\"existing drugs\" OR \"repurposed drugs\") with a filter for recent publications (e.g., 2020-2023).\n\nAlternatively, a more concise query could be: (\"SARS-CoV-2\" AND \"drug targeting\") AND (\"existing drugs\" OR \"repurposing\") with a filter for recent publications.",
-      "context": "Phase 2 - Scientific Proponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "32735546",
-        "34783553",
+        "33525250",
+        "35341949",
         "33197230"
       ]
     },
     {
       "round": 2,
-      "query": "Here is a precise search query to retrieve relevant scientific evidence:\n\n\"(SARS-CoV-2 OR COVID-19) AND (protein-protein interactions OR host-pathogen interactions) AND (existing drugs OR repurposed drugs OR therapeutic targets) AND (clinical trials OR peer-reviewed studies)\"\n\nAlternatively, a more concise version:\n\"(SARS-CoV-2 OR COVID-19) AND (protein-protein interactions) AND (drug targets OR therapeutic targets)\" \n\nThis search query combines relevant keywords related to SARS-CoV-2, protein-protein interactions, and existing drugs or therapeutic targets, along with filters for clinical trials and peer-reviewed studies, to retrieve the most relevant evidence.",
+      "query": "Here is a precise search query to retrieve relevant scientific evidence:\n\n\"(COVID-19 OR SARS-CoV-2) AND (antigen test* OR rapid diagnosti* test*) AND (sensitivity OR specificity OR accuracy) AND (point-of-care OR rapid test*)\"\n\nThis search query is designed to capture the latest evidence on the accuracy and reliability of rapid antigen tests for COVID-19, particularly those that can deliver results in a few seconds. To retrieve the latest evidence, you can further filter the results by publication date, selecting the most recent studies.",
+      "context": "Phase 2 - Scientific Opponent",
+      "num_results": 3,
+      "evidence_ids": [
+        "34596082",
+        "35463027",
+        "35463027"
+      ]
+    },
+    {
+      "round": 2,
+      "query": "Here is a precise search query to retrieve relevant scientific evidence:\n\n(\"rapid COVID-19 test\" OR \"COVID-19 antigen test\") AND (sensitivity OR specificity OR \"false-positive rate\") AND (\"clinical trial\" OR \"validation study\") AND (protocol OR \"raw data\").\n\nAlternatively, a more concise version: \n(\"COVID-19 antigen test\" AND \"clinical trial protocol\") OR (\"rapid COVID-19 test validation study results\").",
+      "context": "Phase 2 - Scientific Opponent",
+      "num_results": 3,
+      "evidence_ids": [
+        "33895839",
+        "35463027",
+        "37965606"
+      ]
+    },
+    {
+      "round": 3,
+      "query": "To retrieve the most relevant evidence, the search query can be formulated as: \"(COVID-19 antigen tests OR rapid diagnostic tests) AND (diagnostic accuracy OR sensitivity AND specificity) AND (systematic review OR meta-analysis)\". This query can be further refined to include recent publications by adding a filter for the publication date, such as: \"(COVID-19 antigen tests OR rapid diagnostic tests) AND (diagnostic accuracy OR sensitivity AND specificity) AND (systematic review OR meta-analysis) AND (published in the last 2 years)\".",
+      "context": "Phase 3 - Scientific Proponent",
+      "num_results": 3,
+      "evidence_ids": [
+        "33666912",
+        "35341949",
+        "33851942"
+      ]
+    },
+    {
+      "round": 3,
+      "query": "Here is a precise search query to retrieve relevant scientific evidence:\n\n\"(COVID-19 OR SARS-CoV-2) AND (rapid antigen test OR point-of-care test) AND (diagnostic accuracy OR sensitivity OR specificity) AND (latest OR recent OR 2022 OR 2023)\" \n\nThis search query can be further simplified to: \"(COVID-19 OR SARS-CoV-2) AND (rapid antigen test OR point-of-care test) AND diagnostic accuracy\" to retrieve the most relevant evidence.",
+      "context": "Phase 3 - Scientific Opponent",
+      "num_results": 3,
+      "evidence_ids": [
+        "38907198",
+        "32353857",
+        "33197230"
+      ]
+    },
+    {
+      "round": 4,
+      "query": "Here is a precise search query to retrieve relevant scientific evidence:\n\n\"(COVID-19 OR SARS-CoV-2) AND (rapid antigen test OR point-of-care test) AND (diagnostic accuracy OR sensitivity OR specificity) AND ( systematic review OR meta-analysis)\" \n\nThis search query can be further limited to recent publications by adding a date filter (e.g., published in the last 12-24 months).",
+      "context": "Phase 4 - Scientific Proponent",
+      "num_results": 3,
+      "evidence_ids": [
+        "37202770",
+        "33525250",
+        "35341949"
+      ]
+    },
+    {
+      "round": 4,
+      "query": "Here is a precise search query to retrieve relevant scientific evidence:\n\n(\"COVID-19 test\" OR \"rapid antigen test\") AND (\"diagnostic accuracy\" OR \"sensitivity\" OR \"specificity\") AND (\"SARS-CoV-2\" OR \"coronavirus proteins\") \n\nThis query can be further limited to recent publications by adding a filter for publication date, e.g., \"published in the last 2 years\". \n\nHere is an example: ((\"COVID-19 test\" OR \"rapid antigen test\") AND (\"diagnostic accuracy\" OR \"sensitivity\" OR \"specificity\") AND (\"SARS-CoV-2\" OR \"coronavirus proteins\")) AND (\"2022\"[Date] : \"3000\"[Date])",
+      "context": "Phase 4 - Scientific Opponent",
+      "num_results": 3,
+      "evidence_ids": [
+        "33312801",
+        "32998992",
+        "33525250"
+      ]
+    },
+    {
+      "round": 4,
+      "query": "Here is a precise search query to retrieve relevant scientific evidence:\n\n(\"rapid antigen test\" OR \"lateral flow assay\") AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"sensitivity\" OR \"specificity\") AND (\"PCR\" OR \"RT-PCR\") AND (\"validation\" OR \"accuracy\") in peer-reviewed journals.\n\nAlternatively, a more concise version: (\"rapid antigen test\" AND \"COVID-19\") AND (\"sensitivity\" AND \"specificity\") AND (\"PCR comparison\").",
+      "context": "Phase 4 - Scientific Opponent",
+      "num_results": 3,
+      "evidence_ids": [
+        "35463027",
+        "34596082",
+        "35463027"
+      ]
+    },
+    {
+      "round": 5,
+      "query": "Here is a precise search query to retrieve relevant scientific evidence:\n\n\"(COVID-19 OR SARS-CoV-2) AND (rapid antigen test OR point-of-care test) AND (diagnostic accuracy OR sensitivity OR specificity) AND ( systematic review OR meta-analysis)\"\n\nThis search query combines relevant keywords related to COVID-19 testing, diagnostic accuracy, and study design to retrieve the latest evidence on the topic. \n\nAlternatively, a simpler query could be: \"(COVID-19 OR SARS-CoV-2) AND (rapid antigen test accuracy)\" \n\nBoth queries can be used to search databases such as PubMed or Cochrane Library to retrieve the most recent and relevant scientific evidence.",
+      "context": "Phase 5 - Scientific Proponent",
+      "num_results": 3,
+      "evidence_ids": [
+        "37965606",
+        "33666912",
+        "33197230"
+      ]
+    },
+    {
+      "round": 5,
+      "query": "Here is a precise search query to retrieve the most relevant scientific evidence:\n\n(\"rapid antigen test\" OR \"point-of-care test\") AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"diagnostic accuracy\" OR \"sensitivity\" OR \"specificity\") AND (\"2022\" OR \"2023\" OR \"2024\"[Publication Date])\n\nThis search query is designed to retrieve recent studies (published in 2022 or later) that focus on the diagnostic accuracy of rapid antigen tests for COVID-19, which is the central topic of the debate.",
+      "context": "Phase 5 - Scientific Opponent",
+      "num_results": 3,
+      "evidence_ids": [
+        "32353857",
+        "34596082",
+        "35463027"
+      ]
+    },
+    {
+      "round": 1,
+      "query": "Since there's no specific debate context provided, I'll create a general template for a search query that can be adapted based on the topic of interest.\n\nFor a generic \"latest evidence\" request, a precise search query could be: \n\"Search for the most recent peer-reviewed articles or systematic reviews on [topic of interest] published within the last 5 years, prioritizing sources from reputable scientific databases such as PubMed, Scopus, or Web of Science.\"\n\nHowever, without a specific topic, here's a placeholder search query:\n`((\"systematic review\" OR \"meta-analysis\") AND (\"latest\" OR \"recent\")) AND [topic]`\n\nYou would replace `[topic]` with the specific subject or issue being debated.\n\nExample Search Query: \nIf the topic is \"climate change,\" the search query could be: \n`((\"systematic review\" OR \"meta-analysis\") AND (\"latest\" OR \"recent\")) AND \"climate change\"`\n\nThis query seeks recent systematic reviews or meta-analyses related to climate change, aiming to find the latest evidence.",
+      "context": "Phase 1 - Scientific Opponent",
+      "num_results": 3,
+      "evidence_ids": [
+        "37178780",
+        "37178780",
+        "34375298"
+      ]
+    },
+    {
+      "round": 1,
+      "query": "Here is a precise search query to retrieve relevant scientific evidence:\n\n\"((COVID-19 antigen test OR rapid antigen test) AND (diagnostic accuracy OR sensitivity OR specificity)) AND (systematic review OR meta-analysis) AND (latest OR recent OR 2022 OR 2023)\"\n\nAlternatively, a more concise version:\n\n\"(COVID-19 antigen test AND diagnostic accuracy) AND (systematic review OR meta-analysis)\"\n\nThis search query is designed to retrieve the latest evidence on the diagnostic accuracy of COVID-19 antigen tests, specifically systematic reviews and meta-analyses, which is in line with the evidence cited by the Scientific Opponent (Evidence 6 and Evidence 14).",
+      "context": "Phase 1 - Scientific Proponent",
+      "num_results": 3,
+      "evidence_ids": [
+        "35597369",
+        "35463027",
+        "32659413"
+      ]
+    },
+    {
+      "round": 2,
+      "query": "Here is a precise search query to retrieve the most relevant scientific evidence:\n\n\"((COVID-19 OR SARS-CoV-2) AND (rapid antigen test* OR lateral flow assay*)) AND (diagnostic accuracy OR sensitivity OR specificity) AND (meta-analysis OR systematic review)\"\n\nThis search query is designed to retrieve recent studies on the diagnostic accuracy of rapid antigen tests for COVID-19, including systematic reviews and meta-analyses. \n\nAlternatively, a simpler query can be: \"(COVID-19 rapid antigen test diagnostic accuracy) AND (systematic review OR meta-analysis)\"",
+      "context": "Phase 2 - Scientific Opponent",
+      "num_results": 3,
+      "evidence_ids": [
+        "35463027",
+        "34596082",
+        "32659413"
+      ]
+    },
+    {
+      "round": 2,
+      "query": "Here is a precise search query to retrieve the latest relevant scientific evidence:\n\n\"(COVID-19 OR SARS-CoV-2) AND (rapid antigen test* OR lateral flow assay*) AND (diagnostic accuracy OR sensitivity OR specificity) AND (meta-analysis OR systematic review)\" with a filter for recent publications (e.g., published in the last 2 years).\n\nThis search query is designed to retrieve the most recent and relevant evidence on the diagnostic accuracy of rapid antigen tests for COVID-19, focusing on systematic reviews and meta-analyses.",
       "context": "Phase 2 - Scientific Proponent",
       "num_results": 3,
       "evidence_ids": [
-        "35694045",
-        "33083826",
-        "32591771"
+        "35463027",
+        "34596082",
+        "32659413"
+      ]
+    },
+    {
+      "round": 2,
+      "query": "Here is a precise search query to retrieve relevant scientific evidence:\n(\"rapid antigen test\" OR \"lateral flow assay\") AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"sensitivity\" OR \"specificity\" OR \"accuracy\") AND (\"PCR\" OR \"RT-PCR\") AND (\"false negative\" OR \"viral load\")\n Filter results to include peer-reviewed studies and clinical trials. \n\nAlternatively, a more concise version:\n(\"rapid antigen test\" AND \"COVID-19\") AND (\"sensitivity\" OR \"specificity\" OR \"comparison with PCR\")",
+      "context": "Phase 2 - Scientific Proponent",
+      "num_results": 3,
+      "evidence_ids": [
+        "35463027",
+        "35463027",
+        "36633370"
       ]
     }
   ]

@@ -14,15 +14,44 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def main():
-    base_dir = "d:/thesis/checkcovid/Check-COVID"
+    # Use current working directory for output path
+    base_dir = os.getcwd()
+    # Keep data dir as is (assuming external data location)
     data_dir = "d:/thesis/checkcovid/Check-COVID/Check-COVID"
     
     # Create a custom logger
     from datetime import datetime
     logs_dir = f"{base_dir}/framework/logs"
     os.makedirs(logs_dir, exist_ok=True)
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    log_filename = f"{logs_dir}/execution_log_{timestamp}.txt"
+
+    # 1. Determine which claim to process (Serial Processing)
+    processed_claims_path = f"{base_dir}/framework/processed_claims.txt"
+    processed_ids = set()
+    if os.path.exists(processed_claims_path):
+        with open(processed_claims_path, "r", encoding="utf-8") as f:
+            processed_ids = set(line.strip() for line in f if line.strip())
+
+    print("1. Loading Data...")
+    loader = DataLoader(data_dir)
+    # Load a sufficient batch to find the next unprocessed claim
+    claims = loader.load_claims(limit=5000)
+    
+    if not claims:
+        print("No claims found in source.")
+        return
+
+    input_claim = None
+    for claim in claims:
+        if str(claim.id) not in processed_ids:
+            input_claim = claim
+            break
+            
+    if not input_claim:
+        print("All loaded claims have already been processed.")
+        return
+
+    # 2. Setup Logging with Claim ID
+    log_filename = f"{logs_dir}/execution_log_{input_claim.id}.txt"
     
     class DualLogger:
         def __init__(self, filename):
@@ -44,16 +73,6 @@ def main():
         def log(msg):
             print(msg)
 
-        log("1. Loading Data...")
-        loader = DataLoader(data_dir)
-        claims = loader.load_claims(limit=50)
-        
-        if not claims:
-            log("No claims found.")
-            return
-
-        import random
-        input_claim = random.choice(claims)
         log(f"   [CLAIM ID: {input_claim.id}]")
         log(f"   Claim Text: {input_claim.text}")
 
@@ -135,6 +154,27 @@ def main():
         final_result = verdict_generator.generate_verdict()
         log(f"   Verdict: {final_result['verdict']}")
         log(f"   Confidence: {final_result['confidence']:.3f}")
+
+        # 12. Save Verdict and Update Processed List
+        verdicts_path = f"{base_dir}/framework/all_verdicts.jsonl"
+        
+        # Prepare record with specific fields requested by user
+        record = {
+            "claim_id": input_claim.id,
+            "verdict": final_result['verdict'],
+            "confidence": final_result['confidence'],
+            "ground_truth": final_result['ground_truth_label'],
+            "correct": final_result['correct']
+        }
+        
+        with open(verdicts_path, "a", encoding="utf-8") as f:
+            f.write(json.dumps(record) + "\n")
+            
+        with open(processed_claims_path, "a", encoding="utf-8") as f:
+            f.write(f"{input_claim.id}\n")
+            
+        log(f"\n   [SAVED] Verdict appended to {verdicts_path}")
+        log(f"   [UPDATED] Claim {input_claim.id} marked as processed.")
         
     finally:
         sys.stdout = dual_logger.terminal
