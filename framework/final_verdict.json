@@ -1,0 +1,58 @@
+{
+  "claim": "Ultraviolet light is associated with higher COVID-19 growth rates.",
+  "verdict": "REFUTE",
+  "confidence": 0.487,
+  "ground_truth_label": "REFUTE",
+  "correct": true,
+  "reasoning": {
+    "winner": "opponent",
+    "winner_agent": "Scientific Opponent",
+    "main_arguments": {
+      "proponent": "The claim that ultraviolet (UV) light is associated with higher COVID-19 growth rates is supported by substantial evidence indicating that UV radiation can significantly reduce the transmission of the virus. A comprehensive study published in the *Proceedings of the National Academy of Sciences of t...",
+      "opponent": "The claim that ultraviolet (UV) light is associated with higher COVID-19 growth rates is not supported by the evidence presented. In fact, a comprehensive study published in the *Proceedings of the National Academy of Sciences of the United States of America* (2021) with the source ID 33323525, demo..."
+    },
+    "decision_factors": [
+      "Evidence Quality Expert: Error generating response: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/doc...",
+      "Scientific Accuracy Expert: The opponent won the debate by effectively countering the proponent's claims with accurate interpretation of the same study, which actually supports the idea that increased UV radiation correlates wit...",
+      "Role-switching demonstrated consistent argumentation",
+      "Self-reflection acknowledged weaknesses (confidence adjusted by -0.30)"
+    ]
+  },
+  "key_evidence": [
+    {
+      "source_id": "34375298",
+      "relevance": 0,
+      "round": 1
+    },
+    {
+      "source_id": "38907198",
+      "relevance": 0,
+      "round": 1
+    },
+    {
+      "source_id": "33323525",
+      "relevance": 0,
+      "round": 2
+    },
+    {
+      "source_id": "33323525",
+      "relevance": 0,
+      "round": 2
+    },
+    {
+      "source_id": "33323525",
+      "relevance": 0,
+      "round": 3
+    }
+  ],
+  "metadata": {
+    "judge_scores": {
+      "proponent": 73,
+      "opponent": 97
+    },
+    "role_switch_consistent": true,
+    "self_reflection_adjustment": -0.3,
+    "debate_rounds": 5,
+    "total_evidence_used": 8
+  }
+}
