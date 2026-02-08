@@ -1,0 +1,71 @@
+{
+  "claim": "One type of COVID-19 test identifies coronavirus proteins in thirty minutes. ",
+  "judges": [
+    {
+      "judge_name": "Logic & Reasoning Expert",
+      "model": "meta-llama/llama-4-maverick-17b-128e-instruct",
+      "proponent_scores": {
+        "evidence_quality": 7,
+        "logical_consistency": 8,
+        "persuasiveness": 8,
+        "scientific_accuracy": 8,
+        "total": 31
+      },
+      "opponent_scores": {
+        "evidence_quality": 7,
+        "logical_consistency": 7,
+        "persuasiveness": 7,
+        "scientific_accuracy": 7,
+        "total": 28
+      },
+      "winner": "proponent",
+      "reasoning": "The proponent won this debate because they presented a clear and substantiated argument regarding the capability of rapid antigen tests to quickly detect COVID-19 proteins, while the opponent failed to directly refute the specific claim about the thirty-minute timeframe. The opponent's argument relied on the cited sources not providing direct evidence, but they did not present alternative evidence or directly challenge the proponent's assertion. The proponent's argument remained unchallenged, making their claim more convincing."
+    },
+    {
+      "judge_name": "Evidence Quality Expert",
+      "model": "llama-3.3-70b-versatile",
+      "proponent_scores": {
+        "evidence_quality": 8,
+        "logical_consistency": 9,
+        "persuasiveness": 8,
+        "scientific_accuracy": 9,
+        "total": 34
+      },
+      "opponent_scores": {
+        "evidence_quality": 8,
+        "logical_consistency": 9,
+        "persuasiveness": 8,
+        "scientific_accuracy": 9,
+        "total": 34
+      },
+      "winner": "opponent",
+      "reasoning": "The opponent won this debate because they effectively challenged the proponent's claim by pointing out the lack of direct evidence supporting the specific 30-minute timeframe for COVID-19 test results. The opponent's evaluation of the cited sources (32703894 and 32315614) revealed that they do not provide sufficient evidence to substantiate the proponent's claim. This critique undermined the proponent's argument, giving the opponent the upper hand in the debate."
+    },
+    {
+      "judge_name": "Scientific Accuracy Expert",
+      "model": "gpt-4o-mini",
+      "proponent_scores": {
+        "evidence_quality": 6,
+        "logical_consistency": 8,
+        "persuasiveness": 7,
+        "scientific_accuracy": 8,
+        "total": 29
+      },
+      "opponent_scores": {
+        "evidence_quality": 7,
+        "logical_consistency": 8,
+        "persuasiveness": 7,
+        "scientific_accuracy": 8,
+        "total": 30
+      },
+      "winner": "opponent",
+      "reasoning": "The opponent won the debate by effectively highlighting the lack of direct evidence supporting the specific claim of a thirty-minute timeframe for rapid antigen tests. They pointed out that the sources cited by the proponent do not explicitly validate this timeframe, undermining the proponent's argument and emphasizing the importance of accurate and precise claims in scientific discussions. This critical evaluation of the evidence led to a stronger position for the opponent."
+    }
+  ],
+  "aggregate_scores": {
+    "proponent": 94,
+    "opponent": 92
+  },
+  "provisional_winner": "proponent",
+  "confidence": 0.011
+}

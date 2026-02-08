@@ -1,0 +1,52 @@
+{
+  "claim": "One type of COVID-19 test identifies coronavirus proteins in thirty minutes. ",
+  "verdict": "SUPPORT",
+  "confidence": 0.251,
+  "ground_truth_label": "SUPPORT",
+  "correct": true,
+  "reasoning": {
+    "winner": "proponent",
+    "winner_agent": "Scientific Proponent",
+    "main_arguments": {
+      "proponent": "The claim that one type of COVID-19 test can identify coronavirus proteins in thirty minutes is substantiated by the advancements in rapid antigen testing technology. Rapid antigen tests are designed to detect specific proteins from the virus, enabling quicker results compared to traditional PCR tes...",
+      "opponent": "The claim that one type of COVID-19 test can identify coronavirus proteins in thirty minutes is not substantiated by the evidence presented. While the Scientific Proponent references advancements in rapid antigen testing technology, the cited sources (32703894 and 32315614) do not provide direct evi..."
+    },
+    "decision_factors": [
+      "Logic & Reasoning Expert: The proponent won this debate because they presented a clear and substantiated argument regarding the capability of rapid antigen tests to quickly detect COVID-19 proteins, while the opponent failed t...",
+      "Role-switching demonstrated consistent argumentation",
+      "Self-reflection acknowledged weaknesses (confidence adjusted by -0.30)"
+    ]
+  },
+  "key_evidence": [
+    {
+      "source_id": "37178780",
+      "relevance": 0,
+      "round": 1
+    },
+    {
+      "source_id": "33197230",
+      "relevance": 0,
+      "round": 1
+    },
+    {
+      "source_id": "35589144",
+      "relevance": 0,
+      "round": 2
+    },
+    {
+      "source_id": "33906636",
+      "relevance": 0,
+      "round": 2
+    }
+  ],
+  "metadata": {
+    "judge_scores": {
+      "proponent": 94,
+      "opponent": 92
+    },
+    "role_switch_consistent": true,
+    "self_reflection_adjustment": -0.3,
+    "debate_rounds": 2,
+    "total_evidence_used": 8
+  }
+}

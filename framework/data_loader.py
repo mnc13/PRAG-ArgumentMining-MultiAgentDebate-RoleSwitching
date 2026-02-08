@@ -6,7 +6,7 @@ from models import Claim
 class DataLoader:
     def __init__(self, check_covid_dir: str):
         self.check_covid_dir = check_covid_dir
-        self.claims_path = os.path.join(check_covid_dir, "Check-COVID_all.json")
+        self.claims_path = os.path.join(check_covid_dir, "Check-COVID_all.jsonl")
         self.corpus_path = os.path.join(check_covid_dir, "corpus.json")
 
     def load_claims(self, limit: int = 5) -> List[Claim]:

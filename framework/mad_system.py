@@ -63,6 +63,7 @@ class DebateAgent:
         - Maintain a clinical, factual, and strictly evidence-based tone.
         - Focus on proving or refuting the claim using the provided medical evidence and expert testimony.
         - State your arguments clearly and concisely.
+        - DIRECT OUTPUT ONLY: Do not reveal your internal thought process, scratchpad, or "thinking" steps. Output only your final argument.
         """
 
         if self.role == "proponent":
@@ -92,7 +93,7 @@ class DebateAgent:
 
         Provide your statement (2-3 paragraphs, cite evidence by source ID):"""
         
-        argument = self.llm.generate(prompt)
+        argument = self.llm.generate(prompt, max_tokens=512)
         return argument
 
     def request_expert(self, debate_history: List[Dict]) -> Dict:

@@ -25,7 +25,13 @@ class OllamaLLMClient(LLMClient):
         self.temperature = temperature
         self.host = host or os.getenv("OLLAMA_HOST", "http://localhost:11434")
     
-    def generate(self, prompt: str) -> str:
+    def generate(self, prompt: str, **kwargs) -> str:
+        # Ollama uses 'num_predict' for max tokens in options
+        options = {
+            "temperature": self.temperature,
+        }
+        if 'max_tokens' in kwargs:
+            options['num_predict'] = kwargs['max_tokens']
         try:
             # Combine system prompt with user prompt
             full_prompt = f"{self.system_prompt}\n\n{prompt}" if self.system_prompt else prompt
@@ -35,7 +41,7 @@ class OllamaLLMClient(LLMClient):
                 json={
                     "model": self.model_name,
                     "prompt": full_prompt,
-                    "temperature": self.temperature,
+                    "options": options,
                     "stream": False
                 },
                 timeout=120  # 2 minute timeout for local models

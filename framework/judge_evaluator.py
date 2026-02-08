@@ -37,7 +37,7 @@ class JudgeEvaluator:
                 "name": "Evidence Quality Expert",
                 "llm": GroqLLMClient(
                     api_key=groq_key,
-                    model_name="llama-3.1-70b-versatile",
+                    model_name="llama-3.3-70b-versatile",
                     system_prompt="You are an expert in scientific evidence evaluation. Assess the quality and relevance of cited sources.",
                     temperature=0.3
                 ),

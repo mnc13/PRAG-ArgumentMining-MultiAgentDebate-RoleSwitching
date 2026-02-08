@@ -9,3 +9,4 @@ pip install -r requirements.txt
 python main_pipeline.py
 
 
+python framework/main_pipeline.py --limit 150

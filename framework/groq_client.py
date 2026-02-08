@@ -11,7 +11,8 @@ from llm_client import LLMClient
 
 class GroqLLMClient(LLMClient):
     def __init__(self, api_key: str = None, model_name: str = "llama-3.1-8b-instant", 
-                 system_prompt: str = None, temperature: float = 0.7):
+                 system_prompt: str = None, temperature: float = 0.7,
+                 reasoning_effort: str = None):
         """
         Initialize Groq client
         
@@ -21,6 +22,7 @@ class GroqLLMClient(LLMClient):
                         qwen/qwen3-32b, openai/gpt-oss-20b)
             system_prompt: System prompt for persona
             temperature: Sampling temperature
+            reasoning_effort: Optional reasoning effort for reasoning models (e.g. 'medium')
         """
         self.api_key = api_key or os.getenv("GROQ_API_KEY")
         if not self.api_key:
@@ -30,23 +32,43 @@ class GroqLLMClient(LLMClient):
         self.model_name = model_name
         self.system_prompt = system_prompt
         self.temperature = temperature
+        self.reasoning_effort = reasoning_effort
     
-    def generate(self, prompt: str) -> str:
+    def generate(self, prompt: str, **kwargs) -> str:
         try:
             messages = []
             if self.system_prompt:
                 messages.append({"role": "system", "content": self.system_prompt})
             messages.append({"role": "user", "content": prompt})
             
+            # Prepare parameters
+            params = {
+                "model": self.model_name,
+                "messages": messages,
+                "temperature": self.temperature,
+                "stream": False
+            }
+
+            # Handle reasoning_effort if set
+            if self.reasoning_effort:
+                params["reasoning_effort"] = self.reasoning_effort
+
+            # Handle token limits - prioritize max_completion_tokens (new standard)
+            if 'max_completion_tokens' in kwargs:
+                params['max_completion_tokens'] = kwargs['max_completion_tokens']
+            elif 'max_tokens' in kwargs:
+                # Some models might require max_completion_tokens, but default to max_tokens request
+                params['max_tokens'] = kwargs['max_tokens']
+            else:
+                # Default if nothing specified
+                params['max_tokens'] = 512
+
             # Use non-streaming for simplicity
-            completion = self.client.chat.completions.create(
-                model=self.model_name,
-                messages=messages,
-                temperature=self.temperature,
-                max_tokens=2048,  # Increased for longer responses
-                stream=False
-            )
+            completion = self.client.chat.completions.create(**params)
             
+            if hasattr(completion, 'usage'):
+                print(f"   [Token Usage] Input: {completion.usage.prompt_tokens}, Output: {completion.usage.completion_tokens}, Total: {completion.usage.total_tokens}")
+
             return completion.choices[0].message.content
         except Exception as e:
             print(f"Error calling Groq ({self.model_name}): {e}")

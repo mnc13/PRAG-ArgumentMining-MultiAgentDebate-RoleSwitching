@@ -1,3 +1,0 @@
-1. Loading Data...
-Error: Claims file not found at d:/thesis/checkcovid/Check-COVID/Check-COVID\Check-COVID_all.json
-No claims found.

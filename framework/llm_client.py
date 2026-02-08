@@ -8,11 +8,11 @@ load_dotenv()
 
 class LLMClient(ABC):
     @abstractmethod
-    def generate(self, prompt: str) -> str:
+    def generate(self, prompt: str, **kwargs) -> str:
         pass
 
 class MockLLMClient(LLMClient):
-    def generate(self, prompt: str) -> str:
+    def generate(self, prompt: str, **kwargs) -> str:
         if "decompose" in prompt.lower():
             return "1. First premise of the claim.\n2. Second premise of the claim."
         elif "negotiate" in prompt.lower() or "select" in prompt.lower():
@@ -31,15 +31,21 @@ class GeminiLLMClient(LLMClient):
         self.system_prompt = system_prompt
         self.temperature = temperature
 
-    def generate(self, prompt: str) -> str:
+    def generate(self, prompt: str, **kwargs) -> str:
+        # Extract max_tokens if provided
+        max_tokens = kwargs.get('max_tokens', None)
         try:
             # Prepend system prompt if provided
             full_prompt = f"{self.system_prompt}\n\n{prompt}" if self.system_prompt else prompt
             
+            config_params = {"temperature": self.temperature}
+            if max_tokens:
+                config_params["max_output_tokens"] = max_tokens
+
             response = self.model.generate_content(
                 full_prompt,
                 generation_config=genai.types.GenerationConfig(
-                    temperature=self.temperature
+                    **config_params
                 )
             )
             return response.text

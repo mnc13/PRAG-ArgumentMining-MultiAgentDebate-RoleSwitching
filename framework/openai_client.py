@@ -27,7 +27,9 @@ class OpenAILLMClient(LLMClient):
         self.system_prompt = system_prompt
         self.temperature = temperature
     
-    def generate(self, prompt: str) -> str:
+    def generate(self, prompt: str, **kwargs) -> str:
+        # Extract max_tokens if provided, default to 1024
+        max_tokens = kwargs.get('max_tokens', 1024)
         try:
             messages = []
             if self.system_prompt:

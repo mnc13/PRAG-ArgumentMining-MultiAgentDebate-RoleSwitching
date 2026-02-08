@@ -5,6 +5,7 @@ Defines LLM slots and utilities for dynamic persona assignment.
 """
 
 # Fixed LLM configurations (slots) for debate roles
+print("DEBUG: Loading personas.py from " + __file__)
 AGENT_SLOTS = {
     "proponent": {
         "name": "Proponent",
@@ -28,7 +29,7 @@ AGENT_SLOTS = {
         "name": "Moderator",
         "role": "Scientific Moderator",
         "llm_provider": "groq",
-        "llm_model": "llama-3.1-70b-versatile",
+        "llm_model": "llama-3.3-70b-versatile",
         "temperature": 0.2,
         "expertise": ["scientific oversight", "evidence synthesis"],
         "system_prompt": "You are the Moderator (Judge) of a scientific simulation. oversee the debate, ensure logical flow, and determine if sufficient evidence has been presented."
@@ -37,8 +38,9 @@ AGENT_SLOTS = {
         "name": "Analyst",
         "role": "Scientific Analyst",
         "llm_provider": "groq",
-        "llm_model": "mixtral-8x7b-32768",
-        "temperature": 0.4,
+        "llm_model": "openai/gpt-oss-120b",
+        "temperature": 1.0,
+        "reasoning_effort": "medium",
         "expertise": ["logical consistency", "clinical methodology"],
         "system_prompt": "You are the Scientific Analyst. Provide neutral, methodical analysis of the arguments and testimony. Focus on technical consistency."
     },
@@ -99,6 +101,7 @@ def create_llm_client(persona_config: dict):
     model = persona_config["llm_model"]
     system_prompt = persona_config["system_prompt"]
     temperature = persona_config["temperature"]
+    reasoning_effort = persona_config.get("reasoning_effort")
     
     if provider == "google":
         api_key = os.getenv("GEMINI_API_KEY")
@@ -122,7 +125,8 @@ def create_llm_client(persona_config: dict):
             api_key=api_key,
             model_name=model,
             system_prompt=system_prompt,
-            temperature=temperature
+            temperature=temperature,
+            reasoning_effort=reasoning_effort
         )
     elif provider == "ollama":
         from ollama_client import OllamaLLMClient
