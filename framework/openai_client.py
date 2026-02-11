@@ -31,19 +31,36 @@ class OpenAILLMClient(LLMClient):
         # Extract max_tokens if provided, default to 1024
         max_tokens = kwargs.get('max_tokens', 1024)
         try:
+            # Handle gpt-5-mini using the new Responses API
+            if "gpt-5" in self.model_name:
+                # Based on user documentation, gpt-5-mini uses client.responses.create
+                full_input = f"{self.system_prompt}\n\n{prompt}" if self.system_prompt else prompt
+                response = self.client.responses.create(
+                    model=self.model_name,
+                    input=full_input
+                )
+                return response.output_text
+
             messages = []
             if self.system_prompt:
                 messages.append({"role": "system", "content": self.system_prompt})
             messages.append({"role": "user", "content": prompt})
             
-            response = self.client.chat.completions.create(
-                model=self.model_name,
-                messages=messages,
-                temperature=self.temperature,
-                max_tokens=1024
-            )
+            params = {
+                "model": self.model_name,
+                "messages": messages,
+                "temperature": self.temperature,
+            }
             
+            # Use max_completion_tokens for newer reasoning models
+            if "o1" in self.model_name or "o3" in self.model_name:
+                params["max_completion_tokens"] = max_tokens
+            else:
+                params["max_tokens"] = max_tokens
+
+            response = self.client.chat.completions.create(**params)
             return response.choices[0].message.content
+
         except Exception as e:
             print(f"Error calling OpenAI ({self.model_name}): {e}")
             return f"Error generating response: {e}"

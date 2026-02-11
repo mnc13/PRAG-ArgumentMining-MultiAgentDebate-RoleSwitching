@@ -11,7 +11,7 @@ AGENT_SLOTS = {
         "name": "Proponent",
         "role": "Scientific Proponent",
         "llm_provider": "openai",
-        "llm_model": "gpt-4o-mini",
+        "llm_model": "gpt-5-mini",
         "temperature": 0.5,
         "expertise": ["scientific logic", "clinical analysis"],
         "system_prompt": "You are the Proponent in a clinical debate. Your goal is to argue in favor of the claim using medical evidence and technical reasoning. Maintain a scientific tone."
@@ -19,8 +19,8 @@ AGENT_SLOTS = {
     "opponent": {
         "name": "Opponent",
         "role": "Scientific Opponent",
-        "llm_provider": "groq",
-        "llm_model": "meta-llama/llama-4-maverick-17b-128e-instruct",
+        "llm_provider": "openrouter",
+        "llm_model": "deepseek/deepseek-v3.2",
         "temperature": 0.5,
         "expertise": ["critical analysis", "counter-argumentation"],
         "system_prompt": "You are the Opponent in a clinical debate. Your goal is to identify weaknesses in the claim and evidence. Maintain a scientific, critical tone."
@@ -28,8 +28,8 @@ AGENT_SLOTS = {
     "judge": {
         "name": "Moderator",
         "role": "Scientific Moderator",
-        "llm_provider": "groq",
-        "llm_model": "llama-3.3-70b-versatile",
+        "llm_provider": "openrouter",
+        "llm_model": "qwen/qwen3-235b-a22b-2507",
         "temperature": 0.2,
         "expertise": ["scientific oversight", "evidence synthesis"],
         "system_prompt": "You are the Moderator (Judge) of a scientific simulation. oversee the debate, ensure logical flow, and determine if sufficient evidence has been presented."
@@ -37,17 +37,16 @@ AGENT_SLOTS = {
     "critic": {
         "name": "Analyst",
         "role": "Scientific Analyst",
-        "llm_provider": "groq",
-        "llm_model": "openai/gpt-oss-120b",
-        "temperature": 1.0,
-        "reasoning_effort": "medium",
+        "llm_provider": "openrouter",
+        "llm_model": "deepseek/deepseek-v3.2",
+        "temperature": 0.7,
         "expertise": ["logical consistency", "clinical methodology"],
         "system_prompt": "You are the Scientific Analyst. Provide neutral, methodical analysis of the arguments and testimony. Focus on technical consistency."
     },
     "expert_slot": {
         "role": "Scientific Expert",
-        "llm_provider": "groq",
-        "llm_model": "meta-llama/llama-4-maverick-17b-128e-instruct",
+        "llm_provider": "openrouter",
+        "llm_model": "meta-llama/llama-3.1-405b-instruct",
         "temperature": 0.5
     }
 }
@@ -131,6 +130,13 @@ def create_llm_client(persona_config: dict):
     elif provider == "ollama":
         from ollama_client import OllamaLLMClient
         return OllamaLLMClient(
+            model_name=model,
+            system_prompt=system_prompt,
+            temperature=temperature
+        )
+    elif provider == "openrouter":
+        from openrouter_client import OpenRouterLLMClient
+        return OpenRouterLLMClient(
             model_name=model,
             system_prompt=system_prompt,
             temperature=temperature

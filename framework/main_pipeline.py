@@ -49,11 +49,12 @@ def main():
 
     print("1. Loading Data...")
     loader = DataLoader(data_dir)
-    # Load a sufficient batch to find the next unprocessed claim
-    all_claims = loader.load_claims(limit=5000)
+    # Load specific test file
+    test_file_path = os.path.join(data_dir, "test", "covidCheck_test_no_NEI.json")
+    all_claims = loader.load_specific_file(test_file_path)
     
     if not all_claims:
-        print("No claims found in source.")
+        print(f"No claims found in {test_file_path}")
         return
 
     # Apply offset
@@ -105,13 +106,10 @@ def main():
             log(f"   Extracted: {extracted_claim.text}")
 
             log("\n3. Argument Mining...")
-            groq_api_key = os.getenv("GROQ_API_KEY")
-            if groq_api_key:
-                from groq_client import GroqLLMClient
-                llm = GroqLLMClient(api_key=groq_api_key, model_name="meta-llama/llama-4-maverick-17b-128e-instruct")
-            else:
-                llm = MockLLMClient()
-
+            # Use OpenRouter with DeepSeek-R1 for decomposition
+            from openrouter_client import OpenRouterLLMClient
+            llm = OpenRouterLLMClient(model_name="deepseek/deepseek-r1")
+            
             miner = ArgumentMiner(llm)
             argument = miner.mine_arguments(extracted_claim)
             

@@ -1,18 +1,18 @@
 {
-  "claim": "One type of COVID-19 test identifies coronavirus proteins in thirty minutes. ",
+  "claim": "COVID-19 increases the risk for stroke only when patients have a significant number of pre-existing stroke risk factors.",
   "verdict": "SUPPORT",
-  "confidence": 0.251,
-  "ground_truth_label": "SUPPORT",
-  "correct": true,
+  "confidence": 0.233,
+  "ground_truth_label": "REFUTE",
+  "correct": false,
   "reasoning": {
     "winner": "proponent",
     "winner_agent": "Scientific Proponent",
     "main_arguments": {
-      "proponent": "The claim that one type of COVID-19 test can identify coronavirus proteins in thirty minutes is substantiated by the advancements in rapid antigen testing technology. Rapid antigen tests are designed to detect specific proteins from the virus, enabling quicker results compared to traditional PCR tes...",
-      "opponent": "The claim that one type of COVID-19 test can identify coronavirus proteins in thirty minutes is not substantiated by the evidence presented. While the Scientific Proponent references advancements in rapid antigen testing technology, the cited sources (32703894 and 32315614) do not provide direct evi..."
+      "proponent": "Population-level clinical data indicate that SARS-CoV-2 infection is not universally associated with a large excess risk of acute cerebrovascular events: a study reporting stroke incidence and outcomes in a COVID-19 cohort documented a low 30\u2011day incidence of stroke among infected patients, arguing ...",
+      "opponent": "The proponent's argument hinges on a narrow interpretation of a single cohort study reporting low stroke incidence (35401913), but this overlooks critical methodological limitations and broader evidence. A low absolute incidence does not equate to a lack of increased relative risk; without compariso..."
     },
     "decision_factors": [
-      "Logic & Reasoning Expert: The proponent won this debate because they presented a clear and substantiated argument regarding the capability of rapid antigen tests to quickly detect COVID-19 proteins, while the opponent failed t...",
+      "Scientific Accuracy Expert: The proponent won the debate by effectively highlighting the low observed incidence of stroke in COVID-19 patients as evidence against a significant independent risk factor for cerebrovascular events....",
       "Role-switching demonstrated consistent argumentation",
       "Self-reflection acknowledged weaknesses (confidence adjusted by -0.30)"
     ]
@@ -24,29 +24,34 @@
       "round": 1
     },
     {
-      "source_id": "33197230",
+      "source_id": "37178780",
       "relevance": 0,
       "round": 1
     },
     {
-      "source_id": "35589144",
+      "source_id": "35142148",
       "relevance": 0,
       "round": 2
     },
     {
-      "source_id": "33906636",
+      "source_id": "32761396",
       "relevance": 0,
       "round": 2
+    },
+    {
+      "source_id": "35142148",
+      "relevance": 0,
+      "round": 3
     }
   ],
   "metadata": {
     "judge_scores": {
-      "proponent": 94,
-      "opponent": 92
+      "proponent": 91,
+      "opponent": 90
     },
     "role_switch_consistent": true,
     "self_reflection_adjustment": -0.3,
-    "debate_rounds": 2,
-    "total_evidence_used": 8
+    "debate_rounds": 5,
+    "total_evidence_used": 16
   }
 }
