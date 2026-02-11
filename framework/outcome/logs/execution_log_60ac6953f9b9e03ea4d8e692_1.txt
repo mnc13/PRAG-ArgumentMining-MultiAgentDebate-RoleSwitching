@@ -1,0 +1,445 @@
+   [CLAIM ID: 60ac6953f9b9e03ea4d8e692_1]
+   Claim Text: Young patients with COVID-19 can have sudden strokes with few to no prior risk factors.
+
+2. Preprocessing & Extraction...
+   Extracted: Young patients with COVID-19 can have sudden strokes with few to no prior risk factors.
+
+3. Argument Mining...
+   [DECOMPOSED PREMISES/ARGUMENTS]:
+   - 1. Young patients can develop COVID-19
+   - 2. Strokes can occur in young patients
+   - 3. Strokes can occur in patients with COVID-19
+   - 4. Strokes can be sudden in young patients with COVID-19
+   - 5. Young patients with COVID-19 who experience strokes may have few to no traditional stroke risk factors
+   - 6. The incidence of strokes in young COVID-19 patients is higher than in young patients without COVID-19
+   - 7. Traditional stroke risk factors are often absent in young COVID-19 patients who experience strokes
+
+4. Initial RAG Retrieval...
+   [DEBUG] Checking paths:
+   Index: D:\thesis\PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID\framework\pubmed_faiss.index (Exists: True)
+   Meta: D:\thesis\PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID\framework\pubmed_meta.jsonl (Exists: True)
+   Offsets: D:\thesis\PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID\framework\pubmed_meta_offsets.npy (Exists: True)
+Loading embedding model: sentence-transformers/all-MiniLM-L6-v2...
+Loading FAISS index from D:\thesis\PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID\framework\pubmed_faiss.index...
+Loading offsets from D:\thesis\PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID\framework\pubmed_meta_offsets.npy...
+   [INITIAL RETRIEVED EVIDENCE]:
+   - Evidence 1 (ID: 33173859): [Brain, behavior, & immunity - health 2020] COVID-19 and stroke, a case series and review of literature.
+
+CONCLUSION: Ischemic strokes are known compl...
+   - Evidence 2 (ID: 32583169): [Neurological sciences : official journal of the Italian Neurological Society and of the Italian Society of Clinical Neurophysiology 2020] COVID-19-re...
+   - Evidence 3 (ID: 33774622): [Cerebrovascular diseases (Basel, Switzerland) 2021] Risk Factors, and Clinical and Etiological Characteristics of Ischemic Strokes in COVID-19-Infect...
+   - Evidence 4 (ID: 33774622): [Cerebrovascular diseases (Basel, Switzerland) 2021] Risk Factors, and Clinical and Etiological Characteristics of Ischemic Strokes in COVID-19-Infect...
+   - Evidence 5 (ID: 33171425): [Journal of stroke and cerebrovascular diseases : the official journal of National Stroke Association 2021] Characteristics and Comparison of 32 COVID...
+
+5. Evidence Negotiation & Arbitration...
+
+--- [Negotiator] Step 1: Premise-Grounded Shared Retrieval ---
+   > Aggregated 12 shared evidence items.
+
+--- [Negotiator] Step 2: Stance / Perspective Retrieval ---
+   > Generating proponent-conditioned queries...
+   > Proponent gathered 3 perspective-specific items.
+   > Generating opponent-conditioned queries...
+   > Opponent gathered 3 perspective-specific items.
+
+--- [Negotiator] Step 5: Multi-Agent Negotiation Injection ---
+   > [Proponent] Reviewing prospective evidence pools...
+Error calling OpenRouter (deepseek/deepseek-r1): Response ended prematurely
+   > [Opponent] Reviewing prospective evidence pools...
+   > Negotiation complete. Proceeding to Judge arbitration.
+
+--- [Judge] Step 4: Evidence Arbitration & Weighting ---
+   > Evaluating Source ID: 32548163
+   > Evaluating Source ID: 37948730
+   > Evaluating Source ID: 35192517
+   > Evaluating Source ID: 32583169
+   > Evaluating Source ID: 34675873
+   > Evaluating Source ID: 33870763
+   > Evaluating Source ID: 33173859
+   > Evaluating Source ID: 32493597
+   > Evaluating Source ID: 35401913
+   > Evaluating Source ID: 32934172
+   > Evaluating Source ID: 32992199
+   > Evaluating Source ID: 38948623
+   > Evaluating Source ID: 34352787
+   > Evaluating Source ID: 32852257
+   > Evaluating Source ID: 37243226
+   > Evaluating Source ID: 35380052
+   > Evaluating Source ID: 37592943
+   > Evaluating Source ID: 34979237
+   > Admitted 18 high-weight items. Flagged 0 for dispute.
+   [SAVED] Negotiation state saved to D:\thesis\PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID\framework\outcome\negotiation_state_60ac6953f9b9e03ea4d8e692_1.json
+
+   [JUDGE VERDICT] Admitted 18 items for debate.
+   - 1. Source ID: 32548163 (Weight: 0.75)
+   - 2. Source ID: 37948730 (Weight: 0.75)
+   - 3. Source ID: 35192517 (Weight: 0.75)
+   - 4. Source ID: 32583169 (Weight: 0.75)
+   - 5. Source ID: 34675873 (Weight: 0.75)
+   - 6. Source ID: 33870763 (Weight: 0.75)
+   - 7. Source ID: 33173859 (Weight: 0.75)
+   - 8. Source ID: 32493597 (Weight: 0.75)
+   - 9. Source ID: 35401913 (Weight: 0.75)
+   - 10. Source ID: 32934172 (Weight: 0.75)
+   - 11. Source ID: 32992199 (Weight: 0.75)
+   - 12. Source ID: 38948623 (Weight: 0.75)
+   - 13. Source ID: 34352787 (Weight: 0.75)
+   - 14. Source ID: 32852257 (Weight: 0.75)
+   - 15. Source ID: 37243226 (Weight: 0.75)
+   - 16. Source ID: 35380052 (Weight: 0.75)
+   - 17. Source ID: 37592943 (Weight: 0.75)
+   - 18. Source ID: 34979237 (Weight: 0.75)
+
+6. Initializing Multi-Agent Debate (MAD) Simulation...
+DEBUG: Loading personas.py from D:\thesis\PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID\framework\personas.py
+
+7. Running Debate Proceedings...
+
+============================================================
+DEBATE PHASE 1
+============================================================
+
+--- [Proponent] Step 1: Gathering Clinical Evidence ---
+   > [Proponent] Found 3 new technical sources.
+--- [Proponent] Step 2: Generating Technical Argument ---
+
+SARS‑CoV‑2 infection has been repeatedly associated with acute ischemic cerebrovascular events occurring in younger patients who lack conventional vascular comorbidities. Case series and systematic reviews document strokes in adults younger than 55 and even in pediatric age groups during the pandemic: a dedicated case series described six patients <55 years with acute stroke and confirmed COVID‑19 (32583169), and an international survey documented incident arterial ischemic stroke in hospitalized children with concurrent SARS‑CoV‑2 (35380052). Systematic reviews and meta‑analyses report a younger average age of stroke among SARS‑CoV‑2–positive patients and note multiple reports of stroke occurring in patients with “zero identifiable preexisting conditions,” raising strong suspicion that SARS‑CoV‑2 itself can be an independent precipitant of stroke (34352787, 32934172, 32992199).
+
+Pathophysiologically, COVID‑19 produces a prothrombotic, endothelial‑injuring and hyperinflammatory state that can acutely trigger large‑vessel and embolic cerebral ischemia even in the absence of traditional risk factors. Reviews of mechanisms and clinical series link SARS‑CoV‑2–related coagulopathy and endothelial dysfunction to ischemic stroke, and registry data confirm cerebrovascular events across age groups among hospitalized COVID‑19 patients (32493597, 33173859, 32852257). Moreover, cohort analyses indicate that younger age, independent of prior comorbidity, is associated with an appreciable risk of acute ischemic stroke in the setting of COVID‑19 (34675873). Taken together, the clinical reports, epidemiologic data, and mechanistic studies support the claim that young patients with COVID‑19 can suffer sudden strokes with few or no prior vascular risk factors.
+
+--- [Opponent] Step 1: Gathering Counter-Evidence ---
+   > [Opponent] Found 3 new technical sources.
+--- [Opponent] Step 2: Generating Technical Counter-Argument ---
+
+The claim that young patients with COVID-19 can have sudden strokes with few to no prior risk factors is not substantiated by the available evidence and suffers from significant methodological and inferential flaws.
+
+First, the evidence cited in support relies heavily on low-level evidence, such as small case series and uncontrolled observations, which cannot establish causation or even a strong association. The case series of six patients under 55 (32583169) is anecdotal and lacks a control group, making it impossible to determine if the stroke incidence exceeds the expected background rate in this age group. Similarly, the international survey on pediatric stroke (35380052) reports incident cases but does not provide a comparative analysis to establish a causal link with SARS-CoV-2, merely documenting temporal association. Larger, controlled registry data consistently show that the absolute incidence of stroke in hospitalized COVID-19 patients is low (1.13% in 32852257; "low 30-day incidence" in 35401913) and that the majority of affected patients are older adults or possess traditional vascular risk factors. For instance, the SVIN registry (32852257, 24) found 55.8% of stroke patients were aged 60-79 years. Furthermore, systematic reviews explicitly identify hypertension, diabetes, and prior stroke as key risk factors (34352787, 13; 37243226, 15), undermining the notion of "few to no" risk factors.
+
+Second, the argument confuses correlation with causation and fails to account for confounding. The observation of a potentially younger average age in some reports (34352787) is suggestive but not conclusive of an independent effect. As evidence 35192517 states, the clinical course of COVID-19 in children and young adults is typically less severe, and the pathogenesis is highly variable. The prothrombotic state in COVID-19 is acknowledged, but this does not equate to a direct, independent trigger for stroke in otherwise healthy young individuals. Evidence 34675873 identifies younger age as a risk factor among hospitalized COVID-19 patients *with neurologic symptoms*, but this is a highly selected population and does not prove causality in the general young population. Crucially, no evidence provided establishes a mechanistic pathway exclusive to SARS-CoV-2 that bypasses all conventional risk factors. Therefore, the claim overstates the evidence, which at best indicates that SARS-CoV-2 may be a contributing factor in a multifactorial event, often in conjunction with other, potentially undiagnosed, prothrombotic conditions (33870763,
+
+--- [Moderator] Step 3: Evaluating Scientific Expert Requirements ---
+   > [Proponent] Proposed Expert Type: Infectious-disease epidemiologist / biostatistician with expertise in stroke epidemiology
+   > [Moderator] REQUEST GRANTED. Generating dynamic expert persona...
+   [Token Usage] Input: 139, Output: 133, Total: 272
+   > [Expert] Scientific Expert (Technical Expert) delivering testimony...
+
+[TECHNICAL TESTIMONY]: As a Scientific Expert in Stroke Epidemiology, COVID-19 Epidemiology, Biostatistical Analysis of Infectious Diseases, and Epidemiological Modeling of Emerging Outbreaks, I have thoroughly examined the available evidence regarding the relationship between COVID-19 and stroke in young patients. The evidence suggests that young patients with COVID-19 can indeed experience sudden strokes with few to no prior vascular risk factors (32583169, 35380052, 34352787, 32934172, 32992199). Systematic reviews and meta-analyses report a younger average age of stroke among SARS-CoV-2-positive patients, and multiple reports document stroke occurring in patients with "zero identifiable preexisting conditions" (34352787, 32934172, 32992199).
+
+From a pathophysiological perspective, COVID-19 produces a prothrombotic, endothelial-injuring, and hyperinflammatory state that can acutely trigger large-vessel and embolic cerebral ischemia even in the absence of traditional risk factors (32493597, 33173859, 32852257). Registry data confirm cerebrovascular events across age groups among hospitalized COVID-19 patients (32852257). Furthermore, cohort analyses indicate that younger age, independent of prior comorbidity, is associated with an appreciable risk of acute ischemic stroke in the setting of COVID-19 (34675873). While the absolute incidence of stroke in hospitalized COVID-19 patients may be low (32852257, 35401913), the evidence supports the notion that SARS-CoV-2 can be an independent precipitant of stroke, particularly in younger patients.
+
+In conclusion, based on the available evidence, I support the claim that young patients with COVID-19 can suffer sudden strokes with few or no prior vascular risk factors. The pathophysiological mechanisms underlying COVID-19, combined with the epidemiological data and clinical reports, provide a robust foundation for this assertion. While further research is necessary to fully elucidate the relationship between COVID-19 and stroke in young patients, the current evidence base is sufficient to warrant concern and consideration in clinical practice (32583169, 35380052, 34352787, 32934172, 32992199).
+
+[Critic] Analyzing proceedings...
+
+============================================================
+DEBATE PHASE 2
+============================================================
+
+--- [Proponent] Step 1: Gathering Clinical Evidence ---
+   > [Proponent] Found 3 new technical sources.
+--- [Proponent] Step 2: Generating Technical Argument ---
+
+Multiple lines of clinical and epidemiologic evidence document that acute ischemic stroke can occur in younger patients with SARS‑CoV‑2 infection, including individuals with few or no identifiable preexisting vascular risk factors. Case series reported unexpected large‑vessel and ischemic strokes in adults under 55 with confirmed COVID‑19 (32583169), and international surveillance identified incident arterial ischemic stroke among hospitalized children with concurrent SARS‑CoV‑2 (35380052). Systematic reviews and meta‑analyses have observed a younger average age of stroke in SARS‑CoV‑2–positive cohorts and explicitly note multiple reports of strokes occurring in patients with “zero identifiable preexisting conditions,” raising plausibility that SARS‑CoV‑2 can act as an independent precipitant (34352787, 32934172, 32992199). Although the absolute incidence of stroke among all hospitalized COVID‑19 patients is relatively low, registry and cohort analyses confirm cerebrovascular events across age groups and identify younger age as an independent predictor of ischemic stroke among selected hospitalized patients with neurologic symptoms (32852257, 35401913, 34675873).
+
+Biologically plausible mechanisms link SARS‑CoV‑2 infection to acute arterial thrombosis in otherwise healthy younger individuals. COVID‑19 produces endothelial injury, a hyperinflammatory cytokine milieu, and systemic coagulopathy that promote in situ arterial thrombosis and embolic large‑vessel occlusion, mechanisms repeatedly reviewed in clinical series and pathophysiologic summaries of COVID‑19–related stroke (32493597, 33173859, 32852257). Taken together, the case reports, systematic reviews, registry data, and mechanistic studies provide convergent evidence that young patients with COVID‑19 can suffer sudden strokes with few or no prior vascular risk factors; this warrants heightened clinical vigilance for acute cerebrovascular events in younger SARS‑CoV‑2–infected patients.
+
+--- [Opponent] Step 1: Gathering Counter-Evidence ---
+   > [Opponent] Found 3 new technical sources.
+--- [Opponent] Step 2: Generating Technical Counter-Argument ---
+
+The claim that young patients with COVID-19 can have sudden strokes with few to no prior risk factors is not supported by robust evidence and suffers from significant methodological limitations. The proponent's reliance on low-level evidence, such as small case series (e.g., 32583169, reporting only six patients under 55) and uncontrolled observations, cannot establish causation or a definitive association. These studies lack appropriate control groups, making it impossible to determine if stroke incidence exceeds background rates in young populations. Moreover, larger registry data consistently demonstrate that the absolute incidence of stroke in hospitalized COVID-19 patients is low (1.13% in 32852257; "low 30-day incidence" in 35401913) and that the majority of affected patients are older adults or possess traditional vascular risk factors. For instance, the SVIN registry (32852257, 24) found that 55.8% of stroke patients were aged 60-79 years, undermining the focus on youth. Systematic reviews explicitly identify hypertension, diabetes, and prior stroke as key risk factors (34352787, 13; 37243226, 15), suggesting that strokes in COVID-19 patients rarely occur in the absence of comorbidities.
+
+Furthermore, the evidence fails to account for confounding and selection bias, confusing correlation with causation. While some reports note a potentially younger average age in stroke patients with COVID-19 (34352787), this observation is inconclusive and may reflect heightened surveillance during the pandemic rather than an independent effect. The clinical course of COVID-19 in children and young adults is typically less severe (35192517), and pathophysiological mechanisms, though plausible, do not prove that SARS-CoV-2 alone triggers strokes in otherwise healthy individuals. Cohort analyses identifying younger age as a risk factor (34675873) are based on highly selected hospitalized patients with neurologic symptoms, not the general young population. Additionally, a study on pediatric stroke found that prior, not acute, COVID-19 infection correlated with stroke risk (36418211), challenging the notion of sudden strokes during acute infection. Therefore, the claim overstates the evidence, which at best indicates SARS-CoV-2 may be a contributing factor in multifactorial events, often alongside undiagnosed prothrombotic conditions (33870763), rather than an independent precipitant in young patients with few to no risk factors.
+
+--- [Moderator] Step 3: Evaluating Scientific Expert Requirements ---
+   > [Proponent] Proposed Expert Type: Vascular neurologist with expertise in COVID‑19–associated coagulopathy and neuroimaging
+   > [Moderator] REQUEST GRANTED. Generating dynamic expert persona...
+   [Token Usage] Input: 141, Output: 123, Total: 264
+   > [Expert] Scientific Expert (Technical Expert) delivering testimony...
+
+[TECHNICAL TESTIMONY]: As a Scientific Expert, I have thoroughly examined the available evidence regarding the relationship between COVID-19 and stroke in young patients. The evidence suggests that young patients with COVID-19 can indeed experience sudden strokes with few to no prior vascular risk factors (32583169, 35380052, 34352787, 32934172, 32992199). Systematic reviews and meta-analyses report a younger average age of stroke among SARS-CoV-2-positive patients, and multiple reports document stroke occurring in patients with "zero identifiable preexisting conditions" (34352787, 32934172, 32992199).
+
+From a pathophysiological perspective, COVID-19 produces a prothrombotic, endothelial-injuring, and hyperinflammatory state that can acutely trigger large-vessel and embolic cerebral ischemia even in the absence of traditional risk factors (32493597, 33173859, 32852257). Registry data confirm cerebrovascular events across age groups among hospitalized COVID-19 patients (32852257). Furthermore, cohort analyses indicate that younger age, independent of prior comorbidity, is associated with an appreciable risk of acute ischemic stroke in the setting of COVID-19 (34675873).
+
+While the absolute incidence of stroke in hospitalized COVID-19 patients may be low (32852257, 35401913), the evidence supports the notion that SARS-CoV-2 can be an independent precipitant of stroke, particularly in younger patients. The pathophysiological mechanisms underlying COVID-19, combined with the epidemiological data and clinical reports, provide a robust foundation for this assertion. Therefore, I support the claim that young patients with COVID-19 can suffer sudden strokes with few or no prior vascular risk factors, warranting heightened clinical vigilance for acute cerebrovascular events in younger SARS-CoV-2-infected patients (32583169, 35380052, 34352787, 32934172, 32992199).
+
+   > [Opponent] Proposed Expert Type: Epidemiologist and Biostatistician
+   > [Moderator] REQUEST GRANTED. Generating dynamic expert persona...
+   [Token Usage] Input: 131, Output: 135, Total: 266
+   > [Expert] Scientific Expert (Technical Expert) delivering testimony...
+
+[TECHNICAL TESTIMONY]: As a Scientific Expert in Infectious Disease Epidemiology, Biostatistical Modeling, COVID-19 Research, and Cerebrovascular Disease Epidemiology, I have thoroughly examined the available evidence regarding the relationship between COVID-19 and stroke in young patients. The evidence suggests that young patients with COVID-19 can indeed experience sudden strokes with few to no prior vascular risk factors (32583169, 35380052, 34352787, 32934172, 32992199). Systematic reviews and meta-analyses report a younger average age of stroke among SARS-CoV-2-positive patients, and multiple reports document stroke occurring in patients with "zero identifiable preexisting conditions" (34352787, 32934172, 32992199).
+
+From a pathophysiological perspective, COVID-19 produces a prothrombotic, endothelial-injuring, and hyperinflammatory state that can acutely trigger large-vessel and embolic cerebral ischemia even in the absence of traditional risk factors (32493597, 33173859, 32852257). Registry data confirm cerebrovascular events across age groups among hospitalized COVID-19 patients (32852257). Furthermore, cohort analyses indicate that younger age, independent of prior comorbidity, is associated with an appreciable risk of acute ischemic stroke in the setting of COVID-19 (34675873). While the absolute incidence of stroke in hospitalized COVID-19 patients may be low (32852257, 35401913), the evidence supports the notion that SARS-CoV-2 can be an independent precipitant of stroke, particularly in younger patients.
+
+The pathophysiological mechanisms underlying COVID-19, combined with the epidemiological data and clinical reports, provide a robust foundation for the assertion that young patients with COVID-19 can suffer sudden strokes with few or no prior vascular risk factors. This warrants heightened clinical vigilance for acute cerebrovascular events in younger SARS-CoV-2-infected patients (32583169, 35380052, 34352787, 32934172, 32992199). Therefore, I support the claim that young patients with COVID-19 can have sudden strokes with few to no prior risk factors, emphasizing the need for clinicians to remain vigilant for cerebrovascular complications in this population.
+
+[Critic] Analyzing proceedings...
+
+[P-RAG] Archivist retrieving additional evidence...
+[Judge] Reviewing record for completion...
+
+============================================================
+DEBATE PHASE 3
+============================================================
+
+--- [Proponent] Step 1: Gathering Clinical Evidence ---
+   > [Proponent] Found 3 new technical sources.
+--- [Proponent] Step 2: Generating Technical Argument ---
+
+Multiple independent lines of clinical and epidemiologic evidence demonstrate that acute ischemic stroke can present suddenly in younger patients with SARS‑CoV‑2 infection, including individuals with few or no identifiable preexisting vascular risk factors. Case series described unexpected large‑vessel and ischemic strokes in adults under 55 with confirmed COVID‑19 (32583169), and international surveillance and pediatric stroke registries identified incident arterial ischemic strokes temporally associated with SARS‑CoV‑2 in children and adolescents (35380052). Systematic reviews and meta‑analyses report a younger average age among COVID‑19–associated stroke cases and explicitly note numerous reports of stroke in patients without prior comorbidities, supporting the hypothesis that SARS‑CoV‑2 can act as an independent precipitant (34352787, 32934172, 32992199). Multinational registry data confirm cerebrovascular events across age groups during COVID‑19 hospitalizations, and cohort analyses have identified younger age as an independent predictor of ischemic stroke among hospitalized COVID‑19 patients presenting with neurologic symptoms (32852257, 34675873).
+
+There is strong biological plausibility for these observations: SARS‑CoV‑2 infection produces endothelial injury, a hyperinflammatory cytokine milieu, and a prothrombotic coagulopathy that can acutely trigger in‑situ arterial thrombosis and embolic large‑vessel occlusion even in the absence of traditional risk factors (32493597, 33173859, 32852257). Although the absolute incidence of stroke among all COVID‑19 patients is relatively low, the convergence of case reports, systematic reviews, registry data, and coherent pathophysiologic mechanisms supports the clinical conclusion that young patients with COVID‑19 can suffer sudden strokes with few or no prior vascular risk factors—warranting heightened clinical vigilance for acute cerebrovascular events in this population (32583169, 35380052, 34352787, 32934172, 32992199, 32493597, 33173859, 32852257).
+
+--- [Opponent] Step 1: Gathering Counter-Evidence ---
+   > [Opponent] Found 3 new technical sources.
+--- [Opponent] Step 2: Generating Technical Counter-Argument ---
+
+The claim that young patients with COVID-19 can have sudden strokes with few to no prior risk factors is not substantiated by robust epidemiological evidence and is primarily supported by low-level, uncontrolled observations. The proponent's reliance on small case series (32583169) and systematic reviews noting a "younger average age" (34352787) fails to account for critical confounding factors and lacks appropriate comparator groups. Larger, higher-quality registry data consistently demonstrate that the absolute incidence of stroke in hospitalized COVID-19 patients is low (1.13% in 32852257; "low 30-day incidence" in 35401913) and that the overwhelming majority of cerebrovascular events occur in older adults with established vascular risk factors. For instance, the SVIN Multinational Registry (32852257, 24, 29, 37) found that 55.8% of stroke patients were aged 60-79 years, directly contradicting the focus on youth. Furthermore, multiple analyses identify hypertension, diabetes, and prior stroke as the dominant risk factors (34352787, 13, 22, 25, 39; 37243226, 15), indicating strokes in this population rarely occur in the absence of comorbidities.
+
+The proposed biological mechanisms, while plausible, do not establish SARS-CoV-2 as an independent causal agent for stroke in otherwise healthy young individuals. The evidence is confounded by selection bias, as studies identifying younger age as a risk factor (34675873) are derived from highly selected cohorts of hospitalized patients already exhibiting neurologic symptoms. Crucially, a pediatric study found that prior, not acute, COVID-19 infection was correlated with stroke risk (36418211), challenging the notion of sudden strokes during acute infection. The clinical course of COVID-19 in the young is typically less severe (35192517), and the available data cannot rule out the contribution of undiagnosed prothrombotic conditions (33870763) or heightened surveillance during the pandemic. Therefore, the claim overstates the evidence, which at best suggests SARS-CoV-2 may be a contributing factor within a multifactorial framework, not an independent precipitant of stroke in young patients with few to no risk factors.
+
+--- [Moderator] Step 3: Evaluating Scientific Expert Requirements ---
+   > [Proponent] Proposed Expert Type: Vascular neurologist / thrombosis specialist with clinical experience treating COVID‑19–associated stroke
+   > [Moderator] REQUEST GRANTED. Generating dynamic expert persona...
+   [Token Usage] Input: 141, Output: 123, Total: 264
+   > [Expert] Scientific Expert (Technical Expert) delivering testimony...
+
+[TECHNICAL TESTIMONY]: As a Scientific Expert, I have thoroughly examined the available evidence regarding the relationship between COVID-19 and stroke in young patients. The evidence suggests that young patients with COVID-19 can indeed experience sudden strokes with few to no prior vascular risk factors (32583169, 35380052, 34352787, 32934172, 32992199). Systematic reviews and meta-analyses report a younger average age of stroke among SARS-CoV-2-positive patients, and multiple reports document stroke occurring in patients with "zero identifiable preexisting conditions" (34352787, 32934172, 32992199).
+
+From a pathophysiological perspective, COVID-19 produces a prothrombotic, endothelial-injuring, and hyperinflammatory state that can acutely trigger large-vessel and embolic cerebral ischemia even in the absence of traditional risk factors (32493597, 33173859, 32852257). Registry data confirm cerebrovascular events across age groups among hospitalized COVID-19 patients (32852257). Furthermore, cohort analyses indicate that younger age, independent of prior comorbidity, is associated with an appreciable risk of acute ischemic stroke in the setting of COVID-19 (34675873).
+
+While the absolute incidence of stroke in hospitalized COVID-19 patients may be low (32852257, 35401913), the evidence supports the notion that SARS-CoV-2 can be an independent precipitant of stroke, particularly in younger patients. The pathophysiological mechanisms underlying COVID-19, combined with the epidemiological data and clinical reports, provide a robust foundation for this assertion. Therefore, I support the claim that young patients with COVID-19 can suffer sudden strokes with few or no prior vascular risk factors, warranting heightened clinical vigilance for acute cerebrovascular events in younger SARS-CoV-2-infected patients (32583169, 35380052, 34352787, 32934172, 32992199).
+
+   > [Opponent] Proposed Expert Type: Epidemiologist specializing in cerebrovascular diseases and infectious disease outcomes
+   > [Moderator] REQUEST GRANTED. Generating dynamic expert persona...
+   [Token Usage] Input: 135, Output: 129, Total: 264
+   > [Expert] Scientific Expert (Technical Expert) delivering testimony...
+
+[TECHNICAL TESTIMONY]: As a Scientific Expert, I have thoroughly examined the available evidence regarding the relationship between COVID-19 and stroke in young patients. The evidence suggests that young patients with COVID-19 can indeed experience sudden strokes with few to no prior vascular risk factors (32583169, 35380052, 34352787, 32934172, 32992199). Systematic reviews and meta-analyses report a younger average age of stroke among SARS-CoV-2-positive patients, and multiple reports document stroke occurring in patients with "zero identifiable preexisting conditions" (34352787, 32934172, 32992199).
+
+From a pathophysiological perspective, COVID-19 produces a prothrombotic, endothelial-injuring, and hyperinflammatory state that can acutely trigger large-vessel and embolic cerebral ischemia even in the absence of traditional risk factors (32493597, 33173859, 32852257). Registry data confirm cerebrovascular events across age groups among hospitalized COVID-19 patients (32852257). Furthermore, cohort analyses indicate that younger age, independent of prior comorbidity, is associated with an appreciable risk of acute ischemic stroke in the setting of COVID-19 (34675873). While the absolute incidence of stroke in hospitalized COVID-19 patients may be low (32852257, 35401913), the evidence supports the notion that SARS-CoV-2 can be an independent precipitant of stroke, particularly in younger patients.
+
+The pathophysiological mechanisms underlying COVID-19, combined with the epidemiological data and clinical reports, provide a robust foundation for this assertion. Therefore, I support the claim that young patients with COVID-19 can suffer sudden strokes with few or no prior vascular risk factors, warranting heightened clinical vigilance for acute cerebrovascular events in younger SARS-CoV-2-infected patients (32583169, 35380052, 34352787, 32934172, 32992199). This is further supported by the fact that SARS-CoV-2 infection can lead to a prothrombotic state, which can increase the risk of stroke (32493597, 33173859). Overall, the evidence suggests that young patients with COVID-19 are at risk of sudden strokes, and clinicians should be aware of this potential complication.
+
+[Critic] Analyzing proceedings...
+[Judge] Reviewing record for completion...
+
+============================================================
+DEBATE PHASE 4
+============================================================
+
+--- [Proponent] Step 1: Gathering Clinical Evidence ---
+   > [Proponent] Found 3 new technical sources.
+--- [Proponent] Step 2: Generating Technical Argument ---
+
+Multiple, independent clinical and epidemiologic reports document acute ischemic stroke occurring in younger patients with SARS‑CoV‑2 infection, including otherwise healthy individuals. Case series described large‑vessel and ischemic strokes in adults under 55 with confirmed COVID‑19 (32583169), and international pediatric stroke surveillance identified incident arterial ischemic strokes temporally associated with SARS‑CoV‑2 (35380052). Systematic reviews and meta‑analyses report a younger average age among COVID‑19–associated stroke cases and explicitly note numerous reports of stroke in patients with “zero identifiable preexisting conditions” (34352787, 32934172, 32992199). Multinational registry and cohort data confirm that cerebrovascular events occur across age groups during COVID‑19 hospitalizations and that younger age can be an independent predictor of acute ischemic stroke among hospitalized patients presenting with neurologic symptoms (32852257, 34675873).
+
+There is strong biologic plausibility linking acute SARS‑CoV‑2 infection to sudden stroke in the young: the infection produces endothelial injury, a hyperinflammatory cytokine milieu, and a prothrombotic coagulopathy capable of precipitating in‑situ arterial thrombosis and embolic large‑vessel occlusion even in patients without traditional vascular risk factors (32493597, 33173859, 32852257). Although the absolute incidence of stroke among all COVID‑19 cases is relatively low, the convergence of case reports, registries, systematic reviews, and coherent pathophysiologic mechanisms supports the conclusion that young patients with COVID‑19 can suffer sudden strokes with few or no prior risk factors and that heightened clinical vigilance is warranted (32583169, 35380052, 34352787, 32934172, 32992199, 32493597, 33173859, 32852257).
+
+--- [Opponent] Step 1: Gathering Counter-Evidence ---
+   > [Opponent] Found 3 new technical sources.
+--- [Opponent] Step 2: Generating Technical Counter-Argument ---
+
+The claim that young patients with COVID-19 can have sudden strokes with few to no prior risk factors is not supported by robust epidemiological data and is largely inferred from low-level evidence. First, the absolute incidence of stroke in hospitalized COVID-19 patients is consistently low, at approximately 1.13% in a large multinational registry, with the majority of events occurring in older adults aged 60-79 years (Source: 32852257, 24, 29, 37). A separate study explicitly concludes a "low 30-day incidence of stroke among COVID-19 patients" (Source: 35401913). For pediatric populations, the clinical course of COVID-19 is notably less severe than in adults (Source: 35192517), and international surveillance found incident arterial ischemic strokes associated with SARS-CoV-2 in children to be rare events within a specific pandemic window (Source: 35380052). The data do not demonstrate a significant population-level risk for sudden stroke in otherwise healthy youth.
+
+Second, the evidence cited to support strokes in low-risk youth is confounded by selection bias and lacks appropriate control groups. The case series of patients under 55 (Source: 32583169) is small and descriptive, unable to establish causality or rule out undiagnosed prothrombotic conditions—a known challenge in young stroke patients (Source: 33870763). Systematic reviews noting a "younger average age" or "zero identifiable preexisting conditions" (Source: 34352787, 13, 22, 25, 39) are based on heterogeneous case reports and uncontrolled cohorts, which are hypothesis-generating only. Crucially, risk factor analyses consistently identify hypertension, diabetes, and prior stroke as the dominant associations (Source: 37243226, 15; 34352787). Furthermore, a key pediatric study found that prior, not acute, COVID-19 infection was correlated with stroke risk (Source: 36418211, 27, 40), directly challenging the notion of sudden strokes during acute infection in the young. The proposed biological mechanisms, while plausible, do not substantiate SARS-CoV-2 as an independent causal agent for stroke in healthy young individuals, as the available clinical evidence is insufficient to distinguish correlation from causation.
+
+--- [Moderator] Step 3: Evaluating Scientific Expert Requirements ---
+   > [Proponent] Proposed Expert Type: Infectious-disease epidemiologist / biostatistician with cerebrovascular expertise
+   > [Moderator] REQUEST GRANTED. Generating dynamic expert persona...
+   [Token Usage] Input: 138, Output: 137, Total: 275
+   > [Expert] Scientific Expert (Technical Expert) delivering testimony...
+
+[TECHNICAL TESTIMONY]: As a Scientific Expert, I have thoroughly examined the available evidence regarding the relationship between COVID-19 and stroke in young patients. The evidence suggests that young patients with COVID-19 can indeed experience sudden strokes with few to no prior vascular risk factors (32583169, 35380052, 34352787, 32934172, 32992199). Systematic reviews and meta-analyses report a younger average age of stroke among SARS-CoV-2-positive patients, and multiple reports document stroke occurring in patients with "zero identifiable preexisting conditions" (34352787, 32934172, 32992199).
+
+From a pathophysiological perspective, COVID-19 produces a prothrombotic, endothelial-injuring, and hyperinflammatory state that can acutely trigger large-vessel and embolic cerebral ischemia even in the absence of traditional risk factors (32493597, 33173859, 32852257). Registry data confirm cerebrovascular events across age groups among hospitalized COVID-19 patients (32852257). Furthermore, cohort analyses indicate that younger age, independent of prior comorbidity, is associated with an appreciable risk of acute ischemic stroke in the setting of COVID-19 (34675873). While the absolute incidence of stroke in hospitalized COVID-19 patients may be low (32852257, 35401913), the evidence supports the notion that SARS-CoV-2 can be an independent precipitant of stroke, particularly in younger patients.
+
+The pathophysiological mechanisms underlying COVID-19, combined with the epidemiological data and clinical reports, provide a robust foundation for this assertion. Therefore, I support the claim that young patients with COVID-19 can suffer sudden strokes with few or no prior vascular risk factors, warranting heightened clinical vigilance for acute cerebrovascular events in younger SARS-CoV-2-infected patients (32583169, 35380052, 34352787, 32934172, 32992199). This is further supported by the fact that SARS-CoV-2 infection can lead to a prothrombotic state, which can increase the risk of stroke (32493597, 33173859). Overall, the evidence suggests that young patients with COVID-19 are at risk of sudden strokes, and clinicians should be aware of this potential complication.
+
+   > [Opponent] Proposed Expert Type: Epidemiologist specializing in cerebrovascular diseases and infectious disease outcomes
+   > [Moderator] REQUEST GRANTED. Generating dynamic expert persona...
+   [Token Usage] Input: 135, Output: 141, Total: 276
+   > [Expert] Scientific Expert (Technical Expert) delivering testimony...
+
+[TECHNICAL TESTIMONY]: As a Scientific Expert, I have thoroughly examined the available evidence regarding the relationship between COVID-19 and stroke in young patients. The evidence suggests that young patients with COVID-19 can indeed experience sudden strokes with few to no prior vascular risk factors (32583169, 35380052, 34352787, 32934172, 32992199). Systematic reviews and meta-analyses report a younger average age of stroke among SARS-CoV-2-positive patients, and multiple reports document stroke occurring in patients with "zero identifiable preexisting conditions" (34352787, 32934172, 32992199).
+
+From a pathophysiological perspective, COVID-19 produces a prothrombotic, endothelial-injuring, and hyperinflammatory state that can acutely trigger large-vessel and embolic cerebral ischemia even in the absence of traditional risk factors (32493597, 33173859, 32852257). Registry data confirm cerebrovascular events across age groups among hospitalized COVID-19 patients (32852257). Furthermore, cohort analyses indicate that younger age, independent of prior comorbidity, is associated with an appreciable risk of acute ischemic stroke in the setting of COVID-19 (34675873). While the absolute incidence of stroke in hospitalized COVID-19 patients may be low (32852257, 35401913), the evidence supports the notion that SARS-CoV-2 can be an independent precipitant of stroke, particularly in younger patients.
+
+The pathophysiological mechanisms underlying COVID-19, combined with the epidemiological data and clinical reports, provide a robust foundation for this assertion. Therefore, I support the claim that young patients with COVID-19 can suffer sudden strokes with few or no prior vascular risk factors, warranting heightened clinical vigilance for acute cerebrovascular events in younger SARS-CoV-2-infected patients (32583169, 35380052, 34352787, 32934172, 32992199). This is further supported by the fact that SARS-CoV-2 infection can lead to a prothrombotic state, which can increase the risk of stroke (32493597, 33173859). Overall, the evidence suggests that young patients with COVID-19 are at risk of sudden strokes, and clinicians should be aware of this potential complication.
+
+[Critic] Analyzing proceedings...
+Error calling OpenRouter (deepseek/deepseek-v3.2): Expecting value: line 187 column 1 (char 1023)
+
+[P-RAG] Archivist retrieving additional evidence...
+[Judge] Reviewing record for completion...
+
+============================================================
+DEBATE PHASE 5
+============================================================
+
+--- [Proponent] Step 1: Gathering Clinical Evidence ---
+   > [Proponent] Found 3 new technical sources.
+--- [Proponent] Step 2: Generating Technical Argument ---
+
+Multiple independent clinical reports and systematic reviews document that acute ischemic stroke can occur in younger patients with SARS‑CoV‑2 infection, including individuals with few or no identifiable vascular risk factors. Case series have described large‑vessel and ischemic strokes in adults under 55 with confirmed COVID‑19 (32583169), and international pediatric surveillance identified incident arterial ischemic strokes temporally associated with SARS‑CoV‑2 (35380052). Systematic reviews and pooled analyses report a younger-than-expected average age among COVID‑19–associated stroke cases and explicitly note numerous instances of stroke in patients with “zero identifiable preexisting conditions,” supporting that these events are not limited to the traditionally high‑risk older population (34352787, 32934172, 32992199). Cohort and registry analyses further confirm cerebrovascular events across age groups during COVID‑19 hospitalizations and identify younger age as an independent predictor of acute ischemic stroke among hospitalized patients presenting with neurologic symptoms (34675873, 32852257).
+
+There is coherent biologic plausibility linking acute SARS‑CoV‑2 infection to sudden stroke in the young: the virus induces endothelial injury, a hyperinflammatory cytokine milieu, and a prothrombotic coagulopathy that can precipitate in‑situ arterial thrombosis or embolic large‑vessel occlusion even in the absence of traditional risk factors (32493597, 33173859, 32852257). Although large registries report a relatively low absolute incidence of stroke among all hospitalized COVID‑19 patients, the convergence of case series, surveillance data, systematic reviews, and mechanistic studies supports the conclusion that SARS‑CoV‑2 can act as an acute, independent precipitant of stroke in younger patients — a phenomenon that warrants heightened clinical vigilance and prompt stroke evaluation when acute neurologic deficits arise in this population (32852257, 35401913, 34352787).
+
+--- [Opponent] Step 1: Gathering Counter-Evidence ---
+   > [Opponent] Found 3 new technical sources.
+--- [Opponent] Step 2: Generating Technical Counter-Argument ---
+
+The claim that young patients with COVID-19 can have sudden strokes with few to no prior risk factors is not substantiated by robust epidemiological data. Large-scale registries demonstrate that cerebrovascular events in hospitalized COVID-19 patients are infrequent, with an incidence of approximately 1.13%, and the majority occur in older adults aged 60-79 years (Source: 32852257, 24, 29, 37). A dedicated study concludes a "low 30-day incidence of stroke among COVID-19 patients" (Source: 35401913). Specifically, in a multinational cohort of 14,483 hospitalized patients, only 1.13% experienced acute cerebrovascular events, with the majority aged 60-79 years (Source: 32852257, 24, 29, 37). For pediatric populations, COVID-19 is consistently less severe than in adults (Source: 35192517), and international surveillance identified only rare incidents of arterial ischemic stroke temporally associated with SARS-CoV-2 in children (Source: 35380052). These findings indicate that stroke remains a low-probability event in young COVID-19 patients, contradicting the assertion of a significant risk.
+
+The evidence supporting strokes in low-risk youth is methodologically flawed and confounded. Case series describing strokes in adults under 55 (Source: 32583169) are small and descriptive, lacking control groups to establish causality or exclude undiagnosed prothrombotic conditions—a well-recognized challenge in young stroke patients (Source: 33870763). Systematic reviews noting a "younger average age" or "zero identifiable preexisting conditions" (Source: 34352787, 13, 22, 25, 39) rely on heterogeneous case reports and uncontrolled cohorts, which are hypothesis-generating and prone to selection bias. Importantly, risk factor analyses consistently identify hypertension, diabetes, and prior stroke as dominant associations (Source: 37243226, 15; 34352787). Moreover, a pediatric study found that prior, not acute, COVID-19 infection correlated with stroke risk (Source: 36418211, 27, 40), undermining the idea of sudden strokes during acute infection. While biological mechanisms are plausible, the clinical evidence fails to distinguish correlation from causation, and SARS-CoV-2 has not been proven an independent causal agent for stroke in otherwise healthy young individuals.
+
+--- [Moderator] Step 3: Evaluating Scientific Expert Requirements ---
+   > [Proponent] Proposed Expert Type: Neuroepidemiologist / vascular neurologist with advanced epidemiology and biostatistics expertise
+   > [Moderator] REQUEST GRANTED. Generating dynamic expert persona...
+   [Token Usage] Input: 140, Output: 110, Total: 250
+   > [Expert] Scientific Expert (Technical Expert) delivering testimony...
+
+[TECHNICAL TESTIMONY]: As a Scientific Expert, I have thoroughly examined the available evidence regarding the relationship between COVID-19 and stroke in young patients. The evidence suggests that young patients with COVID-19 can indeed experience sudden strokes with few to no prior vascular risk factors (Source: 32583169, 35380052, 34352787, 32934172, 32992199). Systematic reviews and meta-analyses report a younger average age of stroke among SARS-CoV-2-positive patients, and multiple reports document stroke occurring in patients with "zero identifiable preexisting conditions" (Source: 34352787, 32934172, 32992199).
+
+From a pathophysiological perspective, COVID-19 produces a prothrombotic, endothelial-injuring, and hyperinflammatory state that can acutely trigger large-vessel and embolic cerebral ischemia even in the absence of traditional risk factors (Source: 32493597, 33173859, 32852257). Registry data confirm cerebrovascular events across age groups among hospitalized COVID-19 patients (Source: 32852257). Furthermore, cohort analyses indicate that younger age, independent of prior comorbidity, is associated with an appreciable risk of acute ischemic stroke in the setting of COVID-19 (Source: 34675873). While the absolute incidence of stroke in hospitalized COVID-19 patients may be low (Source: 32852257, 35401913), the evidence supports the notion that SARS-CoV-2 can be an independent precipitant of stroke, particularly in younger patients.
+
+The pathophysiological mechanisms underlying COVID-19, combined with the epidemiological data and clinical reports, provide a robust foundation for this assertion. Therefore, I support the claim that young patients with COVID-19 can suffer sudden strokes with few or no prior vascular risk factors, warranting heightened clinical vigilance for acute cerebrovascular events in younger SARS-CoV-2-infected patients (Source: 32583169, 35380052, 34352787, 32934172, 32992199). This is further supported by the fact that SARS-CoV-2 infection can lead to a prothrombotic state, which can increase the risk of stroke (Source: 32493597, 33173859).
+
+Error calling OpenRouter (deepseek/deepseek-v3.2): Response ended prematurely
+[Critic] Analyzing proceedings...
+Error calling OpenRouter (deepseek/deepseek-v3.2): HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000014E81103F70>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)"))
+Error calling OpenRouter (deepseek/deepseek-v3.2): HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000014E81100BB0>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)"))
+[Judge] Reviewing record for completion...
+Error calling OpenRouter (qwen/qwen3-235b-a22b-2507): HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000014E811031C0>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)"))
+
+8. Role-Switching Round...
+
+============================================================
+ROLE-SWITCHING ROUND
+============================================================
+Swapping Proponent ↔ Opponent roles...
+
+
+============================================================
+DEBATE PHASE 1
+============================================================
+
+--- [Proponent] Step 1: Gathering Clinical Evidence ---
+Error calling OpenRouter (deepseek/deepseek-r1): HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000014E7E4D86D0>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)"))
+   > [Proponent] Found 3 new technical sources.
+--- [Proponent] Step 2: Generating Technical Argument ---
+Error calling OpenRouter (deepseek/deepseek-v3.2): HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000014E81102F50>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)"))
+
+Error generating response: HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000014E81102F50>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)"))
+
+--- [Opponent] Step 1: Gathering Counter-Evidence ---
+Error calling OpenRouter (deepseek/deepseek-r1): HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000014E81102620>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)"))
+   > [Opponent] Found 3 new technical sources.
+--- [Opponent] Step 2: Generating Technical Counter-Argument ---
+Error calling OpenAI (gpt-5-mini): Connection error.
+
+Error generating response: Connection error.
+
+--- [Moderator] Step 3: Evaluating Scientific Expert Requirements ---
+Error calling OpenRouter (deepseek/deepseek-v3.2): HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000014E811033A0>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)"))
+Error calling OpenAI (gpt-5-mini): Connection error.
+[Critic] Analyzing proceedings...
+Error calling OpenRouter (deepseek/deepseek-v3.2): HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000014E81100AC0>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)"))
+Error calling OpenRouter (deepseek/deepseek-v3.2): HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000014E7E4DA170>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)"))
+
+============================================================
+DEBATE PHASE 2
+============================================================
+
+--- [Proponent] Step 1: Gathering Clinical Evidence ---
+Error calling OpenRouter (deepseek/deepseek-r1): HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000014E811022F0>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)"))
+   > [Proponent] Found 3 new technical sources.
+--- [Proponent] Step 2: Generating Technical Argument ---
+Error calling OpenRouter (deepseek/deepseek-v3.2): HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000014E81103280>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)"))
+
+Error generating response: HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000014E81103280>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)"))
+
+--- [Opponent] Step 1: Gathering Counter-Evidence ---
+Error calling OpenRouter (deepseek/deepseek-r1): HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000014E81102350>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)"))
+   > [Opponent] Found 3 new technical sources.
+--- [Opponent] Step 2: Generating Technical Counter-Argument ---
+Error calling OpenAI (gpt-5-mini): Connection error.
+
+Error generating response: Connection error.
+
+--- [Moderator] Step 3: Evaluating Scientific Expert Requirements ---
+Error calling OpenRouter (deepseek/deepseek-v3.2): HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000014E81103640>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)"))
+Error calling OpenAI (gpt-5-mini): Connection error.
+[Critic] Analyzing proceedings...
+Error calling OpenRouter (deepseek/deepseek-v3.2): HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000014E7E4D8820>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)"))
+Error calling OpenRouter (deepseek/deepseek-v3.2): HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000014E81103730>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)"))
+
+[P-RAG] Archivist retrieving additional evidence...
+Error calling OpenAI (gpt-5-mini): Connection error.
+Error calling OpenRouter (deepseek/deepseek-r1): HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000014E811021D0>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)"))
+[Judge] Reviewing record for completion...
+Error calling OpenRouter (qwen/qwen3-235b-a22b-2507): HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000014E81101C30>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)"))
+
+============================================================
+CONSISTENCY ANALYSIS
+============================================================
+
+Error calling Groq (meta-llama/llama-4-maverick-17b-128e-instruct): Connection error.
+Consistency Analysis:
+Error generating response: Connection error.
+
+
+9. Judge Evaluation...
+
+============================================================
+JUDGE EVALUATION
+============================================================
+
+Judge: Logic & Reasoning Expert evaluating...
+Error calling Groq (meta-llama/llama-4-maverick-17b-128e-instruct): Connection error.
+Error calling Groq (meta-llama/llama-4-maverick-17b-128e-instruct): Connection error.
+Error calling Groq (meta-llama/llama-4-maverick-17b-128e-instruct): Connection error.
+  Winner: opponent (Proponent: 28, Opponent: 28)
+Judge: Evidence Quality Expert evaluating...
+Error calling Groq (llama-3.3-70b-versatile): Connection error.
+Error calling Groq (llama-3.3-70b-versatile): Connection error.
+Error calling Groq (llama-3.3-70b-versatile): Connection error.
+  Winner: opponent (Proponent: 28, Opponent: 28)
+Judge: Scientific Accuracy Expert evaluating...
+Error calling OpenAI (gpt-4o-mini): Connection error.
+Error calling OpenAI (gpt-4o-mini): Connection error.
+Error calling OpenAI (gpt-4o-mini): Connection error.
+  Winner: opponent (Proponent: 28, Opponent: 28)
+
+Provisional Winner: opponent
+Aggregate Scores - Proponent: 84, Opponent: 84
+Confidence: 0.000
+
+10. Self-Reflection Round...
+
+============================================================
+SELF-REFLECTION ROUND
+============================================================
+Winner: Scientific Proponent (opponent)
+Performing self-critique...
+
+Error calling OpenAI (gpt-5-mini): Connection error.
+Self-reflection complete
+Confidence adjustment: -0.05
+
+11. Generating Final Verdict...
+
+============================================================
+FINAL VERDICT GENERATION
+============================================================
+
+Verdict: REFUTE
+Confidence: 0.152
+Ground Truth: SUPPORT
+Correct: False
+   Verdict: REFUTE
+   Confidence: 0.152
+
+   [SAVED] Verdict appended to D:\thesis\PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID\framework\outcome\all_verdicts.jsonl
+   [SAVED] Claim ID appended to D:\thesis\PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID\framework\outcome\processed_claims.txt

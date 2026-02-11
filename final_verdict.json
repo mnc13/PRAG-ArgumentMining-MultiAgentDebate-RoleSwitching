@@ -1,25 +1,27 @@
 {
-  "claim": "COVID-19 increases the risk for stroke only when patients have a significant number of pre-existing stroke risk factors.",
-  "verdict": "SUPPORT",
-  "confidence": 0.233,
-  "ground_truth_label": "REFUTE",
+  "claim": "Young patients with COVID-19 can have sudden strokes with few to no prior risk factors.",
+  "verdict": "REFUTE",
+  "confidence": 0.152,
+  "ground_truth_label": "SUPPORT",
   "correct": false,
   "reasoning": {
-    "winner": "proponent",
-    "winner_agent": "Scientific Proponent",
+    "winner": "opponent",
+    "winner_agent": "Scientific Opponent",
     "main_arguments": {
-      "proponent": "Population-level clinical data indicate that SARS-CoV-2 infection is not universally associated with a large excess risk of acute cerebrovascular events: a study reporting stroke incidence and outcomes in a COVID-19 cohort documented a low 30\u2011day incidence of stroke among infected patients, arguing ...",
-      "opponent": "The proponent's argument hinges on a narrow interpretation of a single cohort study reporting low stroke incidence (35401913), but this overlooks critical methodological limitations and broader evidence. A low absolute incidence does not equate to a lack of increased relative risk; without compariso..."
+      "proponent": "SARS\u2011CoV\u20112 infection has been repeatedly associated with acute ischemic cerebrovascular events occurring in younger patients who lack conventional vascular comorbidities. Case series and systematic reviews document strokes in adults younger than 55 and even in pediatric age groups during the pandemi...",
+      "opponent": "The claim that young patients with COVID-19 can have sudden strokes with few to no prior risk factors is not substantiated by the available evidence and suffers from significant methodological and inferential flaws.\n\nFirst, the evidence cited in support relies heavily on low-level evidence, such as ..."
     },
     "decision_factors": [
-      "Scientific Accuracy Expert: The proponent won the debate by effectively highlighting the low observed incidence of stroke in COVID-19 patients as evidence against a significant independent risk factor for cerebrovascular events....",
-      "Role-switching demonstrated consistent argumentation",
-      "Self-reflection acknowledged weaknesses (confidence adjusted by -0.30)"
+      "Logic & Reasoning Expert: Error generating response: Connection error....",
+      "Evidence Quality Expert: Error generating response: Connection error....",
+      "Scientific Accuracy Expert: Error generating response: Connection error....",
+      "Role-switching revealed some inconsistencies",
+      "Self-reflection acknowledged weaknesses (confidence adjusted by -0.05)"
     ]
   },
   "key_evidence": [
     {
-      "source_id": "37178780",
+      "source_id": "36351782",
       "relevance": 0,
       "round": 1
     },
@@ -29,29 +31,29 @@
       "round": 1
     },
     {
-      "source_id": "35142148",
+      "source_id": "34352787",
       "relevance": 0,
       "round": 2
     },
     {
-      "source_id": "32761396",
+      "source_id": "32493597",
       "relevance": 0,
       "round": 2
     },
     {
-      "source_id": "35142148",
+      "source_id": "34268645",
       "relevance": 0,
       "round": 3
     }
   ],
   "metadata": {
     "judge_scores": {
-      "proponent": 91,
-      "opponent": 90
+      "proponent": 84,
+      "opponent": 84
     },
-    "role_switch_consistent": true,
-    "self_reflection_adjustment": -0.3,
+    "role_switch_consistent": false,
+    "self_reflection_adjustment": -0.05,
     "debate_rounds": 5,
-    "total_evidence_used": 16
+    "total_evidence_used": 18
   }
 }

@@ -1,5 +1,5 @@
 {
-  "claim": "COVID-19 increases the risk for stroke only when patients have a significant number of pre-existing stroke risk factors.",
+  "claim": "Young patients with COVID-19 can have sudden strokes with few to no prior risk factors.",
   "judges": [
     {
       "judge_name": "Logic & Reasoning Expert",
@@ -19,53 +19,53 @@
         "total": 28
       },
       "winner": "opponent",
-      "reasoning": "The opponent won this debate because they effectively challenged the proponent's reliance on a single study by highlighting its methodological limitations, such as the lack of a control group, and pointing out that a low absolute incidence doesn't necessarily mean a lack of increased relative risk. Additionally, the opponent presented a meta-analysis (33219563) that directly assessed cerebrovascular events, providing a more comprehensive evidence base."
+      "reasoning": "Error generating response: Connection error."
     },
     {
       "judge_name": "Evidence Quality Expert",
       "model": "llama-3.3-70b-versatile",
       "proponent_scores": {
-        "evidence_quality": 8,
-        "logical_consistency": 9,
-        "persuasiveness": 8,
-        "scientific_accuracy": 8,
-        "total": 33
+        "evidence_quality": 7,
+        "logical_consistency": 7,
+        "persuasiveness": 7,
+        "scientific_accuracy": 7,
+        "total": 28
       },
       "opponent_scores": {
-        "evidence_quality": 8,
-        "logical_consistency": 9,
-        "persuasiveness": 8,
-        "scientific_accuracy": 9,
-        "total": 34
+        "evidence_quality": 7,
+        "logical_consistency": 7,
+        "persuasiveness": 7,
+        "scientific_accuracy": 7,
+        "total": 28
       },
       "winner": "opponent",
-      "reasoning": "The opponent won this debate because they effectively pointed out the methodological limitations of the proponent's cited study, including the lack of a control group to establish a baseline risk. The opponent also introduced a meta-analysis of observational data, which provides a more comprehensive understanding of the relationship between COVID-19 and cerebrovascular events. This broader evidence base undermines the proponent's narrow interpretation of a single cohort study."
+      "reasoning": "Error generating response: Connection error."
     },
     {
       "judge_name": "Scientific Accuracy Expert",
       "model": "gpt-4o-mini",
       "proponent_scores": {
         "evidence_quality": 7,
-        "logical_consistency": 8,
+        "logical_consistency": 7,
         "persuasiveness": 7,
-        "scientific_accuracy": 8,
-        "total": 30
+        "scientific_accuracy": 7,
+        "total": 28
       },
       "opponent_scores": {
         "evidence_quality": 7,
-        "logical_consistency": 8,
+        "logical_consistency": 7,
         "persuasiveness": 7,
-        "scientific_accuracy": 6,
+        "scientific_accuracy": 7,
         "total": 28
       },
-      "winner": "proponent",
-      "reasoning": "The proponent won the debate by effectively highlighting the low observed incidence of stroke in COVID-19 patients as evidence against a significant independent risk factor for cerebrovascular events. Their argument was supported by population-level clinical data, which suggests that the relationship between SARS-CoV-2 infection and stroke is not as strong as posited by the opponent, who relied on broader evidence without adequately addressing the specific findings of the cited study. This focus on empirical data and its interpretation allowed the proponent to present a compelling case for their position."
+      "winner": "opponent",
+      "reasoning": "Error generating response: Connection error."
     }
   ],
   "aggregate_scores": {
-    "proponent": 91,
-    "opponent": 90
+    "proponent": 84,
+    "opponent": 84
   },
-  "provisional_winner": "proponent",
-  "confidence": 0.006
+  "provisional_winner": "opponent",
+  "confidence": 0.0
 }

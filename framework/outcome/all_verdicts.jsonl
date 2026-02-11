@@ -1,1 +1,2 @@
 {"claim_id": "60ac6953f9b9e03ea4d8e692_0", "verdict": "SUPPORT", "confidence": 0.233, "ground_truth": "REFUTE", "correct": false}
+{"claim_id": "60ac6953f9b9e03ea4d8e692_1", "verdict": "REFUTE", "confidence": 0.152, "ground_truth": "SUPPORT", "correct": false}

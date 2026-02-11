@@ -140,21 +140,41 @@ def main():
             for i, ev in enumerate(retrieved_evidence):
                 log(f"   - Evidence {i+1} (ID: {ev.source_id}): {ev.text[:150]}...")
 
-            log("\n5. Evidence-First Debate...")
-            debate_state = DebateState(claim=extracted_claim, evidence_pool=retrieved_evidence)
-            debater = EvidenceFirstDebateAgent(llm)
-            shared_set = debater.negotiate_evidence(debate_state)
+            log("\n5. Evidence Negotiation & Arbitration...")
+            from negotiation_engine import EvidenceNegotiator
+            negotiator = EvidenceNegotiator(retriever, llm)
             
-            # Log Shared Evidence Set
-            log("   [SHARED EVIDENCE SET AGREED]:")
-            for i, ev in enumerate(shared_set):
-                log(f"   - {i+1}. Source ID: {ev.source_id} | Relevance: {ev.relevance_score:.2f}")
+            # Run the 6-point procedure
+            negotiator.prepare_pools(extracted_claim, argument.premises)
+            negotiator.negotiate_phase(extracted_claim)
+            negotiator.judge_arbitration(extracted_claim)
+            
+            neg_result = negotiator.get_negotiation_json()
+            
+            # Save negotiation state
+            neg_path = os.path.join(outcome_dir, f"negotiation_state_{extracted_claim.id}.json")
+            with open(neg_path, "w") as f:
+                json.dump(neg_result, f, indent=2)
+            log(f"   [SAVED] Negotiation state saved to {neg_path}")
+
+            # Extract admissible evidence for MAD
+            admissible_ids = [item['id'] for item in neg_result['judge_state']['admissible_evidence']]
+            final_evidence_set = [ev for ev in negotiator._deduplicate(
+                negotiator.negotiation_state["shared_pool"] + 
+                negotiator.negotiation_state["proponent_pool"] + 
+                negotiator.negotiation_state["opponent_pool"]
+            ) if ev.source_id in admissible_ids]
+
+            log(f"\n   [JUDGE VERDICT] Admitted {len(final_evidence_set)} items for debate.")
+            for i, ev in enumerate(final_evidence_set):
+                log(f"   - {i+1}. Source ID: {ev.source_id} (Weight: {ev.relevance_score:.2f})")
 
             log("\n6. Initializing Multi-Agent Debate (MAD) Simulation...")
             from prag_engine import ProgressiveRAG
             from mad_orchestrator import MADOrchestrator
             prag = ProgressiveRAG(retriever, llm)
-            mad = MADOrchestrator(extracted_claim, shared_set, [], prag)
+            # Use final_evidence_set from negotiation
+            mad = MADOrchestrator(extracted_claim, final_evidence_set, [], prag)
             
             log("\n7. Running Debate Proceedings...")
             debate_result = mad.run_full_debate(max_rounds=5)

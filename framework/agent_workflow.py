@@ -1,3 +1,5 @@
+import re
+import os
 from typing import List
 from models import Claim, Argument, Evidence, DebateState
 from llm_client import LLMClient
@@ -7,10 +9,22 @@ class ArgumentMiner:
         self.llm_client = llm_client
 
     def mine_arguments(self, claim: Claim) -> Argument:
-        prompt = f"Decompose the following claim into premises: {claim.text}"
+        prompt = (
+            f"As a Scientific Analyst, decompose the following clinical claim into atomic, testable premises "
+            f"suitable for evidence retrieval.\n"
+            f"Claim: {claim.text}\n"
+            f"Format: Return only the list of premises, one per line. No numbering or prefixes."
+        )
         response = self.llm_client.generate(prompt)
-        # Naive parsing for the mock response
-        premises = [line.strip() for line in response.split('\n') if line.strip()]
+        # Handle various list formats (numbered, bulleted, etc) if LLM doesn't follow strict format
+        premises = []
+        for line in response.strip().split('\n'):
+            line = line.strip()
+            if not line: continue
+            # Remove common prefixes like 1. or - or *
+            line = re.sub(r'^[\d\.\-\*\s]+', '', line).strip()
+            if line:
+                premises.append(line)
         return Argument(claim_id=claim.id, premises=premises)
 
 class EvidenceFirstDebateAgent:

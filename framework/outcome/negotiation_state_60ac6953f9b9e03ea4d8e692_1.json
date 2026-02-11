@@ -1,0 +1,211 @@
+{
+  "shared_pool": [
+    {
+      "source_id": "32548163",
+      "text": "[World journal of clinical cases 2020] Clinical characteristics, diagnosis, and treatment of COVID-19: A case report.\n\nCONCLUSION: COVID-19 in young adults can be successfully treated with active treatment. We report a typical case of COVID-19, analyze its clinical characteristics, summarize its cli",
+      "relevance_score": 0.75
+    },
+    {
+      "source_id": "37948730",
+      "text": "[Wiadomosci lekarskie (Warsaw, Poland : 1960) 2023] CLINICAL AND EPIDEMIOLOGICAL FEATURES OF COVID-19 IN CHILDREN FOR THE PERIOD 2020-2022.\n\nOBJECTIVE: The",
+      "relevance_score": 0.75
+    },
+    {
+      "source_id": "35192517",
+      "text": "[Journal of infection in developing countries 2022] COVID-19 disease characteristics in different pediatric age groups.\n\nCONCLUSIONS: As we know the clinical course of COVID-19 in children is less severe than in adults. We also found significant differences in both clinical and laboratory findings b",
+      "relevance_score": 0.75
+    },
+    {
+      "source_id": "32583169",
+      "text": "[Neurological sciences : official journal of the Italian Neurological Society and of the Italian Society of Clinical Neurophysiology 2020] COVID-19-related strokes in adults below 55\u00a0years of age: a case series.\n\nMETHODS: In this series, six patients younger than 55\u00a0years of age with diagnosis of st",
+      "relevance_score": 0.75
+    },
+    {
+      "source_id": "34675873",
+      "text": "[Frontiers in neurology 2021] Prior Stroke and Age Predict Acute Ischemic Stroke Among Hospitalized COVID-19 Patients: A Derivation and Validation Study.\n\nCONCLUSIONS: Hospitalized COVID-19 patients who demonstrate a neurologic symptom and have either a history of prior stroke or are of younger age ",
+      "relevance_score": 0.75
+    },
+    {
+      "source_id": "33870763",
+      "text": "[Clinical and applied thrombosis/hemostasis : official journal of the International Academy of Clinical and Applied Thrombosis/Hemostasis 2021] Ischemic Stroke in the Young.\n\nThe purpose of this article is to address several challenging questions in the management of young patients (those age 60 and",
+      "relevance_score": 0.75
+    },
+    {
+      "source_id": "33173859",
+      "text": "[Brain, behavior, & immunity - health 2020] COVID-19 and stroke, a case series and review of literature.\n\nCONCLUSION: Ischemic strokes are known complications in patients with severe COVID-19.",
+      "relevance_score": 0.75
+    },
+    {
+      "source_id": "32493597",
+      "text": "[Neurologia 2020] Stroke as a complication and prognostic factor of COVID-19.\n\nMETHODS: This study systematically reviews case series reporting stroke as a complication of COVID-19, and analyses the prognosis of patients with COVID-19 and history of stroke. The pathophysiological mechanisms of strok",
+      "relevance_score": 0.75
+    },
+    {
+      "source_id": "35401913",
+      "text": "[The Neurohospitalist 2022] Stroke Incidence and Outcome in a Population With COVID-19.\n\nCONCLUSION: This study showed a low 30-day incidence of stroke among COVID-19 patients.",
+      "relevance_score": 0.75
+    },
+    {
+      "source_id": "32934172",
+      "text": "[Neurology 2020] Stroke risk, phenotypes, and death in COVID-19: Systematic review and newly reported cases.\n\nOBJECTIVES: To investigate the hypothesis that strokes occurring in patients with coronavirus disease 2019 (COVID-19) have distinctive features, we investigated stroke risk, clinical phenoty",
+      "relevance_score": 0.75
+    },
+    {
+      "source_id": "32992199",
+      "text": "[Journal of stroke and cerebrovascular diseases : the official journal of National Stroke Association 2020] Clinical Characteristics of Stroke with COVID-19: A Systematic Review and Meta-Analysis.\n\nBACKGROUND: The coronavirus disease 2019 (COVID-19) potentially increases the risk of thromboembolism ",
+      "relevance_score": 0.75
+    },
+    {
+      "source_id": "38948623",
+      "text": "[Journal of family medicine and primary care 2024] The investigation of the frequency of COVID-19 in patients with a history of stroke.\n\nCONCLUSION: According to the results and data of this research, the probability of infecting COVID-19 is higher in people with a history of stroke, and these patie",
+      "relevance_score": 0.75
+    }
+  ],
+  "proponent_pool": [
+    {
+      "source_id": "34352787",
+      "text": "[European neurology 2021] Cerebrovascular Accident and SARS-CoV-19 (COVID-19): A Systematic Review.\n\nDISCUSSION: The data suggest SARS-CoV-2 is a risk factor for developing stroke, particularly in patients with hypertension and diabetes. Furthermore, the younger average age of stroke in patients wit",
+      "relevance_score": 0.75
+    },
+    {
+      "source_id": "32852257",
+      "text": "[International journal of stroke : official journal of the International Stroke Society 2021] Cerebrovascular events and outcomes in hospitalized patients with COVID-19: The SVIN COVID-19 Multinational Registry.\n\nRESULTS: Of the 14,483 patients with laboratory-confirmed SARS-CoV-2, 172 were diagnose",
+      "relevance_score": 0.75
+    },
+    {
+      "source_id": "37243226",
+      "text": "[Viruses 2023] The Risk Factors for Acute Cerebrovascular Accident (Stroke) in Patients with Severe Acute Respiratory Syndrome Coronavirus (SARS-CoV-2).\n\nd that factors including age, hypertension, deep vein thrombosis, and ischemic heart disease are associated with an increased risk of ischemic str",
+      "relevance_score": 0.75
+    }
+  ],
+  "opponent_pool": [
+    {
+      "source_id": "35380052",
+      "text": "[Stroke 2022] International Prevalence and Mechanisms of SARS-CoV-2 in Childhood Arterial Ischemic Stroke During the COVID-19 Pandemic.\n\nMETHODS: We surveyed international sites with pediatric stroke expertise to determine numbers of hospitalized SARS-CoV-2 patients <18 years, numbers of incident AI",
+      "relevance_score": 0.75
+    },
+    {
+      "source_id": "37592943",
+      "text": "[Frontiers in neurology 2023] Ischemic strokes in COVID-19: risk factors, obesity paradox, and distinction between trigger and causal association.\n\nMETHODS: We describe the characteristics of confirmed COVID-19-related strokes among all cases of COVID-19 hospitalized in our health network, from Nove",
+      "relevance_score": 0.75
+    },
+    {
+      "source_id": "34979237",
+      "text": "[Brain research bulletin 2022] Risk of ischemic stroke in patients with COVID-19 infection: A systematic review and meta-analysis.\n\nAn ongoing global pandemic, the coronavirus disease 2019 is posing threat to people all over the world. The association between COVID-19 and the risk of ischemic stroke",
+      "relevance_score": 0.75
+    }
+  ],
+  "judge_state": {
+    "admissible_evidence": [
+      {
+        "id": "32548163",
+        "weight": 0.75,
+        "reason": "Demonstrates clear clinical correlation with the claim premises.",
+        "text": "[World journal of clinical cases 2020] Clinical characteristics, diagnosis, and treatment of COVID-19: A case report.\n\nCONCLUSION: COVID-19 in young a"
+      },
+      {
+        "id": "37948730",
+        "weight": 0.75,
+        "reason": "Demonstrates clear clinical correlation with the claim premises.",
+        "text": "[Wiadomosci lekarskie (Warsaw, Poland : 1960) 2023] CLINICAL AND EPIDEMIOLOGICAL FEATURES OF COVID-19 IN CHILDREN FOR THE PERIOD 2020-2022.\n\nOBJECTIVE"
+      },
+      {
+        "id": "35192517",
+        "weight": 0.75,
+        "reason": "Demonstrates clear clinical correlation with the claim premises.",
+        "text": "[Journal of infection in developing countries 2022] COVID-19 disease characteristics in different pediatric age groups.\n\nCONCLUSIONS: As we know the c"
+      },
+      {
+        "id": "32583169",
+        "weight": 0.75,
+        "reason": "Demonstrates clear clinical correlation with the claim premises.",
+        "text": "[Neurological sciences : official journal of the Italian Neurological Society and of the Italian Society of Clinical Neurophysiology 2020] COVID-19-re"
+      },
+      {
+        "id": "34675873",
+        "weight": 0.75,
+        "reason": "Demonstrates clear clinical correlation with the claim premises.",
+        "text": "[Frontiers in neurology 2021] Prior Stroke and Age Predict Acute Ischemic Stroke Among Hospitalized COVID-19 Patients: A Derivation and Validation Stu"
+      },
+      {
+        "id": "33870763",
+        "weight": 0.75,
+        "reason": "Demonstrates clear clinical correlation with the claim premises.",
+        "text": "[Clinical and applied thrombosis/hemostasis : official journal of the International Academy of Clinical and Applied Thrombosis/Hemostasis 2021] Ischem"
+      },
+      {
+        "id": "33173859",
+        "weight": 0.75,
+        "reason": "Demonstrates clear clinical correlation with the claim premises.",
+        "text": "[Brain, behavior, & immunity - health 2020] COVID-19 and stroke, a case series and review of literature.\n\nCONCLUSION: Ischemic strokes are known compl"
+      },
+      {
+        "id": "32493597",
+        "weight": 0.75,
+        "reason": "Demonstrates clear clinical correlation with the claim premises.",
+        "text": "[Neurologia 2020] Stroke as a complication and prognostic factor of COVID-19.\n\nMETHODS: This study systematically reviews case series reporting stroke"
+      },
+      {
+        "id": "35401913",
+        "weight": 0.75,
+        "reason": "Demonstrates clear clinical correlation with the claim premises.",
+        "text": "[The Neurohospitalist 2022] Stroke Incidence and Outcome in a Population With COVID-19.\n\nCONCLUSION: This study showed a low 30-day incidence of strok"
+      },
+      {
+        "id": "32934172",
+        "weight": 0.75,
+        "reason": "Demonstrates clear clinical correlation with the claim premises.",
+        "text": "[Neurology 2020] Stroke risk, phenotypes, and death in COVID-19: Systematic review and newly reported cases.\n\nOBJECTIVES: To investigate the hypothesi"
+      },
+      {
+        "id": "32992199",
+        "weight": 0.75,
+        "reason": "Demonstrates clear clinical correlation with the claim premises.",
+        "text": "[Journal of stroke and cerebrovascular diseases : the official journal of National Stroke Association 2020] Clinical Characteristics of Stroke with CO"
+      },
+      {
+        "id": "38948623",
+        "weight": 0.75,
+        "reason": "Demonstrates clear clinical correlation with the claim premises.",
+        "text": "[Journal of family medicine and primary care 2024] The investigation of the frequency of COVID-19 in patients with a history of stroke.\n\nCONCLUSION: A"
+      },
+      {
+        "id": "34352787",
+        "weight": 0.75,
+        "reason": "Demonstrates clear clinical correlation with the claim premises.",
+        "text": "[European neurology 2021] Cerebrovascular Accident and SARS-CoV-19 (COVID-19): A Systematic Review.\n\nDISCUSSION: The data suggest SARS-CoV-2 is a risk"
+      },
+      {
+        "id": "32852257",
+        "weight": 0.75,
+        "reason": "Demonstrates clear clinical correlation with the claim premises.",
+        "text": "[International journal of stroke : official journal of the International Stroke Society 2021] Cerebrovascular events and outcomes in hospitalized pati"
+      },
+      {
+        "id": "37243226",
+        "weight": 0.75,
+        "reason": "Demonstrates clear clinical correlation with the claim premises.",
+        "text": "[Viruses 2023] The Risk Factors for Acute Cerebrovascular Accident (Stroke) in Patients with Severe Acute Respiratory Syndrome Coronavirus (SARS-CoV-2"
+      },
+      {
+        "id": "35380052",
+        "weight": 0.75,
+        "reason": "Demonstrates clear clinical correlation with the claim premises.",
+        "text": "[Stroke 2022] International Prevalence and Mechanisms of SARS-CoV-2 in Childhood Arterial Ischemic Stroke During the COVID-19 Pandemic.\n\nMETHODS: We s"
+      },
+      {
+        "id": "37592943",
+        "weight": 0.75,
+        "reason": "Demonstrates clear clinical correlation with the claim premises.",
+        "text": "[Frontiers in neurology 2023] Ischemic strokes in COVID-19: risk factors, obesity paradox, and distinction between trigger and causal association.\n\nME"
+      },
+      {
+        "id": "34979237",
+        "weight": 0.75,
+        "reason": "Demonstrates clear clinical correlation with the claim premises.",
+        "text": "[Brain research bulletin 2022] Risk of ischemic stroke in patients with COVID-19 infection: A systematic review and meta-analysis.\n\nAn ongoing global "
+      }
+    ],
+    "disputed_items": []
+  }
+}
