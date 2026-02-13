@@ -1,192 +1,170 @@
 {
-  "total_retrievals": 17,
-  "rounds_with_prag": 5,
+  "total_retrievals": 15,
+  "rounds_with_prag": 4,
   "history": [
     {
       "round": 1,
-      "query": "Based on the request for the **\"latest evidence\"** without specific context, the optimal query prioritizes recency and scientific relevance. The search should focus on recent peer-reviewed publications and preprints:\n\n**\"scientific evidence published in 2023-2024 OR latest clinical trials OR recent systematic reviews\"**  \n\n### Key elements:\n- **Timeframe**: `2023-2024` ensures retrieval of the most current data.\n- **Source focus**: Targets high-impact evidence types (clinical trials, systematic reviews).\n- **Recency emphasis**: Explicit inclusion of \"latest\" and \"recent\" aligns with the request.  \n\nThis query balances specificity with flexibility, accommodating diverse topics while prioritizing authoritative, up-to-date results from scientific databases.",
+      "query": "Based on the **empty debate context** and the request for the **\"latest evidence\"**, it's impossible to formulate a precise scientific search query. **Specific keywords from the debate context are essential.**\n\n**To create a useful query, please provide the topic or key terms being debated.** For example:\n\n*   If the debate is about **climate change impacts**, a query could be:  \n    `(\"climate change\" OR \"global warming\") AND (\"health impacts\" OR \"economic effects\") AND (\"systematic review\" OR \"meta-analysis\" OR \"clinical trial\") published in the last 2 years`\n\n*   If the debate is about **a specific medical treatment**, a query could be:  \n    `\"[Drug Name/Intervention]\" AND \"[Condition/Disease]\" AND (\"efficacy\" OR \"safety\") AND (\"randomized controlled trial\" OR \"cohort study\") published in the last 1 year`\n\n**Without the debate topic/keywords, the best possible generic query is:**  \n`(\"latest research\" OR \"recent evidence\") AND (\"systematic review\" OR \"meta-analysis\" OR \"randomized controlled trial\")`  \n*(This will retrieve recent high-level evidence but is not topic-specific and will be very broad/low relevance)*\n\n**Please provide the subject of the debate to generate a precise, evidence-based query.**",
       "context": "Phase 1 - Scientific Proponent",
       "num_results": 3,
       "evidence_ids": [
-        "36351782",
         "37178780",
-        "37965606"
+        "37178780",
+        "38814687"
       ]
     },
     {
       "round": 1,
-      "query": "Based on the debate context and request for the **latest evidence**, here is a precise PubMed search query:\n\n```pubmed\n(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"ischemic stroke\" OR \"cerebrovascular event\") AND (\"young adult\" OR adolescent OR pediatric OR \"under 55\" OR \"without risk factors\") AND (\"hypercoagulability\" OR \"endothelial dysfunction\" OR \"prothrombotic\") AND (\"2023\"[Date - Publication] : \"3000\"[Date - Publication])\n```\n\n**Explanation:**\n\n1.  **Core Concepts:** Combines `COVID-19/SARS-CoV-2` with `ischemic stroke/cerebrovascular event`.\n2.  **Key Population:** Targets `young adults, adolescents, pediatric patients, those under 55, or specifically those without traditional risk factors`.\n3.  **Mechanism:** Includes terms for the proposed pathophysiology (`hypercoagulability, endothelial dysfunction, prothrombotic state`) to find relevant mechanistic or clinical evidence.\n4.  **Recency:** Filters for publications from **2023 onwards** (`\"2023\"[Date - Publication] : \"3000\"[Date - Publication]`) to capture the *latest* evidence beyond the citations provided (which are mostly 2020-2022).\n5.  **Structure:** Uses parentheses `()` for grouping, `OR` for synonyms within groups, and `AND` to require all core concepts. The date filter ensures focus on recent findings.\n\nThis query efficiently targets recent studies investigating stroke in young/otherwise healthy COVID-19 patients, specifically exploring the independent role of the virus and its associated prothrombotic mechanisms.",
+      "query": "Based on the debate context and request for the **latest evidence** on the incidence and distribution of COVID-19-associated Kawasaki Disease (KD) or MIS-C in children, the precise search query is:\n\n> **`(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"Kawasaki Disease\" OR MIS-C) AND (child* OR pediatric) AND (incidence OR trend* OR epidemiolog* OR cluster* OR \"geographic distribution\") AND (systematic review OR meta-analysis OR \"cohort study\" OR surveillance) AND (2022:2024)`**\n\n### Key Components Justified:\n1.  **Core Concepts:** `(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"Kawasaki Disease\" OR MIS-C) AND (child* OR pediatric)`  \n    *   *Why:* Directly targets the diseases and population in question.\n2.  **Incidence & Distribution Focus:** `(incidence OR trend* OR epidemiolog* OR cluster* OR \"geographic distribution\")`  \n    *   *Why:* Reflects the debate's core argument about whether cases are widespread/ubiquitous or sporadic/limited/clustered. Terms like \"trends\" and \"geographic distribution\" specifically address changes over time and location.\n3.  **Robust Evidence Filter:** `(systematic review OR meta-analysis OR \"cohort study\" OR surveillance)`  \n    *   *Why:* Prioritizes high-level evidence (reviews, meta-analyses) and large-scale observational data (cohorts, surveillance systems) needed to assess population-level incidence and patterns, as referenced in the context (e.g., \"large case series,\" \"population-level data\").\n4.  **Recency Filter:** `(2022:2024)`  \n    *   *Why:* Explicitly limits results to the **latest 2-3 years** to capture the most recent evidence on trends and incidence post-initial pandemic waves, as requested (\"latest evidence\"). This timeframe moves beyond the early case reports (2020-2021) discussed in the context.",
       "context": "Phase 1 - Scientific Opponent",
       "num_results": 3,
       "evidence_ids": [
-        "34352787",
-        "36171201",
-        "32852257"
+        "34331326",
+        "39017646",
+        "33884312"
       ]
     },
     {
       "round": 2,
-      "query": "Based on the debate context and the request for the **latest evidence** on COVID-19 and stroke in young patients without traditional risk factors, the precise search query is:\n\n**`(\"SARS-CoV-2\" OR \"COVID-19\") AND (\"ischemic stroke\" OR \"cerebrovascular event\") AND (\"young adult\" OR adolescent OR pediatric OR \"under 55\") AND (\"risk factors\" OR etiology OR pathophysiology) AND (\"without comorbidities\" OR \"no risk factors\") AND (incidence OR risk OR association) AND (\"2023\"[Date - Publication] : \"3000\"[Date - Publication])`**\n\n**Key components explained:**  \n1.  **`(\"SARS-CoV-2\" OR \"COVID-19\")`**: Targets the infection.  \n2.  **`(\"ischemic stroke\" OR \"cerebrovascular event\")`**: Specifies the outcome.  \n3.  **`(\"young adult\" OR adolescent OR pediatric OR \"under 55\")`**: Focuses on the debated age group.  \n4.  **`(\"risk factors\" OR etiology OR pathophysiology)`**: Addresses causation/mechanisms (core debate point).  \n5.  **`(\"without comorbidities\" OR \"no risk factors\")`**: Directly targets the \"few to no prior risk factors\" claim.  \n6.  **`(incidence OR risk OR association)`**: Ensures retrieval of epidemiological/quantitative studies.  \n7.  **`(\"2023\"[Date - Publication] : \"3000\"[Date - Publication])`**: Filters for the **latest evidence** published since 2023 (post-dating the latest citations in the debate).  \n\nThis query prioritizes recent, relevant studies specifically investigating the disputed link between COVID-19 and stroke in young, otherwise healthy individuals.",
+      "query": "Based on the debate context and the request for the **latest evidence**, the precise search query is:\n\n**`(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"Kawasaki disease\" OR \"MIS-C\") AND (\"children\" OR \"pediatric\") AND (\"incidence\" OR \"risk\" OR \"temporal trends\" OR \"population-based\") AND (\"2021\"\u2013\"2024\")`**\n\n### Key Rationale:\n1.  **Core Concepts:** Combines the virus (`COVID-19 OR SARS-CoV-2`) and the diseases (`Kawasaki disease OR MIS-C`) in the target population (`children OR pediatric`).\n2.  **Focus of Dispute:** Targets evidence types central to the debate:\n    *   `incidence` (changes over time, geographic variation)\n    *   `risk` (quantified association, hazard ratios)\n    *   `temporal trends` (link to pandemic timing)\n    *   `population-based` (studies like Evidence 14 & 15).\n3.  **\"Latest Evidence\":** Explicitly limits results to studies published **since 2021** to capture data newer than the referenced evidence (Evidence 4-8, 14-16, likely 2020/early 2021). This ensures the query prioritizes the most recent findings.",
       "context": "Phase 2 - Scientific Proponent",
       "num_results": 3,
       "evidence_ids": [
-        "34352787",
-        "32493597",
-        "36418211"
+        "34140220",
+        "32876096",
+        "34331326"
       ]
     },
     {
       "round": 2,
-      "query": "Based on the debate context and request for the **latest evidence**, here is a precise search query:\n\n```sql\n(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"acute ischemic stroke\" OR \"cerebrovascular event\") AND (\"young adult\" OR \"young patient\" OR \"pediatric\" OR \"child\" OR \"adolescent\" OR \"under 55\") AND (\"risk factors\" OR \"without risk factors\" OR \"low risk\") AND (\"registry data\" OR \"cohort study\" OR \"systematic review\" OR \"mechanism\" OR \"pathophysiology\") AND (2023:2025)\n```\n\n**Key components explained:**\n1.  **Population/Disease:** `(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"acute ischemic stroke\" OR \"cerebrovascular event\")` captures the core condition and outcome.\n2.  **Age Focus:** `(\"young adult\" OR \"young patient\" OR \"pediatric\" OR \"child\" OR \"adolescent\" OR \"under 55\")` targets the debated age group.\n3.  **Risk Factor Controversy:** `(\"risk factors\" OR \"without risk factors\" OR \"low risk\")` addresses the central dispute about prior vascular risk.\n4.  **Evidence Type:** `(\"registry data\" OR \"cohort study\" OR \"systematic review\" OR \"mechanism\" OR \"pathophysiology\")` prioritizes higher-level evidence and mechanistic studies relevant to the debate points.\n5.  **Recency:** `(2023:2025)` focuses on the *latest* evidence, as requested.",
+      "query": "Based on the debate context and the request for the **latest evidence**, here is a precise search query:\n\n**\"Pediatric COVID-19\" OR \"SARS-CoV-2 children\" AND (\"Kawasaki disease\" OR \"MIS-C\") AND (\"incidence trend\" OR \"risk quantification\" OR \"geographic variation\") AND (2023 OR 2024)**\n\n**Why this query works:**\n\n1.  **Focus on Recency:** Explicitly includes `(2023 OR 2024)` to prioritize the latest studies.\n2.  **Core Concepts:** Covers the key elements:\n    *   Population: `\"Pediatric COVID-19\" OR \"SARS-CoV-2 children\"`\n    *   Conditions: `\"Kawasaki disease\" OR \"MIS-C\"`\n    *   Debate-Specific Metrics: `\"incidence trend\"` (addresses changes over time, including post-2020), `\"risk quantification\"` (addresses absolute/relative risk), `\"geographic variation\"` (addresses focal vs. uniform distribution).\n3.  **Neutral & Evidence-Based:** Avoids loaded terms like \"causal\" or \"isolated instances,\" focusing instead on measurable epidemiological patterns relevant to *both* sides of the debate (incidence, risk, distribution trends).\n4.  **Concise:** Combines essential elements into a single, targeted query suitable for scientific databases.",
       "context": "Phase 2 - Scientific Opponent",
       "num_results": 3,
       "evidence_ids": [
-        "32807412",
-        "32852257",
-        "32807412"
+        "35635842",
+        "35635842",
+        "32373339"
       ]
     },
     {
       "round": 2,
-      "query": "Based on the debate context and agent request, here is a precise search query:\n\n**\"Acute ischemic stroke\" incidence \"population-level\" \"2015-2019\" \"18-50 years\" stratified risk factors baseline comparison surveillance bias diagnostic bias**\n\n**Key elements explained:**\n1.  **\"Acute ischemic stroke\"**: Specifies the exact condition.\n2.  **incidence**: Focuses on rate data, not just cases.\n3.  **\"population-level\"**: Ensures broad epidemiological data, not single-center studies.\n4.  **\"2015-2019\"**: Defines the pre-pandemic baseline period.\n5.  **\"18-50 years\"**: Targets the specific young adult age group in question.\n6.  **stratified risk factors**: Directly addresses the need for data broken down by the relevant risk factors (like those used in COVID-19 stroke studies).\n7.  **baseline comparison surveillance bias diagnostic bias**: Captures the core purpose of establishing a reference point and identifying potential biases affecting the COVID-era data interpretation.",
+      "query": "**Search Query:**  \n\"Population-level epidemiological studies\" AND (\"Kawasaki disease\" OR \"KD\") AND (\"SARS-CoV-2\" OR \"COVID-19\") AND (\"temporal clustering\" OR \"infection waves\") AND (\"serological studies\" OR \"seroprevalence\") AND (\"SARS-CoV-2 antibodies\" OR \"anti-SARS-CoV-2 IgG\") AND (\"without prior diagnosis\" OR \"undiagnosed COVID-19\").  \n\nThis query combines keywords targeting population-scale epidemiological data on KD/COVID-19 temporal associations and serological evidence linking SARS-CoV-2 antibodies to KD in patients lacking prior COVID-19 diagnoses.",
       "context": "Phase 2 - Scientific Opponent",
       "num_results": 3,
       "evidence_ids": [
-        "39606612",
-        "35470196",
-        "32787707"
+        "32876096",
+        "37940843",
+        "35482574"
       ]
     },
     {
       "round": 3,
-      "query": "Based on the debate context and the request for the **latest evidence**, here is a precise search query:\n\n```sql\n(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"stroke\" OR \"ischemic stroke\") AND (\"young adult\" OR \"young patient\" OR adolescent OR pediatric OR \"under 50\") AND (\"risk factors\" OR \"without comorbidities\" OR \"low risk\" OR \"minimal risk\") AND (\"incidence\" OR \"cohort\" OR \"registry\" OR \"case series\") AND (\"2023\"[Date - Publication] : \"2025\"[Date - Publication])\n```\n\n**Key elements explained:**\n\n1.  **Core Concepts:** Combines `COVID-19/SARS-CoV-2`, `stroke`, and `young populations` (using multiple synonyms).\n2.  **Critical Nuance:** Explicitly includes terms for the *absence of traditional risk factors* (`without comorbidities`, `low risk`, `minimal risk`).\n3.  **Evidence Focus:** Prioritizes study types mentioned in the debate (`cohort`, `registry`, `case series`) and `incidence` data.\n4.  **\"Latest Evidence\":** Filters for publications **from 2023 to the present** to capture the most recent data, addressing the specific request and moving beyond the studies cited in the debate (which are primarily 2020-2022).",
+      "query": "**Search Query:**  \n(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"Kawasaki Disease\" OR \"Multisystem Inflammatory Syndrome in Children\" OR \"MIS-C\") AND (\"incidence\" OR \"risk\" OR \"hazard ratio\" OR \"temporal association\") AND (\"pediatric\" OR \"children\") AND (2022-2023[Date - Publication])  \n\n**Rationale:**  \n- Focuses on **recent evidence** (2022\u20132023) to address the \u201clatest\u201d request.  \n- Combines terms for **SARS-CoV-2/COVID-19**, **Kawasaki Disease (KD)**, and **MIS-C** with modifiers like \u201cincidence\u201d and \u201chazard ratio\u201d to target epidemiological risk quantification.  \n- Includes **pediatric populations** and \u201ctemporal association\u201d to prioritize studies linking COVID-19 to inflammatory sequelae in children.  \n- Structured for databases like PubMed, using date filters to retrieve current, peer-reviewed studies.",
       "context": "Phase 3 - Scientific Proponent",
       "num_results": 3,
       "evidence_ids": [
-        "34268645",
-        "32761396",
-        "32807412"
+        "34140220",
+        "34872479",
+        "34006982"
       ]
     },
     {
       "round": 3,
-      "query": "Based on the debate context and the request for the **latest evidence**, here is a precise search query:\n\n```sql\n(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"acute ischemic stroke\" OR \"cerebrovascular event\") \nAND (\"young patients\" OR \"young adults\" OR \"adolescents\" OR \"children\" OR \"under 55\") \nAND (\"without prior risk factors\" OR \"no comorbidities\" OR \"minimal vascular risk\") \nAND (\"incidence\" OR \"pathophysiology\" OR \"mechanism\" OR \"registry data\" OR \"cohort analysis\") \nAND (\"2023\"[Date - Publication] : \"3000\"[Date - Publication] OR \"last 1 year\"[Filter])\n```\n\n**Key elements explained:**\n1.  **Core Concepts:** Combines COVID-19/SARS-CoV-2, stroke types, and the young patient population.\n2.  **Critical Distinction:** Explicitly includes terms for the *absence of prior risk factors/comorbidities*.\n3.  **Evidence Focus:** Targets terms for incidence, pathophysiology, and study types (registry, cohort) central to the debate.\n4.  **\"Latest Evidence\" Requirement:** Filters for publications from **2023 onwards** or the **last year** to prioritize the most recent data, as the debate cites studies up to 2022/early 2023 (e.g., 35401913, 34675873).",
+      "query": "Based on the debate context and request for the **latest evidence** on the relationship between SARS-CoV-2, MIS-C, and Kawasaki disease in children, focusing on incidence patterns and clustering, the precise search query is:\n\n**\"SARS-CoV-2\" OR \"COVID-19\" AND (\"Multisystem Inflammatory Syndrome in Children\" OR MIS-C OR \"Kawasaki disease\" OR \"KD-like\") AND \"incidence\" AND (cluster* OR pattern* OR surveillance OR \"population-based\") AND (child* OR pediatric OR paediatric) AND (2022-2024)**\n\n### Reasoning:\n1.  **Core Concepts:** Explicitly includes `SARS-CoV-2/COVID-19`, `MIS-C`, `Kawasaki disease/KD-like`, and `children/pediatric`.\n2.  **Key Debate Focus:** Targets `incidence` and terms related to geographic/temporal distribution (`cluster*`, `pattern*`) and potential reporting bias (`surveillance`, `population-based`).\n3.  **\"Latest Evidence\":** Filters for publications from **2022 onwards** to capture studies published after the evidence cited in the debate (e.g., Evidence 14, 15, 16).\n4.  **Specificity:** Avoids vague terms like \"isolated instances\" or \"systematic,\" instead using measurable concepts central to the disagreement (incidence patterns, clustering).",
       "context": "Phase 3 - Scientific Opponent",
       "num_results": 3,
       "evidence_ids": [
-        "32852257",
-        "34268645",
-        "34352787"
+        "32921711",
+        "33537269",
+        "34331326"
       ]
     },
     {
       "round": 4,
-      "query": "Based on the debate context and the request for the **latest evidence**, here is a precise search query:\n\n```sql\n(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"stroke\" OR \"cerebrovascular event\") AND (\"young\" OR \"adolescent\" OR \"pediatric\") AND (\"risk factors\" OR \"comorbidity\" OR \"pathophysiology\" OR \"incidence\") AND (\"2020\"[Date - Publication] : \"2024\"[Date - Publication])\n```\n\n**Rationale:**\n\n1.  **Core Concepts:** Explicitly includes `COVID-19/SARS-CoV-2`, `stroke/cerebrovascular event`, and `young/adolescent/pediatric` to target the specific population and outcome.\n2.  **Debate Focus:** Incorporates `risk factors`, `comorbidity`, and `pathophysiology` to address the central disagreement about the role of pre-existing conditions vs. independent viral mechanisms. `Incidence` captures the epidemiological aspect.\n3.  **Latest Evidence:** Uses the publication date filter `(\"2020\"[Date - Publication] : \"2024\"[Date - Publication])` to prioritize the most recent studies published during the pandemic era, as requested.\n4.  **Comprehensiveness:** Combines clinical (`stroke`, `incidence`, `risk factors`) and mechanistic (`pathophysiology`) terms to capture both epidemiological trends and biological explanations relevant to the debate.",
+      "query": "Based on the debate context and the request for the **latest evidence**, here is a precise search query:\n\n```\n(\"SARS-CoV-2\" OR \"COVID-19\") AND (\"Kawasaki disease\" OR \"MIS-C\" OR \"Multisystem Inflammatory Syndrome in Children\") AND (children OR pediatric) AND (\"relative risk\" OR \"hazard ratio\" OR \"incidence\" OR \"epidemiology\") AND (\"systematic association\" OR \"temporal association\" OR \"causal link\") \n```\n\n**Key elements explained:**\n\n1.  **Core Concepts:** `(\"SARS-CoV-2\" OR \"COVID-19\")` captures the virus/disease. `(\"Kawasaki disease\" OR \"MIS-C\" OR \"Multisystem Inflammatory Syndrome in Children\")` captures the inflammatory conditions in question. `(children OR pediatric)` focuses the search on the relevant population.\n2.  **Quantitative Measures:** `(\"relative risk\" OR \"hazard ratio\" OR \"incidence\" OR \"epidemiology\")` targets studies providing the statistical evidence central to the debate (like the HR 3.023 for MIS-C and 1.736 for KD).\n3.  **Association Type:** `(\"systematic association\" OR \"temporal association\" OR \"causal link\")` directly addresses the core dispute (isolated vs. systematic/non-random association) using terms from the debate context.\n4.  **Implicit Recency:** By specifying the highly specific concepts and association types debated during the pandemic (especially MIS-C), the query inherently prioritizes recent literature (post-2020) without needing a date filter, which could exclude relevant foundational studies cited in the context. Adding `AND (2023 OR 2024)` would enforce strict recency but might miss key late 2022/early 2023 studies.",
       "context": "Phase 4 - Scientific Proponent",
       "num_results": 3,
       "evidence_ids": [
-        "36418211",
-        "35838670",
-        "32761396"
+        "34140220",
+        "34872479",
+        "33452195"
       ]
     },
     {
       "round": 4,
-      "query": "Based on the debate context requesting the **latest evidence** on COVID-19 causing stroke in young patients without traditional risk factors, the precise search query is:\n\n> **(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"acute ischemic stroke\" OR \"cerebrovascular event\") AND (\"young adult\" OR \"young patient\" OR adolescent OR pediatric) AND (\"risk factors\" OR \"no comorbidities\" OR \"previously healthy\") AND (\"incidence\" OR \"mechanism\" OR \"prothrombotic\" OR \"endothelial injury\")**\n\n**Key elements justified:**\n1.  **Core Concepts:** Explicitly includes COVID-19/SARS-CoV-2 and stroke types mentioned (acute ischemic, cerebrovascular).\n2.  **Population:** Focuses on young patients (young adult, adolescent, pediatric) as central to the debate.\n3.  **Critical Factor:** Incorporates terms for the absence of traditional risk factors (\"no comorbidities\", \"previously healthy\") combined with \"risk factors\" to capture comparative studies.\n4.  **Latest Evidence Scope:** Includes terms related to frequency (\"incidence\") and biological mechanisms (\"prothrombotic\", \"endothelial injury\", \"mechanism\") to find recent clinical studies, cohort analyses, and mechanistic research published after the cited references (most from 2020-2021).\n5.  **Conciseness:** Combines essential modifiers into a single query optimized for biomedical databases (PubMed, etc.), avoiding overly broad terms.",
+      "query": "Based on the debate context and the request for the **latest evidence**, here is a precise search query:\n\n```sql\n(\"SARS-CoV-2\" OR \"COVID-19\") AND (\"pediatric\" OR \"children\") AND (\"MIS-C\" OR \"Multisystem Inflammatory Syndrome in Children\" OR \"Kawasaki disease\") AND (\"incidence\" OR \"risk\" OR \"epidemiology\" OR \"temporal trend\") AND (\"2023\"[Date - Publication] : \"2024\"[Date - Publication])\n```\n\n**Key elements explained:**\n1.  **Core Terms:** Combines the virus (`SARS-CoV-2`/`COVID-19`), population (`pediatric`/`children`), and conditions (`MIS-C`/`Kawasaki disease`).\n2.  **Focus:** Targets epidemiological data (`incidence`, `risk`, `epidemiology`, `temporal trend`) crucial to the debate on prevalence and patterns.\n3.  **Recency Filter:** Limits results to studies published in **2023 or 2024** to retrieve the *latest evidence* as requested. This ensures the query captures post-pandemic phase data and recent analyses of trends/bias concerns.",
       "context": "Phase 4 - Scientific Opponent",
       "num_results": 3,
       "evidence_ids": [
-        "34352787",
-        "35142148",
-        "32634813"
+        "34140220",
+        "34331326",
+        "38302974"
       ]
     },
     {
       "round": 4,
-      "query": "Based on the debate context and the specific request for controlled epidemiological studies, here is a precise search query:\n\n```sql\n(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"ischemic stroke\" OR stroke) AND (young OR \"young adult\" OR \"18-50\") AND (\"cohort study\" OR \"case-control study\" OR \"population-based\") AND (\"incidence rate\" OR \"risk ratio\" OR \"adjusted hazard ratio\") AND (\"confound*\" OR \"risk factors\" OR \"comorbidities\")\n```\n\n**Key elements addressed:**\n1.  **Exposure:** `(\"COVID-19\" OR \"SARS-CoV-2\")`\n2.  **Outcome:** `(\"ischemic stroke\" OR stroke)`\n3.  **Target Population:** `(young OR \"young adult\" OR \"18-50\")`\n4.  **Study Type:** `(\"cohort study\" OR \"case-control study\" OR \"population-based\")`\n5.  **Analysis Requirement:** `(\"incidence rate\" OR \"risk ratio\" OR \"adjusted hazard ratio\")` (Implies quantification and comparison)\n6.  **Confounding Control:** `(\"confound*\" OR \"risk factors\" OR \"comorbidities\")` (Captures studies discussing/adjusting for these factors)\n\nThis query directly targets **large-scale epidemiological studies (cohort/case-control/population-based)** investigating **stroke incidence in young adults with COVID-19**, specifically emphasizing studies that report **adjusted risk measures (like adjusted hazard ratios)** indicating **control for confounders and pre-existing risk factors**, as explicitly requested.",
+      "query": "Based on the debate context and the specific request for anonymized records showing clustering patterns, the precise search query is:\n\n> **(\"Kawasaki disease\" OR \"MIS-C\" OR \"Multisystem Inflammatory Syndrome in Children\") AND (\"SARS-CoV-2\" OR \"COVID-19\") AND (\"pediatric\" OR \"child*\") AND (\"temporal clustering\" OR \"geographic clustering\" OR \"spatiotemporal pattern\") AND (\"incidence\" OR \"infection rate\" OR \"case series\") AND (\"medical records\" OR \"electronic health records\" OR \"population data\")**\n\n**Key elements explained:**\n\n1.  **Conditions:** `(\"Kawasaki disease\" OR \"MIS-C\"...)` captures KD and its COVID-associated variant.\n2.  **Virus:** `(\"SARS-CoV-2\" OR \"COVID-19\")` specifies the infection link.\n3.  **Population:** `(\"pediatric\" OR \"child*\")` focuses on the relevant age group.\n4.  **Pattern Requested:** `(\"temporal clustering\" OR \"geographic clustering\"...)` directly targets the clustering evidence debated.\n5.  **Data Type:** `(\"incidence\" OR \"infection rate\"...)` focuses on population-level rates.\n6.  **Source:** `(\"medical records\" OR \"electronic health records\"...)` aligns with the request for anonymized patient/population records.\n\nThis query efficiently combines the core debate elements (KD/MIS-C, COVID-19, children) with the specific evidence type requested (clustering patterns derived from medical/population records showing incidence rates).",
       "context": "Phase 4 - Scientific Opponent",
       "num_results": 3,
       "evidence_ids": [
-        "34268645",
-        "35470196",
-        "34268645"
-      ]
-    },
-    {
-      "round": 5,
-      "query": "Based on the debate context and the request for the **latest evidence**, here is a precise search query:\n\n```sql\n(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"stroke\" OR \"cerebrovascular event\" OR \"ischemic stroke\") \nAND (\"young\" OR \"adolescent\" OR \"pediatric\" OR \"under 55\") \nAND (\"incidence\" OR \"risk\" OR \"association\") \nAND (\"without risk factors\" OR \"no comorbidities\" OR \"low risk\") \nAND (\"cohort\" OR \"registry\" OR \"systematic review\" OR \"meta-analysis\") \nFILTER: 2023-2024\n```\n\n### Key elements explained:\n1. **Population & Condition**: Targets young patients (`young/adolescent/pediatric/under 55`) with COVID-19 and stroke.  \n2. **Core Controversy**: Focuses on incidence/risk in those `without traditional risk factors` (addressing the opponent's critique).  \n3. **Evidence Quality**: Prioritizes high-level studies (`cohorts, registries, systematic reviews`) to resolve disputes about low-level evidence.  \n4. **Recency**: Limits to **2023-2024** to capture post-pandemic data addressing gaps in earlier studies (e.g., pediatric rarity, acute vs. prior infection).  \n\nThis query directly confronts the debate\u2019s central conflict: *robust epidemiological evidence for stroke in low-risk youth during acute COVID-19*, while excluding older studies already cited by both sides.",
-      "context": "Phase 5 - Scientific Proponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "35470196",
-        "34979237",
-        "35470196"
-      ]
-    },
-    {
-      "round": 5,
-      "query": "Based on the debate context and the request for the **latest evidence**, the most precise search query is:\n\n```pubmed\n(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"stroke\" OR \"ischemic stroke\" OR \"cerebrovascular event\") AND (\"young adult\" OR \"young patient\" OR \"youth\") AND (\"without vascular risk factors\" OR \"no prior risk factors\") AND (\"2023\"[Date - Publication] : \"2024\"[Date - Publication])\n```\n\n### Key Components Justified:\n1.  **Population/Exposure:** `(\"COVID-19\" OR \"SARS-CoV-2\")` - Captures all relevant viral terminology.\n2.  **Outcome:** `(\"stroke\" OR \"ischemic stroke\" OR \"cerebrovascular event\")` - Focuses on the specific neurological events discussed.\n3.  **Patient Group:** `(\"young adult\" OR \"young patient\" OR \"youth\")` - Targets the debated demographic (typically <50-55 years).\n4.  **Critical Distinction:** `(\"without vascular risk factors\" OR \"no prior risk factors\")` - Directly addresses the core debate point about strokes occurring in low-risk individuals.\n5.  **Recency Filter:** `(\"2023\"[Date - Publication] : \"2024\"[Date - Publication])` - Explicitly limits results to studies published **within the last 18-24 months** to find the *latest evidence* beyond the citations provided (which are primarily 2020-2022).\n\nThis query efficiently combines the core scientific concepts from the debate with the specific requirement for recent data, optimizing retrieval of relevant studies published after the citations in the context.",
-      "context": "Phase 5 - Scientific Opponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "32761396",
-        "34144743",
-        "33831333"
+        "32921711",
+        "32692691",
+        "33726806"
       ]
     },
     {
       "round": 1,
-      "query": "Error generating response: HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x0000014E7E4D86D0>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)\"))",
+      "query": "Given the lack of specific context, the query focuses on **recency and high-quality evidence** across scientific literature. For a precise search:  \n\n```  \n(\"last 2 years\" OR \"last 5 years\") AND (\"systematic review\" OR \"meta-analysis\" OR \"randomized controlled trial\") AND (pub_date >= 2022)  \n```  \n\n**Key filters**:  \n1. Prioritizes studies from the **last 2 years** (adjustable to 5 years if needed).  \n2. Targets high-evidence publications: **systematic reviews, meta-analyses, or RCTs**.  \n3. Replace `[topic]` with your subject if context emerges (e.g., `\"stroke prevention\" AND [...]`).  \n\n**Example adaptation**:  \n> `(\"stroke prevention\") AND (\"systematic review\" OR \"RCT\") AND (pub_date >= 2022)`  \n\nThis balances rigor with recency while allowing topic flexibility.",
       "context": "Phase 1 - Scientific Opponent",
       "num_results": 3,
       "evidence_ids": [
-        "35137107",
-        "37327997",
-        "37387072"
+        "37178780",
+        "37178780",
+        "36351782"
       ]
     },
     {
       "round": 1,
-      "query": "Error generating response: HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x0000014E81102620>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)\"))",
+      "query": "Based on the debate context and the request for the **latest evidence**, here is a precise search query focusing on recent epidemiological data for MIS-C and Kawasaki disease incidence in relation to COVID-19:\n\n**Concise Search Query:**\n```\n(\"MIS-C\" OR \"Multisystem Inflammatory Syndrome in Children\" OR \"Kawasaki disease\") AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"incidence\" OR \"epidemiology\" OR \"trend\" OR \"absolute risk\") AND (\"pediatric\" OR \"children\") AND (\"2023\" OR \"2024\")\n```\n\n**Why this query works:**\n\n1.  **Core Concepts:** Captures both specific syndromes (`MIS-C`, `Kawasaki disease`) and the virus (`COVID-19`, `SARS-CoV-2`).\n2.  **Epidemiological Focus:** Uses terms (`incidence`, `epidemiology`, `trend`, `absolute risk`) directly relevant to the debate's focus on population-level occurrence and risk quantification.\n3.  **Population:** Specifies `pediatric` or `children` as the context is MIS-C/Kawasaki in youth.\n4.  **Recency:** Filters for the very latest data by including `2023` OR `2024`. This directly addresses the \"latest evidence\" request.\n5.  **Precision:** Avoids less precise terms like \"relationship\" or \"association\" in favor of concrete epidemiological metrics mentioned in the context (incidence, trends, absolute risk).",
       "context": "Phase 1 - Scientific Proponent",
       "num_results": 3,
       "evidence_ids": [
-        "35137107",
-        "37327997",
-        "37387072"
+        "34140220",
+        "34140220",
+        "33679227"
       ]
     },
     {
       "round": 2,
-      "query": "Error generating response: HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x0000014E811022F0>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)\"))",
+      "query": "Based on the debate context and the request for the **latest evidence**, here is a precise search query:\n\n```sql\n(\"Kawasaki disease\" OR MIS-C OR PIMS-TS) AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"temporal association\" OR cluster* OR outbreak* OR \"increased risk\" OR \"hazard ratio\" OR \"distinct phenotype\") AND (epidemiol* OR cohort OR surveillance) AND (2023 OR 2024)\n```\n\n**Key elements explained:**\n\n1.  **Core Concepts:** `(\"Kawasaki disease\" OR MIS-C OR PIMS-TS) AND (\"COVID-19\" OR \"SARS-CoV-2\")` - Captures the main conditions under debate.\n2.  **Association & Evidence Type:** `(\"temporal association\" OR cluster* OR outbreak* OR \"increased risk\" OR \"hazard ratio\" OR \"distinct phenotype\")` - Focuses on the *nature* of the link debated (temporal clusters, risk elevation, phenotype differences).\n3.  **Methodology Focus:** `(epidemiol* OR cohort OR surveillance)` - Targets the type of evidence emphasized (epidemiological data, cohort studies, surveillance reports) relevant to disproving \"isolation\".\n4.  **Recency:** `AND (2023 OR 2024)` - Explicitly filters for the **latest evidence** published in the last two years.",
       "context": "Phase 2 - Scientific Opponent",
       "num_results": 3,
       "evidence_ids": [
-        "35137107",
-        "37327997",
-        "37387072"
+        "34140220",
+        "34140220",
+        "34140220"
       ]
     },
     {
       "round": 2,
-      "query": "Error generating response: HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x0000014E81102350>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)\"))",
+      "query": "Based on the debate context focusing on clusters, relative/absolute risk, phenotypic differences, and surveillance limitations regarding COVID-19/SARS-CoV-2 and Kawasaki Disease/MIS-C, and the request for the **latest evidence**, here is the precise search query:\n\n```\n(\"Kawasaki disease\" OR MIS-C) AND (SARS-CoV-2 OR COVID-19) AND (\"temporal association\" OR clusters OR \"relative risk\" OR \"absolute risk\" OR surveillance) AND (\"phenotypic differences\" OR underestimation) AND (2023 OR 2024) AND (\"systematic review\" OR \"meta-analysis\")\n```\n\n**Key elements explained:**\n\n1.  **Core Terms:** `(\"Kawasaki disease\" OR MIS-C) AND (SARS-CoV-2 OR COVID-19)` - Captures the primary diseases/virus.\n2.  **Debate Concepts:** `(\"temporal association\" OR clusters OR \"relative risk\" OR \"absolute risk\" OR surveillance) AND (\"phenotypic differences\" OR underestimation)` - Targets the specific points of contention: clusters vs. isolation, risk assessment (relative vs. absolute), distinct phenotypes, and surveillance limitations causing underestimation.\n3.  **Recency:** `(2023 OR 2024)` - Filters for the very latest evidence as requested.\n4.  **Evidence Quality:** `(\"systematic review\" OR \"meta-analysis\")` - Prioritizes high-level synthesis of recent evidence, crucial for resolving the nuanced debate.",
       "context": "Phase 2 - Scientific Proponent",
       "num_results": 3,
       "evidence_ids": [
-        "35137107",
-        "37327997",
-        "37387072"
+        "32876096",
+        "33502003",
+        "34140220"
       ]
     },
     {
       "round": 2,
-      "query": "Error generating response: HTTPSConnectionPool(host='openrouter.ai', port=443): Max retries exceeded with url: /api/v1/chat/completions (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x0000014E811021D0>: Failed to resolve 'openrouter.ai' ([Errno 11001] getaddrinfo failed)\"))",
+      "query": "Based on the debate context and the specific data requested, the most precise search query would be:\n\n> **(\"Multisystem Inflammatory Syndrome in Children\" OR MIS-C OR PIMS-TS OR \"Kawasaki Disease\") AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"patient-level data\" OR \"registry data\" OR \"cohort data\") AND (\"epidemiology\" OR \"incidence\" OR \"temporal association\" OR \"immunology\" OR \"virology\") AND (\"symptom onset\" OR \"demographics\" OR \"comorbidities\" OR \"laboratory findings\" OR \"inflammatory markers\" OR \"cytokines\" OR \"echocardiography\" OR \"treatment\" OR \"outcomes\" OR \"autopsy\" OR \"pre-pandemic\")**\n\n**Key elements covered:**\n\n1.  **Core Conditions:** Explicitly includes MIS-C/PIMS-TS and Kawasaki Disease (KD) alongside COVID-19/SARS-CoV-2.\n2.  **Data Type:** Focuses on retrieving underlying datasets (\"patient-level data\", \"registry data\", \"cohort data\").\n3.  **Analysis Scope:** Incorporates the requested analytical angles (\"epidemiology\", \"incidence\", \"temporal association\", \"immunology\", \"virology\").\n4.  **Specific Data Points:** Lists critical requested variables (\"symptom onset\", \"demographics\", \"comorbidities\", \"laboratory findings\", \"inflammatory markers\", \"cytokines\", \"echocardiography\", \"treatment\", \"outcomes\", \"autopsy\").\n5.  **Critical Comparison:** Includes \"pre-pandemic\" to ensure retrieval of baseline KD data for comparison.",
       "context": "Phase 2 - Scientific Proponent",
       "num_results": 3,
       "evidence_ids": [
-        "35137107",
-        "37327997",
-        "37387072"
+        "34140220",
+        "34121829",
+        "33152254"
       ]
     }
   ]

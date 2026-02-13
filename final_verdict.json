@@ -1,27 +1,27 @@
 {
-  "claim": "Young patients with COVID-19 can have sudden strokes with few to no prior risk factors.",
+  "claim": "Cases of COVID-19 and Kawasaki disease occur in isolated instances.",
   "verdict": "REFUTE",
-  "confidence": 0.152,
-  "ground_truth_label": "SUPPORT",
-  "correct": false,
+  "confidence": 0.353,
+  "ground_truth_label": "REFUTE",
+  "correct": true,
   "reasoning": {
     "winner": "opponent",
     "winner_agent": "Scientific Opponent",
     "main_arguments": {
-      "proponent": "SARS\u2011CoV\u20112 infection has been repeatedly associated with acute ischemic cerebrovascular events occurring in younger patients who lack conventional vascular comorbidities. Case series and systematic reviews document strokes in adults younger than 55 and even in pediatric age groups during the pandemi...",
-      "opponent": "The claim that young patients with COVID-19 can have sudden strokes with few to no prior risk factors is not substantiated by the available evidence and suffers from significant methodological and inferential flaws.\n\nFirst, the evidence cited in support relies heavily on low-level evidence, such as ..."
+      "proponent": "The preponderance of clinical reports and series indicates that COVID-19\u2013associated Kawasaki disease (KD) or KD-like inflammatory syndromes in children have presented as individual cases or small clusters rather than as a diffuse, ubiquitous phenomenon. The first descriptions of concurrent SARS\u2011CoV\u2011...",
+      "opponent": "The claim that cases of COVID-19 and Kawasaki disease occur in isolated instances is not supported by the epidemiological and clinical evidence. A direct causal and temporal association between SARS-CoV-2 infection and Kawasaki-like disease, specifically Multisystem Inflammatory Syndrome in Children..."
     },
     "decision_factors": [
-      "Logic & Reasoning Expert: Error generating response: Connection error....",
-      "Evidence Quality Expert: Error generating response: Connection error....",
-      "Scientific Accuracy Expert: Error generating response: Connection error....",
-      "Role-switching revealed some inconsistencies",
-      "Self-reflection acknowledged weaknesses (confidence adjusted by -0.05)"
+      "Logic & Reasoning Expert: The opponent won this debate because they presented evidence of population-level studies that demonstrate a significant association between COVID-19 and Kawasaki-like disease in children, contradictin...",
+      "Evidence Quality Expert: The opponent won this debate because they presented a stronger argument backed by epidemiological and clinical evidence, specifically citing population-level studies that demonstrate a direct causal l...",
+      "Scientific Accuracy Expert: The opponent won the debate by effectively countering the proponent's assertion that COVID-19-associated Kawasaki disease occurs primarily in isolated cases. They provided robust epidemiological evide...",
+      "Role-switching demonstrated consistent argumentation",
+      "Self-reflection acknowledged weaknesses (confidence adjusted by -0.30)"
     ]
   },
   "key_evidence": [
     {
-      "source_id": "36351782",
+      "source_id": "37178780",
       "relevance": 0,
       "round": 1
     },
@@ -31,17 +31,17 @@
       "round": 1
     },
     {
-      "source_id": "34352787",
+      "source_id": "34140220",
       "relevance": 0,
       "round": 2
     },
     {
-      "source_id": "32493597",
+      "source_id": "32876096",
       "relevance": 0,
       "round": 2
     },
     {
-      "source_id": "34268645",
+      "source_id": "34140220",
       "relevance": 0,
       "round": 3
     }
@@ -49,11 +49,11 @@
   "metadata": {
     "judge_scores": {
       "proponent": 84,
-      "opponent": 84
+      "opponent": 96
     },
-    "role_switch_consistent": false,
-    "self_reflection_adjustment": -0.05,
-    "debate_rounds": 5,
-    "total_evidence_used": 18
+    "role_switch_consistent": true,
+    "self_reflection_adjustment": -0.3,
+    "debate_rounds": 4,
+    "total_evidence_used": 15
   }
 }
