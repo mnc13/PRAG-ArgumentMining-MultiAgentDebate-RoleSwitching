@@ -165,34 +165,54 @@ def main():
                 negotiator.negotiation_state["opponent_pool"]
             ) if ev.source_id in admissible_ids]
 
-            log(f"\n   [JUDGE VERDICT] Admitted {len(final_evidence_set)} items for debate.")
+            log(f"\n   [JUDICIAL ADMISSION] Admitted {len(final_evidence_set)} exhibits for global discovery.")
             for i, ev in enumerate(final_evidence_set):
                 log(f"   - {i+1}. Source ID: {ev.source_id} (Weight: {ev.relevance_score:.2f})")
 
-            log("\n6. Initializing Multi-Agent Debate (MAD) Simulation...")
+            log("\n6. Initializing Multi-Agent Legal Proceedings ( Courtroom MAD)...")
             from prag_engine import ProgressiveRAG
             from mad_orchestrator import MADOrchestrator
             prag = ProgressiveRAG(retriever, llm)
             # Use final_evidence_set from negotiation
             mad = MADOrchestrator(extracted_claim, final_evidence_set, [], prag)
             
-            log("\n7. Running Debate Proceedings...")
-            debate_result = mad.run_full_debate(max_rounds=5)
+            log("\n7. Presiding Over Courtroom Proceedings...")
+            debate_result = mad.run_full_debate(max_rounds=10)
             
-            log("\n8. Role-Switching Round...")
+            log("\n8. Legal Consistency Check (Role-Switching)...")
             from role_switcher import RoleSwitcher
             switcher = RoleSwitcher(mad)
             switched_result = switcher.switch_roles(max_rounds=2)
             consistency_report = switcher.check_consistency(debate_result, switched_result)
             
-            log("\n9. Judge Evaluation...")
-            from judge_evaluator import JudgeEvaluator
-            judges = JudgeEvaluator()
-            judge_result = judges.evaluate_debate(debate_result)
+            log("\n9. Judicial Panel Evaluation...")
+            from judge_evaluator import JudicialPanel
+            panel = JudicialPanel()
+            judge_result = panel.evaluate_debate(
+                debate_result, 
+                admitted_evidence=final_evidence_set,
+                role_switch_history=consistency_report,
+                prag_metrics=mad.prag.get_retrieval_summary()
+            )
             
-            log("\n10. Self-Reflection Round...")
+            log("\n10. Counsel Self-Reflection (Integrity Check)...")
             from self_reflection import SelfReflection
-            winner_side = judge_result['provisional_winner']
+            # Map judicial verdict to winner side
+            if judge_result['final_verdict'] == 'SUPPORTED':
+                winner_side = 'proponent'
+            elif judge_result['final_verdict'] == 'NOT SUPPORTED':
+                winner_side = 'opponent'
+            else:  # INCONCLUSIVE
+                # Default to side with higher average scores
+                avg_scores = {}
+                for verdict in judge_result['judge_verdicts']:
+                    side = 'proponent' if verdict['verdict'] == 'SUPPORTED' else 'opponent'
+                    if side not in avg_scores:
+                        avg_scores[side] = []
+                    avg_score = (verdict['evidence_strength'] + verdict['argument_validity'] + verdict['scientific_reliability']) / 3
+                    avg_scores[side].append(avg_score)
+                winner_side = max(avg_scores, key=lambda s: sum(avg_scores[s]) / len(avg_scores[s]))
+            
             reflection = SelfReflection(winner_side, mad.agents[winner_side], debate_result)
             reflection_result = reflection.perform_reflection()
             

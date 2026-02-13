@@ -1,7 +1,7 @@
 """
 Role-Switching Mechanism for Consistency Testing
 
-Swaps proponent and opponent roles to test argument consistency
+Swaps Plaintiff Counsel and Defense Counsel roles to test argument consistency
 """
 
 import json
@@ -26,7 +26,7 @@ class RoleSwitcher:
         
     def switch_roles(self, max_rounds: int = 3) -> Dict:
         """
-        Swap proponent ↔ opponent roles and re-run debate
+        Swap Plaintiff Counsel ↔ Defense Counsel roles and re-run debate
         
         Args:
             max_rounds: Number of rounds for switched debate
@@ -37,7 +37,7 @@ class RoleSwitcher:
         print("\n" + "="*60)
         print("ROLE-SWITCHING ROUND")
         print("="*60)
-        print("Swapping Proponent ↔ Opponent roles...")
+        print("Swapping Plaintiff Counsel ↔ Defense Counsel roles...")
         print()
         
         # Get original agents
@@ -119,23 +119,23 @@ class RoleSwitcher:
         # Analyze consistency
         prompt = f"""Analyze the logical consistency of arguments when agents switch roles.
 
-ORIGINAL DEBATE:
-Proponent (Agent A) Arguments:
+ORIGINAL PROCEEDINGS:
+Plaintiff Counsel (Agent A) Arguments:
 {chr(10).join(original_pro_args[:2])}
 
-Opponent (Agent B) Arguments:
+Defense Counsel (Agent B) Arguments:
 {chr(10).join(original_opp_args[:2])}
 
-SWITCHED DEBATE (Roles Swapped):
-Proponent (Agent B - formerly Opponent) Arguments:
+SWITCHED PROCEEDINGS (Roles Swapped):
+Plaintiff Counsel (Agent B - formerly Defense) Arguments:
 {chr(10).join(switched_pro_args[:2])}
 
-Opponent (Agent A - formerly Proponent) Arguments:
+Defense Counsel (Agent A - formerly Plaintiff) Arguments:
 {chr(10).join(switched_opp_args[:2])}
 
 Analyze:
-1. Does Agent A maintain logical consistency when switching from proponent to opponent?
-2. Does Agent B maintain logical consistency when switching from opponent to proponent?
+1. Does Agent A maintain logical consistency when switching from Plaintiff Counsel to Defense Counsel?
+2. Does Agent B maintain logical consistency when switching from Defense Counsel to Plaintiff Counsel?
 3. Are there contradictions in their arguments?
 4. Overall consistency score (0-10)
 

@@ -22,7 +22,7 @@ class DebateAgent:
         
         Args:
             persona_config: Full persona configuration dictionary
-            role: "proponent", "opponent", "judge", "critic", or "expert"
+            role: "proponent", "opponent", "judge", or "expert"
             prag_engine: ProgressiveRAG instance for evidence requests
         """
         from personas import create_llm_client
@@ -57,25 +57,23 @@ class DebateAgent:
         history_lines = [f"{arg['agent']}: {arg['text']}" for arg in debate_history[-5:]]
         history_text = "\n\n".join(history_lines) if history_lines else "Opening of the case."
         
-        # Simulation instructions
+        # Courtroom proceedings instructions
         debate_context = """
-        You are participating in a structured scientific debate. 
-        - Maintain a clinical, factual, and strictly evidence-based tone.
-        - Focus on proving or refuting the claim using the provided medical evidence and expert testimony.
-        - State your arguments clearly and concisely.
+        You are participating in a structured legal proceeding. 
+        - Maintain a professional, factual, and strictly evidence-based tone.
+        - Focus on proving or refuting the claim using the provided medical evidence and expert witness testimony.
+        - State your arguments clearly and concisely as you would in a courtroom.
         - DIRECT OUTPUT ONLY: Do not reveal your internal thought process, scratchpad, or "thinking" steps. Output only your final argument.
         """
 
         if self.role == "proponent":
-            role_instruction = "Present your case in SUPPORT of the claim. Use evidence to persuade the Moderator."
+            role_instruction = "As Plaintiff Counsel, present your case in SUPPORT of the claim. Use evidence and expert testimony to persuade the Court."
         elif self.role == "opponent":
-            role_instruction = "Present your case AGAINST the claim. Identify flaws and pose challenges to the proponent's evidence."
+            role_instruction = "As Defense Counsel, present your case AGAINST the claim. Identify flaws and challenge the plaintiff's evidence and witnesses."
         elif self.role == "judge":
-            role_instruction = "Oversee the discussion. Summarize the current state of arguments and ask probing questions to both sides."
-        elif self.role == "critic":
-            role_instruction = "Provide a neutral scientific analysis of the current debate. Identify logical gaps and evidentiary weaknesses."
+            role_instruction = "As the Court, oversee the proceedings. Summarize the current state of arguments and ask probing questions to both counsels."
         else:  # expert
-            role_instruction = f"Provide your unbiased expert testimony as a {self.job_title} regarding: {', '.join(self.expertise)}."
+            role_instruction = f"As an Expert Witness ({self.job_title}), provide your unbiased professional testimony regarding: {', '.join(self.expertise)}."
         
         prompt = f"""
         {debate_context}
@@ -108,9 +106,9 @@ class DebateAgent:
 
         history_summary = "\n".join([f"{a['agent']}: {a['text'][:200]}..." for a in debate_history[-3:]])
         prompt = f"""
-        Based on the current state of the simulation, do you need to summon a scientific expert witness to clarify a specific point?
+        Based on the current state of the proceedings, do you need to call an expert witness to clarify a specific point?
         
-        Recent Debate Activity:
+        Recent Proceedings:
         {history_summary}
 
         If yes, specify the type of expertise needed and why. If no, say 'None'.
@@ -133,14 +131,51 @@ class DebateAgent:
         if self.role != "judge": return False
 
         prompt = f"""
-        The {requester} has requested to summon an expert witness: {request['expert_type']}
+        {requester} has requested to call an expert witness: {request['expert_type']}
         Reasoning: {request['reasoning']}
 
-        As the Moderator, is this expert necessary for the thorough resolution of the debate? 
+        As the Court, is this expert witness necessary for the thorough resolution of this case? 
         Respond only with 'Granted' or 'Denied' followed by a brief reason.
         """
         response = self.llm.generate(prompt)
         return "Granted" in response
+
+    def refine_query(self, original_query: str, debate_context: str) -> str:
+        """
+        Judge-only: Review and refine a counsel's proposed search query
+        """
+        if self.role != "judge": return original_query
+
+        prompt = f"""
+        As the Court, you must maintain the quality and focus of evidence discovery.
+        A counsel has proposed the following search query to retrieve additional medical exhibits:
+        
+        Proposed Query: "{original_query}"
+        
+        Context of proceedings:
+        {debate_context}
+        
+        Refine this query to be more precise, narrow the scope if necessary, and ensure it follows scientific rigor.
+        Respond ONLY with the refined query string.
+        """
+        refined_query = self.llm.generate(prompt)
+        return refined_query.strip().strip('"')
+
+    def propose_query_gap(self, debate_context: str) -> str:
+        """
+        Counsel: Identify a gap in evidence and propose a specific need
+        """
+        if self.role not in ["proponent", "opponent"]:
+            return ""
+
+        prompt = f"""As {self.job_title}, analyze the current proceedings and identify a critical gap in the available medical exhibits. 
+        What specific evidence do you need to request to strengthen your case or challenge the opposition?
+        
+        Context: {debate_context}
+        
+        Propose exactly one specific evidence need (1 sentence):"""
+        specific_need = self.llm.generate(prompt)
+        return specific_need.strip()
 
     def check_debate_completion(self, debate_history: List[Dict]) -> bool:
         """
@@ -150,12 +185,12 @@ class DebateAgent:
 
         history_summary = "\n".join([f"{a['agent']}: {a['text'][:200]}..." for a in debate_history])
         prompt = f"""
-        As the Moderator (Judge), review the debate record. Have both sides had sufficient opportunity to present their medical evidence and arguments?
+        As the Court, review the proceedings. Have both counsels had sufficient opportunity to present their medical evidence and arguments?
         
         Record Summary:
         {history_summary}
 
-        Should the debate continue or should we move to final evaluation?
+        Should the proceedings continue or should we move to final deliberation?
         Respond 'Wait' to continue or 'Close' to finish.
         """
         
@@ -168,7 +203,7 @@ class DebateAgent:
         Request additional evidence via P-RAG (maintain scientific rigor)
         """
         if specific_need is None:
-            prompt = f"""As {self.job_title}, what specific scientific evidence do you need to request from the archives to build your case?
+            prompt = f"""As {self.job_title}, what specific scientific evidence do you need to request from the medical archives to support your case?
             
             Context: {debate_context}
             
@@ -183,23 +218,4 @@ class DebateAgent:
         )
         return evidence
 
-    def critique_argument(self, argument: Dict) -> Dict:
-        """Maintain critic role as scientific analyst"""
-        prompt = f"""Analyze this testimony/argument for logical consistency and evidentiary strength.
-        
-        Statement by {argument['agent']}:
-        {argument['text']}
-        
-        Provide:
-        1. Points of Strength
-        2. Points of Contradiction/Weakness
-        3. Suggested Cross-Examination questions
-        
-        Format as JSON."""
-        
-        critique_text = self.llm.generate(prompt)
-        return {
-            "critic": self.job_title,
-            "target_agent": argument['agent'],
-            "critique": critique_text
-        }
+

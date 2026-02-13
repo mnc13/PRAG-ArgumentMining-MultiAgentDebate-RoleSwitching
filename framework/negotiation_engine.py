@@ -43,13 +43,14 @@ class EvidenceNegotiator:
 
         print("\n--- [Negotiator] Step 2: Stance / Perspective Retrieval ---")
         for role in ["proponent", "opponent"]:
-            print(f"   > Generating {role}-conditioned queries...")
+            display_role = "Plaintiff" if role == "proponent" else "Defense"
+            print(f"   > Generating {display_role} Counsel-conditioned queries...")
             stance_query = self._generate_stance_query(claim.text, role)
             role_results = self.retriever.retrieve(stance_query, top_k=top_k)
             
             pool_key = f"{role}_pool"
             self.negotiation_state[pool_key] = self._deduplicate(role_results)
-            print(f"   > {role.capitalize()} gathered {len(self.negotiation_state[pool_key])} perspective-specific items.")
+            print(f"   > {display_role} Counsel gathered {len(self.negotiation_state[pool_key])} perspective-specific items.")
 
     def negotiate_phase(self, claim: Claim):
         """
@@ -64,27 +65,27 @@ class EvidenceNegotiator:
             "opponent_only": [e.source_id for e in self.negotiation_state["opponent_pool"]]
         }
         
-        # Proponent discloses/challenges
-        print("   > [Proponent] Reviewing prospective evidence pools...")
-        prop_input = (f"Review these evidence pools for claim: {claim.text}\n"
+        # Plaintiff Counsel discloses/challenges
+        print("   > [Plaintiff Counsel] Reviewing prospective evidence pools...")
+        prop_input = (f"Review these evidence discovery pools for claim: {claim.text}\n"
                       f"Context: {json.dumps(context)}\n"
-                      f"Identify any items from your pool to DISCLOSE and any shared/opponent items to CHALLENGE.")
+                      f"Identify any items from your discovery pool to DISCLOSE (admit) and any shared/defense items to CHALLENGE.")
         self.llm.generate(prop_input) # Simulate processing
         
-        # Opponent discloses/challenges
-        print("   > [Opponent] Reviewing prospective evidence pools...")
-        opp_input = (f"Review these evidence pools for claim: {claim.text}\n"
+        # Defense Counsel discloses/challenges
+        print("   > [Defense Counsel] Reviewing prospective evidence pools...")
+        opp_input = (f"Review these evidence discovery pools for claim: {claim.text}\n"
                      f"Context: {json.dumps(context)}\n"
-                     f"Identify any items from your pool to DISCLOSE and any shared/proponent items to CHALLENGE.")
+                     f"Identify any items from your discovery pool to DISCLOSE (admit) and any shared/plaintiff items to CHALLENGE.")
         self.llm.generate(opp_input) # Simulate processing
         
-        print("   > Negotiation complete. Proceeding to Judge arbitration.")
+        print("   > Negotiation complete. Proceeding to Judicial arbitration.")
 
     def judge_arbitration(self, claim: Claim):
         """
-        4. Judge Role - arbitration and weighting
+        4. Judicial Role - arbitration and admissibility weighting
         """
-        print("\n--- [Judge] Step 4: Evidence Arbitration & Weighting ---")
+        print("\n--- [The Court] Step 4: Evidence Arbitration \u0026 Admissibility ---")
         all_candidate_evidence = []
         all_candidate_evidence.extend(self.negotiation_state["shared_pool"])
         all_candidate_evidence.extend(self.negotiation_state["proponent_pool"])
@@ -143,8 +144,10 @@ class EvidenceNegotiator:
         }
 
     def _generate_stance_query(self, claim: str, role: str) -> str:
-        prompt = (f"Generate a search query to find evidence {role == 'proponent' and 'supporting' or 'challenging'} "
-                  f"the following claim for scientific debate:\nClaim: {claim}\n"
+        display_role = "Plaintiff" if role == "proponent" else "Defense"
+        prompt = (f"Generate a search query to find medical evidence {role == 'proponent' and 'supporting' or 'challenging'} "
+                  f"the following claim for legal proceedings:\nClaim: {claim}\n"
+                  f"Role: {display_role} Counsel\n"
                   f"Query (scientific keywords only):")
         return self.llm.generate(prompt).strip().strip('"')
 

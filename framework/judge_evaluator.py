@@ -1,72 +1,75 @@
 """
-Judge Evaluation System
+Judicial Panel Evaluation System
 
-Multiple judges evaluate debate transcript and select provisional winner
+Three independent judges perform holistic evaluation of debate transcripts
+using appellate-style deliberation with majority voting.
 """
 
 from typing import List, Dict
-from groq_client import GroqLLMClient
-from openai_client import OpenAILLMClient
+from openrouter_client import OpenRouterLLMClient
 import os
 import json
+from collections import Counter
 
-class JudgeEvaluator:
+
+class JudicialPanel:
     """
-    Multi-judge evaluation system for debate transcripts
+    3-Judge deliberative panel for independent holistic debate evaluation
     """
     
     def __init__(self):
         """
-        Initialize judges with different LLM providers for diversity
+        Initialize three independent judges with different LLM models
         """
-        groq_key = os.getenv("GROQ_API_KEY")
-        openai_key = os.getenv("OPENAI_API_KEY")
-        
+        # All judges use OpenRouter for consistency
         self.judges = [
             {
-                "name": "Logic & Reasoning Expert",
-                "llm": GroqLLMClient(
-                    api_key=groq_key,
-                    model_name="meta-llama/llama-4-maverick-17b-128e-instruct",
-                    system_prompt="You are an expert in logical reasoning and argumentation. Evaluate arguments for logical consistency and soundness.",
+                "name": "Judge 1",
+                "llm": OpenRouterLLMClient(
+                    model_name="deepseek/deepseek-r1",
+                    system_prompt="You are an independent appellate judge presiding over a legal proceeding. Your role is to perform a comprehensive holistic evaluation of the case, focusing on evidence admissibility, logical coherence of advocacy, and scientific accuracy of expert testimonies.",
                     temperature=0.3
                 ),
-                "focus": "logical_consistency"
+                "model": "deepseek/deepseek-r1"
             },
             {
-                "name": "Evidence Quality Expert",
-                "llm": GroqLLMClient(
-                    api_key=groq_key,
-                    model_name="llama-3.3-70b-versatile",
-                    system_prompt="You are an expert in scientific evidence evaluation. Assess the quality and relevance of cited sources.",
+                "name": "Judge 2",
+                "llm": OpenRouterLLMClient(
+                    model_name="meta-llama/llama-3.1-405b-instruct",
+                    system_prompt="You are an independent appellate judge presiding over a legal proceeding. Your role is to perform a comprehensive holistic evaluation of the case, focusing on evidence admissibility, logical coherence of advocacy, and scientific accuracy of expert testimonies.",
                     temperature=0.3
                 ),
-                "focus": "evidence_quality"
+                "model": "meta-llama/llama-3.1-405b-instruct"
             },
             {
-                "name": "Scientific Accuracy Expert",
-                "llm": OpenAILLMClient(
-                    api_key=openai_key,
-                    model_name="gpt-4o-mini",
-                    system_prompt="You are a scientific accuracy expert. Evaluate claims for factual correctness and proper interpretation.",
+                "name": "Judge 3",
+                "llm": OpenRouterLLMClient(
+                    model_name="qwen/qwen3-235b-a22b-2507",
+                    system_prompt="You are an independent appellate judge presiding over a legal proceeding. Your role is to perform a comprehensive holistic evaluation of the case, focusing on evidence admissibility, logical coherence of advocacy, and scientific accuracy of expert testimonies.",
                     temperature=0.3
                 ),
-                "focus": "scientific_accuracy"
+                "model": "qwen/qwen3-235b-a22b-2507"
             }
         ]
     
-    def evaluate_debate(self, debate_transcript: Dict) -> Dict:
+    def evaluate_debate(self, debate_transcript: Dict, 
+                       admitted_evidence: List = None,
+                       role_switch_history: Dict = None,
+                       prag_metrics: Dict = None) -> Dict:
         """
-        Each judge evaluates the debate and scores both sides
+        Each judge independently evaluates the full debate transcript
         
         Args:
             debate_transcript: Full debate transcript from MAD
+            admitted_evidence: List of evidence items admitted by negotiation judge
+            role_switch_history: Role-switching consistency report (optional)
+            prag_metrics: Summary of Progressive RAG evolution and novelty (optional)
             
         Returns:
-            Judge evaluation results with provisional winner
+            Judicial panel results with majority verdict and opinions
         """
         print("\n" + "="*60)
-        print("JUDGE EVALUATION")
+        print("JUDICIAL PANEL EVALUATION")
         print("="*60 + "\n")
         
         claim = debate_transcript['claim']
@@ -75,71 +78,267 @@ class JudgeEvaluator:
         proponent_args = self._extract_side_arguments(debate_transcript, 'proponent')
         opponent_args = self._extract_side_arguments(debate_transcript, 'opponent')
         
-        judge_results = []
+        # Extract evidence references
+        evidence_summary = self._extract_evidence_summary(debate_transcript, admitted_evidence)
+        
+        # Role-switch summary
+        role_switch_summary = self._format_role_switch(role_switch_history) if role_switch_history else "No role-switching performed."
+        
+        judge_verdicts = []
         
         for judge in self.judges:
-            print(f"Judge: {judge['name']} evaluating...")
+            print(f"{judge['name']} ({judge['model']}) deliberating...")
             
-            # Score both sides
-            proponent_scores = self._score_arguments(
-                judge, 
-                proponent_args, 
-                opponent_args,
-                "proponent"
-            )
-            
-            opponent_scores = self._score_arguments(
+            verdict = self._judge_evaluate(
                 judge,
-                opponent_args,
+                claim,
                 proponent_args,
-                "opponent"
+                opponent_args,
+                evidence_summary,
+                role_switch_summary,
+                debate_transcript,
+                prag_metrics
             )
             
-            # Determine winner for this judge
-            winner = "proponent" if proponent_scores['total'] > opponent_scores['total'] else "opponent"
-            
-            judge_result = {
-                "judge_name": judge['name'],
-                "model": judge['llm'].model_name,
-                "proponent_scores": proponent_scores,
-                "opponent_scores": opponent_scores,
-                "winner": winner,
-                "reasoning": self._generate_reasoning(judge, proponent_args, opponent_args, winner)
-            }
-            
-            judge_results.append(judge_result)
-            print(f"  Winner: {winner} (Proponent: {proponent_scores['total']}, Opponent: {opponent_scores['total']})")
+            judge_verdicts.append(verdict)
+            print(f"  Verdict: {verdict['verdict']}")
+            print(f"  Evidence Strength: {verdict['evidence_strength']}/10")
+            print(f"  Argument Validity: {verdict['argument_validity']}/10")
+            print(f"  Scientific Reliability: {verdict['scientific_reliability']}/10\n")
         
-        # Aggregate scores
-        total_proponent = sum(j['proponent_scores']['total'] for j in judge_results)
-        total_opponent = sum(j['opponent_scores']['total'] for j in judge_results)
-        
-        provisional_winner = "proponent" if total_proponent > total_opponent else "opponent"
-        
-        # Calculate confidence based on score margin
-        total_scores = total_proponent + total_opponent
-        confidence = abs(total_proponent - total_opponent) / total_scores if total_scores > 0 else 0.5
+        # Aggregate verdicts using majority voting
+        aggregation = self._aggregate_verdicts(judge_verdicts)
         
         result = {
             "claim": claim,
-            "judges": judge_results,
-            "aggregate_scores": {
-                "proponent": total_proponent,
-                "opponent": total_opponent
-            },
-            "provisional_winner": provisional_winner,
-            "confidence": round(confidence, 3)
+            "judge_verdicts": judge_verdicts,
+            "final_verdict": aggregation['final_verdict'],
+            "majority_opinion": aggregation['majority_opinion'],
+            "dissenting_opinion": aggregation['dissenting_opinion'],
+            "vote_breakdown": aggregation['vote_breakdown']
         }
         
         # Save results
         with open("judge_evaluation.json", "w") as f:
             json.dump(result, f, indent=2)
         
-        print(f"\nProvisional Winner: {provisional_winner}")
-        print(f"Aggregate Scores - Proponent: {total_proponent}, Opponent: {total_opponent}")
-        print(f"Confidence: {confidence:.3f}")
+        print(f"\nFinal Verdict: {aggregation['final_verdict']}")
+        print(f"Vote Breakdown: {aggregation['vote_breakdown']}")
+        if aggregation['dissenting_opinion']:
+            print(f"Dissent Present: Yes")
         
         return result
+    
+    def _judge_evaluate(self, judge: Dict, claim: str, 
+                       proponent_args: List[str], opponent_args: List[str],
+                       evidence_summary: str, role_switch_summary: str,
+                       full_transcript: Dict, prag_metrics: Dict = None) -> Dict:
+        """
+        Single judge performs 5-stage holistic evaluation
+        
+        Returns:
+            Dict with claim_summary, scores, verdict, and reasoning
+        """
+        # Prepare comprehensive prompt for 5-stage evaluation
+        prompt = f"""You are an appellate judge evaluating the following proceedings for medical fact-checking.
+
+PROCEEDINGS RECORD:
+CLAIM: {claim}
+
+PLAINTIFF COUNSEL'S ARGUMENTS:
+{chr(10).join(proponent_args)}
+
+DEFENSE COUNSEL'S ARGUMENTS:
+{chr(10).join(opponent_args)}
+
+ADMITTED EVIDENCE & EXPERT TESTIMONIES:
+{evidence_summary}
+
+ROLE-SWITCH HISTORY (ADVERSARY CONSISTENCY):
+{role_switch_summary}
+
+EVIDENCE DISCOVERY METRICS (PRAG EVOLUTION):
+{json.dumps(prag_metrics, indent=2) if prag_metrics else "No P-RAG data available."}
+
+Perform the following evaluation stages:
+
+STAGE 1 - CASE RECONSTRUCTION
+Identify:
+- Core claim being adjudicated
+- Main supporting arguments from Plaintiff Counsel
+- Main counterarguments from Defense Counsel
+
+STAGE 2 - EVIDENCE & TESTIMONY WEIGHTING
+Evaluate the evidence and expert witness testimonies for:
+- Relevance to the claim/premises
+- Scientific credibility (peer-reviewed sources, professional credentials)
+- Testimony strength (how well expert opinions back the advocacy)
+- Consistency with admitted exhibits
+
+Provide a score: Evidence Strength (0-10)
+- 0-3: Weak, irrelevant, or unreliable evidence
+- 4-6: Moderate evidence with some limitations
+- 7-10: Strong, credible, highly relevant evidence
+
+STAGE 3 - LOGICAL COHERENCE ANALYSIS
+Detect:
+- Logical contradictions
+- Unsupported inferential leaps
+- Fallacies (ad hominem, straw man, false dichotomy, etc.)
+- Misuse or misrepresentation of evidence
+
+Provide a score: Argument Validity (0-10)
+- 0-3: Severely flawed logic, multiple fallacies
+- 4-6: Some logical issues but generally coherent
+- 7-10: Sound reasoning, minimal logical flaws
+
+STAGE 4 - SCIENTIFIC/TECHNICAL CONSISTENCY
+Check:
+- Alignment with established biomedical/scientific consensus
+- Correctness of interpretation of studies and data
+- Risk of misrepresentation or cherry-picking
+
+Provide a score: Scientific Reliability (0-10)
+- 0-3: Contradicts consensus, major misinterpretations
+- 4-6: Partially aligned, some interpretation issues
+- 7-10: Well-aligned with consensus, accurate interpretations
+
+STAGE 5 - DISCOVERY RIGOR & TRANSPARENCY
+Analyze the PRAG metrics:
+- Query Evolution: How well did counsels refine their discovery requests?
+- Evidence Novelty: Did the proceedings reach a point of diminishing returns?
+- Role of the Court: Assess the impact of judicial query refinement on evidence quality.
+- Transparency: How does the retrieval history affect your confidence in the exhaustiveness of the case?
+
+STAGE 6 - JUDICIAL VERDICT
+Based on your evaluation, determine:
+- SUPPORTED: The claim is well-supported by the evidence and arguments
+- NOT SUPPORTED: The claim is not adequately supported or is refuted
+- INCONCLUSIVE: Insufficient evidence or arguments are too balanced
+
+Provide written justification including:
+- Key decisive factors that led to your verdict
+- Specific evidence references (cite by source ID if available)
+- Reasoning summary (2-3 sentences)
+
+Respond ONLY in valid JSON format:
+{{
+  "claim_summary": "Brief summary of the core claim and debate",
+  "evidence_strength": <score 0-10>,
+  "argument_validity": <score 0-10>,
+  "scientific_reliability": <score 0-10>,
+  "verdict": "SUPPORTED" or "NOT SUPPORTED" or "INCONCLUSIVE",
+  "reasoning": "Detailed justification for your verdict"
+}}"""
+
+        response = judge['llm'].generate(prompt)
+        
+        # Parse JSON response
+        try:
+            # Extract JSON from response (handle markdown code blocks)
+            import re
+            json_match = re.search(r'\{[\s\S]*\}', response)
+            if json_match:
+                verdict_data = json.loads(json_match.group())
+            else:
+                raise ValueError("No JSON found in response")
+            
+            # Validate required fields
+            required_fields = ['claim_summary', 'evidence_strength', 'argument_validity', 
+                             'scientific_reliability', 'verdict', 'reasoning']
+            for field in required_fields:
+                if field not in verdict_data:
+                    raise ValueError(f"Missing required field: {field}")
+            
+            # Validate verdict value
+            if verdict_data['verdict'] not in ['SUPPORTED', 'NOT SUPPORTED', 'INCONCLUSIVE']:
+                verdict_data['verdict'] = 'INCONCLUSIVE'
+            
+            # Ensure scores are integers 0-10
+            for score_field in ['evidence_strength', 'argument_validity', 'scientific_reliability']:
+                verdict_data[score_field] = max(0, min(10, int(verdict_data[score_field])))
+            
+        except Exception as e:
+            print(f"  [WARNING] Failed to parse judge response: {e}")
+            print(f"  [WARNING] Using fallback verdict")
+            # Fallback verdict
+            verdict_data = {
+                "claim_summary": f"Evaluation of: {claim}",
+                "evidence_strength": 5,
+                "argument_validity": 5,
+                "scientific_reliability": 5,
+                "verdict": "INCONCLUSIVE",
+                "reasoning": "Unable to parse structured evaluation. Defaulting to inconclusive."
+            }
+        
+        # Add judge metadata
+        verdict_data['judge_name'] = judge['name']
+        verdict_data['model'] = judge['model']
+        
+        return verdict_data
+    
+    def _aggregate_verdicts(self, judge_verdicts: List[Dict]) -> Dict:
+        """
+        Aggregate judge verdicts using majority voting and construct opinions
+        
+        Returns:
+            Dict with final_verdict, majority_opinion, dissenting_opinion, vote_breakdown
+        """
+        # Count votes
+        vote_counts = Counter(v['verdict'] for v in judge_verdicts)
+        final_verdict = vote_counts.most_common(1)[0][0]
+        
+        # Separate majority and dissenting judges
+        majority_judges = [v for v in judge_verdicts if v['verdict'] == final_verdict]
+        dissenting_judges = [v for v in judge_verdicts if v['verdict'] != final_verdict]
+        
+        # Construct majority opinion
+        majority_opinion = self._synthesize_opinion(majority_judges, "majority")
+        
+        # Construct dissenting opinion if exists
+        dissenting_opinion = None
+        if dissenting_judges:
+            dissenting_opinion = self._synthesize_opinion(dissenting_judges, "dissent")
+        
+        return {
+            "final_verdict": final_verdict,
+            "majority_opinion": majority_opinion,
+            "dissenting_opinion": dissenting_opinion,
+            "vote_breakdown": dict(vote_counts)
+        }
+    
+    def _synthesize_opinion(self, judges: List[Dict], opinion_type: str) -> str:
+        """
+        Synthesize a coherent opinion from multiple judges' reasoning
+        
+        Args:
+            judges: List of judge verdict dicts
+            opinion_type: "majority" or "dissent"
+            
+        Returns:
+            Synthesized opinion text
+        """
+        if not judges:
+            return ""
+        
+        if len(judges) == 1:
+            # Single judge opinion
+            judge = judges[0]
+            return f"{judge['judge_name']} ({judge['model']}) - {judge['verdict']}: {judge['reasoning']}"
+        
+        # Multiple judges with same verdict - synthesize
+        verdict = judges[0]['verdict']
+        judge_names = ", ".join([j['judge_name'] for j in judges])
+        
+        # Combine reasoning
+        combined_reasoning = []
+        for judge in judges:
+            combined_reasoning.append(f"- {judge['judge_name']}: {judge['reasoning']}")
+        
+        opinion = f"{opinion_type.capitalize()} Opinion ({judge_names}) - {verdict}:\n\n"
+        opinion += "\n".join(combined_reasoning)
+        
+        return opinion
     
     def _extract_side_arguments(self, transcript: Dict, role: str) -> List[str]:
         """Extract all arguments and expert testimonies for one side"""
@@ -153,83 +352,57 @@ class JudgeEvaluator:
             if 'expert_testimonies' in round_data:
                 for expert in round_data['expert_testimonies']:
                     if expert.get('requesting_side') == role:
-                        arguments.append(f"[Expert Testimony Supporting {role.capitalize()}]: {expert['text']}")
+                        arguments.append(f"[Expert Testimony]: {expert['text']}")
         return arguments
     
-    def _score_arguments(self, judge: Dict, side_args: List[str], 
-                        opponent_args: List[str], side_name: str) -> Dict:
+    def _extract_evidence_summary(self, transcript: Dict, admitted_evidence: List) -> str:
         """
-        Judge scores arguments on 4 criteria
-        
-        Returns:
-            Dict with scores for each criterion and total
+        Create a summary of evidence used in the debate
         """
-        # Combine arguments for evaluation
-        args_text = "\n\n".join(side_args[:3])  # Use first 3 arguments to avoid token limits
-        opp_text = "\n\n".join(opponent_args[:2])
-        
-        prompt = f"""Evaluate the following arguments on a scale of 0-10 for each criterion:
-
-{side_name.upper()} ARGUMENTS:
-{args_text}
-
-OPPONENT ARGUMENTS (for context):
-{opp_text}
-
-Score the {side_name}'s arguments on:
-1. Evidence Quality (0-10): Relevance and strength of cited sources
-2. Logical Consistency (0-10): Internal coherence and sound reasoning
-3. Persuasiveness (0-10): Clarity and convincingness
-4. Scientific Accuracy (0-10): Factual correctness
-
-Respond in JSON format:
-{{
-  "evidence_quality": <score>,
-  "logical_consistency": <score>,
-  "persuasiveness": <score>,
-  "scientific_accuracy": <score>
-}}"""
-        
-        response = judge['llm'].generate(prompt)
-        
-        # Parse JSON response
-        try:
-            # Extract JSON from response
-            import re
-            json_match = re.search(r'\{[^}]+\}', response)
-            if json_match:
-                scores = json.loads(json_match.group())
+        if not admitted_evidence:
+            # Fallback: extract from transcript
+            evidence_ids = set()
+            for round_data in transcript.get('rounds', []):
+                for arg in round_data.get('arguments', []):
+                    # Extract source IDs from argument text (simple regex)
+                    import re
+                    ids = re.findall(r'\b\d{8}\b', arg['text'])
+                    evidence_ids.update(ids)
+            
+            if evidence_ids:
+                return f"Evidence sources cited: {', '.join(sorted(evidence_ids))}"
             else:
-                # Fallback scores if parsing fails
-                scores = {
-                    "evidence_quality": 7,
-                    "logical_consistency": 7,
-                    "persuasiveness": 7,
-                    "scientific_accuracy": 7
-                }
-        except:
-            scores = {
-                "evidence_quality": 7,
-                "logical_consistency": 7,
-                "persuasiveness": 7,
-                "scientific_accuracy": 7
-            }
+                return "No specific evidence sources identified."
         
-        scores['total'] = sum(scores.values())
-        return scores
+        # Format admitted evidence
+        evidence_lines = []
+        for i, ev in enumerate(admitted_evidence[:10], 1):  # Limit to 10 for brevity
+            source_id = ev.source_id if hasattr(ev, 'source_id') else ev.get('source_id', 'unknown')
+            text_preview = ev.text[:150] if hasattr(ev, 'text') else ev.get('text', '')[:150]
+            evidence_lines.append(f"{i}. Source {source_id}: {text_preview}...")
+        
+        return "\n".join(evidence_lines)
     
-    def _generate_reasoning(self, judge: Dict, proponent_args: List[str], 
-                           opponent_args: List[str], winner: str) -> str:
-        """Generate judge's reasoning for their decision"""
-        prompt = f"""Explain in 2-3 sentences why the {winner} won this debate based on your evaluation.
-
-PROPONENT ARGUMENTS:
-{proponent_args[0][:500]}...
-
-OPPONENT ARGUMENTS:
-{opponent_args[0][:500]}...
-
-Provide concise reasoning:"""
+    def _format_role_switch(self, role_switch_history: Dict) -> str:
+        """Format role-switching history for judge review"""
+        if not role_switch_history:
+            return "No role-switching performed."
         
-        reasoning = judge['llm'].generate(prompt)
-        return reasoning.strip()
+        analysis = role_switch_history.get('analysis', 'No analysis available.')
+        return f"Role-Switching Consistency Analysis:\n{analysis}"
+    
+    def _format_arguments(self, args: List[str]) -> str:
+        """Format arguments for prompt (limit to avoid token overflow)"""
+        if not args:
+            return "No arguments presented."
+        
+        formatted = []
+        for i, arg in enumerate(args[:5], 1):  # Limit to 5 arguments
+            # Truncate long arguments
+            arg_text = arg[:800] if len(arg) > 800 else arg
+            formatted.append(f"Argument {i}:\n{arg_text}\n")
+        
+        if len(args) > 5:
+            formatted.append(f"... and {len(args) - 5} more arguments")
+        
+        return "\n".join(formatted)

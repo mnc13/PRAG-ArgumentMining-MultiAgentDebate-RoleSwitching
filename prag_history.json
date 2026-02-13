@@ -1,170 +1,192 @@
 {
-  "total_retrievals": 15,
-  "rounds_with_prag": 4,
+  "total_retrievals": 17,
+  "rounds_with_prag": 5,
   "history": [
     {
       "round": 1,
-      "query": "Based on the **empty debate context** and the request for the **\"latest evidence\"**, it's impossible to formulate a precise scientific search query. **Specific keywords from the debate context are essential.**\n\n**To create a useful query, please provide the topic or key terms being debated.** For example:\n\n*   If the debate is about **climate change impacts**, a query could be:  \n    `(\"climate change\" OR \"global warming\") AND (\"health impacts\" OR \"economic effects\") AND (\"systematic review\" OR \"meta-analysis\" OR \"clinical trial\") published in the last 2 years`\n\n*   If the debate is about **a specific medical treatment**, a query could be:  \n    `\"[Drug Name/Intervention]\" AND \"[Condition/Disease]\" AND (\"efficacy\" OR \"safety\") AND (\"randomized controlled trial\" OR \"cohort study\") published in the last 1 year`\n\n**Without the debate topic/keywords, the best possible generic query is:**  \n`(\"latest research\" OR \"recent evidence\") AND (\"systematic review\" OR \"meta-analysis\" OR \"randomized controlled trial\")`  \n*(This will retrieve recent high-level evidence but is not topic-specific and will be very broad/low relevance)*\n\n**Please provide the subject of the debate to generate a precise, evidence-based query.**",
-      "context": "Phase 1 - Scientific Proponent",
+      "query": "Based on the **empty Debate Context** and the request for the **\"latest evidence\"**, a precise search query is impossible to formulate without specific details. \n\n**However, here is a template requiring YOUR input:**  \n`\"latest clinical evidence, peer-reviewed studies, or regulatory updates since 2023 on [SPECIFIC MEDICAL CONDITION/DRUG/DEVICE] AND [SPECIFIC LEGAL ISSUE e.g., 'adverse events', 'efficacy claims', 'failure rates']\"`\n\n**Why this structure?**  \n1.  **\"latest clinical evidence, peer-reviewed studies, or regulatory updates since 2023\"**: Targets recent, high-authority sources.  \n2.  **[SPECIFIC MEDICAL CONDITION/DRUG/DEVICE]**: Mandatory placeholder. *Examples: \"Ozempic\", \"hip replacement implants\", \"PTSD diagnosis\"*.  \n3.  **AND [SPECIFIC LEGAL ISSUE]**: Connects medicine to legal relevance. *Examples: \"AND cardiovascular risks\", \"AND metallosis\", \"AND diagnostic criteria reliability\"*.  \n\n**Without filling these placeholders, any search will be too broad and legally irrelevant.**  \n**Example with placeholders filled:**  \n`\"latest clinical evidence and FDA advisories since 2023 on GLP-1 agonists AND cardiovascular event risk\"`  \n\n**Provide the missing context for a truly precise query.**",
+      "context": "Phase 1 - Plaintiff Counsel",
       "num_results": 3,
       "evidence_ids": [
-        "37178780",
-        "37178780",
-        "38814687"
+        "37965606",
+        "36351782",
+        "34580669"
       ]
     },
     {
       "round": 1,
-      "query": "Based on the debate context and request for the **latest evidence** on the incidence and distribution of COVID-19-associated Kawasaki Disease (KD) or MIS-C in children, the precise search query is:\n\n> **`(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"Kawasaki Disease\" OR MIS-C) AND (child* OR pediatric) AND (incidence OR trend* OR epidemiolog* OR cluster* OR \"geographic distribution\") AND (systematic review OR meta-analysis OR \"cohort study\" OR surveillance) AND (2022:2024)`**\n\n### Key Components Justified:\n1.  **Core Concepts:** `(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"Kawasaki Disease\" OR MIS-C) AND (child* OR pediatric)`  \n    *   *Why:* Directly targets the diseases and population in question.\n2.  **Incidence & Distribution Focus:** `(incidence OR trend* OR epidemiolog* OR cluster* OR \"geographic distribution\")`  \n    *   *Why:* Reflects the debate's core argument about whether cases are widespread/ubiquitous or sporadic/limited/clustered. Terms like \"trends\" and \"geographic distribution\" specifically address changes over time and location.\n3.  **Robust Evidence Filter:** `(systematic review OR meta-analysis OR \"cohort study\" OR surveillance)`  \n    *   *Why:* Prioritizes high-level evidence (reviews, meta-analyses) and large-scale observational data (cohorts, surveillance systems) needed to assess population-level incidence and patterns, as referenced in the context (e.g., \"large case series,\" \"population-level data\").\n4.  **Recency Filter:** `(2022:2024)`  \n    *   *Why:* Explicitly limits results to the **latest 2-3 years** to capture the most recent evidence on trends and incidence post-initial pandemic waves, as requested (\"latest evidence\"). This timeframe moves beyond the early case reports (2020-2021) discussed in the context.",
-      "context": "Phase 1 - Scientific Opponent",
+      "query": "Based on the context emphasizing the association between COVID-19 and Kawasaki-like presentations in children, including MIS-C overlap, biological plausibility, and the request for **latest evidence**, formulate this precise search query:\n\n**((\"SARS-CoV-2\" OR \"COVID-19\") AND (\"Kawasaki disease\" OR \"Kawasaki-like\" OR \"MIS-C\" OR \"Multisystem Inflammatory Syndrome in Children\") AND (children OR pediatric) AND (trigger* OR association OR \"associated with\" OR presentation* OR phenotype OR hyperinflammatory OR febrile) AND (2020:2024[dp] OR 2020:2024[edat])) NOT (animals[mh] NOT humans[mh])**\n\n**Key Elements Explained:**\n\n1.  **Core Concepts:**\n    *   `(\"SARS-CoV-2\" OR \"COVID-19\")`: Specifies the infectious trigger.\n    *   `(\"Kawasaki disease\" OR \"Kawasaki-like\" OR \"MIS-C\" OR \"Multisystem Inflammatory Syndrome in Children\")`: Captures the spectrum of hyperinflammatory syndromes discussed (classical KD, atypical KD, MIS-C with KD features).\n    *   `(children OR pediatric)`: Focuses on the relevant population.\n    *   `(trigger* OR association OR \"associated with\" OR presentation* OR phenotype OR hyperinflammatory OR febrile)`: Targets studies discussing the causal link, clinical features, and manifestations (covers \"temporally and clinically associated\", \"presentations\", \"phenotype\", \"hyperinflammatory syndrome\").\n2.  **Latest Evidence:**\n    *   `AND (2020:2024[dp] OR 2020:2024[edat])`: Filters for publications from 2020 onwards (PubMed date filters: `[dp]`=Publication Date, `[edat]`=Entrez Date).\n3.  **Relevance & Precision:**\n    *   `NOT (animals[mh] NOT humans[mh])`: Excludes studies solely on animals while keeping human or mixed studies (standard PubMed filter).\n    *   The combination of specific disease terms with relationship/feature terms ensures relevance to the debated association and clinical overlap.\n    *   Prioritizing recent publications (2020+) directly addresses the \"latest evidence\" request.",
+      "context": "Phase 1 - Defense Counsel",
       "num_results": 3,
       "evidence_ids": [
-        "34331326",
-        "39017646",
-        "33884312"
-      ]
-    },
-    {
-      "round": 2,
-      "query": "Based on the debate context and the request for the **latest evidence**, the precise search query is:\n\n**`(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"Kawasaki disease\" OR \"MIS-C\") AND (\"children\" OR \"pediatric\") AND (\"incidence\" OR \"risk\" OR \"temporal trends\" OR \"population-based\") AND (\"2021\"\u2013\"2024\")`**\n\n### Key Rationale:\n1.  **Core Concepts:** Combines the virus (`COVID-19 OR SARS-CoV-2`) and the diseases (`Kawasaki disease OR MIS-C`) in the target population (`children OR pediatric`).\n2.  **Focus of Dispute:** Targets evidence types central to the debate:\n    *   `incidence` (changes over time, geographic variation)\n    *   `risk` (quantified association, hazard ratios)\n    *   `temporal trends` (link to pandemic timing)\n    *   `population-based` (studies like Evidence 14 & 15).\n3.  **\"Latest Evidence\":** Explicitly limits results to studies published **since 2021** to capture data newer than the referenced evidence (Evidence 4-8, 14-16, likely 2020/early 2021). This ensures the query prioritizes the most recent findings.",
-      "context": "Phase 2 - Scientific Proponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "34140220",
-        "32876096",
-        "34331326"
-      ]
-    },
-    {
-      "round": 2,
-      "query": "Based on the debate context and the request for the **latest evidence**, here is a precise search query:\n\n**\"Pediatric COVID-19\" OR \"SARS-CoV-2 children\" AND (\"Kawasaki disease\" OR \"MIS-C\") AND (\"incidence trend\" OR \"risk quantification\" OR \"geographic variation\") AND (2023 OR 2024)**\n\n**Why this query works:**\n\n1.  **Focus on Recency:** Explicitly includes `(2023 OR 2024)` to prioritize the latest studies.\n2.  **Core Concepts:** Covers the key elements:\n    *   Population: `\"Pediatric COVID-19\" OR \"SARS-CoV-2 children\"`\n    *   Conditions: `\"Kawasaki disease\" OR \"MIS-C\"`\n    *   Debate-Specific Metrics: `\"incidence trend\"` (addresses changes over time, including post-2020), `\"risk quantification\"` (addresses absolute/relative risk), `\"geographic variation\"` (addresses focal vs. uniform distribution).\n3.  **Neutral & Evidence-Based:** Avoids loaded terms like \"causal\" or \"isolated instances,\" focusing instead on measurable epidemiological patterns relevant to *both* sides of the debate (incidence, risk, distribution trends).\n4.  **Concise:** Combines essential elements into a single, targeted query suitable for scientific databases.",
-      "context": "Phase 2 - Scientific Opponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "35635842",
-        "35635842",
-        "32373339"
-      ]
-    },
-    {
-      "round": 2,
-      "query": "**Search Query:**  \n\"Population-level epidemiological studies\" AND (\"Kawasaki disease\" OR \"KD\") AND (\"SARS-CoV-2\" OR \"COVID-19\") AND (\"temporal clustering\" OR \"infection waves\") AND (\"serological studies\" OR \"seroprevalence\") AND (\"SARS-CoV-2 antibodies\" OR \"anti-SARS-CoV-2 IgG\") AND (\"without prior diagnosis\" OR \"undiagnosed COVID-19\").  \n\nThis query combines keywords targeting population-scale epidemiological data on KD/COVID-19 temporal associations and serological evidence linking SARS-CoV-2 antibodies to KD in patients lacking prior COVID-19 diagnoses.",
-      "context": "Phase 2 - Scientific Opponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "32876096",
-        "37940843",
-        "35482574"
-      ]
-    },
-    {
-      "round": 3,
-      "query": "**Search Query:**  \n(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"Kawasaki Disease\" OR \"Multisystem Inflammatory Syndrome in Children\" OR \"MIS-C\") AND (\"incidence\" OR \"risk\" OR \"hazard ratio\" OR \"temporal association\") AND (\"pediatric\" OR \"children\") AND (2022-2023[Date - Publication])  \n\n**Rationale:**  \n- Focuses on **recent evidence** (2022\u20132023) to address the \u201clatest\u201d request.  \n- Combines terms for **SARS-CoV-2/COVID-19**, **Kawasaki Disease (KD)**, and **MIS-C** with modifiers like \u201cincidence\u201d and \u201chazard ratio\u201d to target epidemiological risk quantification.  \n- Includes **pediatric populations** and \u201ctemporal association\u201d to prioritize studies linking COVID-19 to inflammatory sequelae in children.  \n- Structured for databases like PubMed, using date filters to retrieve current, peer-reviewed studies.",
-      "context": "Phase 3 - Scientific Proponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "34140220",
-        "34872479",
-        "34006982"
-      ]
-    },
-    {
-      "round": 3,
-      "query": "Based on the debate context and request for the **latest evidence** on the relationship between SARS-CoV-2, MIS-C, and Kawasaki disease in children, focusing on incidence patterns and clustering, the precise search query is:\n\n**\"SARS-CoV-2\" OR \"COVID-19\" AND (\"Multisystem Inflammatory Syndrome in Children\" OR MIS-C OR \"Kawasaki disease\" OR \"KD-like\") AND \"incidence\" AND (cluster* OR pattern* OR surveillance OR \"population-based\") AND (child* OR pediatric OR paediatric) AND (2022-2024)**\n\n### Reasoning:\n1.  **Core Concepts:** Explicitly includes `SARS-CoV-2/COVID-19`, `MIS-C`, `Kawasaki disease/KD-like`, and `children/pediatric`.\n2.  **Key Debate Focus:** Targets `incidence` and terms related to geographic/temporal distribution (`cluster*`, `pattern*`) and potential reporting bias (`surveillance`, `population-based`).\n3.  **\"Latest Evidence\":** Filters for publications from **2022 onwards** to capture studies published after the evidence cited in the debate (e.g., Evidence 14, 15, 16).\n4.  **Specificity:** Avoids vague terms like \"isolated instances\" or \"systematic,\" instead using measurable concepts central to the disagreement (incidence patterns, clustering).",
-      "context": "Phase 3 - Scientific Opponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "32921711",
-        "33537269",
-        "34331326"
-      ]
-    },
-    {
-      "round": 4,
-      "query": "Based on the debate context and the request for the **latest evidence**, here is a precise search query:\n\n```\n(\"SARS-CoV-2\" OR \"COVID-19\") AND (\"Kawasaki disease\" OR \"MIS-C\" OR \"Multisystem Inflammatory Syndrome in Children\") AND (children OR pediatric) AND (\"relative risk\" OR \"hazard ratio\" OR \"incidence\" OR \"epidemiology\") AND (\"systematic association\" OR \"temporal association\" OR \"causal link\") \n```\n\n**Key elements explained:**\n\n1.  **Core Concepts:** `(\"SARS-CoV-2\" OR \"COVID-19\")` captures the virus/disease. `(\"Kawasaki disease\" OR \"MIS-C\" OR \"Multisystem Inflammatory Syndrome in Children\")` captures the inflammatory conditions in question. `(children OR pediatric)` focuses the search on the relevant population.\n2.  **Quantitative Measures:** `(\"relative risk\" OR \"hazard ratio\" OR \"incidence\" OR \"epidemiology\")` targets studies providing the statistical evidence central to the debate (like the HR 3.023 for MIS-C and 1.736 for KD).\n3.  **Association Type:** `(\"systematic association\" OR \"temporal association\" OR \"causal link\")` directly addresses the core dispute (isolated vs. systematic/non-random association) using terms from the debate context.\n4.  **Implicit Recency:** By specifying the highly specific concepts and association types debated during the pandemic (especially MIS-C), the query inherently prioritizes recent literature (post-2020) without needing a date filter, which could exclude relevant foundational studies cited in the context. Adding `AND (2023 OR 2024)` would enforce strict recency but might miss key late 2022/early 2023 studies.",
-      "context": "Phase 4 - Scientific Proponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "34140220",
-        "34872479",
-        "33452195"
-      ]
-    },
-    {
-      "round": 4,
-      "query": "Based on the debate context and the request for the **latest evidence**, here is a precise search query:\n\n```sql\n(\"SARS-CoV-2\" OR \"COVID-19\") AND (\"pediatric\" OR \"children\") AND (\"MIS-C\" OR \"Multisystem Inflammatory Syndrome in Children\" OR \"Kawasaki disease\") AND (\"incidence\" OR \"risk\" OR \"epidemiology\" OR \"temporal trend\") AND (\"2023\"[Date - Publication] : \"2024\"[Date - Publication])\n```\n\n**Key elements explained:**\n1.  **Core Terms:** Combines the virus (`SARS-CoV-2`/`COVID-19`), population (`pediatric`/`children`), and conditions (`MIS-C`/`Kawasaki disease`).\n2.  **Focus:** Targets epidemiological data (`incidence`, `risk`, `epidemiology`, `temporal trend`) crucial to the debate on prevalence and patterns.\n3.  **Recency Filter:** Limits results to studies published in **2023 or 2024** to retrieve the *latest evidence* as requested. This ensures the query captures post-pandemic phase data and recent analyses of trends/bias concerns.",
-      "context": "Phase 4 - Scientific Opponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "34140220",
-        "34331326",
-        "38302974"
-      ]
-    },
-    {
-      "round": 4,
-      "query": "Based on the debate context and the specific request for anonymized records showing clustering patterns, the precise search query is:\n\n> **(\"Kawasaki disease\" OR \"MIS-C\" OR \"Multisystem Inflammatory Syndrome in Children\") AND (\"SARS-CoV-2\" OR \"COVID-19\") AND (\"pediatric\" OR \"child*\") AND (\"temporal clustering\" OR \"geographic clustering\" OR \"spatiotemporal pattern\") AND (\"incidence\" OR \"infection rate\" OR \"case series\") AND (\"medical records\" OR \"electronic health records\" OR \"population data\")**\n\n**Key elements explained:**\n\n1.  **Conditions:** `(\"Kawasaki disease\" OR \"MIS-C\"...)` captures KD and its COVID-associated variant.\n2.  **Virus:** `(\"SARS-CoV-2\" OR \"COVID-19\")` specifies the infection link.\n3.  **Population:** `(\"pediatric\" OR \"child*\")` focuses on the relevant age group.\n4.  **Pattern Requested:** `(\"temporal clustering\" OR \"geographic clustering\"...)` directly targets the clustering evidence debated.\n5.  **Data Type:** `(\"incidence\" OR \"infection rate\"...)` focuses on population-level rates.\n6.  **Source:** `(\"medical records\" OR \"electronic health records\"...)` aligns with the request for anonymized patient/population records.\n\nThis query efficiently combines the core debate elements (KD/MIS-C, COVID-19, children) with the specific evidence type requested (clustering patterns derived from medical/population records showing incidence rates).",
-      "context": "Phase 4 - Scientific Opponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "32921711",
-        "32692691",
-        "33726806"
-      ]
-    },
-    {
-      "round": 1,
-      "query": "Given the lack of specific context, the query focuses on **recency and high-quality evidence** across scientific literature. For a precise search:  \n\n```  \n(\"last 2 years\" OR \"last 5 years\") AND (\"systematic review\" OR \"meta-analysis\" OR \"randomized controlled trial\") AND (pub_date >= 2022)  \n```  \n\n**Key filters**:  \n1. Prioritizes studies from the **last 2 years** (adjustable to 5 years if needed).  \n2. Targets high-evidence publications: **systematic reviews, meta-analyses, or RCTs**.  \n3. Replace `[topic]` with your subject if context emerges (e.g., `\"stroke prevention\" AND [...]`).  \n\n**Example adaptation**:  \n> `(\"stroke prevention\") AND (\"systematic review\" OR \"RCT\") AND (pub_date >= 2022)`  \n\nThis balances rigor with recency while allowing topic flexibility.",
-      "context": "Phase 1 - Scientific Opponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "37178780",
-        "37178780",
-        "36351782"
-      ]
-    },
-    {
-      "round": 1,
-      "query": "Based on the debate context and the request for the **latest evidence**, here is a precise search query focusing on recent epidemiological data for MIS-C and Kawasaki disease incidence in relation to COVID-19:\n\n**Concise Search Query:**\n```\n(\"MIS-C\" OR \"Multisystem Inflammatory Syndrome in Children\" OR \"Kawasaki disease\") AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"incidence\" OR \"epidemiology\" OR \"trend\" OR \"absolute risk\") AND (\"pediatric\" OR \"children\") AND (\"2023\" OR \"2024\")\n```\n\n**Why this query works:**\n\n1.  **Core Concepts:** Captures both specific syndromes (`MIS-C`, `Kawasaki disease`) and the virus (`COVID-19`, `SARS-CoV-2`).\n2.  **Epidemiological Focus:** Uses terms (`incidence`, `epidemiology`, `trend`, `absolute risk`) directly relevant to the debate's focus on population-level occurrence and risk quantification.\n3.  **Population:** Specifies `pediatric` or `children` as the context is MIS-C/Kawasaki in youth.\n4.  **Recency:** Filters for the very latest data by including `2023` OR `2024`. This directly addresses the \"latest evidence\" request.\n5.  **Precision:** Avoids less precise terms like \"relationship\" or \"association\" in favor of concrete epidemiological metrics mentioned in the context (incidence, trends, absolute risk).",
-      "context": "Phase 1 - Scientific Proponent",
-      "num_results": 3,
-      "evidence_ids": [
-        "34140220",
-        "34140220",
+        "34278987",
+        "34006982",
         "33679227"
       ]
     },
     {
       "round": 2,
-      "query": "Based on the debate context and the request for the **latest evidence**, here is a precise search query:\n\n```sql\n(\"Kawasaki disease\" OR MIS-C OR PIMS-TS) AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"temporal association\" OR cluster* OR outbreak* OR \"increased risk\" OR \"hazard ratio\" OR \"distinct phenotype\") AND (epidemiol* OR cohort OR surveillance) AND (2023 OR 2024)\n```\n\n**Key elements explained:**\n\n1.  **Core Concepts:** `(\"Kawasaki disease\" OR MIS-C OR PIMS-TS) AND (\"COVID-19\" OR \"SARS-CoV-2\")` - Captures the main conditions under debate.\n2.  **Association & Evidence Type:** `(\"temporal association\" OR cluster* OR outbreak* OR \"increased risk\" OR \"hazard ratio\" OR \"distinct phenotype\")` - Focuses on the *nature* of the link debated (temporal clusters, risk elevation, phenotype differences).\n3.  **Methodology Focus:** `(epidemiol* OR cohort OR surveillance)` - Targets the type of evidence emphasized (epidemiological data, cohort studies, surveillance reports) relevant to disproving \"isolation\".\n4.  **Recency:** `AND (2023 OR 2024)` - Explicitly filters for the **latest evidence** published in the last two years.",
-      "context": "Phase 2 - Scientific Opponent",
+      "query": "Based on the debate context and the request for the **latest evidence** on the relationship between COVID-19 and Kawasaki Disease (KD), focusing on diagnostic distinctions and causal links, here is the precise search query:\n\n```sql\n(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"Kawasaki Disease\" OR \"MIS-C\" OR \"Multisystem Inflammatory Syndrome in Children\") \nAND (\"diagnostic differentiation\" OR \"etiology\" OR \"causal link\" OR \"infectious trigger\") \nAND (\"systematic review\" OR \"cohort study\" OR \"case-control\") \nAND (child* OR pediatric) \nFILTER: Publication Date >= 2022\n```\n\n### Key Elements Explained:\n1.  **Core Concepts:** Combines `COVID-19/SARS-CoV-2` with `Kawasaki Disease/MIS-C`.\n2.  **Controversy Focus:** Targets `diagnostic differentiation` (MIS-C vs. KD), `etiology/causal link`, and `infectious trigger` \u2013 the core points of debate.\n3.  **Evidence Strength:** Prioritizes high-level evidence (`systematic review`, `cohort study`, `case-control`) to address the defense's criticism of preliminary data.\n4.  **Population:** Specifies `child*/pediatric`.\n5.  **\"Latest Evidence\":** Filters for publications from **2022 onwards** to capture the most recent developments and resolve the acknowledged need for \"further studies\".\n6.  **Debate Context:** Incorporates terminology used by both sides (Defense's \"diagnostic differentiation\" and \"lack of causality\" vs. Proponent's \"infectious trigger\" and \"KD-like presentations\").\n\nThis query efficiently retrieves recent, high-quality studies directly addressing the unresolved questions of diagnostic overlap/separateness and potential causality between COVID-19 and Kawasaki Disease in children.",
+      "context": "Phase 2 - Plaintiff Counsel",
       "num_results": 3,
       "evidence_ids": [
         "34140220",
-        "34140220",
-        "34140220"
+        "32965372",
+        "34006982"
       ]
     },
     {
       "round": 2,
-      "query": "Based on the debate context focusing on clusters, relative/absolute risk, phenotypic differences, and surveillance limitations regarding COVID-19/SARS-CoV-2 and Kawasaki Disease/MIS-C, and the request for the **latest evidence**, here is the precise search query:\n\n```\n(\"Kawasaki disease\" OR MIS-C) AND (SARS-CoV-2 OR COVID-19) AND (\"temporal association\" OR clusters OR \"relative risk\" OR \"absolute risk\" OR surveillance) AND (\"phenotypic differences\" OR underestimation) AND (2023 OR 2024) AND (\"systematic review\" OR \"meta-analysis\")\n```\n\n**Key elements explained:**\n\n1.  **Core Terms:** `(\"Kawasaki disease\" OR MIS-C) AND (SARS-CoV-2 OR COVID-19)` - Captures the primary diseases/virus.\n2.  **Debate Concepts:** `(\"temporal association\" OR clusters OR \"relative risk\" OR \"absolute risk\" OR surveillance) AND (\"phenotypic differences\" OR underestimation)` - Targets the specific points of contention: clusters vs. isolation, risk assessment (relative vs. absolute), distinct phenotypes, and surveillance limitations causing underestimation.\n3.  **Recency:** `(2023 OR 2024)` - Filters for the very latest evidence as requested.\n4.  **Evidence Quality:** `(\"systematic review\" OR \"meta-analysis\")` - Prioritizes high-level synthesis of recent evidence, crucial for resolving the nuanced debate.",
-      "context": "Phase 2 - Scientific Proponent",
+      "query": "Based on the debate context and the request for the **latest evidence** on the COVID-19 / Kawasaki disease (KD) / MIS-C relationship, here is a precise search query:\n\n```sql\n(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"Kawasaki Disease\" OR KD) AND (\"Multisystem Inflammatory Syndrome in Children\" OR MIS-C) AND (association OR link OR differentiation OR diagnostic criteria OR etiology) AND (systematic review OR cohort study OR prospective study) AND (\"2020\"[Date - Publication] : \"2024\"[Date - Publication])\n```\n\n**Breakdown of Key Elements:**\n\n1.  **Core Entities:** `(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"Kawasaki Disease\" OR KD) AND (\"Multisystem Inflammatory Syndrome in Children\" OR MIS-C)` - Captures the essential conditions in debate.\n2.  **Relationship Focus:** `(association OR link OR differentiation OR diagnostic criteria OR etiology)` - Targets the core debate points: existence/strength of a link, how to distinguish MIS-C from KD, underlying causes, and defining criteria.\n3.  **Evidence Type & Recency:** `(systematic review OR cohort study OR prospective study) AND (\"2020\"[Date - Publication] : \"2024\"[Date - Publication])` - Prioritizes high-level synthesized evidence (systematic reviews) and robust observational studies (cohort, prospective) published since the pandemic began (2020 onwards), focusing on the *latest* findings as requested.\n4.  **Captures Key Debate Nuances:** The terms `differentiation` and `diagnostic criteria` directly address the controversy highlighted by both experts and the scoring system mentioned (Evidence 14). `Etiology` addresses the infectious trigger hypothesis central to the plaintiff's argument and discussed by all parties. `Association`/`link` captures the core question of relationship existence.",
+      "context": "Phase 2 - Defense Counsel",
+      "num_results": 3,
+      "evidence_ids": [
+        "34140220",
+        "34013488",
+        "34013488"
+      ]
+    },
+    {
+      "round": 2,
+      "query": "Based on the legal request for pre-pandemic Kawasaki disease baseline epidemiology in children, formulate this concise search query:\n\n> **(\"Kawasaki disease\" OR \"Mucocutaneous lymph node syndrome\") AND (incidence OR prevalence OR epidemiology) AND (child* OR pediatric OR paediatric) AND (\"seasonal variation\" OR \"seasonal pattern\" OR seasonality OR \"temporal trend\") AND (demographic* OR \"age distribution\" OR \"sex distribution\" OR \"ethnic distribution\" OR race OR gender) AND (\"2010-2019\" OR \"pre-pandemic\" OR \"pre-COVID\")**\n\n**Key elements covered:**\n1.  **Disease:** `\"Kawasaki disease\" OR \"Mucocutaneous lymph node syndrome\"`\n2.  **Population:** `child* OR pediatric OR paediatric`\n3.  **Core Metrics:** `incidence OR prevalence OR epidemiology`\n4.  **Seasonal Aspect:** `\"seasonal variation\" OR \"seasonal pattern\" OR seasonality OR \"temporal trend\"`\n5.  **Demographics:** `demographic* OR \"age distribution\" OR \"sex distribution\" OR \"ethnic distribution\" OR race OR gender`\n6.  **Critical Timeframe:** `\"2010-2019\" OR \"pre-pandemic\" OR \"pre-COVID\"` - Excludes pandemic-influenced data.",
+      "context": "Phase 2 - Defense Counsel",
+      "num_results": 3,
+      "evidence_ids": [
+        "39627984",
+        "33361078",
+        "37725798"
+      ]
+    },
+    {
+      "round": 3,
+      "query": "Based on the debate context and request for the \"latest evidence\" on the COVID-19/KD relationship, here is a precise search query:\n\n```sql\n(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"Kawasaki Disease\" OR \"KD\" OR \"MIS-C\") AND (association OR trigger OR differentiation) AND (children OR pediatric) AND (epidemiology OR incidence OR \"systematic review\" OR \"cohort study\") AND (2023:2024)\n```\n\n**Key elements explained:**\n\n1.  **Core Concepts:** `(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"Kawasaki Disease\" OR \"KD\" OR \"MIS-C\")` - Captures the main diseases/conditions in question, including the specific syndrome (MIS-C) central to the debate.\n2.  **Relationship Focus:** `(association OR trigger OR differentiation)` - Targets the key aspects of the relationship debated: temporal/clinical association, infectious trigger hypothesis, and diagnostic differentiation (MIS-C vs KD).\n3.  **Population:** `(children OR pediatric)` - Specifies the relevant population.\n4.  **Evidence Type & Scope:** `(epidemiology OR incidence OR \"systematic review\" OR \"cohort study\")` - Focuses on the types of evidence emphasized (epidemiological trends, incidence changes, high-level reviews, observational studies) and excludes basic science or case reports unless part of larger analyses.\n5.  **Recency:** `(2023:2024)` - Filters for the *latest* evidence, as requested, building upon the foundational studies cited (many from 2020-2022).",
+      "context": "Phase 3 - Plaintiff Counsel",
+      "num_results": 3,
+      "evidence_ids": [
+        "34278987",
+        "39017646",
+        "34310359"
+      ]
+    },
+    {
+      "round": 3,
+      "query": "Based on the debate context and request for \"latest evidence,\" here is a precise search query:\n\n```sql\n(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"Kawasaki disease\" OR \"KD\") AND (children OR pediatric) AND (\"Multisystem Inflammatory Syndrome in Children\" OR \"MIS-C\") AND (association OR trigger OR link) AND (temporal OR clinical OR epidemiological) AND (diagnostic criteria OR differentiation) AND (\"2023\"[Date - Publication] : \"2024\"[Date - Publication])\n```\n\n**Key elements explained:**\n1.  **Core Concepts:** Combines `COVID-19/SARS-CoV-2`, `Kawasaki disease/KD`, `children/pediatric`, and `MIS-C` as the fundamental subjects.\n2.  **Relationship Terms:** Includes `association`, `trigger`, and `link` to capture the debated causal/triggering relationship.\n3.  **Evidence Type:** Uses `temporal`, `clinical`, and `epidemiological` to target the specific types of evidence discussed (incidence patterns, symptom overlap, population data).\n4.  **Critical Distinction:** Adds `diagnostic criteria` OR `differentiation` to retrieve studies addressing the MIS-C vs. KD distinction, a key point of debate.\n5.  **Recency Filter:** Limits results to publications from **2023-2024** to prioritize the *latest* evidence as requested.",
+      "context": "Phase 3 - Defense Counsel",
+      "num_results": 3,
+      "evidence_ids": [
+        "34140220",
+        "33391390",
+        "32583808"
+      ]
+    },
+    {
+      "round": 4,
+      "query": "Based on the debate context and the request for the **latest evidence** on the complex relationship between COVID-19, MIS-C, and Kawasaki Disease (KD) in children, here is a precise search query:\n\n```sql\n(\"SARS-CoV-2\" OR \"COVID-19\") AND (\"Kawasaki Disease\" OR \"MIS-C\" OR \"Multisystem Inflammatory Syndrome in Children\") AND (children OR pediatric) AND (\"temporal association\" OR pathogenesis OR etiology OR \"diagnostic criteria\" OR \"differential diagnosis\") AND (\"systematic review\" OR \"meta-analysis\") AND (2023:2024[PDAT])\n```\n\n**Why this query works:**\n\n1.  **Core Concepts:** Targets `COVID-19/SARS-CoV-2`, `Kawasaki Disease`, `MIS-C`, and the `pediatric population` explicitly mentioned in the debate.\n2.  **Relationship Focus:** Uses terms reflecting the core debate points: `temporal association`, `pathogenesis`, `etiology`, `diagnostic criteria`, and `differential diagnosis`.\n3.  **Latest Evidence:** Filters for `systematic reviews` and `meta-analyses` (highest level of synthesized evidence) published in `2023 or 2024`.\n4.  **Precision:** Combines terms with `AND` to ensure results address *all* key aspects (disease, population, relationship type, evidence recency/level). Uses `OR` within groups to capture synonyms/related terms.\n5.  **Addresses Debate Nuances:** Captures the complexity of the relationship (association vs. trigger vs. distinct entity) and the need for diagnostic clarity highlighted by both experts.",
+      "context": "Phase 4 - Plaintiff Counsel",
+      "num_results": 3,
+      "evidence_ids": [
+        "34140220",
+        "34006982",
+        "34098792"
+      ]
+    },
+    {
+      "round": 4,
+      "query": "Based on the proceedings context and the request for \"latest evidence,\" here is a precise search query:\n\n```plaintext\n(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"Kawasaki Disease\" OR \"KD\" OR \"Kawasaki-like\") AND (children OR pediatric) AND (association OR trigger OR link OR incidence) AND (MIS-C OR \"multisystem inflammatory syndrome\") AND (epidemiology OR cohort OR \"risk factor\") NOT adult\nFilters: Publication Date from 2023 - Present\n```\n\n### Why this query works:\n1. **Core Concepts**: Combines key terms `(COVID-19/SARS-CoV-2)`, `(Kawasaki Disease/KD/Kawasaki-like)`, and `(children/pediatric)`.\n2. **Relationship Focus**: Targets `association/trigger/link/incidence` to capture causal or correlational evidence.\n3. **Critical Distinction**: Includes `(MIS-C)` explicitly, reflecting the debate about overlapping syndromes.\n4. **Evidence Type**: Prioritizes `epidemiology/cohort/risk factor` studies for population-level data.\n5. **Recency**: Filters for publications from **2023 onward** to capture the \"latest evidence\" (e.g., the cited TriNetX study PMID 39017646).\n6. **Exclusion**: `NOT adult` narrows results to pediatric contexts.\n\nThis query retrieves recent studies investigating the epidemiological and clinical links between COVID-19 and Kawasaki-like presentations in children, including MIS-C comparisons.",
+      "context": "Phase 4 - Defense Counsel",
+      "num_results": 3,
+      "evidence_ids": [
+        "34140220",
+        "34140220",
+        "35229055"
+      ]
+    },
+    {
+      "round": 4,
+      "query": "Based on the legal request to find evidence of KD-like illness *without* SARS-CoV-2 infection to challenge causation, the precise search query is:\n\n> **(\"Kawasaki Disease\" OR \"Kawasaki syndrome\" OR \"MIS-C\" OR \"Multisystem Inflammatory Syndrome in Children\" OR \"pediatric inflammatory multisystem syndrome\") AND (child* OR pediatric OR paediatric OR infant OR adolescent) AND (\"SARS-CoV-2 negative\" OR \"COVID-19 negative\" OR \"pre-pandemic\" OR \"without infection\") NOT (\"SARS-CoV-2\" OR \"COVID-19\" OR \"coronavirus\")**\n\n**Key elements explained:**\n\n1.  **Core Conditions:** `(\"Kawasaki Disease\" OR ... OR \"pediatric inflammatory multisystem syndrome\")` - Captures KD and related syndromes (like MIS-C) central to the debate.\n2.  **Population:** `(child* OR pediatric OR paediatric OR infant OR adolescent)` - Focuses specifically on pediatric patients.\n3.  **Absence of Infection (Critical for Defense):**\n    *   `(\"SARS-CoV-2 negative\" OR \"COVID-19 negative\")` - Directly targets cases confirmed *not* to have the infection.\n    *   `(\"pre-pandemic\")` - Captures cases occurring before SARS-CoV-2 existed.\n    *   `(\"without infection\")` - Broadens capture for negative status phrasing.\n4.  **Exclusion of COVID Terms:** `NOT (\"SARS-CoV-2\" OR \"COVID-19\" OR \"coronavirus\")` - Ensures the query actively *excludes* studies primarily *about* COVID-19 association, retrieving only studies focused on cases *without* it or from pre-pandemic times. This directly addresses the defense's need to find cases independent of the virus.\n\n**Why this meets the Defense Request:**\n*   It specifically searches for the condition (KD/MIS-C) in the relevant population (children).\n*   It mandates the **absence of SARS-CoV-2 infection** using confirmed negative status or pre-pandemic timing.\n*   It **excludes studies primarily discussing COVID-19**, ensuring results focus on cases challenging the alleged *specificity* and *necessity* of the virus for causing the condition.\n*   It retrieves peer-reviewed clinical/epidemiological data as requested.",
+      "context": "Phase 4 - Defense Counsel",
+      "num_results": 3,
+      "evidence_ids": [
+        "34278987",
+        "34222140",
+        "33537269"
+      ]
+    },
+    {
+      "round": 5,
+      "query": "Based on the debate context and the request for \"latest evidence\" on the COVID-19/KD relationship, here is a precise search query:\n\n```sql\n(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"Kawasaki disease\" OR KD) AND (association OR link OR trigger) AND (MIS-C OR \"multisystem inflammatory syndrome\") AND (diagnostic OR differentiate OR distinguish) AND (etiology OR controversy OR uncertainty) AND (\"2023-2024\"[Date - Publication])\n```\n\n**Key elements explained:**\n1.  **Core Concepts:** Combines `COVID-19/SARS-CoV-2` with `Kawasaki disease/KD` and `MIS-C`.\n2.  **Relationship Focus:** Includes terms like `association`, `link`, `trigger` to capture the causal debate.\n3.  **Diagnostic Distinction:** Uses `diagnostic`, `differentiate`, `distinguish` to target evidence on separating KD from MIS-C (a key point of contention).\n4.  **Etiology & Uncertainty:** Adds `etiology`, `controversy`, `uncertainty` to find literature addressing the unknown cause of KD and the disputed nature of the link.\n5.  **Recency Filter:** Restricts results to publications from **2023-2024** to prioritize the latest evidence as requested.",
+      "context": "Phase 5 - Plaintiff Counsel",
       "num_results": 3,
       "evidence_ids": [
         "32876096",
-        "33502003",
+        "34278987",
+        "33272357"
+      ]
+    },
+    {
+      "round": 5,
+      "query": "Based on the debate context focusing on the **association, differentiation, and latest evidence** regarding COVID-19, Kawasaki disease (KD), and MIS-C in children, the precise search query is:\n\n> **(\"SARS-CoV-2\" OR \"COVID-19\") AND (\"Kawasaki disease\" OR KD) AND (children OR pediatric) AND (association OR link OR risk) AND (MIS-C OR \"multisystem inflammatory syndrome\") AND (diagnostic OR criteria OR differentiation OR KMDscore OR \"cohort study\") AND (2020:2024[dp])**\n\n**Rationale for key terms:**\n1.  **Core Entities:** Explicitly includes `SARS-CoV-2/COVID-19`, `Kawasaki disease/KD`, `MIS-C`, and `children/pediatric`.\n2.  **Core Debate Focus:** Targets `association/link/risk` and `diagnostic criteria/differentiation` using terms like `KMDscore` and `cohort study` mentioned in the context.\n3.  **Recency (\"latest evidence\"):** Limits results to publications from `2020-2024` using `[dp]` (PubMed date publication filter).\n4.  **Specificity:** Avoids ambiguous terms (e.g., \"relationship\") and focuses on concrete concepts debated (association, diagnostic distinction, epidemiological evidence like cohort studies).",
+      "context": "Phase 5 - Defense Counsel",
+      "num_results": 3,
+      "evidence_ids": [
+        "39017646",
+        "34140220",
+        "34858909"
+      ]
+    },
+    {
+      "round": 1,
+      "query": "Based on the **empty debate context**, I cannot generate a specific query. **Please provide the core medical/legal topic or disputed issue** (e.g., \"efficacy of drug X for condition Y,\" \"causation between exposure Z and disease A,\" \"standard of care for procedure B\").\n\n**Once you provide the topic, here is the precise query structure I will use:**\n\n```sql\n(\"[Specific Medical Condition/Treatment/Exposure]\" OR \"[Specific Drug/Device/Procedure]\") AND\n(\"clinical trial\" OR \"meta-analysis\" OR \"systematic review\" OR \"cohort study\" OR \"expert consensus\") AND\n(\"legal evidence\" OR \"medical exhibit\" OR \"admissibility\" OR \"causation\" OR \"standard of care\") AND\n(published_date:[2023-01-01 TO *] OR \"last 18 months\")\n```\n\n**Example with Topic \"Efficacy of DrugX for ConditionY\":**\n```sql\n(\"ConditionY\" OR \"DrugX\") AND\n(\"clinical trial\" OR \"meta-analysis\" OR \"systematic review\") AND\n(\"legal evidence\" OR \"causation\" OR \"adverse events\") AND\n(published_date:[2023-01-01 TO *])\n```\n\n**Key elements optimized for legal/medical evidence:**\n1.  **Precise Medical Terms:** Targets the core subject.\n2.  **High-Value Study Types:** Filters for robust evidence (trials, reviews).\n3.  **Legal/Evidence Context:** Includes terms relevant to litigation/disputes.\n4.  **Date Restriction:** Ensures \"latest evidence\" (adjust date range as needed).\n\n**Provide the debate topic, and I will generate the exact query.**",
+      "context": "Phase 1 - Defense Counsel",
+      "num_results": 3,
+      "evidence_ids": [
+        "34393782",
+        "36302580",
+        "35507397"
+      ]
+    },
+    {
+      "round": 1,
+      "query": "Based on the defense's argument focusing on the **distinction between MIS-C and classic Kawasaki Disease (KD), the lack of definitive causation by COVID-19, and confounding factors in epidemiological data**, here is the precise search query:\n\n> **(\"Multisystem Inflammatory Syndrome in Children\" OR MIS-C) AND (\"Kawasaki disease\" OR KD) AND (COVID-19 OR SARS-CoV-2) AND (\"differential diagnosis\" OR \"distinct entity\" OR \"Kawasaki-like\" OR KMDscore) AND (\"association\" OR \"relationship\" OR \"trigger\") NOT (\"cause\" OR causation) AND (\"confounding factors\" OR \"ascertainment bias\" OR epidemiology) AND (2023-2024 OR \"latest evidence\")**\n\n### Why this query works:\n1.  **Core Entities:** Explicitly includes `MIS-C`, `KD`, and `COVID-19/SARS-CoV-2`.\n2.  **Distinction Focus:** Uses terms like `\"differential diagnosis\"`, `\"distinct entity\"`, `\"Kawasaki-like\"`, and the specific tool `KMDscore` to target evidence differentiating MIS-C from KD.\n3.  **Causality Argument:** Searches for `association/relationship/trigger` while explicitly **excluding** `cause/causation` to align with the defense's position.\n4.  **Confounding & Bias:** Addresses the defense's critique of epidemiological data with `\"confounding factors\"`, `\"ascertainment bias\"`, and `epidemiology`.\n5.  **Recency:** Filters for the **latest evidence** (`2023-2024` OR `\"latest evidence\"`).\n6.  **Precision:** Avoids overly broad terms, focusing on the specific debate points raised.",
+      "context": "Phase 1 - Plaintiff Counsel",
+      "num_results": 3,
+      "evidence_ids": [
+        "34858909",
+        "34858909",
+        "34278987"
+      ]
+    },
+    {
+      "round": 2,
+      "query": "Based on the proceedings and the request for \"latest evidence,\" here is a precise search query:\n\n```sql\n(\"SARS-CoV-2\" OR \"COVID-19\") AND (\"Kawasaki disease\" OR \"KD\") AND (\"MIS-C\" OR \"PIMS-TS\") \nAND (\"causal link\" OR \"causality\" OR \"association\" OR \"differential diagnosis\" OR \"distinct syndrome\" OR \"KMDscore\") \nAND (\"comparative study\" OR \"systematic review\" OR \"meta-analysis\" OR \"expert consensus\") \nNOT (\"case report\" OR \"animal study\") \nPUBLICATION_YEAR: 2020-CURRENT\n```\n\n**Key elements explained:**\n\n1.  **Core Concepts:** `(\"SARS-CoV-2\" OR \"COVID-19\") AND (\"Kawasaki disease\" OR \"KD\") AND (\"MIS-C\" OR \"PIMS-TS\")` - Directly targets the core relationship in dispute.\n2.  **Disputed Relationship & Differentiation:** `(\"causal link\" OR \"causality\" OR \"association\" OR \"differential diagnosis\" OR \"distinct syndrome\" OR \"KMDscore\")` - Focuses on the crux of the debate (causation vs. association/differentiation) and includes the specific diagnostic tool mentioned.\n3.  **Evidence Strength & Recency:** `AND (\"comparative study\" OR \"systematic review\" OR \"meta-analysis\" OR \"expert consensus\") NOT (\"case report\" OR \"animal study\") PUBLICATION_YEAR: 2020-CURRENT` - Prioritizes high-level evidence published since the pandemic began, excluding weaker evidence types like single case reports or animal studies.\n4.  **Contextual Fit:** The query directly addresses the arguments raised (causation debate, MIS-C vs KD differentiation, KMDscore, confounding/ascertainment bias implications) and fulfills the request for the *latest* evidence relevant to this ongoing scientific discussion.",
+      "context": "Phase 2 - Defense Counsel",
+      "num_results": 3,
+      "evidence_ids": [
+        "34140220",
+        "34140220",
         "34140220"
       ]
     },
     {
       "round": 2,
-      "query": "Based on the debate context and the specific data requested, the most precise search query would be:\n\n> **(\"Multisystem Inflammatory Syndrome in Children\" OR MIS-C OR PIMS-TS OR \"Kawasaki Disease\") AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"patient-level data\" OR \"registry data\" OR \"cohort data\") AND (\"epidemiology\" OR \"incidence\" OR \"temporal association\" OR \"immunology\" OR \"virology\") AND (\"symptom onset\" OR \"demographics\" OR \"comorbidities\" OR \"laboratory findings\" OR \"inflammatory markers\" OR \"cytokines\" OR \"echocardiography\" OR \"treatment\" OR \"outcomes\" OR \"autopsy\" OR \"pre-pandemic\")**\n\n**Key elements covered:**\n\n1.  **Core Conditions:** Explicitly includes MIS-C/PIMS-TS and Kawasaki Disease (KD) alongside COVID-19/SARS-CoV-2.\n2.  **Data Type:** Focuses on retrieving underlying datasets (\"patient-level data\", \"registry data\", \"cohort data\").\n3.  **Analysis Scope:** Incorporates the requested analytical angles (\"epidemiology\", \"incidence\", \"temporal association\", \"immunology\", \"virology\").\n4.  **Specific Data Points:** Lists critical requested variables (\"symptom onset\", \"demographics\", \"comorbidities\", \"laboratory findings\", \"inflammatory markers\", \"cytokines\", \"echocardiography\", \"treatment\", \"outcomes\", \"autopsy\").\n5.  **Critical Comparison:** Includes \"pre-pandemic\" to ensure retrieval of baseline KD data for comparison.",
-      "context": "Phase 2 - Scientific Proponent",
+      "query": "Based on the debate context and request for the **latest evidence** on the causal relationship between COVID-19 and *classic* Kawasaki Disease (KD) versus MIS-C/PIMS-TS, the precise search query is:\n\n> **`(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"Kawasaki disease\" OR \"KD\") AND (\"Multisystem Inflammatory Syndrome in Children\" OR \"MIS-C\" OR \"PIMS-TS\") AND (\"causal link\" OR etiology OR pathogenesis) AND (differentiation OR \"differential diagnosis\" OR \"versus\" OR \"distinct from\") AND (\"systematic review\" OR \"meta-analysis\" OR \"cohort study\") 2023-2024`**\n\n### Key Rationale:\n1.  **Core Concepts:** Explicitly includes COVID-19/SARS-CoV-2, Kawasaki Disease (KD), and MIS-C/PIMS-TS as the central subjects.\n2.  **Disputed Relationship:** Targets the **causal link/etiology/pathogenesis** debate highlighted by both experts.\n3.  **Critical Distinction:** Focuses on **differentiation** between classic KD and MIS-C (using terms like \"versus,\" \"distinct from,\" \"differential diagnosis\"), a core argument in the proceedings.\n4.  **Evidence Strength & Recency:** Prioritizes high-level evidence (`systematic review`, `meta-analysis`, `cohort study`) published within the **last 1-2 years (2023-2024)** to fulfill the \"latest evidence\" request.\n5.  **Avoids Over-Specificity:** Omits terms like \"KMDscore\" or \"confounding\" to prevent excluding relevant broader studies while ensuring the core differentiation and causality questions are addressed.",
+      "context": "Phase 2 - Plaintiff Counsel",
       "num_results": 3,
       "evidence_ids": [
-        "34140220",
-        "34121829",
-        "33152254"
+        "39017646",
+        "34006982",
+        "34278987"
+      ]
+    },
+    {
+      "round": 2,
+      "query": "**Search Query:**  \n\"Medical studies, case reports, or clinical guidelines examining the causal relationship between SARS-CoV-2 infection (COVID-19) and *classic* Kawasaki disease (KD) in pediatric patients, including diagnostic criteria (e.g., fever, mucocutaneous symptoms), inflammatory markers (CRP, IL-6, D-dimer), echocardiographic coronary artery abnormalities (z-scores), RT-PCR/viral sequencing results, and differential diagnosis excluding MIS-C. Focus on etiology, lab/imaging evidence, treatment response (IVIG, steroids), and histopathological findings.\"  \n\n**Rationale:**  \n- Specifies *classic KD* to exclude MIS-C debates per the proceedings.  \n- Covers diagnostic, lab, imaging, and treatment evidence requested by the plaintiff.  \n- Targets causation (etiology/pathogenesis) to address the burden of proof.",
+      "context": "Phase 2 - Plaintiff Counsel",
+      "num_results": 3,
+      "evidence_ids": [
+        "32876096",
+        "35194409",
+        "33196004"
       ]
     }
   ]

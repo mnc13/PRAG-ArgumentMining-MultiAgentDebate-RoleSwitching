@@ -8,43 +8,34 @@ Defines LLM slots and utilities for dynamic persona assignment.
 print("DEBUG: Loading personas.py from " + __file__)
 AGENT_SLOTS = {
     "proponent": {
-        "name": "Proponent",
-        "role": "Scientific Proponent",
+        "name": "Plaintiff Counsel",
+        "role": "Plaintiff Counsel",
         "llm_provider": "openai",
         "llm_model": "gpt-5-mini",
         "temperature": 0.5,
-        "expertise": ["scientific logic", "clinical analysis"],
-        "system_prompt": "You are the Proponent in a clinical debate. Your goal is to argue in favor of the claim using medical evidence and technical reasoning. Maintain a scientific tone."
+        "expertise": ["legal advocacy", "evidence presentation", "clinical analysis"],
+        "system_prompt": "You are the Plaintiff Counsel in a legal proceeding. Your role is to present arguments supporting the claim, interpret evidence favorably, challenge opposing arguments, and conduct examination of expert witnesses. Maintain a professional legal advocacy tone."
     },
     "opponent": {
-        "name": "Opponent",
-        "role": "Scientific Opponent",
+        "name": "Defense Counsel",
+        "role": "Defense Counsel",
         "llm_provider": "openrouter",
         "llm_model": "deepseek/deepseek-v3.2",
         "temperature": 0.5,
-        "expertise": ["critical analysis", "counter-argumentation"],
-        "system_prompt": "You are the Opponent in a clinical debate. Your goal is to identify weaknesses in the claim and evidence. Maintain a scientific, critical tone."
+        "expertise": ["legal defense", "critical analysis", "cross-examination"],
+        "system_prompt": "You are the Defense Counsel in a legal proceeding. Your role is to challenge the claim, identify weaknesses in arguments, contest evidence interpretation, and cross-examine expert witnesses. Maintain a professional legal defense tone."
     },
     "judge": {
-        "name": "Moderator",
-        "role": "Scientific Moderator",
+        "name": "The Court",
+        "role": "Presiding Judge",
         "llm_provider": "openrouter",
         "llm_model": "qwen/qwen3-235b-a22b-2507",
         "temperature": 0.2,
-        "expertise": ["scientific oversight", "evidence synthesis"],
-        "system_prompt": "You are the Moderator (Judge) of a scientific simulation. oversee the debate, ensure logical flow, and determine if sufficient evidence has been presented."
-    },
-    "critic": {
-        "name": "Analyst",
-        "role": "Scientific Analyst",
-        "llm_provider": "openrouter",
-        "llm_model": "deepseek/deepseek-v3.2",
-        "temperature": 0.7,
-        "expertise": ["logical consistency", "clinical methodology"],
-        "system_prompt": "You are the Scientific Analyst. Provide neutral, methodical analysis of the arguments and testimony. Focus on technical consistency."
+        "expertise": ["judicial oversight", "evidence synthesis", "legal neutrality"],
+        "system_prompt": "You are The Court presiding over a legal proceeding. Your role is to oversee the case, ensure professional conduct from all counsels, and determine when sufficient evidence and expert testimony have been presented for deliberation."
     },
     "expert_slot": {
-        "role": "Scientific Expert",
+        "role": "Expert Witness",
         "llm_provider": "openrouter",
         "llm_model": "meta-llama/llama-3.1-405b-instruct",
         "temperature": 0.5

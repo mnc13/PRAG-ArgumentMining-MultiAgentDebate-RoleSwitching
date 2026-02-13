@@ -41,15 +41,21 @@ class FinalVerdict:
         print("FINAL VERDICT GENERATION")
         print("="*60 + "\n")
         
-        # Determine verdict based on provisional winner
-        provisional_winner = self.judge_result['provisional_winner']
-        verdict = "SUPPORT" if provisional_winner == "proponent" else "REFUTE"
+        # Determine verdict based on judicial panel final verdict
+        final_judicial_verdict = self.judge_result['final_verdict']
+        if final_judicial_verdict == 'SUPPORTED':
+            verdict = "SUPPORT"
+        elif final_judicial_verdict == 'NOT SUPPORTED':
+            verdict = "REFUTE"
+        else:  # INCONCLUSIVE
+            # Default to plaintiff counsel if inconclusive
+            verdict = "SUPPORT"
         
         # Calculate confidence
         confidence = self._calculate_confidence()
         
         # Generate reasoning chain
-        reasoning = self._generate_reasoning(provisional_winner)
+        reasoning = self._generate_reasoning(final_judicial_verdict)
         
         # Extract key evidence
         key_evidence = self._extract_key_evidence()
@@ -67,7 +73,8 @@ class FinalVerdict:
             "reasoning": reasoning,
             "key_evidence": key_evidence,
             "metadata": {
-                "judge_scores": self.judge_result['aggregate_scores'],
+                "judicial_verdict": self.judge_result['final_verdict'],
+                "vote_breakdown": self.judge_result['vote_breakdown'],
                 "role_switch_consistent": self._check_role_switch_consistency(),
                 "self_reflection_adjustment": self.reflection_result['self_reflection']['confidence_adjustment'],
                 "debate_rounds": len(self.debate_result['rounds']),
@@ -93,24 +100,31 @@ class FinalVerdict:
         Returns:
             Confidence score between 0 and 1
         """
-        # 1. Base confidence from score margin (Sigmoid-like)
-        proponent_score = self.judge_result['aggregate_scores']['proponent']
-        opponent_score = self.judge_result['aggregate_scores']['opponent']
-        total_score = proponent_score + opponent_score
+        # 1. Base confidence from vote consensus
+        vote_breakdown = self.judge_result['vote_breakdown']
+        total_votes = sum(vote_breakdown.values())
         
-        if total_score > 0:
-            # Margin determines specific confidence (0-1)
-            # A margin of 10% (0.1) should give high confidence
-            margin = abs(proponent_score - opponent_score) / total_score
-            margin_score = margin * 2.0  # Boost margin impact
-            margin_score = min(1.0, margin_score)
+        if total_votes > 0:
+            # Get the winning verdict vote count
+            final_verdict = self.judge_result['final_verdict']
+            winning_votes = vote_breakdown.get(final_verdict, 0)
+            
+            # Consensus strength (3-0 = 1.0, 2-1 = 0.67, 1-1-1 = 0.33)
+            consensus_strength = winning_votes / total_votes
+            
+            # Boost consensus impact
+            margin_score = consensus_strength * 0.8  # Max 0.8 from consensus
         else:
             margin_score = 0.0
             
-        # 2. Quality confidence (High judge scores = better debate)
-        # Max possible is ~30 per judge per side. 3 judges * 2 sides * 40 = 240
-        # If total score > 150, it's a high quality debate
-        quality_score = min(1.0, total_score / 200.0) * 0.3
+        # 2. Quality confidence from judge scores
+        # Average the scores across all judges
+        avg_evidence_strength = sum(v['evidence_strength'] for v in self.judge_result['judge_verdicts']) / len(self.judge_result['judge_verdicts'])
+        avg_argument_validity = sum(v['argument_validity'] for v in self.judge_result['judge_verdicts']) / len(self.judge_result['judge_verdicts'])
+        avg_scientific_reliability = sum(v['scientific_reliability'] for v in self.judge_result['judge_verdicts']) / len(self.judge_result['judge_verdicts'])
+        
+        # Normalize to 0-1 (scores are 0-10)
+        quality_score = ((avg_evidence_strength + avg_argument_validity + avg_scientific_reliability) / 30) * 0.3
         
         base_confidence = margin_score + quality_score
         
@@ -135,8 +149,8 @@ class FinalVerdict:
         # Final calculation
         final_confidence = base_confidence + adjustments
         
-        # Ensure minimal non-zero confidence if there is a winner
-        if final_confidence < 0.1 and margin > 0.02:
+        # Ensure minimal non-zero confidence if there is consensus
+        if final_confidence < 0.1 and consensus_strength > 0.5:
             final_confidence = 0.1
             
         # Clamp to [0, 1]
@@ -162,23 +176,33 @@ class FinalVerdict:
         
         return consistent_count > inconsistent_count
     
-    def _generate_reasoning(self, winner: str) -> Dict:
+    def _generate_reasoning(self, final_verdict: str) -> Dict:
         """
         Generate reasoning chain for verdict
         """
+        # Map verdict to winner side
+        if final_verdict == 'SUPPORTED':
+            winner = 'proponent'
+        elif final_verdict == 'NOT SUPPORTED':
+            winner = 'opponent'
+        else:
+            winner = 'proponent'  # Default for INCONCLUSIVE (Plaintiff Counsel)
+        
         winner_agent_name = self.debate_result['agents'][winner]
         
         # Extract main arguments
         proponent_args = self._extract_side_arguments('proponent')
         opponent_args = self._extract_side_arguments('opponent')
         
-        # Get decision factors
+        # Get decision factors from judicial panel
         decision_factors = []
         
-        # Judge reasoning
-        for judge in self.judge_result['judges']:
-            if judge['winner'] == winner:
-                decision_factors.append(f"{judge['judge_name']}: {judge['reasoning'][:200]}...")
+        # Add majority opinion
+        decision_factors.append(f"Majority Opinion: {self.judge_result['majority_opinion'][:300]}...")
+        
+        # Add dissenting opinion if exists
+        if self.judge_result['dissenting_opinion']:
+            decision_factors.append(f"Dissenting Opinion: {self.judge_result['dissenting_opinion'][:200]}...")
         
         # Role-switch factor
         if self._check_role_switch_consistency():
@@ -194,11 +218,12 @@ class FinalVerdict:
             decision_factors.append(f"Self-reflection reinforced arguments (confidence adjusted by {reflection_adj:+.2f})")
         
         reasoning = {
-            "winner": winner,
+            "winner": "plaintiff_counsel" if winner == 'proponent' else "defense_counsel",
             "winner_agent": winner_agent_name,
+            "judicial_verdict": final_verdict,
             "main_arguments": {
-                "proponent": proponent_args[0][:300] + "..." if proponent_args else "N/A",
-                "opponent": opponent_args[0][:300] + "..." if opponent_args else "N/A"
+                "plaintiff_counsel": proponent_args[0][:300] + "..." if proponent_args else "N/A",
+                "defense_counsel": opponent_args[0][:300] + "..." if opponent_args else "N/A"
             },
             "decision_factors": decision_factors
         }
@@ -214,8 +239,9 @@ class FinalVerdict:
             if 'new_evidence' in round_data and round_data['new_evidence']:
                 for ev in round_data['new_evidence'][:2]:  # Top 2 per round
                     evidence_list.append({
-                        "source_id": ev.get('source_id', 'unknown'),
-                        "relevance": ev.get('relevance_score', 0),
+                        "source_id": ev.get('source_id') or ev.get('id', 'unknown'),
+                        "relevance": ev.get('relevance_score') or ev.get('relevance', 0),
+                        "novelty": ev.get('novelty', 1.0),
                         "round": round_data['round_number']
                     })
         
@@ -244,6 +270,6 @@ class FinalVerdict:
         for round_data in self.debate_result['rounds']:
             if 'new_evidence' in round_data:
                 for ev in round_data['new_evidence']:
-                    evidence_ids.add(ev.get('source_id', ''))
+                    evidence_ids.add(ev.get('source_id') or ev.get('id', ''))
         
         return len(evidence_ids)

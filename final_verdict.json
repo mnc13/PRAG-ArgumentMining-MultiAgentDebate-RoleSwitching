@@ -1,59 +1,63 @@
 {
-  "claim": "Cases of COVID-19 and Kawasaki disease occur in isolated instances.",
-  "verdict": "REFUTE",
-  "confidence": 0.353,
-  "ground_truth_label": "REFUTE",
+  "claim": "COVID-19 has been linked with cases of a similar rare condition in children called Kawasaki disease.",
+  "verdict": "SUPPORT",
+  "confidence": 0.993,
+  "ground_truth_label": "SUPPORT",
   "correct": true,
   "reasoning": {
-    "winner": "opponent",
-    "winner_agent": "Scientific Opponent",
+    "winner": "plaintiff_counsel",
+    "winner_agent": "Plaintiff Counsel",
+    "judicial_verdict": "SUPPORTED",
     "main_arguments": {
-      "proponent": "The preponderance of clinical reports and series indicates that COVID-19\u2013associated Kawasaki disease (KD) or KD-like inflammatory syndromes in children have presented as individual cases or small clusters rather than as a diffuse, ubiquitous phenomenon. The first descriptions of concurrent SARS\u2011CoV\u2011...",
-      "opponent": "The claim that cases of COVID-19 and Kawasaki disease occur in isolated instances is not supported by the epidemiological and clinical evidence. A direct causal and temporal association between SARS-CoV-2 infection and Kawasaki-like disease, specifically Multisystem Inflammatory Syndrome in Children..."
+      "plaintiff_counsel": "Your Honor, the medical literature shows a clear and consistent signal that SARS\u2011CoV\u20112 infection is temporally and clinically associated with Kawasaki disease\u2013like presentations in children. Multiple systematic reviews and case series documented a marked rise in Kawasaki-type illness coincident with...",
+      "defense_counsel": "Your Honor, the plaintiff's argument rests on a flawed conflation of distinct clinical entities and misinterprets preliminary observational data as definitive evidence. The claim that COVID-19 has been linked with Kawasaki disease (KD) is not supported by the weight of the available scientific liter..."
     },
     "decision_factors": [
-      "Logic & Reasoning Expert: The opponent won this debate because they presented evidence of population-level studies that demonstrate a significant association between COVID-19 and Kawasaki-like disease in children, contradictin...",
-      "Evidence Quality Expert: The opponent won this debate because they presented a stronger argument backed by epidemiological and clinical evidence, specifically citing population-level studies that demonstrate a direct causal l...",
-      "Scientific Accuracy Expert: The opponent won the debate by effectively countering the proponent's assertion that COVID-19-associated Kawasaki disease occurs primarily in isolated cases. They provided robust epidemiological evide...",
+      "Majority Opinion: Majority Opinion (Judge 1, Judge 2, Judge 3) - SUPPORTED:\n\n- Judge 1: The preponderance of evidence demonstrates a robust temporal and clinical association. Key decisive factors include: (1) Multiple systematic reviews (32965372, 33152254) documenting increased Kawasaki-type illness during the pande...",
       "Role-switching demonstrated consistent argumentation",
       "Self-reflection acknowledged weaknesses (confidence adjusted by -0.30)"
     ]
   },
   "key_evidence": [
     {
-      "source_id": "37178780",
+      "source_id": "37965606",
       "relevance": 0,
+      "novelty": 1.0,
       "round": 1
     },
     {
-      "source_id": "37178780",
+      "source_id": "36351782",
       "relevance": 0,
+      "novelty": 1.0,
       "round": 1
     },
     {
       "source_id": "34140220",
       "relevance": 0,
+      "novelty": 1.0,
       "round": 2
     },
     {
-      "source_id": "32876096",
+      "source_id": "32965372",
       "relevance": 0,
+      "novelty": 1.0,
       "round": 2
     },
     {
-      "source_id": "34140220",
+      "source_id": "34278987",
       "relevance": 0,
+      "novelty": 1.0,
       "round": 3
     }
   ],
   "metadata": {
-    "judge_scores": {
-      "proponent": 84,
-      "opponent": 96
+    "judicial_verdict": "SUPPORTED",
+    "vote_breakdown": {
+      "SUPPORTED": 3
     },
     "role_switch_consistent": true,
     "self_reflection_adjustment": -0.3,
-    "debate_rounds": 4,
-    "total_evidence_used": 15
+    "debate_rounds": 5,
+    "total_evidence_used": 18
   }
 }

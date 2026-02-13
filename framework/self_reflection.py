@@ -35,14 +35,16 @@ class SelfReflection:
         print("\n" + "="*60)
         print("SELF-REFLECTION ROUND")
         print("="*60)
-        print(f"Winner: {self.winner_agent.name} ({self.winner_side})")
-        print("Performing self-critique...\n")
+        display_side = "Plaintiff Counsel" if self.winner_side == "proponent" else "Defense Counsel"
+        print(f"Winner: {self.winner_agent.name} ({display_side})")
+        print("Performing legal self-reflection and integrity check...\n")
         
         # Extract winner's arguments
         winner_args = self._extract_side_arguments(self.winner_side)
         
-        # Extract opponent's critiques
+        # Extract opponent's critiques (counter-arguments)
         opponent_side = "opponent" if self.winner_side == "proponent" else "proponent"
+        opponent_display = "Defense" if self.winner_side == "proponent" else "Plaintiff"
         opponent_critiques = self._extract_critiques(opponent_side)
         
         # Generate self-reflection prompt
@@ -53,15 +55,15 @@ CLAIM: {self.debate_transcript['claim']}
 YOUR ARGUMENTS:
 {self._format_arguments(winner_args)}
 
-OPPONENT'S CRITIQUES:
+{opponent_display.upper()} COUNSEL'S CHALLENGES:
 {self._format_arguments(opponent_critiques)}
 
-Now, critically review your own arguments with complete honesty:
+Now, critically review your own arguments with complete legal and scientific honesty:
 
-1. **Identify Logical Flaws**: Are there any weaknesses in your reasoning?
-2. **Acknowledge Valid Opponent Points**: Which of the opponent's critiques are legitimate?
-3. **Evidence Misinterpretations**: Did you misinterpret any evidence?
-4. **Corrected Stance**: Based on this reflection, what is your refined position?
+1. **Identify Logical Flaws**: Are there any weaknesses in your advocacy or reasoning?
+2. **Acknowledge Valid Opposing Points**: Which of the {opponent_display.lower()} counsel's challenges are legitimate?
+3. **Evidence Misinterpretations**: Did you misinterpret any expert witness testimony or medical evidence?
+4. **Refined Position**: Based on this reflection, what is your refined professional position?
 5. **Confidence Adjustment**: Should your confidence increase or decrease? By how much? (provide a number between -0.3 and +0.3)
 
 Provide a thorough, honest self-critique:"""

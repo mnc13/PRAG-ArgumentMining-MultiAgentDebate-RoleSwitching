@@ -1,71 +1,41 @@
 {
-  "claim": "Cases of COVID-19 and Kawasaki disease occur in isolated instances.",
-  "judges": [
+  "claim": "COVID-19 has been linked with cases of a similar rare condition in children called Kawasaki disease.",
+  "judge_verdicts": [
     {
-      "judge_name": "Logic & Reasoning Expert",
-      "model": "meta-llama/llama-4-maverick-17b-128e-instruct",
-      "proponent_scores": {
-        "evidence_quality": 7,
-        "logical_consistency": 7,
-        "persuasiveness": 7,
-        "scientific_accuracy": 7,
-        "total": 28
-      },
-      "opponent_scores": {
-        "evidence_quality": 7,
-        "logical_consistency": 7,
-        "persuasiveness": 7,
-        "scientific_accuracy": 7,
-        "total": 28
-      },
-      "winner": "opponent",
-      "reasoning": "The opponent won this debate because they presented evidence of population-level studies that demonstrate a significant association between COVID-19 and Kawasaki-like disease in children, contradicting the proponent's claim that cases occur in isolated instances. The opponent's argument is supported by epidemiological and clinical evidence, making it more convincing. The proponent's reliance on individual case reports and small series is insufficient to refute the opponent's evidence."
+      "claim_summary": "Whether COVID-19 has been linked with cases of a Kawasaki disease-like condition in children, based on temporal/clinical associations and biological plausibility.",
+      "evidence_strength": 8,
+      "argument_validity": 8,
+      "scientific_reliability": 8,
+      "verdict": "SUPPORTED",
+      "reasoning": "The preponderance of evidence demonstrates a robust temporal and clinical association. Key decisive factors include: (1) Multiple systematic reviews (32965372, 33152254) documenting increased Kawasaki-type illness during the pandemic; (2) Large cohort studies (39017646) showing significantly elevated post-COVID KD risk (HR 1.736); (3) Biological plausibility from infectious-trigger models (34483151, 38426498); and (4) Consistent expert acknowledgment of overlapping features between MIS-C and KD (34013488, 35626814). While Defense correctly notes diagnostic distinctions (KMDscore: 34858909) and unknown KD etiology, these do not negate the documented linkage. The claim's phrasing ('linked with... Kawasaki disease-like condition') is substantiated by clinical, epidemiological, and mechanistic evidence, though causal certainty requires further research.",
+      "judge_name": "Judge 1",
+      "model": "deepseek/deepseek-r1"
     },
     {
-      "judge_name": "Evidence Quality Expert",
-      "model": "llama-3.3-70b-versatile",
-      "proponent_scores": {
-        "evidence_quality": 8,
-        "logical_consistency": 7,
-        "persuasiveness": 6,
-        "scientific_accuracy": 7,
-        "total": 28
-      },
-      "opponent_scores": {
-        "evidence_quality": 8,
-        "logical_consistency": 9,
-        "persuasiveness": 8,
-        "scientific_accuracy": 9,
-        "total": 34
-      },
-      "winner": "opponent",
-      "reasoning": "The opponent won this debate because they presented a stronger argument backed by epidemiological and clinical evidence, specifically citing population-level studies that demonstrate a direct causal link between SARS-CoV-2 infection and Kawasaki-like disease. In contrast, the proponent's argument relied on anecdotal evidence from individual cases or small-series observations, which is less convincing. The opponent's use of population-level studies provided more robust evidence to support their claim."
+      "claim_summary": "The core claim is that COVID-19 has been linked with cases of a similar rare condition in children called Kawasaki disease. The debate centers on whether the evidence supports a causal link between COVID-19 and Kawasaki disease.",
+      "evidence_strength": 8,
+      "argument_validity": 7,
+      "scientific_reliability": 8,
+      "verdict": "SUPPORTED",
+      "reasoning": "The verdict is supported due to the preponderance of peer-reviewed clinical and epidemiologic evidence demonstrating a consistent temporal and clinical association between SARS-CoV-2 infection and Kawasaki disease-like presentations in children. Multiple systematic reviews and case series (32965372, 33152254, 34140220) document a marked rise in Kawasaki-type illness coincident with the COVID-19 pandemic. While the defense raises valid points about the distinction between MIS-C and KD, the evidence suggests that COVID-19 can act as a precipitating infectious trigger for KD-like disease (34013488, 34483151, 38426498). The ongoing debate and need for further research do not negate the existing evidence supporting a link between COVID-19 and Kawasaki disease-like conditions in children.",
+      "judge_name": "Judge 2",
+      "model": "meta-llama/llama-3.1-405b-instruct"
     },
     {
-      "judge_name": "Scientific Accuracy Expert",
-      "model": "gpt-4o-mini",
-      "proponent_scores": {
-        "evidence_quality": 7,
-        "logical_consistency": 8,
-        "persuasiveness": 7,
-        "scientific_accuracy": 6,
-        "total": 28
-      },
-      "opponent_scores": {
-        "evidence_quality": 9,
-        "logical_consistency": 8,
-        "persuasiveness": 8,
-        "scientific_accuracy": 9,
-        "total": 34
-      },
-      "winner": "opponent",
-      "reasoning": "The opponent won the debate by effectively countering the proponent's assertion that COVID-19-associated Kawasaki disease occurs primarily in isolated cases. They provided robust epidemiological evidence showing a significant correlation between SARS-CoV-2 infection and the development of Multisystem Inflammatory Syndrome in Children (MIS-C), highlighting that population-level studies indicate a markedly increased risk of these inflammatory conditions in children with COVID-19. This evidence undermines the proponent's claim and establishes a clearer link between the virus and the inflammatory syndromes."
+      "claim_summary": "The core claim is whether COVID-19 has been linked with cases of a Kawasaki disease\u2013like condition in children. The debate centers on whether SARS-CoV-2 infection is temporally, clinically, and etiologically associated with Kawasaki disease (KD) or a KD-like syndrome in children, particularly in light of the emergence of Multisystem Inflammatory Syndrome in Children (MIS-C). Plaintiff Counsel argues for a clear and consistent association supported by epidemiological, clinical, and biological evidence, while Defense Counsel contends that MIS-C and KD are distinct entities and that the evidence does not establish a definitive causal link between COVID-19 and classical KD.",
+      "evidence_strength": 9,
+      "argument_validity": 8,
+      "scientific_reliability": 9,
+      "verdict": "SUPPORTED",
+      "reasoning": "The claim that COVID-19 has been linked with cases of a Kawasaki disease\u2013like condition in children is well-supported by a preponderance of peer-reviewed evidence. Multiple systematic reviews (e.g., 32965372), case series (e.g., 33152254, 33083367), and comparative studies (e.g., 34013488, 35626814) document a marked rise in KD-like illness coincident with the pandemic and describe children with confirmed SARS-CoV-2 infection meeting typical or atypical KD criteria. Robust observational data, including a large TriNetX cohort study (39017646), show significantly increased risks of both MIS-C and KD post-COVID-19 (HRs 3.023 and 1.736), providing population-level evidence of association. While experts acknowledge that MIS-C and classical KD are distinct entities\u2014supported by tools like the KMDscore (34858909)\u2014they also consistently affirm substantial clinical and laboratory overlap and a plausible biological mechanism, given KD\u2019s long-standing association with infectious triggers (34483151, 34935098, 38426498). The development of diagnostic criteria to differentiate MIS-C from KD does not negate a link; rather, it reflects clinical refinement within a spectrum of hyperinflammatory states. Even defense experts and cited literature (e.g., 34310359) do not deny the temporal and clinical association but caution against equating MIS-C with classic KD\u2014a nuance the plaintiff does not ignore. The totality of evidence, including epidemiological shifts in KD incidence during public health interventions (34483151), supports the conclusion that SARS-CoV-2 can act as a precipitating trigger for KD-like disease. Therefore, the claim is not that COVID-19 causes classical KD in all cases, but that it has been linked to KD-like presentations\u2014a distinction consistently upheld in the literature and expert testimony. This threshold of linkage\u2014temporal, clinical, and biologically plausible association\u2014is met.",
+      "judge_name": "Judge 3",
+      "model": "qwen/qwen3-235b-a22b-2507"
     }
   ],
-  "aggregate_scores": {
-    "proponent": 84,
-    "opponent": 96
-  },
-  "provisional_winner": "opponent",
-  "confidence": 0.067
+  "final_verdict": "SUPPORTED",
+  "majority_opinion": "Majority Opinion (Judge 1, Judge 2, Judge 3) - SUPPORTED:\n\n- Judge 1: The preponderance of evidence demonstrates a robust temporal and clinical association. Key decisive factors include: (1) Multiple systematic reviews (32965372, 33152254) documenting increased Kawasaki-type illness during the pandemic; (2) Large cohort studies (39017646) showing significantly elevated post-COVID KD risk (HR 1.736); (3) Biological plausibility from infectious-trigger models (34483151, 38426498); and (4) Consistent expert acknowledgment of overlapping features between MIS-C and KD (34013488, 35626814). While Defense correctly notes diagnostic distinctions (KMDscore: 34858909) and unknown KD etiology, these do not negate the documented linkage. The claim's phrasing ('linked with... Kawasaki disease-like condition') is substantiated by clinical, epidemiological, and mechanistic evidence, though causal certainty requires further research.\n- Judge 2: The verdict is supported due to the preponderance of peer-reviewed clinical and epidemiologic evidence demonstrating a consistent temporal and clinical association between SARS-CoV-2 infection and Kawasaki disease-like presentations in children. Multiple systematic reviews and case series (32965372, 33152254, 34140220) document a marked rise in Kawasaki-type illness coincident with the COVID-19 pandemic. While the defense raises valid points about the distinction between MIS-C and KD, the evidence suggests that COVID-19 can act as a precipitating infectious trigger for KD-like disease (34013488, 34483151, 38426498). The ongoing debate and need for further research do not negate the existing evidence supporting a link between COVID-19 and Kawasaki disease-like conditions in children.\n- Judge 3: The claim that COVID-19 has been linked with cases of a Kawasaki disease\u2013like condition in children is well-supported by a preponderance of peer-reviewed evidence. Multiple systematic reviews (e.g., 32965372), case series (e.g., 33152254, 33083367), and comparative studies (e.g., 34013488, 35626814) document a marked rise in KD-like illness coincident with the pandemic and describe children with confirmed SARS-CoV-2 infection meeting typical or atypical KD criteria. Robust observational data, including a large TriNetX cohort study (39017646), show significantly increased risks of both MIS-C and KD post-COVID-19 (HRs 3.023 and 1.736), providing population-level evidence of association. While experts acknowledge that MIS-C and classical KD are distinct entities\u2014supported by tools like the KMDscore (34858909)\u2014they also consistently affirm substantial clinical and laboratory overlap and a plausible biological mechanism, given KD\u2019s long-standing association with infectious triggers (34483151, 34935098, 38426498). The development of diagnostic criteria to differentiate MIS-C from KD does not negate a link; rather, it reflects clinical refinement within a spectrum of hyperinflammatory states. Even defense experts and cited literature (e.g., 34310359) do not deny the temporal and clinical association but caution against equating MIS-C with classic KD\u2014a nuance the plaintiff does not ignore. The totality of evidence, including epidemiological shifts in KD incidence during public health interventions (34483151), supports the conclusion that SARS-CoV-2 can act as a precipitating trigger for KD-like disease. Therefore, the claim is not that COVID-19 causes classical KD in all cases, but that it has been linked to KD-like presentations\u2014a distinction consistently upheld in the literature and expert testimony. This threshold of linkage\u2014temporal, clinical, and biologically plausible association\u2014is met.",
+  "dissenting_opinion": null,
+  "vote_breakdown": {
+    "SUPPORTED": 3
+  }
 }

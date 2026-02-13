@@ -12,6 +12,7 @@ class Evidence:
     text: str
     source_id: str
     relevance_score: float = 0.0
+    novelty_score: float = 1.0  # Default to 1.0 (completely novel)
 
 @dataclass
 class Argument:

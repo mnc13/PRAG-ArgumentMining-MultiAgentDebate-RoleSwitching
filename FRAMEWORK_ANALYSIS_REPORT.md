@@ -21,13 +21,12 @@ graph TD
     I --> J[Final Verdict]
     
     E --> E1[Shared Pool]
-    E --> E2[Proponent Pool]
-    E --> E3[Opponent Pool]
-    E --> E4[Judge Arbitration]
+    E --> E2[Plaintiff Pool]
+    E --> E3[Defense Pool]
+    E --> E4[Judicial Arbitration]
     
     F --> F1[Progressive RAG]
-    F --> F2[Expert Summoning]
-    F --> F3[Critic Analysis]
+    F --> F2[Expert Witness Testimony]
 ```
 
 ---
@@ -150,18 +149,18 @@ This is a **6-step procedure** implementing the PRAG methodology:
 **Input**: Original claim
 
 **Process**:
-- **Proponent query generation**: LLM creates query seeking supporting evidence
-- **Opponent query generation**: LLM creates query seeking refuting evidence
+- **Plaintiff query generation**: LLM creates query seeking supporting evidence
+- **Defense query generation**: LLM creates query seeking refuting evidence
 - Each role retrieves K=3 perspective-specific articles
 
 **Output**: 
-- `proponent_pool` (3 items)
-- `opponent_pool` (3 items)
+- `plaintiff_pool` (3 items)
+- `defense_pool` (3 items)
 
 #### Step 5.3: Evidence Pool Construction
 **Process**: Organize evidence into three distinct pools with metadata
 
-#### Step 5.4: Judge Arbitration
+#### Step 5.4: Judicial Arbitration
 **Input**: All three evidence pools (18 total items)
 
 **Process**:
@@ -178,18 +177,19 @@ This is a **6-step procedure** implementing the PRAG methodology:
   - `admissible_evidence`: List of high-weight items (typically 18)
   - `disputed_items`: List of questionable items
 
-#### Step 5.5: Negotiation Injection
+#### Step 5.5: Negotiation Injection & Discovery Refinement
 **Process**:
-- Proponent reviews all pools, decides what to disclose/challenge
-- Opponent reviews all pools, decides what to disclose/challenge
-- Simulated negotiation dialogue (currently mocked)
+- Plaintiff Counsel reviews all pools, decides what to disclose/challenge.
+- Defense Counsel reviews all pools, decides what to disclose/challenge.
+- **Adaptive Query Refinement**: The Court oversees evidence discovery requests, refining counsel queries for precision and scientific rigor.
 
 #### Step 5.6: Final Evidence Set
 **Output**: 
-- Filtered list of admissible evidence for debate (18 items in example)
-- Saved to `negotiation_state_{claim_id}.json`
+- Filtered list of admissible evidence for proceedings.
+- **Novelty Scoring**: Each exhibit is assigned a novelty score (1 - max cosine similarity to existing pool) to prevent redundant discovery.
+- Saved to `negotiation_state_{claim_id}.json`.
 
-**Performed by**: `EvidenceNegotiator` using **DeepSeek-R1** LLM
+**Performed by**: `EvidenceNegotiator` using **DeepSeek-R1** LLM and embedding-based similarity checks.
 
 ---
 
@@ -210,13 +210,12 @@ This is a **6-step procedure** implementing the PRAG methodology:
 
 | Role | LLM Provider | Model | Temperature | Expertise |
 |------|--------------|-------|-------------|-----------|
-| **Proponent** | OpenAI | gpt-5-mini | 0.5 | Scientific logic, clinical analysis |
-| **Opponent** | OpenRouter | deepseek-v3.2 | 0.5 | Critical analysis, counter-argumentation |
-| **Judge** | OpenRouter | qwen3-235b-a22b-2507 | 0.2 | Scientific oversight, evidence synthesis |
-| **Critic** | OpenRouter | deepseek-v3.2 | 0.7 | Logical consistency, clinical methodology |
-| **Expert (dynamic)** | OpenRouter | llama-3.1-405b | 0.5 | Domain-specific expertise (summoned as needed) |
+| **Plaintiff Counsel** | OpenAI | gpt-5-mini | 0.5 | Legal advocacy, evidence presentation |
+| **Defense Counsel** | OpenRouter | deepseek-v3.2 | 0.5 | Legal defense, cross-examination |
+| **The Court** | OpenRouter | qwen3-235b-a22b-2507 | 0.2 | Judicial oversight, evidence synthesis |
+| **Expert Witness** | OpenRouter | llama-3.1-405b | 0.5 | Domain-specific expertise (summoned as needed) |
 
-**Output**: Initialized debate system with 4 core agents
+**Output**: Initialized debate system with 3 core agents
 
 **Performed by**: `MADOrchestrator` and `DebateAgent` classes
 
@@ -230,36 +229,30 @@ This is a **6-step procedure** implementing the PRAG methodology:
 **Process** (per round):
 
 #### Round Structure:
-1. **Proponent Argument Generation**
-   - Requests additional evidence via P-RAG if needed
-   - Generates argument supporting the claim
-   - Cites specific evidence by source ID
+1. **P-RAG Query Proposal & Refinement**
+   - Counsel identifies an evidence gap based on proceedings.
+   - Proposes a discovery request.
+   - **The Court** reviews and refines the query for better clinical focus.
+   - PRAG executes the refined query.
+   - **Novelty Guard**: Evidence with novelty score < 0.2 is rejected to maintain high information density.
 
-2. **Opponent Counter-Argument**
-   - Requests counter-evidence via P-RAG
-   - Generates rebuttal challenging the claim
-   - Identifies methodological flaws
+2. **Plaintiff Counsel Argument Generation**
+   - Integrates newly admitted exhibits and expert testimony.
+   - cites specific evidence ID and justifies its inclusion.
 
-3. **Expert Summoning** (conditional)
-   - Either side can request domain expert
-   - Judge evaluates request and grants/denies
-   - If granted, dynamic expert persona created
-   - Expert provides technical testimony
+3. **Defense Counsel Counter-Argument**
+   - Challenges the opposing logic and evidence interpretation.
+   - Cross-examines expert witnesses.
 
-4. **Critic Analysis**
-   - Analyzes logical consistency of arguments
-   - Identifies fallacies or weak reasoning
-   - Provides neutral assessment
+4. **Expert Witness Testimony** (conditional)
+   - Either side summons domain experts from the medical archives.
+   - Witnesses provide neutral, professional interpretation of data.
 
-5. **Progressive RAG (P-RAG)**
-   - Agents request targeted evidence mid-debate
-   - LLM formulates context-aware queries
-   - New evidence retrieved and integrated
-   - Tracked in `prag_history.json`
-
-6. **Judge Completion Check**
-   - Judge determines if sufficient evidence presented
-   - Decides whether to continue or conclude
+5. **Adaptive Stopping Logic**
+   - **Novelty Stabilization**: Stop if new arguments in the last 2 rounds have <10% novel evidence.
+   - **Relevance Gain**: Retrieval halts if newly found documents offer <5% relevance improvement.
+   - **Judicial Signal**: The Court can close the record once it determines the claim is thoroughly adjudicated.
+   - **Max Safeguard**: Limit of 10 rounds to prevent infinite loops.
 
 **Termination Conditions**:
 - Judge signals completion
@@ -269,24 +262,21 @@ This is a **6-step procedure** implementing the PRAG methodology:
 - `debate_transcript` with:
   - All arguments by round
   - Expert testimonies
-  - Critic analyses
   - Evidence citations
 - Saved to `debate_transcript.json`
 
 **Example Flow** (from execution log):
 ```
 Round 1:
-  Proponent: Argues claim is supported (cites 32583169, 35380052, 34352787...)
-  Opponent: Challenges methodology (cites 32852257, 35401913...)
-  Expert: Infectious-disease epidemiologist supports proponent
-  Critic: Analyzes logical structure
+  Plaintiff Counsel: Argues claim is supported (cites 32583169, 35380052, 34352787...)
+  Defense Counsel: Challenges methodology (cites 32852257, 35401913...)
+  Expert Witness: Infectious-disease epidemiologist provides professional testimony
 
 Round 2:
-  Proponent: Reinforces with pathophysiology evidence
-  Opponent: Questions causation vs correlation
-  Expert: Vascular neurologist supports proponent
-  Expert: Epidemiologist supports proponent
-  Critic: Evaluates consistency
+  Plaintiff Counsel: Reinforces with pathophysiology evidence
+  Defense Counsel: Questions causation vs correlation
+  Expert Witness: Vascular neurologist supports plaintiff
+  Expert Witness: Epidemiologist supports plaintiff
 
 ... (continues for 5 rounds)
 ```
@@ -305,7 +295,7 @@ Round 2:
 
 **Process**:
 1. **Role Swap**:
-   - Proponent ↔ Opponent agents exchange roles
+   - Plaintiff Counsel ↔ Defense Counsel agents exchange roles
    - Agent that argued FOR now argues AGAINST
    - Agent that argued AGAINST now argues FOR
 
@@ -314,15 +304,19 @@ Round 2:
    - Reset round counter
    - Maintain same evidence pool
 
-3. **Re-run Debate**:
+3. **Re-run Proceedings**:
    - Execute 2 additional rounds with swapped roles
-   - Agents must defend opposite position
+   - Counsels must defend opposite position
 
 4. **Consistency Analysis**:
-   - Compare original vs switched arguments
-   - Identify logical contradictions
-   - Evaluate agent flexibility
-   - Uses **Groq Llama-4-Maverick** for analysis
+   - Compare original vs switched arguments.
+   - Identify logical contradictions.
+   - Evaluate counsel flexibility.
+   - Uses **Groq Llama-4-Maverick** for analysis.
+
+#### Stage 8.5: PRAG Rigor Audit
+- **Judge Visibility**: Judges review `judge_visibility.json` containing query evolution, novelty trends, and retrieval iterations.
+- **Confidence Weighting**: Judges adjust verdict confidence based on the rigor of the discovery process.
 
 **Output**:
 - `debate_transcript_switched.json`
@@ -337,71 +331,96 @@ Round 2:
 
 ---
 
-### Stage 9: Judge Evaluation
+### Stage 9: Judicial Panel Evaluation
 **File**: [`judge_evaluator.py`](file:///d:/thesis/PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID/framework/judge_evaluator.py)
 
-**Input**: Original debate transcript
+**Input**: 
+- Original debate transcript
+- Admitted evidence pool from Stage 5
+- Role-switching consistency report from Stage 8
 
 **Process**:
-- **Three independent judges** evaluate the debate:
+- **Three independent judges** perform holistic evaluation:
 
-| Judge | LLM | Focus Area |
-|-------|-----|------------|
-| Logic & Reasoning Expert | Groq Llama-4-Maverick | Argument structure, logical validity |
-| Evidence Quality Expert | Groq Llama-3.3-70b | Source credibility, citation quality |
-| Scientific Accuracy Expert | OpenAI GPT-4o-mini | Technical correctness, domain accuracy |
+| Judge | LLM Provider | Model |
+|-------|--------------|-------|
+| Judge 1 | OpenRouter | deepseek/deepseek-r1 |
+| Judge 2 | OpenRouter | meta-llama/llama-3.1-405b-instruct |
+| Judge 3 | OpenRouter | qwen/qwen3-235b-a22b-2507 |
 
-- Each judge scores both sides on 4 criteria:
-  1. **Logical Coherence** (0-10)
-  2. **Evidence Quality** (0-10)
-  3. **Rebuttal Strength** (0-10)
-  4. **Technical Accuracy** (0-10)
+- **Each judge independently performs 5-stage evaluation**:
+  1. **Case Reconstruction**: Identify core claim being adjudicated, supporting/counter arguments
+  2. **Evidence Weighting**: Score evidence strength (0-10)
+  3. **Logical Coherence**: Score argument validity (0-10)
+  4. **Scientific Consistency**: Score scientific reliability (0-10)
+  5. **Judicial Verdict**: SUPPORTED | NOT SUPPORTED | INCONCLUSIVE with detailed reasoning
 
-- **Aggregate Scoring**:
-  - Sum scores across all judges
-  - Side with higher total = provisional winner
-  - Calculate confidence based on score margin
+- **Majority Voting Aggregation**:
+  - Final verdict determined by majority vote
+  - Vote breakdown tracked (e.g., 3-0 unanimous, 2-1 majority, 1-1-1 split)
+  - Majority opinion synthesized from agreeing judges
+  - Dissenting opinion captured if exists
 
 **Output**:
 - `judge_evaluation.json` with:
-  - `provisional_winner`: "proponent" or "opponent"
-  - Individual judge scores and reasoning
-  - Aggregate scores
-  - Confidence level
+  - `final_verdict`: "SUPPORTED", "NOT SUPPORTED", or "INCONCLUSIVE"
+  - `judge_verdicts`: Array of 3 individual judge evaluations
+  - `majority_opinion`: Synthesized reasoning from majority
+  - `dissenting_opinion`: Minority reasoning (if applicable)
+  - `vote_breakdown`: Vote count by verdict type
 
-**Example** (from execution log):
+**Example Output Structure**:
+```json
+{
+  "claim": "...",
+  "judge_verdicts": [
+    {
+      "judge_name": "Judge 1",
+      "model": "deepseek/deepseek-r1",
+      "claim_summary": "...",
+      "evidence_strength": 8,
+      "argument_validity": 7,
+      "scientific_reliability": 9,
+      "verdict": "SUPPORTED",
+      "reasoning": "..."
+    },
+    // ... judges 2 and 3
+  ],
+  "final_verdict": "SUPPORTED",
+  "majority_opinion": "...",
+  "dissenting_opinion": null,
+  "vote_breakdown": {"SUPPORTED": 3}
+}
 ```
-Judge 1: Opponent wins (Proponent: 28, Opponent: 28)
-Judge 2: Opponent wins (Proponent: 28, Opponent: 28)
-Judge 3: Opponent wins (Proponent: 28, Opponent: 28)
 
-Provisional Winner: opponent
-Aggregate Scores - Proponent: 84, Opponent: 84
-Confidence: 0.000
-```
+**Key Features**:
+- **Independent Holistic Evaluation**: Each judge evaluates all dimensions (no specialization)
+- **Democratic Decision-Making**: Majority voting reduces single-model bias
+- **Transparent Reasoning**: Majority and dissenting opinions preserved
+- **Quantitative Metrics**: Evidence strength, argument validity, scientific reliability scores
 
-**Performed by**: `JudgeEvaluator` with 3 independent LLM judges
+**Performed by**: `JudicialPanel` with 3 independent LLM judges
 
 ---
 
-### Stage 10: Self-Reflection Round
+### Stage 10: Counsel Self-Reflection Round
 **File**: [`self_reflection.py`](file:///d:/thesis/PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID/framework/self_reflection.py)
 
 **Input**: 
-- Provisional winner from Stage 9
-- Winner's arguments
-- Opponent's critiques
+- Judicial verdict from Stage 9
+- Winning Counsel's arguments
+- Opposing Counsel's challenges
 
 **Process**:
 1. **Extract Winner's Arguments**:
-   - Collect all arguments made by winning side
-   - Compile opponent's counter-arguments
+   - Collect all arguments made by winning counsel
+   - Compile opposing counsel's counter-arguments (challenges)
 
-2. **Self-Critique Prompt**:
-   - Winner's LLM reviews its own arguments
-   - Identifies logical flaws
-   - Acknowledges valid opponent points
-   - Assesses evidence misinterpretations
+2. **Self-Reflection Prompt**:
+   - Winning Counsel's LLM reviews its own advocacy
+   - Identifies logical flaws or weak evidence links
+   - Acknowledges valid points raised by opposing counsel
+   - Assesses any misinterpretations of witness testimony
 
 3. **Confidence Adjustment**:
    - Winner provides self-assessment
@@ -417,7 +436,7 @@ Confidence: 0.000
 
 **Example** (from execution log):
 ```
-Winner: Scientific Proponent (opponent)
+Winner: Plaintiff Counsel (or Defense Counsel)
 Confidence adjustment: -0.05
 ```
 
@@ -457,10 +476,42 @@ confidence = clamp(confidence, 0.0, 1.0)
 ```
 
 #### Verdict Determination:
-- If `provisional_winner == "proponent"` → **SUPPORT**
-- If `provisional_winner == "opponent"` → **REFUTE**
+- If `final_verdict == "SUPPORTED"` → **SUPPORT**
+- If `final_verdict == "NOT SUPPORTED"` → **REFUTE**
+- If `final_verdict == "INCONCLUSIVE"` → **SUPPORT** (default)
+
+#### Confidence Calculation:
+```python
+# 1. Base confidence from vote consensus
+vote_breakdown = judge_result['vote_breakdown']
+total_votes = sum(vote_breakdown.values())
+winning_votes = vote_breakdown.get(final_verdict, 0)
+
+# Consensus strength (3-0 = 1.0, 2-1 = 0.67, 1-1-1 = 0.33)
+consensus_strength = winning_votes / total_votes
+margin_score = consensus_strength * 0.8  # Max 0.8 from consensus
+
+# 2. Quality confidence from judge scores
+avg_evidence_strength = sum(v['evidence_strength'] for v in judge_verdicts) / 3
+avg_argument_validity = sum(v['argument_validity'] for v in judge_verdicts) / 3
+avg_scientific_reliability = sum(v['scientific_reliability'] for v in judge_verdicts) / 3
+
+# Normalize to 0-1 (scores are 0-10)
+quality_score = ((avg_evidence_strength + avg_argument_validity + avg_scientific_reliability) / 30) * 0.3
+
+base_confidence = margin_score + quality_score
+
+# 3. Adjustments
+# Role-switch consistency: +0.10 or -0.05
+# Self-reflection: -0.15 to +0.3 (capped)
+
+final_confidence = base_confidence + adjustments
+final_confidence = clamp(final_confidence, 0.0, 1.0)
+```
 
 #### Reasoning Chain:
+- Includes majority opinion from judicial panel
+- Includes dissenting opinion (if exists)
 - Extracts key evidence cited
 - Summarizes winning arguments
 - Identifies critical turning points
@@ -470,11 +521,17 @@ confidence = clamp(confidence, 0.0, 1.0)
 - `final_verdict.json` with:
   - `verdict`: "SUPPORT" or "REFUTE"
   - `confidence`: 0.0 - 1.0
-  - `reasoning`: Explanation chain
+  - `reasoning`: Explanation chain with judicial verdict and opinions
   - `ground_truth_label`: From metadata
   - `correct`: Boolean (verdict matches ground truth)
   - `key_evidence`: List of cited sources
-  - `total_evidence_used`: Count
+  - `metadata`:
+    - `judicial_verdict`: Final verdict from judicial panel
+    - `vote_breakdown`: Vote count by verdict type
+    - `role_switch_consistent`: Boolean
+    - `self_reflection_adjustment`: Confidence adjustment value
+    - `debate_rounds`: Number of rounds
+    - `total_evidence_used`: Count
 
 **Example** (from execution log):
 ```json
@@ -531,21 +588,20 @@ outcome/
 
 ## LLM Model Assignment
 
-### Core Debate Agents
+### Core Courtroom Agents
 | Role | Provider | Model | Purpose |
 |------|----------|-------|---------|
 | Premise Decomposition | OpenRouter | deepseek/deepseek-r1 | Break claims into testable premises |
-| Proponent | OpenAI | gpt-5-mini | Argue in favor of claim |
-| Opponent | OpenRouter | deepseek/deepseek-v3.2 | Argue against claim |
-| Judge (Moderator) | OpenRouter | qwen/qwen3-235b-a22b-2507 | Oversee debate, determine completion |
-| Critic | OpenRouter | deepseek/deepseek-v3.2 | Analyze logical consistency |
+| Plaintiff Counsel | OpenAI | gpt-5-mini | Argue in favor of claim |
+| Defense Counsel | OpenRouter | deepseek/deepseek-v3.2 | Argue against claim |
+| The Court (Moderator) | OpenRouter | qwen/qwen3-235b-a22b-2507 | Oversee proceedings, determine completion |
 
-### Evaluation Judges
-| Judge | Provider | Model | Expertise |
-|-------|----------|-------|-----------|
-| Logic & Reasoning | Groq | llama-4-maverick-17b-128e | Argument structure |
-| Evidence Quality | Groq | llama-3.3-70b-versatile | Source credibility |
-| Scientific Accuracy | OpenAI | gpt-4o-mini | Technical correctness |
+### Judicial Panel Judges
+| Judge | Provider | Model | Evaluation Approach |
+|-------|----------|-------|---------------------|
+| Judge 1 | OpenRouter | deepseek/deepseek-r1 | Independent holistic evaluation |
+| Judge 2 | OpenRouter | meta-llama/llama-3.1-405b-instruct | Independent holistic evaluation |
+| Judge 3 | OpenRouter | qwen/qwen3-235b-a22b-2507 | Independent holistic evaluation |
 
 ### Dynamic Experts
 | Type | Provider | Model | Summoned When |
@@ -578,10 +634,11 @@ outcome/
 - Tests logical consistency and adaptability
 - Identifies confirmation bias
 
-### 4. **Multi-Judge Evaluation**
-- Three independent LLM judges
-- Diverse evaluation criteria
-- Reduces single-model bias
+### 4. **Judicial Panel Evaluation**
+- Three independent judges perform holistic evaluation
+- Majority voting with transparent vote breakdown
+- Captures majority and dissenting opinions
+- Reduces single-model bias through democratic decision-making
 
 ### 5. **Self-Reflection**
 - Winner critiques own arguments
@@ -644,7 +701,7 @@ outcome/
 
 ### Evaluation & Verdict
 - [`role_switcher.py`](file:///d:/thesis/PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID/framework/role_switcher.py) - RoleSwitcher (consistency testing)
-- [`judge_evaluator.py`](file:///d:/thesis/PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID/framework/judge_evaluator.py) - JudgeEvaluator (multi-judge scoring)
+- [`judge_evaluator.py`](file:///d:/thesis/PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID/framework/judge_evaluator.py) - JudicialPanel (3-judge deliberative panel)
 - [`self_reflection.py`](file:///d:/thesis/PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID/framework/self_reflection.py) - SelfReflection (winner self-critique)
 - [`final_verdict.py`](file:///d:/thesis/PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID/framework/final_verdict.py) - FinalVerdict (confidence-weighted classification)
 
@@ -749,7 +806,7 @@ This framework represents a sophisticated multi-agent fact-checking system that 
 - **Adversarial debate**: Multiple LLMs in proponent/opponent roles
 - **Progressive evidence**: Mid-debate retrieval based on context
 - **Consistency testing**: Role-switching to detect bias
-- **Multi-perspective evaluation**: Three independent judge LLMs
+- **Judicial panel evaluation**: Three independent judges with majority voting
 - **Self-awareness**: Winner performs self-critique
 
 The system processes claims through 11 distinct stages, generating comprehensive audit trails and confidence-weighted verdicts for COVID-19 fact-checking.
