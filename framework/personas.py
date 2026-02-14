@@ -35,10 +35,22 @@ AGENT_SLOTS = {
         "system_prompt": "You are The Court presiding over a legal proceeding. Your role is to oversee the case, ensure professional conduct from all counsels, and determine when sufficient evidence and expert testimony have been presented for deliberation."
     },
     "expert_slot": {
+        "name": "Expert Witness",
         "role": "Expert Witness",
+        "expertise": ["scientific domain"],
+        "system_prompt": "You are a scientific expert witness. Provide technical analysis based on your expertise.",
         "llm_provider": "openrouter",
         "llm_model": "meta-llama/llama-3.1-405b-instruct",
         "temperature": 0.5
+    },
+    "critic": {
+        "name": "Critic Agent",
+        "role": "Independent Critic",
+        "expertise": ["logical analysis", "scientific rigor", "legal argumentation"],
+        "system_prompt": "You are the Independent Critic Agent. Your role is to evaluate the debate rounds for logical coherence, evidence coverage, and rebuttal quality.",
+        "llm_provider": "openrouter",
+        "llm_model": "deepseek/deepseek-r1",
+        "temperature": 0.3
     }
 }
 

@@ -211,9 +211,10 @@ This is a **6-step procedure** implementing the PRAG methodology:
 | Role | LLM Provider | Model | Temperature | Expertise |
 |------|--------------|-------|-------------|-----------|
 | **Plaintiff Counsel** | OpenAI | gpt-5-mini | 0.5 | Legal advocacy, evidence presentation |
-| **Defense Counsel** | OpenRouter | deepseek-v3.2 | 0.5 | Legal defense, cross-examination |
+| **Defense Counsel** | OpenRouter | deepseek/deepseek-v3.2 | 0.5 | Legal defense, cross-examination |
 | **The Court** | OpenRouter | qwen3-235b-a22b-2507 | 0.2 | Judicial oversight, evidence synthesis |
 | **Expert Witness** | OpenRouter | llama-3.1-405b | 0.5 | Domain-specific expertise (summoned as needed) |
+| **Independent Critic** | OpenRouter | deepseek-r1 | 0.3 | Round integrity review, logical analysis |
 
 **Output**: Initialized debate system with 3 core agents
 
@@ -248,10 +249,21 @@ This is a **6-step procedure** implementing the PRAG methodology:
    - Either side summons domain experts from the medical archives.
    - Witnesses provide neutral, professional interpretation of data.
 
-5. **Adaptive Stopping Logic**
-   - **Novelty Stabilization**: Stop if new arguments in the last 2 rounds have <10% novel evidence.
-   - **Relevance Gain**: Retrieval halts if newly found documents offer <5% relevance improvement.
-   - **Judicial Signal**: The Court can close the record once it determines the claim is thoroughly adjudicated.
+5. **Multi-Round Self-Reflection (Integrated)**
+   - After each round, both counsels perform **multi-dimensional self-reflection**.
+   - Score themselves (0-1) on Logic, Novelty, and Rebuttal.
+   - Calculated `total_score` and identify `discovery_need` for next round.
+
+6. **Round Integrity Review (CriticAgent)**
+   - **Critic Agent (DeepSeek-R1)** reviews the entire round transcript.
+   - Evaluates logic, evidence, and rebuttal for both sides.
+   - Provides suggests queries to fill "unresolved premises".
+   - Flags "Diminishing relevance gain" if arguments plateau.
+
+7. **Adaptive Stopping Logic**
+   - **Convergence Check**: The system monitors the `delta_score` (change in reflection scores).
+   - If `delta_score < 0.05` (5%), the debate terminates as quality has plateaued.
+   - **Novelty Guard**: Evidence with novelty score < 0.2 is rejected.
    - **Max Safeguard**: Limit of 10 rounds to prevent infinite loops.
 
 **Termination Conditions**:
@@ -325,9 +337,9 @@ Round 2:
   - Identified contradictions
   - Analysis of argument quality
 
-**Purpose**: Test if agents maintain logical consistency when forced to argue the opposite position
+**Purpose**: Test if agents maintain logical consistency when forced to argue the opposite position.
 
-**Performed by**: `RoleSwitcher` using **Groq Llama-4-Maverick**
+**Performed by**: `RoleSwitcher` using **DeepSeek-Chat** via OpenRouter for consistency analysis.
 
 ---
 
@@ -403,44 +415,17 @@ Round 2:
 
 ---
 
-### Stage 10: Counsel Self-Reflection Round
+### Stage 10: Integrated Self-Reflection & Critic Audit
 **File**: [`self_reflection.py`](file:///d:/thesis/PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID/framework/self_reflection.py)
 
-**Input**: 
-- Judicial verdict from Stage 9
-- Winning Counsel's arguments
-- Opposing Counsel's challenges
+**Status**: Now integrated into Stage 7 as a per-round process.
 
 **Process**:
-1. **Extract Winner's Arguments**:
-   - Collect all arguments made by winning counsel
-   - Compile opposing counsel's counter-arguments (challenges)
+- Counsels perform self-critique iteratively.
+- **Critic Agent** (DeepSeek-R1) provides independent round integrity scores.
+- Adaptive stopping logic triggers based on reflection score convergence.
 
-2. **Self-Reflection Prompt**:
-   - Winning Counsel's LLM reviews its own advocacy
-   - Identifies logical flaws or weak evidence links
-   - Acknowledges valid points raised by opposing counsel
-   - Assesses any misinterpretations of witness testimony
-
-3. **Confidence Adjustment**:
-   - Winner provides self-assessment
-   - Adjusts confidence by ±0.3 based on reflection
-   - Typically decreases after acknowledging weaknesses
-
-**Output**:
-- `self_reflection.json` with:
-  - Winner's original arguments
-  - Opponent's critiques
-  - Self-reflection text
-  - Confidence adjustment (-0.3 to +0.3)
-
-**Example** (from execution log):
-```
-Winner: Plaintiff Counsel (or Defense Counsel)
-Confidence adjustment: -0.05
-```
-
-**Performed by**: Winning agent's LLM (self-critique)
+**Performed by**: `SelfReflection` and `CriticAgent` modules.
 
 ---
 
@@ -611,9 +596,10 @@ outcome/
 ### Utility LLMs
 | Task | Provider | Model |
 |------|----------|-------|
-| Consistency Analysis | Groq | llama-4-maverick-17b-128e |
+| Consistency Analysis | OpenRouter | deepseek/deepseek-chat |
 | Evidence Weighting | OpenRouter | deepseek-r1 |
 | Query Formulation | OpenRouter | deepseek-r1 |
+| Multi-Round Audit | OpenRouter | deepseek-r1 (CriticAgent) |
 
 ---
 

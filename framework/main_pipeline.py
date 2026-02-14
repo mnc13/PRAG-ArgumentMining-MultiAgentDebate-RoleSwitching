@@ -188,33 +188,22 @@ def main():
             log("\n9. Judicial Panel Evaluation...")
             from judge_evaluator import JudicialPanel
             panel = JudicialPanel()
+            # Extract round-by-round metadata for the panel
+            critic_evals = [r.get('critic_evaluation') for r in debate_result['rounds']]
+            ref_history = mad.self_reflection.reflection_history
+            
             judge_result = panel.evaluate_debate(
                 debate_result, 
                 admitted_evidence=final_evidence_set,
                 role_switch_history=consistency_report,
-                prag_metrics=mad.prag.get_retrieval_summary()
+                prag_metrics=mad.prag.get_retrieval_summary(),
+                critic_evaluations=critic_evals,
+                reflection_history=ref_history
             )
             
-            log("\n10. Counsel Self-Reflection (Integrity Check)...")
-            from self_reflection import SelfReflection
-            # Map judicial verdict to winner side
-            if judge_result['final_verdict'] == 'SUPPORTED':
-                winner_side = 'proponent'
-            elif judge_result['final_verdict'] == 'NOT SUPPORTED':
-                winner_side = 'opponent'
-            else:  # INCONCLUSIVE
-                # Default to side with higher average scores
-                avg_scores = {}
-                for verdict in judge_result['judge_verdicts']:
-                    side = 'proponent' if verdict['verdict'] == 'SUPPORTED' else 'opponent'
-                    if side not in avg_scores:
-                        avg_scores[side] = []
-                    avg_score = (verdict['evidence_strength'] + verdict['argument_validity'] + verdict['scientific_reliability']) / 3
-                    avg_scores[side].append(avg_score)
-                winner_side = max(avg_scores, key=lambda s: sum(avg_scores[s]) / len(avg_scores[s]))
-            
-            reflection = SelfReflection(winner_side, mad.agents[winner_side], debate_result)
-            reflection_result = reflection.perform_reflection()
+            # Stage 10 is now part of the multi-round MAD process
+            # We use the final state of reflections for the verdict generator
+            reflection_result = ref_history[-1] if ref_history else {}
             
             log("\n11. Generating Final Verdict...")
             from final_verdict import FinalVerdict

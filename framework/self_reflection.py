@@ -9,160 +9,100 @@ import json
 
 class SelfReflection:
     """
-    Enables winner to critically review their own arguments
+    Enables agents to critically review their own arguments periodically
     """
     
-    def __init__(self, winner_side: str, winner_agent, debate_transcript: Dict):
+    def __init__(self, transcript_ref: List[Dict]):
         """
         Initialize self-reflection
         
         Args:
-            winner_side: "proponent" or "opponent"
-            winner_agent: The DebateAgent who won
-            debate_transcript: Full debate transcript
+            transcript_ref: Reference to the debate transcript list
         """
-        self.winner_side = winner_side
-        self.winner_agent = winner_agent
-        self.debate_transcript = debate_transcript
+        self.debate_transcript = transcript_ref
+        self.reflection_history = []
     
-    def perform_reflection(self) -> Dict:
+    def perform_round_reflection(self, agent, side: str, round_num: int, claim: str) -> Dict:
         """
-        Winner performs self-critique
+        Perform self-critique for a specific agent after a round
         
         Returns:
-            Reflection results with identified flaws and corrected stance
+            Dictionary with multi-dimensional scores and discovery needs
         """
-        print("\n" + "="*60)
-        print("SELF-REFLECTION ROUND")
-        print("="*60)
-        display_side = "Plaintiff Counsel" if self.winner_side == "proponent" else "Defense Counsel"
-        print(f"Winner: {self.winner_agent.name} ({display_side})")
-        print("Performing legal self-reflection and integrity check...\n")
+        print(f"   > [{agent.name}] Performing self-reflection for Phase {round_num}...")
         
-        # Extract winner's arguments
-        winner_args = self._extract_side_arguments(self.winner_side)
+        # Extract context
+        my_args = [a['text'] for a in self.debate_transcript if a.get('role') == side]
+        opponent_side = "opponent" if side == "proponent" else "proponent"
+        opponent_args = [a['text'] for a in self.debate_transcript if a.get('role') == opponent_side]
         
-        # Extract opponent's critiques (counter-arguments)
-        opponent_side = "opponent" if self.winner_side == "proponent" else "proponent"
-        opponent_display = "Defense" if self.winner_side == "proponent" else "Plaintiff"
-        opponent_critiques = self._extract_critiques(opponent_side)
+        display_side = "Plaintiff" if side == "proponent" else "Defense"
+        opp_display = "Defense" if side == "proponent" else "Plaintiff"
+
+        prompt = f"""You are the {agent.job_title} ({display_side} Counsel). 
+        You have just completed Phase {round_num} of the proceedings.
         
-        # Generate self-reflection prompt
-        prompt = f"""You previously argued {self._get_stance_text()} the following claim:
-
-CLAIM: {self.debate_transcript['claim']}
-
-YOUR ARGUMENTS:
-{self._format_arguments(winner_args)}
-
-{opponent_display.upper()} COUNSEL'S CHALLENGES:
-{self._format_arguments(opponent_critiques)}
-
-Now, critically review your own arguments with complete legal and scientific honesty:
-
-1. **Identify Logical Flaws**: Are there any weaknesses in your advocacy or reasoning?
-2. **Acknowledge Valid Opposing Points**: Which of the {opponent_display.lower()} counsel's challenges are legitimate?
-3. **Evidence Misinterpretations**: Did you misinterpret any expert witness testimony or medical evidence?
-4. **Refined Position**: Based on this reflection, what is your refined professional position?
-5. **Confidence Adjustment**: Should your confidence increase or decrease? By how much? (provide a number between -0.3 and +0.3)
-
-Provide a thorough, honest self-critique:"""
+        CLAIM: {claim}
         
-        # Get reflection from winner's LLM
-        reflection_text = self.winner_agent.llm.generate(prompt)
+        YOUR ARGUMENTS SO FAR:
+        {" ".join(my_args[-2:])}
         
-        # Parse confidence adjustment
-        confidence_adjustment = self._extract_confidence_adjustment(reflection_text)
+        {opp_display.upper()} COUNSEL'S CHALLENGES:
+        {" ".join(opponent_args[-2:]) if opponent_args else "No challenges yet."}
         
-        result = {
-            "winner": self.winner_side,
-            "winner_agent": self.winner_agent.name,
-            "winner_persona": self.winner_agent.persona_key,
-            "original_arguments": winner_args[:3],  # First 3 for brevity
-            "opponent_critiques": opponent_critiques[:2],
-            "self_reflection": {
-                "full_text": reflection_text,
-                "confidence_adjustment": confidence_adjustment
+        Perform a strictly professional self-audit:
+        1. Logical Coherence: Evaluate the flow and structural integrity of your arguments.
+        2. Evidence Novelty: Have you introduced truly new information or just repeated old points?
+        3. Rebuttal Coverage: How effectively did you address the {opp_display.lower()} counsel's latest points?
+        
+        Identify:
+        - Critical gaps in your current evidence base.
+        - Premises you haven't sufficiently supported.
+        
+        Respond ONLY in valid JSON format:
+        {{
+            "scores": {{
+                "logic": 0.0-1.0,
+                "novelty": 0.0-1.0,
+                "rebuttal": 0.0-1.0
+            }},
+            "flaws_identified": ["...", "..."],
+            "discovery_need": "Specific evidence lookup query to fill a gap (1 sentence)",
+            "refined_stance": "Summary of your improved position"
+        }}"""
+        
+        response = agent.llm.generate(prompt)
+        try:
+            import json
+            import re
+            match = re.search(r'\{[\s\S]*\}', response)
+            reflection_data = json.loads(match.group()) if match else {}
+            
+            # Weighted score calculation
+            s = reflection_data.get("scores", {})
+            logic = float(s.get("logic", 0.5))
+            novelty = float(s.get("novelty", 0.5))
+            rebuttal = float(s.get("rebuttal", 0.5))
+            total_score = (0.4 * logic) + (0.3 * novelty) + (0.3 * rebuttal)
+            
+            reflection_data["total_score"] = round(total_score, 3)
+            reflection_data["side"] = side
+            reflection_data["round"] = round_num
+            
+            self.reflection_history.append(reflection_data)
+            return reflection_data
+        except Exception as e:
+            print(f"   > [Warning] Reflection parsing failed: {e}")
+            return {
+                "scores": {"logic": 0.5, "novelty": 0.5, "rebuttal": 0.5},
+                "total_score": 0.5,
+                "discovery_need": "",
+                "side": side,
+                "round": round_num
             }
-        }
-        
-        # Save results
-        with open("self_reflection.json", "w") as f:
-            json.dump(result, f, indent=2)
-        
-        print(f"Self-reflection complete")
-        print(f"Confidence adjustment: {confidence_adjustment:+.2f}")
-        
-        return result
-    
-    def _extract_side_arguments(self, side: str) -> List[str]:
-        """Extract all arguments from one side"""
-        arguments = []
-        for round_data in self.debate_transcript['rounds']:
-            for arg in round_data['arguments']:
-                if arg['role'] == side:
-                    arguments.append(arg['text'])
-        return arguments
-    
-    def _extract_critiques(self, side: str) -> List[str]:
-        """Extract critiques from opponent"""
-        critiques = []
-        for round_data in self.debate_transcript['rounds']:
-            if 'critiques' in round_data:
-                for critique in round_data['critiques']:
-                    # Critiques are from the critic, but we want opponent's counter-arguments
-                    pass
-            # Use opponent's arguments as implicit critiques
-            for arg in round_data['arguments']:
-                if arg['role'] == side:
-                    critiques.append(arg['text'])
-        return critiques
-    
-    def _get_stance_text(self) -> str:
-        """Get stance text (FOR or AGAINST)"""
-        return "FOR" if self.winner_side == "proponent" else "AGAINST"
-    
-    def _format_arguments(self, args: List[str]) -> str:
-        """Format arguments for prompt"""
-        formatted = []
-        for i, arg in enumerate(args[:3], 1):  # Limit to 3 to avoid token limits
-            formatted.append(f"Argument {i}:\n{arg[:800]}...")  # Truncate long arguments
-        return "\n\n".join(formatted)
-    
-    def _extract_confidence_adjustment(self, reflection_text: str) -> float:
-        """
-        Extract confidence adjustment from reflection text
-        
-        Returns:
-            Float between -0.3 and +0.3
-        """
-        import re
-        
-        # Look for patterns like "decrease by 0.1", "+0.15", "-0.2", etc.
-        patterns = [
-            r'[-+]?\d*\.?\d+',  # Any number
-            r'decrease.*?(\d*\.?\d+)',
-            r'increase.*?(\d*\.?\d+)',
-            r'adjust.*?by.*?([-+]?\d*\.?\d+)'
-        ]
-        
-        for pattern in patterns:
-            matches = re.findall(pattern, reflection_text.lower())
-            if matches:
-                try:
-                    # Get first number found
-                    num_str = matches[0] if isinstance(matches[0], str) else str(matches[0])
-                    adjustment = float(num_str)
-                    
-                    # Check if text mentions "decrease" or "lower"
-                    if any(word in reflection_text.lower() for word in ['decrease', 'lower', 'reduce', 'less']):
-                        adjustment = -abs(adjustment)
-                    
-                    # Clamp to [-0.3, +0.3]
-                    adjustment = max(-0.3, min(0.3, adjustment))
-                    return adjustment
-                except:
-                    continue
-        
-        # Default: slight decrease due to acknowledging opponent's points
-        return -0.05
+
+    def save_reflection_history(self, filename: str = "self_reflection.json"):
+        """Save history to disk"""
+        import json
+        with open(filename, "w") as f:
+            json.dump(self.reflection_history, f, indent=2)

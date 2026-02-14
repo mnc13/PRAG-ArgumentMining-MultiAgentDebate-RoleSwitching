@@ -219,3 +219,68 @@ class DebateAgent:
         return evidence
 
 
+
+class CriticAgent:
+    """
+    Independent Critic Agent to observe and evaluate the debate each round
+    """
+    def __init__(self, model_config: dict = None):
+        from personas import create_llm_client
+        if model_config is None:
+            # Default to a strong model for critique with full persona config
+            model_config = {
+                "name": "Critic Agent",
+                "role": "Independent Critic",
+                "expertise": ["logical analysis", "scientific rigor", "legal argumentation"],
+                "system_prompt": "You are the Independent Critic Agent. Your role is to evaluate the debate rounds for logical coherence, evidence coverage, and rebuttal quality. Provide objective, actionable feedback.",
+                "llm_provider": "openrouter",
+                "llm_model": "deepseek/deepseek-r1",
+                "temperature": 0.3
+            }
+        self.llm = create_llm_client(model_config)
+        self.name = "Critic Agent"
+
+    def evaluate_round(self, round_num: int, claim: str, transcript: List[Dict]) -> Dict:
+        """
+        Evaluate the latest round of the debate
+        """
+        history_summary = "\n".join([f"{a['agent']}: {a['text'][:400]}..." for a in transcript[-4:]])
+        
+        prompt = f"""
+        You are the Critic Agent observing a courtroom-style scientific debate.
+        Claim: {claim}
+        Round: {round_num}
+        
+        Recent Proceedings:
+        {history_summary}
+        
+        Analyze both the Plaintiff and Defense Counsel's performance in this round.
+        Score each side (0.0 to 1.0) on:
+        1. Logical Coherence: Argument flow and structure.
+        2. Evidence Coverage: How well they used admitted exhibits.
+        3. Rebuttal Coverage: Did they address the opponent's strongest points?
+        
+        Identify any premises that remain "unresolved" or under-supported.
+        Provide actionable recommendations for both sides to improve their discovery and arguments.
+        
+        Respond ONLY in valid JSON format:
+        {{
+            "plaintiff": {{ "logic": 0.0, "evidence": 0.0, "rebuttal": 0.0, "reasoning": "..." }},
+            "defense": {{ "logic": 0.0, "evidence": 0.0, "rebuttal": 0.0, "reasoning": "..." }},
+            "unresolved_premises": ["...", "..."],
+            "recommendations": {{
+                "plaintiff": ["...", "..."],
+                "defense": ["...", "..."],
+                "queries": ["suggested search query 1", "suggested search query 2"]
+            }},
+            "debate_resolved": true/false
+        }}
+        """
+        
+        response = self.llm.generate(prompt)
+        try:
+            import re
+            match = re.search(r'\{[\s\S]*\}', response)
+            return json.loads(match.group()) if match else {}
+        except:
+            return {}

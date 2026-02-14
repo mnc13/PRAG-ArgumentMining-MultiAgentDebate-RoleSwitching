@@ -7,9 +7,11 @@ Manages multi-round debate with multiple agents
 import json
 from typing import List, Dict
 from models import Claim, Evidence
-from mad_system import DebateAgent
+from mad_system import DebateAgent, CriticAgent
+from self_reflection import SelfReflection
 from prag_engine import ProgressiveRAG
 from personas import validate_unique_models
+import numpy as np
 
 class MADOrchestrator:
     """
@@ -38,6 +40,13 @@ class MADOrchestrator:
         self.agents = {}
         self._initialize_agents(persona_configs)
         
+        # Self-Reflection & Critic
+        from personas import AGENT_SLOTS
+        self.self_reflection = SelfReflection(self.debate_transcript)
+        self.critic = CriticAgent(AGENT_SLOTS.get('critic'))
+        self.reflection_discovery_needs = {"proponent": "", "opponent": ""}
+        self.last_total_reflection_score = 0.0
+        
     def _initialize_agents(self, persona_configs: List[Dict]):
         """
         Initialize debate system agents
@@ -65,7 +74,9 @@ class MADOrchestrator:
             "arguments": [],
             "expert_testimonies": [],
             "new_evidence": [],
-            "prag_metrics": []
+            "prag_metrics": [],
+            "reflection_scores": {},
+            "critic_evaluation": {}
         }
         
         print(f"\n{'='*60}")
@@ -76,14 +87,20 @@ class MADOrchestrator:
         for side in ['proponent', 'opponent']:
             display_side = "Plaintiff Counsel" if side == 'proponent' else "Defense Counsel"
             
-            # 1. Query Proposing & Refinement Feedback Loop
-            print(f"--- [{display_side}] Step 1: Evidence Discovery Gap Analysis ---")
+            # 1. Query Proposing & Refinement Feedback Loop (Hybrid: Gap + Reflection)
+            print(f"--- [{display_side}] Step 1: Evidence Discovery (Integrative Discovery) ---")
             debate_context = self._get_debate_context()
             gap_proposal = self.agents[side].propose_query_gap(debate_context)
+            reflection_gap = self.reflection_discovery_needs.get(side, "")
             
-            if gap_proposal and "None" not in gap_proposal:
-                print(f"   > [{display_side}] Proposal: {gap_proposal}")
-                original_query = self.prag.formulate_query(debate_context, gap_proposal)
+            # Combine gap-driven and reflection-driven needs
+            discovery_prompt = gap_proposal
+            if reflection_gap:
+                discovery_prompt = f"{gap_proposal} Focus also on: {reflection_gap}"
+            
+            if discovery_prompt and "None" not in discovery_prompt:
+                print(f"   > [{display_side}] Discovery Need: {discovery_prompt}")
+                original_query = self.prag.formulate_query(debate_context, discovery_prompt)
                 print(f"   > [{display_side}] Formulated Query: {original_query}")
                 
                 # Feedback Loop: The Court refines the query
@@ -142,6 +159,20 @@ class MADOrchestrator:
                     self.debate_transcript.append(expert_entry)
                     print(f"\n[EXPERT TESTIMONY]: {testimony}\n")
 
+        # 4. Multi-Round Self-Reflection
+        print(f"--- [Audit] Step 4: Multi-Round Self-Reflection ---")
+        for side in ['proponent', 'opponent']:
+            reflection = self.self_reflection.perform_round_reflection(self.agents[side], side, round_num, self.claim.text)
+            round_data["reflection_scores"][side] = reflection
+            self.reflection_discovery_needs[side] = reflection.get("discovery_need", "")
+
+        # 5. Critic Agent Evaluation
+        print(f"--- [Critic] Step 5: Round Integrity Review ---")
+        critic_eval = self.critic.evaluate_round(round_num, self.claim.text, self.debate_transcript)
+        round_data["critic_evaluation"] = critic_eval
+        if critic_eval.get("recommendations"):
+            print(f"   > Critic Recommendations: {len(critic_eval['recommendations'].get('plaintiff', []))} for Plaintiff, {len(critic_eval['recommendations'].get('defense', []))} for Defense")
+
         return round_data
 
     def _get_debate_context(self) -> str:
@@ -186,14 +217,25 @@ class MADOrchestrator:
             current_novelties = [e['novelty'] for e in round_data["new_evidence"]]
             avg_novelty = np.mean(current_novelties) if current_novelties else 0
             
-            # 2. Confidence Check (Simulation)
-            # In a real implementation, we'd call self.agents['judge'].get_confidence()
-            # For now, we'll use the judge's existing check_debate_completion
+            # 2. Reflection Delta Check (Convergence)
+            total_ref_score = sum([r.get('total_score', 0) for r in round_data["reflection_scores"].values()])
+            delta_score = total_ref_score - self.last_total_reflection_score
             
-            print(f"--- [The Court] Monitoring Case Convergence ---")
-            print(f"   > Exhibit Novelty: {avg_novelty:.4f}")
+            print(f"--- [Convergence] Score Delta: {delta_score:.4f} ---")
             
             if round_num >= 2:
+                # Terminate if improvement plateaus
+                if delta_score < 0.05 and delta_score > -0.05:
+                    print(f"   > [ADAPTIVE STOP] Argument quality plateaued (delta < 5%). Proceedings concluded.")
+                    debate_result["convergence_metrics"]["stop_reason"] = "Reflection plateau"
+                    break
+                
+                # Terminate if Critic signals resolution
+                if round_data["critic_evaluation"].get("debate_resolved", False):
+                    print(f"   > [ADAPTIVE STOP] Critic signals all premises resolved. Deliberation begins.")
+                    debate_result["convergence_metrics"]["stop_reason"] = "Critic resolution"
+                    break
+
                 # Stop if novelty is very low
                 if avg_novelty < 0.1 and last_novelty < 0.1:
                     print(f"   > [ADAPTIVE STOP] Evidence novelty stabilized (< 10%). Cases closed.")
@@ -206,11 +248,16 @@ class MADOrchestrator:
                     debate_result["convergence_metrics"]["stop_reason"] = "Judicial signal"
                     break
             
+            self.last_total_reflection_score = total_ref_score
             last_novelty = avg_novelty
             
         # Save results
+        import json
         with open("debate_transcript.json", "w") as f:
             json.dump(debate_result, f, indent=2)
+            
+        # Save reflection history
+        self.self_reflection.save_reflection_history()
             
         # Judge Visibility JSON
         self._save_judge_visibility(debate_result)
@@ -236,5 +283,6 @@ class MADOrchestrator:
                     "novelty": m["novelty"]
                 })
         
+        import json
         with open("judge_visibility.json", "w") as f:
             json.dump(visibility, f, indent=2)

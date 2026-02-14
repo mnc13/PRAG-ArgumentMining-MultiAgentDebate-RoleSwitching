@@ -48,9 +48,14 @@ class RoleSwitcher:
         self.original_mad.agents['proponent'] = original_opponent
         self.original_mad.agents['opponent'] = original_proponent
         
-        # Update role attributes
+        # Update role attributes and branding
         self.original_mad.agents['proponent'].role = 'proponent'
+        self.original_mad.agents['proponent'].job_title = "Plaintiff Counsel"
+        self.original_mad.agents['proponent'].name = "Plaintiff Counsel"
+        
         self.original_mad.agents['opponent'].role = 'opponent'
+        self.original_mad.agents['opponent'].job_title = "Defense Counsel"
+        self.original_mad.agents['opponent'].name = "Defense Counsel"
         
         # Reset debate state
         self.original_mad.debate_transcript = []
@@ -81,15 +86,17 @@ class RoleSwitcher:
         print("CONSISTENCY ANALYSIS")
         print("="*60 + "\n")
         
-        # Create analyzer LLM - Use Groq GPT instead of Gemini
-        api_key = os.getenv("GROQ_API_KEY")
-        from groq_client import GroqLLMClient
-        analyzer = GroqLLMClient(
-            api_key=api_key,
-            model_name="meta-llama/llama-4-maverick-17b-128e-instruct",
-            system_prompt="You are an expert in logical consistency analysis and argumentation theory.",
-            temperature=0.3
-        )
+        # Use OpenRouter for consistency analysis
+        from personas import create_llm_client
+        analyzer = create_llm_client({
+            "llm_provider": "openrouter",
+            "llm_model": "deepseek/deepseek-chat",
+            "temperature": 0.3,
+            "system_prompt": "You are an expert in logical consistency analysis and argumentation theory.",
+            "name": "Consistency Analyzer",
+            "role": "Consistency Analyzer",
+            "expertise": ["logic", "argumentation"]
+        })
         
         # Extract key arguments from both debates
         original_pro_args = [

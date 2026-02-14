@@ -55,7 +55,9 @@ class JudicialPanel:
     def evaluate_debate(self, debate_transcript: Dict, 
                        admitted_evidence: List = None,
                        role_switch_history: Dict = None,
-                       prag_metrics: Dict = None) -> Dict:
+                       prag_metrics: Dict = None,
+                       critic_evaluations: List[Dict] = None,
+                       reflection_history: List[Dict] = None) -> Dict:
         """
         Each judge independently evaluates the full debate transcript
         
@@ -64,6 +66,8 @@ class JudicialPanel:
             admitted_evidence: List of evidence items admitted by negotiation judge
             role_switch_history: Role-switching consistency report (optional)
             prag_metrics: Summary of Progressive RAG evolution and novelty (optional)
+            critic_evaluations: Round-by-round evaluations from the Critic Agent (optional)
+            reflection_history: History of agent self-reflections (optional)
             
         Returns:
             Judicial panel results with majority verdict and opinions
@@ -97,7 +101,9 @@ class JudicialPanel:
                 evidence_summary,
                 role_switch_summary,
                 debate_transcript,
-                prag_metrics
+                prag_metrics,
+                critic_evaluations,
+                reflection_history
             )
             
             judge_verdicts.append(verdict)
@@ -132,7 +138,9 @@ class JudicialPanel:
     def _judge_evaluate(self, judge: Dict, claim: str, 
                        proponent_args: List[str], opponent_args: List[str],
                        evidence_summary: str, role_switch_summary: str,
-                       full_transcript: Dict, prag_metrics: Dict = None) -> Dict:
+                       full_transcript: Dict, prag_metrics: Dict = None,
+                       critic_evaluations: List[Dict] = None,
+                       reflection_history: List[Dict] = None) -> Dict:
         """
         Single judge performs 5-stage holistic evaluation
         
@@ -159,6 +167,12 @@ ROLE-SWITCH HISTORY (ADVERSARY CONSISTENCY):
 
 EVIDENCE DISCOVERY METRICS (PRAG EVOLUTION):
 {json.dumps(prag_metrics, indent=2) if prag_metrics else "No P-RAG data available."}
+
+INDEPENDENT CRITIC EVALUATIONS (PROCESS INTEGRITY):
+{json.dumps(critic_evaluations, indent=2) if critic_evaluations else "No critic data available."}
+
+AGENT SELF-REFLECTION TRENDS:
+{json.dumps(reflection_history, indent=2) if reflection_history else "No reflection data available."}
 
 Perform the following evaluation stages:
 
