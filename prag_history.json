@@ -4,144 +4,144 @@
   "history": [
     {
       "round": 1,
-      "query": "Retrieve the complete, original, unredacted nursing notes and time-stamped Medication Administration Records (MAR) for the admission period from [start date] to [end date], inclusive, with explicit documentation of all pain assessments and all administered PRN opioid and analgesic medications, including drug name, dose, route, time of administration, and nurse verification.",
+      "query": "Produce unredacted DICOM files and final radiologist's report for lumbar spine MRI conducted within 72 hours following the accident, along with any pre-existing lumbar spine MRI or CT studies and corresponding radiologist reports obtained within one year prior to the accident, limited to studies performed at accredited imaging centers and interpreted by board-certified radiologists, to enable comparative analysis for objective assessment of structural injury causation.",
       "context": "Round 1 - Plaintiff Counsel",
       "num_retrieved": 3,
       "num_accepted": 3,
       "num_rejected": 0,
       "avg_novelty": 1.0,
-      "avg_relevance": 0.512060264746348,
-      "relevance_gain": 0.512060264746348,
+      "avg_relevance": 0.5945375164349874,
+      "relevance_gain": 0.5945375164349874,
       "redundancy_ratio": 0.0,
       "stop_reason": null,
       "evidence_ids": [
-        "38803782",
-        "32996390",
-        "35600866"
+        "33278329",
+        "33278329",
+        "33278329"
       ]
     },
     {
       "round": 1,
-      "query": "(\"epidemiological data\" OR \"serological survey results\") AND (\"Wuhan\" OR \"Hubei Province\") AND (\"November 2019\" TO \"March 2020\") AND (\"undetected infections\" OR \"asymptomatic transmission\") AND (\"community transmission\" OR \"sustained human-to-human transmission\") AND (\"peer-reviewed study\" OR \"published surveillance data\")",
+      "query": "patient-level\" AND (\"epidemiological data\" OR \"case reports\" OR \"contact tracing\") AND Wuhan AND \"SARS-CoV-2\" AND (\"reproductive number\" OR R0) AND \"outbreak\" AND (2019 OR 2020) AND (\"initial phase\" OR \"early spread\") NOT (\"modeling estimates\" OR \"forecasting\" OR \"simulation\")",
       "context": "Round 1 - Defense Counsel",
       "num_retrieved": 3,
       "num_accepted": 3,
       "num_rejected": 0,
-      "avg_novelty": 0.516593744357427,
-      "avg_relevance": 0.6302743951479594,
-      "relevance_gain": 0.11821413040161133,
+      "avg_novelty": 0.8221279084682465,
+      "avg_relevance": 0.6036340991655985,
+      "relevance_gain": 0.009096582730611091,
       "redundancy_ratio": 0.0,
       "stop_reason": null,
       "evidence_ids": [
-        "36178129",
-        "36343497",
-        "35677068"
+        "36037216",
+        "33442703",
+        "37699018"
       ]
     },
     {
       "round": 2,
-      "query": "Wuhan\" AND (\"SARS-CoV-2\" OR \"COVID-19\") AND (\"line-list\" OR \"individual-level case data\") AND (\"symptom onset date\" OR \"exposure history\" OR \"contact tracing data\" OR \"specimen collection date\") AND (\"R0\" OR \"Re\" OR \"effective reproductive number\") AND (\"phylogenetic analysis\" OR \"whole-genome sequencing\" OR \"genomic epidemiology\") AND (\"international exportation\" OR \"travel-related cases\" OR \"travel restrictions\") AND (\"December 2019\" OR \"January 2020\" OR \"early epidemic phase\") AND (\"peer-reviewed\")",
+      "query": "(\"line-list\" OR \"contact tracing dataset\") AND (\"SARS-CoV-2\" OR \"COVID-19\") AND Wuhan AND (\"December 2019\" OR \"January 2020\") AND (\"symptom onset\" OR \"exposure date\" OR \"testing date\" OR \"secondary case\") AND (\"basic reproduction number\" OR R0) AND (\"pre-intervention\" OR \"before January 23, 2020\") AND (\"serial interval\" OR \"generation time\" OR \"onset-to-onset interval\") AND (\"peer-reviewed\") AND (\"epidemiological study\" OR \"cohort study\" OR \"observational study\")",
       "context": "Round 2 - Plaintiff Counsel",
       "num_retrieved": 3,
       "num_accepted": 3,
       "num_rejected": 0,
-      "avg_novelty": 0.3729189435640971,
-      "avg_relevance": 0.6738719542821249,
-      "relevance_gain": 0.04359755913416552,
+      "avg_novelty": 0.3780741294225057,
+      "avg_relevance": 0.6714308063189188,
+      "relevance_gain": 0.06779670715332031,
       "redundancy_ratio": 0.0,
-      "stop_reason": "Diminishing relevance gain (0.0436 < 0.05)",
+      "stop_reason": null,
       "evidence_ids": [
-        "32285862",
-        "33460673",
-        "39048578"
+        "32771634",
+        "39700491",
+        "33247638"
       ]
     },
     {
       "round": 2,
-      "query": "Wuhan\" AND (\"December 2019\" OR \"January 2020\") AND (\"hospital\" OR \"clinic\") AND (\"SARS-CoV-2\" OR \"COVID-19\") AND (\"R0\" OR \"basic reproduction number\") AND (\"serial interval\" OR \"growth rate\" OR \"effective reproduction number\") AND (\"case report\" OR \"laboratory-confirmed case\" OR \"testing data\") NOT (\"intervention\" OR \"lockdown\" OR \"travel restriction\" OR \"control measure\")",
+      "query": "```sql\n(\"SARS-CoV-2\" OR \"COVID-19\") AND Wuhan AND (\"line-listed data\" OR \"individual case reports\") AND (\"symptom onset\" OR \"confirmation date\") AND (\"December 2019\" OR \"January 2020\") AND (\"China CDC Weekly\" OR \"WHO Weekly Epidemiological Report\")  \nAND  \n(\"basic reproduction number\" OR \"R0\") AND \"pre-intervention period\" AND \"early transmission phase\" AND (\"peer-reviewed\" AND (model* OR estimate*)) AND (\"December 2019\" AND \"January 2020\") AND (\"epidemiological study\" OR \"transmission dynamics\")\n```",
       "context": "Round 2 - Defense Counsel",
       "num_retrieved": 3,
       "num_accepted": 3,
       "num_rejected": 0,
-      "avg_novelty": 0.4184541900952657,
-      "avg_relevance": 0.5693288644154867,
-      "relevance_gain": -0.10454308986663818,
+      "avg_novelty": 0.3494681517283122,
+      "avg_relevance": 0.7025988896687826,
+      "relevance_gain": 0.031168083349863762,
       "redundancy_ratio": 0.0,
-      "stop_reason": "Diminishing relevance gain (-0.1045 < 0.05)",
+      "stop_reason": "Diminishing relevance gain (0.0312 < 0.05)",
       "evidence_ids": [
-        "32294485",
-        "32382449",
-        "32524147"
+        "35960106",
+        "34049599",
+        "32530494"
       ]
     },
     {
       "round": 1,
-      "query": "`(\"contemporaneous medical progress notes\" AND \"causal link\" AND (\"failure to provide\" OR absence OR gap)) OR (\"genomic phylodynamics\" AND (\"mobility model\" OR \"exportation model\") AND (\"effective reproduction number\" OR \"Rt\" OR \"undetected infections\" OR \"exported cases\") AND \"Wuhan\" AND (\"December 2019\" OR \"January 2020\") AND \"peer-reviewed\")`",
+      "query": "((\"Plaintiff [Full Name]\" OR \"Patient ID [Specify]\" OR \"Medical Record Number [Specify]\") AND (\"medical history\" OR \"medical records\" OR \"pre-existing conditions\") AND \"prior to [Incident Date]\" AND \"discharge summary\" OR \"admission note\" OR \"primary care visit\")  \nAND  \n(\"Wuhan\" AND (\"effective reproduction number\" OR \"Rt\" OR \"R0\") AND (\"December 2019\" OR \"January 2020\" OR \"February 2020\") AND (\"confidence interval*\" OR \"CI\" OR \"uncertainty\") AND (\"transmission chain*\" OR \"phylogenetic analysis\" OR \"cluster investigation\") AND (\"3.11\" OR \"3.11 estimate\") AND (\"peer-reviewed\" OR \"published study\" OR \"surveillance data\"))",
       "context": "Round 1 - Plaintiff Counsel",
       "num_retrieved": 3,
       "num_accepted": 3,
       "num_rejected": 0,
-      "avg_novelty": 0.47033870220184326,
-      "avg_relevance": 0.5279434521993002,
-      "relevance_gain": -0.04138541221618652,
+      "avg_novelty": 0.5166964928309122,
+      "avg_relevance": 0.5490866104761759,
+      "relevance_gain": -0.15351227919260668,
       "redundancy_ratio": 0.0,
       "stop_reason": null,
       "evidence_ids": [
-        "35324453",
-        "33956868",
-        "35413000"
+        "33887457",
+        "35619126",
+        "36829139"
       ]
     },
     {
       "round": 1,
-      "query": "(\"Wuhan\" AND (\"COVID-19\" OR \"SARS-CoV-2\") AND \"line list\" AND (\"R0\" OR \"reproduction number\") AND \"early outbreak\" AND (\"underreporting\" OR \"asymptomatic transmission\" OR \"case ascertainment bias\") AND \"epidemiological estimation\") NOT (\"modeling only\" OR \"hypothetical\" OR \"review\")",
+      "query": "('Wuhan cluster investigation reports' OR 'contact-tracing line lists') AND (symptom onset dates OR exposure history OR secondary case identification OR PCR results OR serology results) AND (household transmission OR healthcare-associated transmission OR secondary attack rate OR serial interval) AND ('R0' OR 'basic reproduction number') AND ('independent estimate' OR 'empirical calculation') AND 'Wuhan outbreak' AND ('pre-intervention period' OR 'early exponential phase') AND NOT ('modelled projection' OR 'forecast' OR 'simulated') AND language:en",
       "context": "Round 1 - Defense Counsel",
       "num_retrieved": 3,
-      "num_accepted": 2,
-      "num_rejected": 1,
-      "avg_novelty": 0.21082798639933267,
-      "avg_relevance": 0.6846916675567627,
-      "relevance_gain": 0.15674821535746253,
-      "redundancy_ratio": 0.3333333333333333,
+      "num_accepted": 3,
+      "num_rejected": 0,
+      "avg_novelty": 0.3229692776997884,
+      "avg_relevance": 0.5868954261144003,
+      "relevance_gain": 0.03780881563822436,
+      "redundancy_ratio": 0.0,
       "stop_reason": null,
       "evidence_ids": [
-        "33556763",
-        "33556763"
+        "33952194",
+        "34034662",
+        "32213270"
       ]
     },
     {
       "round": 2,
-      "query": "Wuhan\" AND (\"SARS-CoV-2\" OR \"COVID-19\") AND (\"December 2019\" OR \"January 2020\") AND (\"patient-level data\" OR \"raw epidemiological data\" OR \"individual case data\") AND (\"R0\" OR \"basic reproduction number\") AND (\"pre-intervention period\" OR \"pre-NPI\" OR \"before lockdown\") AND (\"peer-reviewed\")",
+      "query": "Wuhan\" AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"R0\" OR \"basic reproduction number\") AND (\"patient-level data\" OR \"individual-level data\" OR \"contact tracing data\") AND \"December 2019 - January 2020\" AND \"peer-reviewed\" AND (\"epidemiological model\" OR \"transmission model\") AND (\"initial outbreak\" OR \"early transmission\") AND (\"pre-intervention period\" OR \"baseline transmission\") AND (\"confidence interval\" OR \"uncertainty interval\") AND (\"reproductive number estimation\" OR \"transmission dynamics analysis\")",
       "context": "Round 2 - Plaintiff Counsel",
       "num_retrieved": 3,
       "num_accepted": 2,
       "num_rejected": 1,
-      "avg_novelty": 0.17079212268193564,
-      "avg_relevance": 0.6107319593429565,
-      "relevance_gain": -0.07395970821380615,
-      "redundancy_ratio": 0.3333333333333333,
-      "stop_reason": "Diminishing relevance gain (-0.0740 < 0.05)",
+      "avg_novelty": 0.23613035678863525,
+      "avg_relevance": 0.6913678646087646,
+      "relevance_gain": 0.10447243849436438,
+      "redundancy_ratio": 0.0,
+      "stop_reason": null,
       "evidence_ids": [
-        "33297617",
-        "34484978"
+        "32382449",
+        "33253212"
       ]
     },
     {
       "round": 2,
-      "query": "de-identified patient line list\" AND \"Wuhan SARS-CoV-2\" AND (\"basic reproduction number\" OR \"R0 estimate\" OR \"early epidemic growth rate\") AND (\"travel-based importation model\" OR \"seroprevalence correction\" OR \"undetected infection estimate\") AND (\"December 2019\" OR \"January 2020\") AND (\"peer-reviewed\") AND (\"2020/2021 publication year\")",
+      "query": "Wuhan\" AND (\"SARS-CoV-2\" OR \"COVID-19\") AND (\"line-list data\" OR \"contact tracing data\") AND (\"November 2019\" OR \"December 2019\" OR \"January 2020\") AND (\"symptom onset date\" OR \"date of symptom onset\" OR \"exposure window\" OR \"secondary attack rate\") AND (\"basic reproduction number\" OR \"R0\") AND \"pre-lockdown\" AND (\"empirical estimation\" OR \"observed growth rate\") AND (\"bias adjustment\" OR \"right-truncation correction\" OR \"generation interval\") AND (\"time-varying reproduction number\" OR \"Rt\") AND (\"peer-reviewed\") AND (\"2020/01/01\" OR \"2020/01/15\" OR \"2020/01/23\")",
       "context": "Round 2 - Defense Counsel",
       "num_retrieved": 3,
-      "num_accepted": 3,
-      "num_rejected": 0,
-      "avg_novelty": 0.3221651315689087,
-      "avg_relevance": 0.6642338832219442,
-      "relevance_gain": 0.05350192387898767,
-      "redundancy_ratio": 0.0,
-      "stop_reason": null,
+      "num_accepted": 2,
+      "num_rejected": 1,
+      "avg_novelty": 0.19395965337753296,
+      "avg_relevance": 0.6633330881595612,
+      "relevance_gain": -0.02803477644920349,
+      "redundancy_ratio": 0.3333333333333333,
+      "stop_reason": "Diminishing relevance gain (-0.0280 < 0.05)",
       "evidence_ids": [
-        "33399860",
-        "35351016",
-        "39088582"
+        "35162344",
+        "32694200"
       ]
     }
   ]

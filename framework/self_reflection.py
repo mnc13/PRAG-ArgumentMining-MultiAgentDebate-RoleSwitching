@@ -96,6 +96,13 @@ class SelfReflection:
             }
             
             self.reflection_history.append(reflection_data)
+            
+            # Print summary to console for visibility in logs
+            print(f"     * Logic: {logic:.2f}, Novelty: {novelty:.2f}, Rebuttal: {rebuttal:.2f}")
+            print(f"     * Total Score: {total_score:.3f}")
+            if reflection_data.get("discovery_need"):
+                print(f"     * Discovery Need: {reflection_data['discovery_need']}")
+                
             return reflection_data
         except Exception as e:
             print(f"   > [Warning] Reflection parsing failed: {e}")

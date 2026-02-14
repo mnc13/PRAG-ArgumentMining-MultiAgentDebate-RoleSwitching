@@ -1,63 +1,57 @@
 {
-  "claim": "COVID-19 has been linked with cases of a similar rare condition in children called Kawasaki disease.",
-  "verdict": "SUPPORT",
-  "confidence": 0.993,
-  "ground_truth_label": "SUPPORT",
+  "claim": "During the initial outbreak in Wuhan, the novel coronavirus spread with an R0 close to 0.",
+  "verdict": "REFUTE",
+  "confidence": 1.0,
+  "ground_truth_label": "REFUTE",
   "correct": true,
   "reasoning": {
-    "winner": "plaintiff_counsel",
-    "winner_agent": "Plaintiff Counsel",
-    "judicial_verdict": "SUPPORTED",
+    "winner": "defense_counsel",
+    "winner_agent": "Defense Counsel",
+    "judicial_verdict": "NOT SUPPORTED",
     "main_arguments": {
-      "plaintiff_counsel": "Your Honor, the medical literature shows a clear and consistent signal that SARS\u2011CoV\u20112 infection is temporally and clinically associated with Kawasaki disease\u2013like presentations in children. Multiple systematic reviews and case series documented a marked rise in Kawasaki-type illness coincident with...",
-      "defense_counsel": "Your Honor, the plaintiff's argument rests on a flawed conflation of distinct clinical entities and misinterprets preliminary observational data as definitive evidence. The claim that COVID-19 has been linked with Kawasaki disease (KD) is not supported by the weight of the available scientific liter..."
+      "plaintiff_counsel": "May it please the Court: The evidence shows that, during the Wuhan outbreak period, transmission of SARS\u2011CoV\u20112 in the field was rapidly brought under control such that the observed reproductive capacity of the virus in that setting was effectively driven toward zero. Detailed reconstructions of Wuha...",
+      "defense_counsel": "The Plaintiff\u2019s claim that the initial outbreak in Wuhan featured an R0 close to zero is fundamentally flawed and misrepresents the epidemiological evidence. The term \"R0\" refers to the *basic* reproduction number\u2014a measure of inherent transmissibility in a fully susceptible population without inter..."
     },
     "decision_factors": [
-      "Majority Opinion: Majority Opinion (Judge 1, Judge 2, Judge 3) - SUPPORTED:\n\n- Judge 1: The preponderance of evidence demonstrates a robust temporal and clinical association. Key decisive factors include: (1) Multiple systematic reviews (32965372, 33152254) documenting increased Kawasaki-type illness during the pande...",
+      "Majority Opinion: Majority Opinion (Judge 1, Judge 2, Judge 3) - NOT SUPPORTED:\n\n- Judge 1: The claim fails due to fundamental terminological and scientific errors. Plaintiff persistently conflates R0 (basic reproduction number, measuring inherent transmissibility without interventions) with Rt (effective reproductio...",
       "Role-switching demonstrated consistent argumentation",
-      "Self-reflection acknowledged weaknesses (confidence adjusted by -0.30)"
+      "Self-reflection reinforced arguments (confidence adjusted by +0.06)"
     ]
   },
   "key_evidence": [
     {
-      "source_id": "37965606",
+      "source_id": "33278329",
       "relevance": 0,
       "novelty": 1.0,
       "round": 1
     },
     {
-      "source_id": "36351782",
+      "source_id": "33278329",
       "relevance": 0,
       "novelty": 1.0,
       "round": 1
     },
     {
-      "source_id": "34140220",
+      "source_id": "32771634",
       "relevance": 0,
-      "novelty": 1.0,
+      "novelty": 0.41819262504577637,
       "round": 2
     },
     {
-      "source_id": "32965372",
+      "source_id": "39700491",
       "relevance": 0,
-      "novelty": 1.0,
+      "novelty": 0.3738638162612915,
       "round": 2
-    },
-    {
-      "source_id": "34278987",
-      "relevance": 0,
-      "novelty": 1.0,
-      "round": 3
     }
   ],
   "metadata": {
-    "judicial_verdict": "SUPPORTED",
+    "judicial_verdict": "NOT SUPPORTED",
     "vote_breakdown": {
-      "SUPPORTED": 3
+      "NOT SUPPORTED": 3
     },
     "role_switch_consistent": true,
-    "self_reflection_adjustment": -0.3,
-    "debate_rounds": 5,
-    "total_evidence_used": 18
+    "self_reflection_adjustment": 0.057,
+    "debate_rounds": 2,
+    "total_evidence_used": 10
   }
 }

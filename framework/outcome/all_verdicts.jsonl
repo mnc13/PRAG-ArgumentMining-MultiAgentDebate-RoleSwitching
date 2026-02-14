@@ -2,3 +2,4 @@
 {"claim_id": "60ac6953f9b9e03ea4d8e692_1", "verdict": "REFUTE", "confidence": 0.152, "ground_truth": "SUPPORT", "correct": false}
 {"claim_id": "60553c886bc088b6d218dc70_0", "verdict": "REFUTE", "confidence": 0.353, "ground_truth": "REFUTE", "correct": true}
 {"claim_id": "60553c886bc088b6d218dc70_1", "verdict": "SUPPORT", "confidence": 0.993, "ground_truth": "SUPPORT", "correct": true}
+{"claim_id": "60b83a22f9b9e03ea4d8e6c0_0", "verdict": "REFUTE", "confidence": 1.0, "ground_truth": "REFUTE", "correct": true}

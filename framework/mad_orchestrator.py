@@ -171,7 +171,14 @@ class MADOrchestrator:
         critic_eval = self.critic.evaluate_round(round_num, self.claim.text, self.debate_transcript)
         round_data["critic_evaluation"] = critic_eval
         if critic_eval.get("recommendations"):
-            print(f"   > Critic Recommendations: {len(critic_eval['recommendations'].get('plaintiff', []))} for Plaintiff, {len(critic_eval['recommendations'].get('defense', []))} for Defense")
+            recs = critic_eval["recommendations"]
+            p_recs = recs.get('plaintiff', [])
+            d_recs = recs.get('defense', [])
+            print(f"   > Critic Recommendations: {len(p_recs)} for Plaintiff, {len(d_recs)} for Defense")
+            for r in p_recs:
+                print(f"     * [Plaintiff Rec]: {r}")
+            for r in d_recs:
+                print(f"     * [Defense Rec]: {r}")
 
         return round_data
 
