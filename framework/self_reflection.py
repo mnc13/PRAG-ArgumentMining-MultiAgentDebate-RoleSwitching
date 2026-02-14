@@ -89,6 +89,12 @@ class SelfReflection:
             reflection_data["side"] = side
             reflection_data["round"] = round_num
             
+            # Add legacy structure compatibility for FinalVerdict
+            # (total_score 0.5 -> 0, 1.0 -> +0.3, 0.0 -> -0.3)
+            reflection_data["self_reflection"] = {
+                "confidence_adjustment": round((total_score - 0.5) * 0.6, 3)
+            }
+            
             self.reflection_history.append(reflection_data)
             return reflection_data
         except Exception as e:

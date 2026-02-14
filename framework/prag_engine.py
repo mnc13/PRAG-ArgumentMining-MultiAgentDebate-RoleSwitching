@@ -173,5 +173,6 @@ Generate a concise search query (1-2 sentences) that will retrieve the most rele
     
     def save_history(self, filepath: str = "prag_history.json"):
         """Save retrieval history to JSON file"""
+        import json
         with open(filepath, 'w') as f:
             json.dump(self.get_retrieval_summary(), f, indent=2)

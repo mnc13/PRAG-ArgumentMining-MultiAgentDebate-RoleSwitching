@@ -202,8 +202,10 @@ def main():
             )
             
             # Stage 10 is now part of the multi-round MAD process
-            # We use the final state of reflections for the verdict generator
-            reflection_result = ref_history[-1] if ref_history else {}
+            # Select the last reflection of the winning side for confidence adjustment
+            winner_side = 'proponent' if judge_result['final_verdict'] == 'SUPPORTED' else 'opponent'
+            winner_reflections = [r for r in ref_history if r.get('side') == winner_side]
+            reflection_result = winner_reflections[-1] if winner_reflections else (ref_history[-1] if ref_history else {})
             
             log("\n11. Generating Final Verdict...")
             from final_verdict import FinalVerdict

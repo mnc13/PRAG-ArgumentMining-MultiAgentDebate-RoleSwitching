@@ -83,6 +83,7 @@ class FinalVerdict:
         }
         
         # Save results
+        import json
         with open("final_verdict.json", "w") as f:
             json.dump(result, f, indent=2)
         
@@ -139,7 +140,10 @@ class FinalVerdict:
             adjustments -= 0.05
         
         # Self-reflection (limit negative impact)
-        reflection_adj = self.reflection_result['self_reflection']['confidence_adjustment']
+        # Defensive access to handle integrated multi-round reflection structure
+        sr_data = self.reflection_result.get('self_reflection', {})
+        reflection_adj = sr_data.get('confidence_adjustment', 0.0)
+        
         # Don't let self-reflection tank the score completely, cap at -0.15
         if reflection_adj < 0:
             reflection_adj = max(-0.15, reflection_adj)
@@ -211,7 +215,9 @@ class FinalVerdict:
             decision_factors.append("Role-switching revealed some inconsistencies")
         
         # Self-reflection factor
-        reflection_adj = self.reflection_result['self_reflection']['confidence_adjustment']
+        sr_data = self.reflection_result.get('self_reflection', {})
+        reflection_adj = sr_data.get('confidence_adjustment', 0.0)
+        
         if reflection_adj < 0:
             decision_factors.append(f"Self-reflection acknowledged weaknesses (confidence adjusted by {reflection_adj:+.2f})")
         else:

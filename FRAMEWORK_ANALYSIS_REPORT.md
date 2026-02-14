@@ -636,6 +636,10 @@ outcome/
 - Judge approves/denies requests
 - Experts provide specialized testimony
 
+### 7. **Engineering Stability (Persistent Import Guarding)**
+- **Robust Local Imports**: Systematically implemented local `import json` calls across all 8 critical modules (`prag_engine`, `final_verdict`, `mad_orchestrator`, etc.) to prevent environment-induced `NameError` exceptions during long-running multi-round pipeline executions.
+- **Graceful Parsing**: Defensive regex-based JSON extraction in all LLM-to-JSON transitions.
+
 ---
 
 ## Execution Metrics (Example Run)

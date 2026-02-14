@@ -145,6 +145,7 @@ Return ONLY the JSON object.
 """
     response = llm.generate(prompt)
     try:
+        import json
         import re
         match = re.search(r'\{[^}]+\}', response)
         config = json.loads(match.group())

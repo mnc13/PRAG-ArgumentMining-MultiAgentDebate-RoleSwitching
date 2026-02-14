@@ -2,79 +2,149 @@
   "claim": "During the initial outbreak in Wuhan, the novel coronavirus spread with an R0 close to 0.",
   "total_rounds": 2,
   "prag_history": {
-    "total_retrievals": 4,
+    "total_retrievals": 8,
     "rounds_with_prag": 2,
     "history": [
       {
         "round": 1,
-        "query": "Produce original, uncompressed DICOM files for all non-contrast and contrast-enhanced CT, MRI, and plain-film X-ray studies performed during the index hospitalization, defined as the period from [start date] to [end date], inclusive, along with corresponding contemporaneous radiology reports, for independent expert review.",
+        "query": "Retrieve the complete, original, unredacted nursing notes and time-stamped Medication Administration Records (MAR) for the admission period from [start date] to [end date], inclusive, with explicit documentation of all pain assessments and all administered PRN opioid and analgesic medications, including drug name, dose, route, time of administration, and nurse verification.",
         "context": "Round 1 - Plaintiff Counsel",
         "num_retrieved": 3,
         "num_accepted": 3,
         "num_rejected": 0,
         "avg_novelty": 1.0,
-        "avg_relevance": 0.5934166113535563,
-        "relevance_gain": 0.5934166113535563,
+        "avg_relevance": 0.512060264746348,
+        "relevance_gain": 0.512060264746348,
         "redundancy_ratio": 0.0,
         "stop_reason": null,
         "evidence_ids": [
-          "37969632",
-          "37969632",
-          "39616551"
+          "38803782",
+          "32996390",
+          "35600866"
         ]
       },
       {
         "round": 1,
-        "query": "Wuhan\" AND \"syndromic surveillance\" AND (\"system output\" OR \"raw data\") AND \"December 2019\" AND (\"sensitivity\" OR \"specificity\") AND (\"respiratory syndrome\" OR \"influenza-like illness\") AND (\"public health data\" OR \"surveillance data\")",
+        "query": "(\"epidemiological data\" OR \"serological survey results\") AND (\"Wuhan\" OR \"Hubei Province\") AND (\"November 2019\" TO \"March 2020\") AND (\"undetected infections\" OR \"asymptomatic transmission\") AND (\"community transmission\" OR \"sustained human-to-human transmission\") AND (\"peer-reviewed study\" OR \"published surveillance data\")",
         "context": "Round 1 - Defense Counsel",
         "num_retrieved": 3,
         "num_accepted": 3,
         "num_rejected": 0,
-        "avg_novelty": 0.8157629569371542,
-        "avg_relevance": 0.5697741508483887,
-        "relevance_gain": -0.023642460505167606,
+        "avg_novelty": 0.516593744357427,
+        "avg_relevance": 0.6302743951479594,
+        "relevance_gain": 0.11821413040161133,
         "redundancy_ratio": 0.0,
         "stop_reason": null,
         "evidence_ids": [
-          "34733955",
-          "34709870",
-          "39288377"
+          "36178129",
+          "36343497",
+          "35677068"
         ]
       },
       {
         "round": 2,
-        "query": "early Wuhan COVID-19 case data\" OR \"initial outbreak line lists\" (December 1, 2019\u2013January 23, 2020) AND \"symptom onset\" OR \"exposure history\" AND \"RT-PCR confirmed cases\" AND \"transmission chains\" OR \"reproduction number R0\" OR \"effective reproduction number Re\" (pre-lockdown) AND \"genomic sequencing data\" OR \"exported cases\" OR \"seroprevalence studies\" AND \"peer-reviewed\" OR \"primary source\" AND \"epidemiological analysis",
+        "query": "Wuhan\" AND (\"SARS-CoV-2\" OR \"COVID-19\") AND (\"line-list\" OR \"individual-level case data\") AND (\"symptom onset date\" OR \"exposure history\" OR \"contact tracing data\" OR \"specimen collection date\") AND (\"R0\" OR \"Re\" OR \"effective reproductive number\") AND (\"phylogenetic analysis\" OR \"whole-genome sequencing\" OR \"genomic epidemiology\") AND (\"international exportation\" OR \"travel-related cases\" OR \"travel restrictions\") AND (\"December 2019\" OR \"January 2020\" OR \"early epidemic phase\") AND (\"peer-reviewed\")",
         "context": "Round 2 - Plaintiff Counsel",
         "num_retrieved": 3,
         "num_accepted": 3,
         "num_rejected": 0,
-        "avg_novelty": 0.4096047480901082,
-        "avg_relevance": 0.778397798538208,
-        "relevance_gain": 0.20862364768981934,
+        "avg_novelty": 0.3729189435640971,
+        "avg_relevance": 0.6738719542821249,
+        "relevance_gain": 0.04359755913416552,
         "redundancy_ratio": 0.0,
-        "stop_reason": null,
+        "stop_reason": "Diminishing relevance gain (0.0436 < 0.05)",
         "evidence_ids": [
-          "34049599",
-          "32552794",
-          "32133831"
+          "32285862",
+          "33460673",
+          "39048578"
         ]
       },
       {
         "round": 2,
-        "query": "WHO epidemiological dataset Wuhan early outbreak 2019 suspected cases testing denominators unredacted\" AND (\"serological studies\" OR \"modeling studies\") AND \"community transmission Wuhan prior to December 31 2019\" NOT (\"tightly clustered outbreak\" OR \"superspreading event\" OR \"index case cluster\")",
+        "query": "Wuhan\" AND (\"December 2019\" OR \"January 2020\") AND (\"hospital\" OR \"clinic\") AND (\"SARS-CoV-2\" OR \"COVID-19\") AND (\"R0\" OR \"basic reproduction number\") AND (\"serial interval\" OR \"growth rate\" OR \"effective reproduction number\") AND (\"case report\" OR \"laboratory-confirmed case\" OR \"testing data\") NOT (\"intervention\" OR \"lockdown\" OR \"travel restriction\" OR \"control measure\")",
         "context": "Round 2 - Defense Counsel",
         "num_retrieved": 3,
         "num_accepted": 3,
         "num_rejected": 0,
-        "avg_novelty": 0.2530527512232463,
-        "avg_relevance": 0.6841912865638733,
-        "relevance_gain": -0.09420651197433472,
+        "avg_novelty": 0.4184541900952657,
+        "avg_relevance": 0.5693288644154867,
+        "relevance_gain": -0.10454308986663818,
         "redundancy_ratio": 0.0,
-        "stop_reason": "Diminishing relevance gain (-0.0942 < 0.05)",
+        "stop_reason": "Diminishing relevance gain (-0.1045 < 0.05)",
         "evidence_ids": [
-          "32213270",
-          "34034662",
+          "32294485",
+          "32382449",
+          "32524147"
+        ]
+      },
+      {
+        "round": 1,
+        "query": "`(\"contemporaneous medical progress notes\" AND \"causal link\" AND (\"failure to provide\" OR absence OR gap)) OR (\"genomic phylodynamics\" AND (\"mobility model\" OR \"exportation model\") AND (\"effective reproduction number\" OR \"Rt\" OR \"undetected infections\" OR \"exported cases\") AND \"Wuhan\" AND (\"December 2019\" OR \"January 2020\") AND \"peer-reviewed\")`",
+        "context": "Round 1 - Plaintiff Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 3,
+        "num_rejected": 0,
+        "avg_novelty": 0.47033870220184326,
+        "avg_relevance": 0.5279434521993002,
+        "relevance_gain": -0.04138541221618652,
+        "redundancy_ratio": 0.0,
+        "stop_reason": null,
+        "evidence_ids": [
+          "35324453",
+          "33956868",
+          "35413000"
+        ]
+      },
+      {
+        "round": 1,
+        "query": "(\"Wuhan\" AND (\"COVID-19\" OR \"SARS-CoV-2\") AND \"line list\" AND (\"R0\" OR \"reproduction number\") AND \"early outbreak\" AND (\"underreporting\" OR \"asymptomatic transmission\" OR \"case ascertainment bias\") AND \"epidemiological estimation\") NOT (\"modeling only\" OR \"hypothetical\" OR \"review\")",
+        "context": "Round 1 - Defense Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 2,
+        "num_rejected": 1,
+        "avg_novelty": 0.21082798639933267,
+        "avg_relevance": 0.6846916675567627,
+        "relevance_gain": 0.15674821535746253,
+        "redundancy_ratio": 0.3333333333333333,
+        "stop_reason": null,
+        "evidence_ids": [
+          "33556763",
           "33556763"
+        ]
+      },
+      {
+        "round": 2,
+        "query": "Wuhan\" AND (\"SARS-CoV-2\" OR \"COVID-19\") AND (\"December 2019\" OR \"January 2020\") AND (\"patient-level data\" OR \"raw epidemiological data\" OR \"individual case data\") AND (\"R0\" OR \"basic reproduction number\") AND (\"pre-intervention period\" OR \"pre-NPI\" OR \"before lockdown\") AND (\"peer-reviewed\")",
+        "context": "Round 2 - Plaintiff Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 2,
+        "num_rejected": 1,
+        "avg_novelty": 0.17079212268193564,
+        "avg_relevance": 0.6107319593429565,
+        "relevance_gain": -0.07395970821380615,
+        "redundancy_ratio": 0.3333333333333333,
+        "stop_reason": "Diminishing relevance gain (-0.0740 < 0.05)",
+        "evidence_ids": [
+          "33297617",
+          "34484978"
+        ]
+      },
+      {
+        "round": 2,
+        "query": "de-identified patient line list\" AND \"Wuhan SARS-CoV-2\" AND (\"basic reproduction number\" OR \"R0 estimate\" OR \"early epidemic growth rate\") AND (\"travel-based importation model\" OR \"seroprevalence correction\" OR \"undetected infection estimate\") AND (\"December 2019\" OR \"January 2020\") AND (\"peer-reviewed\") AND (\"2020/2021 publication year\")",
+        "context": "Round 2 - Defense Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 3,
+        "num_rejected": 0,
+        "avg_novelty": 0.3221651315689087,
+        "avg_relevance": 0.6642338832219442,
+        "relevance_gain": 0.05350192387898767,
+        "redundancy_ratio": 0.0,
+        "stop_reason": null,
+        "evidence_ids": [
+          "33399860",
+          "35351016",
+          "39088582"
         ]
       }
     ]
@@ -83,30 +153,30 @@
     {
       "round": 1,
       "side": "Plaintiff Counsel",
-      "original": "Based on the context and request, the precise search query should be:\n\n> **\"Produce original, uncompressed DICOM files for all CT, MRI, and X-ray imaging performed during the index event, along with contemporaneous radiology reports, for independent expert review.\"**\n\n**Why this query works:**\n\n1.  **Specific Format & Type:** Explicitly demands \"original, uncompressed DICOM files\" (critical for expert analysis) and lists the modalities (\"CT, MRI, and X-ray\").\n2.  **Temporal Scope:** Clearly limits the request to imaging \"performed during the index event\".\n3.  **Essential Documentation:** Includes \"contemporaneous radiology reports\" created at the time of imaging.\n4.  **Purpose:** States the reason (\"for independent expert review\"), aligning with the legal need to challenge interpretations.\n5.  **Conciseness:** Combines all critical elements into a single, clear sentence.",
-      "refined": "Produce original, uncompressed DICOM files for all non-contrast and contrast-enhanced CT, MRI, and plain-film X-ray studies performed during the index hospitalization, defined as the period from [start date] to [end date], inclusive, along with corresponding contemporaneous radiology reports, for independent expert review.",
-      "novelty": 1.0
+      "original": "Based on the legal request focusing on the medical evidence gap and the specific COVID-19 research, here is a precise search query:\n\n> `(\"contemporaneous medical progress notes\" AND \"causal link\" AND (\"failure to provide\" OR absence OR gap)) OR (\"genomic phylodynamic\" AND (\"mobility model\" OR \"exportation model\") AND (\"effective reproduction number\" OR \"Rt\" OR \"undetected infections\" OR \"exported cases\") AND \"Wuhan\" AND (\"December 2019\" OR \"January 2020\"))`\n\n**Breakdown:**\n\n1.  **Medical Evidence Gap (Plaintiff's Weakness):**\n    *   `\"contemporaneous medical progress notes\"`: The critical missing evidence.\n    *   `\"causal link\"`: The legal concept this gap undermines.\n    *   `(\"failure to provide\" OR absence OR gap)`: Terms describing the deficiency.\n    *   *This part targets evidence/discussions highlighting the importance of contemporaneous notes for proving causation and the impact of their absence.*\n\n2.  **COVID-19 Research (Defense Evidence Request):**\n    *   `\"genomic phylodynamic\"`: The specific type of study requested.\n    *   `(\"mobility model\" OR \"exportation model\")`: The modeling approaches.\n    *   `(\"effective reproduction number\" OR \"Rt\" OR \"undetected infections\" OR \"exported cases\")`: The key parameters to estimate.\n    *   `\"Wuhan\"`: The geographic focus.\n    *   `(\"December 2019\" OR \"January 2020\")`: The critical timeframe.\n    *   *This part targets the highly specific peer-reviewed studies the defense needs.*\n\n**Why this works:**\n\n*   **Precision:** Uses exact phrases (`\" \"`) and specific terminology relevant to both the medical-legal argument and the epidemiological research.\n*   **Boolean Logic:** `AND` ensures all critical concepts within each part are present. `OR` captures synonymous terms (e.g., \"failure to provide\"/absence/gap; mobility/exportation models; Rt/undetected/exported). The outer `OR` combines the two distinct evidentiary needs.\n*   **Focus:** Clearly separates the two distinct evidentiary targets (medical record gap & COVID research) while allowing a single query to retrieve relevant results for either.\n*   **Context Coverage:** Addresses both the core challenge to the Plaintiff's medical causation *and* the specific data the defense seeks to introduce regarding early COVID spread from Wuhan.",
+      "refined": "`(\"contemporaneous medical progress notes\" AND \"causal link\" AND (\"failure to provide\" OR absence OR gap)) OR (\"genomic phylodynamics\" AND (\"mobility model\" OR \"exportation model\") AND (\"effective reproduction number\" OR \"Rt\" OR \"undetected infections\" OR \"exported cases\") AND \"Wuhan\" AND (\"December 2019\" OR \"January 2020\") AND \"peer-reviewed\")`",
+      "novelty": 0.47033870220184326
     },
     {
       "round": 1,
       "side": "Defense Counsel",
-      "original": "Based on the legal request for unredacted surveillance outputs to assess sensitivity/specificity claims, the precise search query is:\n\n> **\"Wuhan Province\" AND \"syndromic surveillance\" AND (\"system output\" OR \"raw data\") AND \"December 2019\" AND (\"sensitivity\" OR \"specificity\")**\n\n### Key elements explained:\n1. **\"Wuhan Province\"** - Specifies the jurisdictional scope of the surveillance systems.  \n2. **\"syndromic surveillance\"** - Targets the specific public health monitoring method cited.  \n3. **(\"system output\" OR \"raw data\")** - Captures operational data records requested (avoids theoretical reports).  \n4. **\"December 2019\"** - Pinpoints the critical early outbreak timeframe.  \n5. **(\"sensitivity\" OR \"specificity\")** - Directly addresses the validation metrics in dispute.  \n\nThis query prioritizes *operational evidence* (outputs/data) over analyses or summaries, aligning with the defense's need to audit surveillance performance during the contested period.",
-      "refined": "Wuhan\" AND \"syndromic surveillance\" AND (\"system output\" OR \"raw data\") AND \"December 2019\" AND (\"sensitivity\" OR \"specificity\") AND (\"respiratory syndrome\" OR \"influenza-like illness\") AND (\"public health data\" OR \"surveillance data\")",
-      "novelty": 0.8157629569371542
+      "original": "Based on the legal request and debate context, here is a precise search query:\n\n> **(\"Wuhan\" AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"line list\" OR \"contact tracing\") AND (\"R0\" OR \"reproduction number\") AND (\"early outbreak\" OR \"initial outbreak\")) AND (\"underreporting\" OR \"asymptomatic transmission\" OR \"case ascertainment\") AND (\"epidemiological study\" OR \"estimation\")**\n\n**Why this query works:**\n\n1.  **Core Elements:** Targets `Wuhan`, `COVID-19/SARS-CoV-2`, `line list/contact tracing`, and `R0/reproduction number` explicitly requested.\n2.  **Temporal Focus:** `\"early outbreak\" OR \"initial outbreak\"` narrows to the relevant Wuhan timeframe.\n3.  **Critical Adjustments:** `\"underreporting\" OR \"asymptomatic transmission\" OR \"case ascertainment\"` directly addresses the need for studies correcting for these biases.\n4.  **Study Type:** `\"epidemiological study\" OR \"estimation\"` ensures retrieval of analytical research, not just raw data or news.\n5.  **Structure:** Parentheses group concepts logically for database processing, ensuring all key aspects are combined.\n\n**This query prioritizes retrieving studies that used the specific early Wuhan data (like line lists/contact tracing) to estimate R0 *while explicitly accounting for underreporting and asymptomatic cases*.**",
+      "refined": "(\"Wuhan\" AND (\"COVID-19\" OR \"SARS-CoV-2\") AND \"line list\" AND (\"R0\" OR \"reproduction number\") AND \"early outbreak\" AND (\"underreporting\" OR \"asymptomatic transmission\" OR \"case ascertainment bias\") AND \"epidemiological estimation\") NOT (\"modeling only\" OR \"hypothetical\" OR \"review\")",
+      "novelty": 0.21082798639933267
     },
     {
       "round": 2,
       "side": "Plaintiff Counsel",
-      "original": "**Search Query:**  \n\"Wuhan COVID-19 case investigation files\" OR \"contact-tracing line lists\" (November 1, 2019\u2013January 31, 2020) + \"symptom onset dates\" OR \"exposure histories\" OR \"testing results\" + \"pre-intervention R0\" OR \"effective reproduction number Re\" estimates (before January 23, 2020) + \"exported case counts\" OR \"seroprevalence surveys\" OR \"time-resolved genomic phylogenies\" + peer-reviewed studies OR primary datasets.  \n\n**Explanation:**  \nThis query combines precise terms for requested records (e.g., case files, line lists) with date ranges and epidemiological metrics (R0/Re) tied to methodologies (exported cases, phylogenies) and evidence types (studies, datasets), ensuring alignment with the legal request\u2019s scope and intent.",
-      "refined": "early Wuhan COVID-19 case data\" OR \"initial outbreak line lists\" (December 1, 2019\u2013January 23, 2020) AND \"symptom onset\" OR \"exposure history\" AND \"RT-PCR confirmed cases\" AND \"transmission chains\" OR \"reproduction number R0\" OR \"effective reproduction number Re\" (pre-lockdown) AND \"genomic sequencing data\" OR \"exported cases\" OR \"seroprevalence studies\" AND \"peer-reviewed\" OR \"primary source\" AND \"epidemiological analysis",
-      "novelty": 0.4096047480901082
+      "original": "Based on the dispute over the early SARS-CoV-2 R0 in Wuhan and the specific request for foundational data and peer-reviewed R0 estimates, the precise search query is:\n\n> **\"Wuhan\" AND (\"SARS-CoV-2\" OR \"COVID-19\") AND (\"December 2019\" OR \"January 2020\") AND (\"patient-level data\" OR \"raw data\" OR \"clinical data\" OR \"epidemiological data\") AND (\"R0\" OR \"basic reproduction number\" OR \"reproduction rate\") AND (\"pre-intervention\" OR \"pre-NPI\" OR \"early transmission\" OR \"index case\")**\n\n### Key Elements Explained:\n1.  **`\"Wuhan\"`**: Mandatory location focus.\n2.  **`(\"SARS-CoV-2\" OR \"COVID-19\")`**: Captures virus-specific terminology.\n3.  **`(\"December 2019\" OR \"January 2020\")`**: Critical timeframe for initial outbreak.\n4.  **`(\"patient-level data\" OR \"raw data\" OR \"clinical data\" OR \"epidemiological data\")`**: Targets the foundational datasets requested (hospitals, patient records).\n5.  **`(\"R0\" OR \"basic reproduction number\" OR \"reproduction rate\")`**: Core epidemiological metric in dispute.\n6.  **`(\"pre-intervention\" OR \"pre-NPI\" OR \"early transmission\" OR \"index case\")`**: Ensures results pertain to the period *before* lockdowns/distancing, crucial for assessing the initial R0 claim. \"Index case\" helps find early transmission chain studies.\n\nThis query directly addresses both components of the request: **1)** Retrieving raw hospital/patient data for verification and **2)** Finding peer-reviewed studies estimating the early R0, while tightly constraining results to Wuhan and the disputed pre-intervention period.",
+      "refined": "Wuhan\" AND (\"SARS-CoV-2\" OR \"COVID-19\") AND (\"December 2019\" OR \"January 2020\") AND (\"patient-level data\" OR \"raw epidemiological data\" OR \"individual case data\") AND (\"R0\" OR \"basic reproduction number\") AND (\"pre-intervention period\" OR \"pre-NPI\" OR \"before lockdown\") AND (\"peer-reviewed\")",
+      "novelty": 0.17079212268193564
     },
     {
       "round": 2,
       "side": "Defense Counsel",
-      "original": "**Search Query:**  \n\"WHO epidemiological dataset Wuhan early outbreak 2019 suspected cases testing denominators unredacted\" AND (\"serological studies\" OR \"modeling studies\") \"community transmission Wuhan prior to December 31 2019\" NOT \"tightly clustered outbreak\"  \n\n**Rationale:**  \n- Targets the WHO dataset with specifics (unredacted, denominators, suspected cases) to address omitted transmission dynamics.  \n- Combines serological/modeling evidence to challenge claims of a non-propagating cluster by prioritizing pre-Dec 31 community spread.  \n- Excludes \"tightly clustered\" to filter out arguments inconsistent with the plaintiff\u2019s narrative.",
-      "refined": "WHO epidemiological dataset Wuhan early outbreak 2019 suspected cases testing denominators unredacted\" AND (\"serological studies\" OR \"modeling studies\") AND \"community transmission Wuhan prior to December 31 2019\" NOT (\"tightly clustered outbreak\" OR \"superspreading event\" OR \"index case cluster\")",
-      "novelty": 0.2530527512232463
+      "original": "**Search Query:**  \n\"Wuhan SARS-CoV-2 de-identified patient line list November 2019\u2013March 2020\" AND (\"basic reproduction number R0 estimates\" OR \"early epidemic growth rate\") AND (\"travel-exportation modeling\" OR \"seroprevalence under-ascertainment\" OR \"undetected infections\") December 2019\u2013January 2020 peer-reviewed  \n\n**Rationale:** Combines precise terminology for the requested patient data, R0/growth rate studies, and supplemental analyses (travel modeling/seroprevalence) with date constraints to prioritize early-pandemic evidence from peer-reviewed sources.",
+      "refined": "de-identified patient line list\" AND \"Wuhan SARS-CoV-2\" AND (\"basic reproduction number\" OR \"R0 estimate\" OR \"early epidemic growth rate\") AND (\"travel-based importation model\" OR \"seroprevalence correction\" OR \"undetected infection estimate\") AND (\"December 2019\" OR \"January 2020\") AND (\"peer-reviewed\") AND (\"2020/2021 publication year\")",
+      "novelty": 0.3221651315689087
     }
   ]
 }

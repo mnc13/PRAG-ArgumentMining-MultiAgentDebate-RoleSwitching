@@ -118,6 +118,7 @@ class DebateAgent:
         response = self.llm.generate(prompt)
         try:
             if "None" in response: return None
+            import json
             import re
             match = re.search(r'\{[^}]+\}', response)
             return json.loads(match.group()) if match else None
@@ -279,6 +280,7 @@ class CriticAgent:
         
         response = self.llm.generate(prompt)
         try:
+            import json
             import re
             match = re.search(r'\{[\s\S]*\}', response)
             return json.loads(match.group()) if match else {}

@@ -66,6 +66,7 @@ class EvidenceNegotiator:
         }
         
         # Plaintiff Counsel discloses/challenges
+        import json
         print("   > [Plaintiff Counsel] Reviewing prospective evidence pools...")
         prop_input = (f"Review these evidence discovery pools for claim: {claim.text}\n"
                       f"Context: {json.dumps(context)}\n"

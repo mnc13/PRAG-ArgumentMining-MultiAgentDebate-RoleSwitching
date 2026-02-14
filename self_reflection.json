@@ -1,74 +1,146 @@
 [
   {
     "scores": {
-      "logic": 0.45,
-      "novelty": 0.35,
-      "rebuttal": 0.25
+      "logic": 0.6,
+      "novelty": 0.4,
+      "rebuttal": 0.3
     },
     "flaws_identified": [
-      "Conflation of R0 (intrinsic, pre-intervention) with post-intervention effective reproduction number (Re) \u2014 a central analytical error.",
-      "Over-reliance on the small initial reported case count (27) as evidence of low transmission without adequately addressing likely under-ascertainment and export-derived estimates of undetected infections.",
-      "Mischaracterization of genomic distinctiveness as dispositive proof of minimal transmission intensity rather than as evidence consistent with a single lineage that can still arise from substantial early spread.",
-      "Insufficient engagement with contemporaneous modeling studies (e.g., estimates of R0 \u2248 3.5) and analyses using exported cases and retrospective serosurveys that suggest broader early transmission.",
-      "Failure to produce direct pre-intervention empirical estimates that support an intrinsic R0 near zero; the argument relies largely on post-recognition suppression and localized observations."
+      "Conflation of intrinsic basic reproduction number (R0) with the observed effective reproduction number (Re) under contemporaneous interventions and behavioral responses.",
+      "Insufficient engagement with defense evidence and models asserting large numbers of asymptomatic/undetected infections and early community transmission.",
+      "Overreliance on reported confirmed-case clusters and household transmission studies without corroborating phylogenetic, serological, or travel-exportation data.",
+      "Lack of time-resolved Rt/Re estimates for Wuhan covering the pre-intervention, early-intervention, and post-intervention windows to demonstrate that local transmission fell to near zero.",
+      "No direct evidence shown quantifying the number and epidemiological success of exportation events from Wuhan that could explain global dissemination despite local control."
     ],
-    "discovery_need": "Locate peer\u2011reviewed studies and primary datasets providing estimates of pre\u2011intervention R0 and early effective Re in Wuhan (before Jan 23, 2020), including analyses based on exported case counts, retrospective seroprevalence surveys, and time\u2011resolved genomic phylogenies with sampling dates.",
-    "refined_stance": "Revise the claim: concede that intrinsic R0 estimates for the virus in Wuhan likely exceeded 1 per contemporaneous modeling, but emphasize that the initially recognized Wuhan cluster manifested limited observed onward transmission and that aggressive public\u2011health measures rapidly reduced effective transmission to near\u2011zero; refocus advocacy on demonstrating that observed early containment (low detected cases, single identifiable lineage, and documented Re decline post\u2011intervention) establishes a narrow, suppressible early chain of transmission rather than proving the virus's intrinsic transmissibility was minimal.",
+    "discovery_need": "Produce early time-series Rt/Re estimates for Wuhan (Dec 2019\u2013Mar 2020), contemporaneous phylogenetic analyses of the earliest SARS-CoV-2 genomes, and passenger-travel/exportation case timelines to quantify the number and impact of exportation events before lockdown.",
+    "refined_stance": "Refine the claim to assert that during the narrowly defined initial Wuhan cluster and the immediate pre-lockdown period, observed effective reproduction (Re) within Wuhan was driven close to zero by rapid containment actions and the clustered nature of cases\u2014while conceding that a small number of exportation events (to be quantified via phylogenetics and travel-linked case timelines) plausibly seeded sustained epidemics elsewhere; pursue targeted evidence (Rt estimates, genomes, serology, exportation timelines) to substantiate the distinction between local Re\u22480 and the separate phenomenon of international spread.",
+    "total_score": 0.45,
+    "side": "proponent",
+    "round": 1
+  },
+  {
+    "scores": {
+      "logic": 0.7,
+      "novelty": 0.6,
+      "rebuttal": 0.5
+    },
+    "flaws_identified": [
+      "Did not directly counter the plaintiff's point on interventions rapidly driving effective R0 to zero",
+      "Overlooked rebuttal to specific case studies on initial clustering and household transmission patterns",
+      "Lacked explicit evidence linking global spread to pre-intervention R0 estimates in Wuhan"
+    ],
+    "discovery_need": "Find epidemiological studies estimating the basic reproduction number (R0) of SARS-CoV-2 in Wuhan during December 2019 to January 2020, prior to the implementation of major non-pharmaceutical interventions.",
+    "refined_stance": "The initial outbreak in Wuhan involved a higher intrinsic R0 than claimed, supported by evidence of significant under-ascertainment, community transmission beyond close contacts, and modeling indicating widespread infection before interventions, which is inconsistent with a pathogen having near-zero transmission potential.",
+    "total_score": 0.61,
+    "side": "opponent",
+    "round": 1
+  },
+  {
+    "scores": {
+      "logic": 0.65,
+      "novelty": 0.25,
+      "rebuttal": 0.45
+    },
+    "flaws_identified": [
+      "Conflation of 'effective reproduction number during the local outbreak' with the virus's intrinsic R0\u2014this distinction is asserted but not explicitly defined or supported with evidence.",
+      "Insufficient addressing of documented under-ascertainment and asymptomatic/pre-symptomatic transmission that could reconcile an apparently small detected cluster with rapid seeding elsewhere.",
+      "Lack of direct engagement with genomic/phylodynamic evidence and travel-exportation modeling that bear on early, undetected spread and multiple introductions.",
+      "Overreliance on the same cluster- and household-based sources (some repetition in filings) without introducing complementary data (seroprevalence, mobility, or exportation timelines).",
+      "Insufficiently supported premise that aggressive NPIs and case-finding alone drove the effective reproduction number 'close to zero' in the absence of quantified Rt estimates from the earliest weeks.",
+      "No explicit accounting for reporting delays and surveillance sensitivity in December 2019\u2013January 2020 that could bias observed case patterns."
+    ],
+    "discovery_need": "Locate peer-reviewed genomic phylodynamic studies and contemporaneous mobility/exportation models estimating early Wuhan Rt, number of undetected infections, and timing/number of exported cases (Dec 2019\u2013Jan 2020).",
+    "refined_stance": "Refine the claim to distinguish clearly between intrinsic R0 and the local effective reproduction number (Rt): assert that available case-cluster and intervention-timing evidence supports that Wuhan's local Rt was driven toward zero during the documented initial containment period, while acknowledging that substantial under-ascertainment, asymptomatic/pre-symptomatic transmission, and exportation events likely produced seeding and amplification elsewhere; commit to acquiring phylodynamic, seroprevalence, and mobility/exportation evidence to quantify early undetected transmission and to demonstrate that low observed local transmission metrics are compatible with rapid global dissemination via exported cases rather than high intrinsic R at origin.",
+    "total_score": 0.47,
+    "side": "proponent",
+    "round": 2
+  },
+  {
+    "scores": {
+      "logic": 0.6,
+      "novelty": 0.7,
+      "rebuttal": 0.5
+    },
+    "flaws_identified": [
+      "Incomplete rebuttal to plaintiff's evidence on household transmission patterns (Sources 33312513, 34376168).",
+      "Lack of direct engagement with plaintiff's points on intervention impact driving effective R0 to near zero (Sources 34034662, 32552794, 34222164).",
+      "Fragmented argument structure with incomplete sentences in the provided text, reducing coherence."
+    ],
+    "discovery_need": "Search for epidemiological studies estimating the basic reproduction number (R0) from early Wuhan case data that adjust for underreporting and asymptomatic transmission.",
+    "refined_stance": "The initial outbreak in Wuhan had a reproduction number significantly above zero, as demonstrated by early community transmission, substantial under-ascertainment of cases, and the virus's rapid global spread, which collectively refute the plaintiff's narrow focus on household clusters and intervention effects.",
+    "total_score": 0.6,
+    "side": "opponent",
+    "round": 2
+  },
+  {
+    "scores": {
+      "logic": 0.6,
+      "novelty": 0.3,
+      "rebuttal": 0.1
+    },
+    "flaws_identified": [
+      "Conflation of basic reproduction number (R0) with effective reproduction number (Re), failing to distinguish intrinsic transmission potential from post-intervention suppression",
+      "Selective citation of evidence that emphasizes clustering and household transmission while ignoring data on under-ascertainment and community spread highlighted by the defense",
+      "Inadequate rebuttal to the defense's key point that rapid global dissemination is biologically inconsistent with an initial R0 close to zero"
+    ],
+    "discovery_need": "Query: Peer-reviewed studies estimating the basic reproduction number (R0) from early Wuhan case sequences and transmission chains prior to non-pharmaceutical interventions.",
+    "refined_stance": "The initial Wuhan outbreak involved traceable, close-contact transmission with minimal community spread, and while early R0 may have been low or mitigated by rapid interventions, the effective reproduction rate was driven to near zero, consistent with limited initial dissemination.",
     "total_score": 0.36,
     "side": "proponent",
     "round": 1
   },
   {
     "scores": {
-      "logic": 0.8,
-      "novelty": 0.7,
-      "rebuttal": 0.75
+      "logic": 0.75,
+      "novelty": 0.35,
+      "rebuttal": 0.65
     },
     "flaws_identified": [
-      "Insufficient direct evidence to counter the plaintiff's emphasis on the initial limited cluster of 27 cases as indicative of low transmissibility.",
-      "Need to more robustly support the premise that genetic lineage data (Source 33425367) does not correlate with transmission intensity or R0 values."
+      "No direct citation or presentation of early Wuhan R0 estimates or growth-rate calculations \u2014 inference from global pandemic is circumstantial.",
+      "Insufficient genomic/phylogenetic evidence to show early unobserved spread or multiple exportation events consistent with an R0 > 0.",
+      "Under-ascertainment assertions lack quantified seroprevalence or modeling numbers tying detected cases to true infections in the Wuhan window.",
+      "Over-reliance on the existence of a global pandemic as an argument against a near-zero R0 without connecting travel patterns and timing to required transmission rates.",
+      "Insufficient rebuttal of household/cluster studies on grounds of representativeness \u2014 haven't shown they underestimate community transmission or secondary attack rates inconsistent with higher R."
     ],
-    "discovery_need": "Lookup serological or modeling studies providing direct evidence of community transmission in Wuhan prior to December 31, 2019, to refute the notion of a tightly clustered, non-propagating initial outbreak.",
-    "refined_stance": "The defense maintains that the novel coronavirus had an R0 significantly above 1 during the initial Wuhan outbreak, as established by peer-reviewed modeling studies, and that the early case count and genetic data are misleading due to substantial undetected community spread, which underscores the virus's inherent transmissibility prior to interventions.",
-    "total_score": 0.755,
+    "discovery_need": "Locate peer-reviewed estimates of SARS-CoV-2 basic reproduction number (R0) and early epidemic growth rate in Wuhan (Dec 2019\u2013Jan 2020), together with contemporaneous travel-exportation modeling and seroprevalence/under-ascertainment studies quantifying undetected infections.",
+    "refined_stance": "Persist in opposing the claim that R0 was 'close to zero' in the initial Wuhan outbreak: the observable rapid international dissemination and modeling of undetected infections make a near-zero biological reproduction number implausible. To solidify this position, I will produce direct early-R0 estimates, early-case growth-rate analyses, genomic evidence of early spread/exportations, and quantified under-ascertainment/seroprevalence data; I acknowledge aggressive NPIs later reduced the effective reproduction number in Wuhan, which is distinct from the intrinsic transmission potential at outbreak origin.",
+    "total_score": 0.6,
     "side": "opponent",
     "round": 1
   },
   {
     "scores": {
-      "logic": 0.55,
-      "novelty": 0.45,
-      "rebuttal": 0.4
+      "logic": 0.5,
+      "novelty": 0.3,
+      "rebuttal": 0.2
     },
     "flaws_identified": [
-      "Conflation of basic reproduction number (R0) with the post\u2011intervention effective reproduction number (Re); relying on a post\u2011lockdown Re (0.84) to support a claim about R0 is a categorical error.",
-      "Overstating the claim that R0 was 'close to 0' rather than limiting the claim to observed effective transmission after detection and intervention.",
-      "Insufficient treatment of detection bias: reliance on the reported 27 cases without adequate evidence ruling out substantial undetected community transmission prior to detection.",
-      "Inadequate engagement with modeling studies based on exported cases and retrospective burden estimates (which directly challenge the low\u2011transmissibility assertion).",
-      "Insufficiently precise temporal framing of 'initial outbreak'\u2014the claim needs strict definition of the time window (e.g., pre\u2011recognition vs post\u2011recognition) to avoid equivocation.",
-      "Insufficiently supported premise that a genetically narrow early lineage necessarily implies low transmissibility (phylodynamic patterns can be consistent with narrow founder effects despite high R and superspreading).",
-      "Lack of direct phylodynamic or early contact\u2011tracing estimates of transmission specific to the immediate pre\u2011recognition window to substantiate the 'near\u2011zero' transmissibility assertion."
+      "Failure to directly address the defense's key point that global pandemic spread contradicts a near-zero R0 in Wuhan",
+      "Overreliance on reported case clusters without adequately accounting for under-ascertainment and asymptomatic transmission highlighted by the defense"
     ],
-    "discovery_need": "Locate peer\u2011reviewed phylodynamic or contact\u2011tracing studies and any retrospective PCR/serology screenings that estimate reproduction numbers or prevalence in Wuhan specifically during the pre\u2011recognition window (roughly Dec 1, 2019\u2013Jan 23, 2020).",
-    "refined_stance": "Refine the position to acknowledge the distinction between R0 and Re: concede that peer\u2011reviewed estimates place the intrinsic R0 above 1 (e.g., ~3.5) but maintain that contemporaneous epidemiologic and genomic data demonstrate the initially detected Wuhan event manifested as a tightly clustered, genetically limited occurrence and that, once recognized, interventions rapidly reduced Re below 1 \u2014 evidence that the observed early chain of transmission was fragile and susceptible to suppression; seek targeted early\u2011window phylodynamic, serologic, and retrospective case\u2011finding evidence to test whether intrinsic transmissibility was actually low in the immediate pre\u2011recognition period or simply masked by detection limits.",
-    "total_score": 0.475,
+    "discovery_need": "Evidence on the proportion and transmission dynamics of undetected cases in Wuhan during December 2019 to January 2020, including modeling studies on early exportation events.",
+    "refined_stance": "The initial Wuhan outbreak had a low effective R0 due to aggressive containment and clustering, but early undetected cases and travel-related exportation explain global spread, without implying high intrinsic transmissibility locally during the controlled phase.",
+    "total_score": 0.35,
     "side": "proponent",
     "round": 2
   },
   {
     "scores": {
       "logic": 0.8,
-      "novelty": 0.5,
+      "novelty": 0.4,
       "rebuttal": 0.7
     },
     "flaws_identified": [
-      "Insufficient direct counter-evidence to refute the plaintiff's genetic lineage argument (Source 33425367) linking a narrow founder chain to low transmission potential.",
-      "Lack of address on early familial propagation reports (Source 32133831) that the plaintiff uses to support limited initial spread.",
-      "Over-reliance on modeling studies without sufficiently emphasizing authoritative definitions distinguishing R0 from effective reproduction number."
+      "Conflation of intrinsic transmissibility (R0) with observed, time-varying effective reproduction number (Rt) \u2014 arguments sometimes switch terms without explicit distinction.",
+      "Insufficient direct citation of early quantitative R0 estimates from Wuhan-era studies and peer-reviewed modelling papers to rebut the plaintiff's claim rigorously.",
+      "Lack of genomic/phylogenetic evidence showing timing and number of exportation events from Wuhan that would demonstrate high early transmissibility.",
+      "No use of mobility/transportation data (e.g., flight/passenger volumes, Lunar New Year travel) to quantify the plausibility of rapid international spread given various R0 values.",
+      "Over-reliance on the macro-fact of a later global pandemic without providing mathematical linkage (probability modeling) between a low initial R0 and observed rapid global dissemination.",
+      "Did not adequately confront the plaintiff's point that aggressive early public-health measures could depress Rt locally to near zero even if intrinsic R0 was higher \u2014 missing evidence differentiating detection bias from true suppression."
     ],
-    "discovery_need": "Search for studies examining the correlation between low genetic diversity in early outbreak lineages and basic reproduction number (R0) for SARS-CoV-2, specifically in the Wuhan context.",
-    "refined_stance": "The defense asserts that the basic reproduction number (R0) during Wuhan's initial outbreak was approximately 3.5, indicating high transmissibility, as directly evidenced by peer-reviewed modeling (Source 32664866). The plaintiff's reliance on early case clusters, genetic distinction, and post-intervention suppression conflates outbreak detection and control efficacy with intrinsic viral spread, which is refuted by evidence of significant undetected community transmission prior to interventions. Strengthening the argument with evidence on genetic diversity and transmission dynamics will clarify that a narrow founder chain does not imply a low R0.",
-    "total_score": 0.68,
+    "discovery_need": "Locate peer-reviewed estimates of SARS-CoV-2 basic reproduction number (R0) from Wuhan December 2019\u2013January 2020, plus contemporaneous genomic/phylogenetic analyses and mobility/exportation data quantifying early seeding events and under-ascertainment.",
+    "refined_stance": "Maintain that the intrinsic transmissibility of the novel coronavirus at the Wuhan origin was materially greater than 'close to zero' \u2014 as evidenced by rapid international spread and under-ascertained early cases \u2014 but refine the argument by (1) clearly distinguishing R0 from Rt, (2) seeking and citing early Wuhan R0 estimates and genomic/exportation data to demonstrate multiple seeding events, and (3) rebutting the plaintiff's claim that observed early household clustering and subsequent local suppression proves an initially negligible R0.",
+    "total_score": 0.65,
     "side": "opponent",
     "round": 2
   }

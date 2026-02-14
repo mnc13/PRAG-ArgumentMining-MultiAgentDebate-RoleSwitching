@@ -125,6 +125,7 @@ class JudicialPanel:
         }
         
         # Save results
+        import json
         with open("judge_evaluation.json", "w") as f:
             json.dump(result, f, indent=2)
         

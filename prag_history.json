@@ -1,0 +1,148 @@
+{
+  "total_retrievals": 8,
+  "rounds_with_prag": 2,
+  "history": [
+    {
+      "round": 1,
+      "query": "Retrieve the complete, original, unredacted nursing notes and time-stamped Medication Administration Records (MAR) for the admission period from [start date] to [end date], inclusive, with explicit documentation of all pain assessments and all administered PRN opioid and analgesic medications, including drug name, dose, route, time of administration, and nurse verification.",
+      "context": "Round 1 - Plaintiff Counsel",
+      "num_retrieved": 3,
+      "num_accepted": 3,
+      "num_rejected": 0,
+      "avg_novelty": 1.0,
+      "avg_relevance": 0.512060264746348,
+      "relevance_gain": 0.512060264746348,
+      "redundancy_ratio": 0.0,
+      "stop_reason": null,
+      "evidence_ids": [
+        "38803782",
+        "32996390",
+        "35600866"
+      ]
+    },
+    {
+      "round": 1,
+      "query": "(\"epidemiological data\" OR \"serological survey results\") AND (\"Wuhan\" OR \"Hubei Province\") AND (\"November 2019\" TO \"March 2020\") AND (\"undetected infections\" OR \"asymptomatic transmission\") AND (\"community transmission\" OR \"sustained human-to-human transmission\") AND (\"peer-reviewed study\" OR \"published surveillance data\")",
+      "context": "Round 1 - Defense Counsel",
+      "num_retrieved": 3,
+      "num_accepted": 3,
+      "num_rejected": 0,
+      "avg_novelty": 0.516593744357427,
+      "avg_relevance": 0.6302743951479594,
+      "relevance_gain": 0.11821413040161133,
+      "redundancy_ratio": 0.0,
+      "stop_reason": null,
+      "evidence_ids": [
+        "36178129",
+        "36343497",
+        "35677068"
+      ]
+    },
+    {
+      "round": 2,
+      "query": "Wuhan\" AND (\"SARS-CoV-2\" OR \"COVID-19\") AND (\"line-list\" OR \"individual-level case data\") AND (\"symptom onset date\" OR \"exposure history\" OR \"contact tracing data\" OR \"specimen collection date\") AND (\"R0\" OR \"Re\" OR \"effective reproductive number\") AND (\"phylogenetic analysis\" OR \"whole-genome sequencing\" OR \"genomic epidemiology\") AND (\"international exportation\" OR \"travel-related cases\" OR \"travel restrictions\") AND (\"December 2019\" OR \"January 2020\" OR \"early epidemic phase\") AND (\"peer-reviewed\")",
+      "context": "Round 2 - Plaintiff Counsel",
+      "num_retrieved": 3,
+      "num_accepted": 3,
+      "num_rejected": 0,
+      "avg_novelty": 0.3729189435640971,
+      "avg_relevance": 0.6738719542821249,
+      "relevance_gain": 0.04359755913416552,
+      "redundancy_ratio": 0.0,
+      "stop_reason": "Diminishing relevance gain (0.0436 < 0.05)",
+      "evidence_ids": [
+        "32285862",
+        "33460673",
+        "39048578"
+      ]
+    },
+    {
+      "round": 2,
+      "query": "Wuhan\" AND (\"December 2019\" OR \"January 2020\") AND (\"hospital\" OR \"clinic\") AND (\"SARS-CoV-2\" OR \"COVID-19\") AND (\"R0\" OR \"basic reproduction number\") AND (\"serial interval\" OR \"growth rate\" OR \"effective reproduction number\") AND (\"case report\" OR \"laboratory-confirmed case\" OR \"testing data\") NOT (\"intervention\" OR \"lockdown\" OR \"travel restriction\" OR \"control measure\")",
+      "context": "Round 2 - Defense Counsel",
+      "num_retrieved": 3,
+      "num_accepted": 3,
+      "num_rejected": 0,
+      "avg_novelty": 0.4184541900952657,
+      "avg_relevance": 0.5693288644154867,
+      "relevance_gain": -0.10454308986663818,
+      "redundancy_ratio": 0.0,
+      "stop_reason": "Diminishing relevance gain (-0.1045 < 0.05)",
+      "evidence_ids": [
+        "32294485",
+        "32382449",
+        "32524147"
+      ]
+    },
+    {
+      "round": 1,
+      "query": "`(\"contemporaneous medical progress notes\" AND \"causal link\" AND (\"failure to provide\" OR absence OR gap)) OR (\"genomic phylodynamics\" AND (\"mobility model\" OR \"exportation model\") AND (\"effective reproduction number\" OR \"Rt\" OR \"undetected infections\" OR \"exported cases\") AND \"Wuhan\" AND (\"December 2019\" OR \"January 2020\") AND \"peer-reviewed\")`",
+      "context": "Round 1 - Plaintiff Counsel",
+      "num_retrieved": 3,
+      "num_accepted": 3,
+      "num_rejected": 0,
+      "avg_novelty": 0.47033870220184326,
+      "avg_relevance": 0.5279434521993002,
+      "relevance_gain": -0.04138541221618652,
+      "redundancy_ratio": 0.0,
+      "stop_reason": null,
+      "evidence_ids": [
+        "35324453",
+        "33956868",
+        "35413000"
+      ]
+    },
+    {
+      "round": 1,
+      "query": "(\"Wuhan\" AND (\"COVID-19\" OR \"SARS-CoV-2\") AND \"line list\" AND (\"R0\" OR \"reproduction number\") AND \"early outbreak\" AND (\"underreporting\" OR \"asymptomatic transmission\" OR \"case ascertainment bias\") AND \"epidemiological estimation\") NOT (\"modeling only\" OR \"hypothetical\" OR \"review\")",
+      "context": "Round 1 - Defense Counsel",
+      "num_retrieved": 3,
+      "num_accepted": 2,
+      "num_rejected": 1,
+      "avg_novelty": 0.21082798639933267,
+      "avg_relevance": 0.6846916675567627,
+      "relevance_gain": 0.15674821535746253,
+      "redundancy_ratio": 0.3333333333333333,
+      "stop_reason": null,
+      "evidence_ids": [
+        "33556763",
+        "33556763"
+      ]
+    },
+    {
+      "round": 2,
+      "query": "Wuhan\" AND (\"SARS-CoV-2\" OR \"COVID-19\") AND (\"December 2019\" OR \"January 2020\") AND (\"patient-level data\" OR \"raw epidemiological data\" OR \"individual case data\") AND (\"R0\" OR \"basic reproduction number\") AND (\"pre-intervention period\" OR \"pre-NPI\" OR \"before lockdown\") AND (\"peer-reviewed\")",
+      "context": "Round 2 - Plaintiff Counsel",
+      "num_retrieved": 3,
+      "num_accepted": 2,
+      "num_rejected": 1,
+      "avg_novelty": 0.17079212268193564,
+      "avg_relevance": 0.6107319593429565,
+      "relevance_gain": -0.07395970821380615,
+      "redundancy_ratio": 0.3333333333333333,
+      "stop_reason": "Diminishing relevance gain (-0.0740 < 0.05)",
+      "evidence_ids": [
+        "33297617",
+        "34484978"
+      ]
+    },
+    {
+      "round": 2,
+      "query": "de-identified patient line list\" AND \"Wuhan SARS-CoV-2\" AND (\"basic reproduction number\" OR \"R0 estimate\" OR \"early epidemic growth rate\") AND (\"travel-based importation model\" OR \"seroprevalence correction\" OR \"undetected infection estimate\") AND (\"December 2019\" OR \"January 2020\") AND (\"peer-reviewed\") AND (\"2020/2021 publication year\")",
+      "context": "Round 2 - Defense Counsel",
+      "num_retrieved": 3,
+      "num_accepted": 3,
+      "num_rejected": 0,
+      "avg_novelty": 0.3221651315689087,
+      "avg_relevance": 0.6642338832219442,
+      "relevance_gain": 0.05350192387898767,
+      "redundancy_ratio": 0.0,
+      "stop_reason": null,
+      "evidence_ids": [
+        "33399860",
+        "35351016",
+        "39088582"
+      ]
+    }
+  ]
+}
