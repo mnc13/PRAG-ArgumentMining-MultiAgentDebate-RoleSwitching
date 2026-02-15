@@ -1,0 +1,179 @@
+{
+  "claim": "During the initial outbreak in Wuhan, the novel coronavirus spread with an R0 of 5.7.",
+  "total_rounds": 2,
+  "prag_history": {
+    "total_retrievals": 8,
+    "rounds_with_prag": 2,
+    "history": [
+      {
+        "round": 1,
+        "query": "Original uncompressed DICOM files\" AND (\"X-ray\" OR \"CT\" OR \"MRI\") AND \"specific injured anatomical region\" AND \"final signed radiology report\" AND \"radiology dictation audit trail\" AND \"study date within alleged injury period",
+        "context": "Round 1 - Plaintiff Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 3,
+        "num_rejected": 0,
+        "avg_novelty": 1.0,
+        "avg_relevance": 0.522045503060023,
+        "relevance_gain": 0.522045503060023,
+        "redundancy_ratio": 0.0,
+        "stop_reason": null,
+        "evidence_ids": [
+          "34748101",
+          "36796147",
+          "39616551"
+        ]
+      },
+      {
+        "round": 1,
+        "query": "Wuhan\" AND \"COVID-19\" AND (\"line list\" OR \"contact tracing data\") AND (\"epidemiological parameters\" OR \"transmission dynamics\") AND (\"early outbreak\" OR \"initial spread\") AND (\"R0\" OR \"basic reproduction number\") AND \"5.7\" AND (\"peer-reviewed\" OR \"published study\") AND (\"2019-12\" OR \"2020-01\")",
+        "context": "Round 1 - Defense Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 3,
+        "num_rejected": 0,
+        "avg_novelty": 0.7565690080324808,
+        "avg_relevance": 0.6707459290822347,
+        "relevance_gain": 0.14870042602221178,
+        "redundancy_ratio": 0.0,
+        "stop_reason": null,
+        "evidence_ids": [
+          "32382449",
+          "32219006",
+          "33556763"
+        ]
+      },
+      {
+        "round": 2,
+        "query": "(\"Wuhan\" OR \"Hubei\") AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"R0\" OR \"basic reproductive number\") AND (\"line list\" OR \"patient-level data\" OR \"epidemiological data\") AND (\"serial interval\" OR \"transmission dynamics\") AND (\"December 2019\" OR \"January 2020\" OR \"early outbreak\") AND (\"R0 \u2265 5.7\" OR \"R0 > 5.7\") AND (\"genomic phylodynamics\" OR \"serology\" OR \"exportation model\" OR \"ascertainment correction\") AND (\"source code\" OR \"modeling code\" OR \"parameter settings\" OR \"raw data\")",
+        "context": "Round 2 - Plaintiff Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 3,
+        "num_rejected": 0,
+        "avg_novelty": 0.48520029584566754,
+        "avg_relevance": 0.6531476775805155,
+        "relevance_gain": -0.01759825150171923,
+        "redundancy_ratio": 0.0,
+        "stop_reason": "Diminishing relevance gain (-0.0176 < 0.05)",
+        "evidence_ids": [
+          "38806176",
+          "33460673",
+          "38806176"
+        ]
+      },
+      {
+        "round": 2,
+        "query": "((\"Wuhan Municipal Health Commission\" AND (\"testing protocol*\" OR \"testing criteria\" OR \"daily testing capacity\") AND (\"December 2019\" OR \"January 2020\")) OR ((\"basic reproduction number\" OR R0) AND Wuhan AND (\"initial outbreak\" OR \"early transmission\") AND (\"testing limitation*\" OR \"ascertainment bias\" OR \"underreporting\" OR \"under-ascertainment\") AND (\"corrected estimate*\" OR \"adjusted estimate*\") AND (\"peer-reviewed\" OR \"methodological adjustment\") NOT (\"R0 = 5.7\" OR \"R\u2080 = 5.7\"))) AND (\"COVID-19\" OR \"SARS-CoV-2\" OR \"2019-nCoV\")",
+        "context": "Round 2 - Defense Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 2,
+        "num_rejected": 1,
+        "avg_novelty": 0.22020363807678223,
+        "avg_relevance": 0.6615435481071472,
+        "relevance_gain": 0.00839587052663171,
+        "redundancy_ratio": 0.3333333333333333,
+        "stop_reason": "Diminishing relevance gain (0.0084 < 0.05)",
+        "evidence_ids": [
+          "35162344",
+          "32407306"
+        ]
+      },
+      {
+        "round": 1,
+        "query": "unredacted medical records\" AND (\"five years preceding\" OR \"five years prior to onset\") AND \"pre-existing condition\" AND baseline AND (\"SARS-CoV-2\" OR \"COVID-19\") AND R0 AND Wuhan AND (adjust* OR calibrat*) AND (\"under-ascertainment\" OR \"testing intensity\" OR seroprevalence OR mobility OR \"SEIR model\") AND (\"5.7\" OR \"5.7*\" OR \"point estimate of 5.7\") AND (\"confidence interval\" OR \"95% CI\") AND published:2020-2021",
+        "context": "Round 1 - Plaintiff Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 3,
+        "num_rejected": 0,
+        "avg_novelty": 0.344108780225118,
+        "avg_relevance": 0.7170180877049764,
+        "relevance_gain": 0.05547453959782922,
+        "redundancy_ratio": 0.0,
+        "stop_reason": null,
+        "evidence_ids": [
+          "33247638",
+          "38700929",
+          "38455320"
+        ]
+      },
+      {
+        "round": 1,
+        "query": "```sql\n(\"Wuhan\" OR \"Hubei Province\") AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"outbreak\" OR \"epidemic\") AND (\"December 2019\" OR \"January 2020\" OR \"early 2020\") AND (\"R0\" OR \"basic reproduction number\") AND (\"estimate\" OR \"estimation\") AND (\"underreporting\" OR \"case ascertainment\" OR \"surveillance bias\" OR \"testing capacity\") AND (\"mathematical model\" OR \"statistical model\" OR \"epidemiological model\") AND (\"R0 < 5.0\") AND (\"peer-reviewed\")\n```",
+        "context": "Round 1 - Defense Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 3,
+        "num_rejected": 0,
+        "avg_novelty": 0.3045509258906047,
+        "avg_relevance": 0.6203229427337646,
+        "relevance_gain": -0.09669514497121179,
+        "redundancy_ratio": 0.0,
+        "stop_reason": null,
+        "evidence_ids": [
+          "34258629",
+          "35677068",
+          "33927237"
+        ]
+      },
+      {
+        "round": 2,
+        "query": "(\"Wuhan\" OR \"Hubei\") AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"R0\" OR \"reproduction number\" OR \"basic reproduction number\") AND (\"5.7\" OR \"5.70\") AND (\"underascertainment\" OR \"under-reporting\" OR \"testing limitations\" OR \"ascertainment bias\" OR \"corrected\" OR \"adjusted\") AND (\"peer-reviewed\" AND (\"study\" OR \"research article\") AND (\"epidemiological data\" OR \"case data\" OR \"raw data\")) AND (\"early outbreak\" OR \"initial outbreak\")",
+        "context": "Round 2 - Plaintiff Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 0,
+        "num_rejected": 3,
+        "avg_novelty": -1.1920928955078125e-07,
+        "avg_relevance": 0.0,
+        "relevance_gain": -0.6203229427337646,
+        "redundancy_ratio": 1.0,
+        "stop_reason": "High redundancy detected (1.00 > 0.7)",
+        "evidence_ids": []
+      },
+      {
+        "round": 2,
+        "query": "(\"Wuhan\" OR \"Wuhan, China\") AND (\"line-list\" OR \"contact tracing dataset\") AND (\"November 2019\" OR \"December 2019\" OR \"January 2020\") AND (\"patient-level\" OR \"individual-level\" OR \"anonymized\") AND (\"symptom onset\" OR \"exposure window\" OR \"contact link\" OR \"household transmission\" OR \"clinical outcome\") AND (\"R0\" OR \"reproduction number\") AND (\"5.7\" OR \"5.5\u20136.0\" OR \"Sanche et al. 2020\") AND (\"uncertainty interval\" OR \"confidence interval\" OR \"methodology\") AND (\"testing rate\" OR \"ascertainment rate\" OR \"surveillance sensitivity\")",
+        "context": "Round 2 - Defense Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 3,
+        "num_rejected": 0,
+        "avg_novelty": 0.41624053319295246,
+        "avg_relevance": 0.5593786636988322,
+        "relevance_gain": 0.5593786636988322,
+        "redundancy_ratio": 0.0,
+        "stop_reason": null,
+        "evidence_ids": [
+          "34850420",
+          "35723606",
+          "33006944"
+        ]
+      }
+    ]
+  },
+  "query_evolution": [
+    {
+      "round": 1,
+      "side": "Plaintiff Counsel",
+      "original": "Based on the context and legal request, here is a precise search query:\n\n> **\"unredacted medical records\" AND (\"five years preceding\" OR \"five years prior\") AND \"pre-existing condition\" AND baseline**\n> **AND**\n> **(\"SARS-CoV-2\" OR \"COVID-19\") AND R0 AND Wuhan AND (adjust* OR calibrat*) AND (\"under-ascertainment\" OR \"testing intensity\" OR seroprevalence OR mobility OR \"SEIR model\") AND (\"5.7\" OR \"5.7*\" OR \"point estimate\") AND (\"confidence interval\" OR CI)**\n\n**Why this query works:**\n\n1.  **Medical Records (First Line):**\n    *   `\"unredacted medical records\"`: Exact phrase for the critical requirement.\n    *   `(\"five years preceding\" OR \"five years prior\")`: Captures the required time frame.\n    *   `\"pre-existing condition\" AND baseline`: Focuses on the purpose of establishing the baseline condition.\n\n2.  **COVID R0 Research (Second Line):**\n    *   `(\"SARS-CoV-2\" OR \"COVID-19\") AND R0 AND Wuhan`: Specifies the virus, metric, and location.\n    *   `(adjust* OR calibrat*)`: Covers \"adjust for\" and \"calibrated\" models.\n    *   `(\"under-ascertainment\" OR \"testing intensity\" OR seroprevalence OR mobility OR \"SEIR model\")`: Includes all the specific adjustment factors and model types requested.\n    *   `(\"5.7\" OR \"5.7*\" OR \"point estimate\")`: Targets the specific R0 value requested (5.7, near 5.7, or explicit point estimates).\n    *   `(\"confidence interval\" OR CI)`: Ensures results report confidence intervals.\n\n**Key features of the query:**\n\n*   **Conciseness:** Fits within 1-2 sentences.\n*   **Precision:** Uses exact phrases (`\" \"`), Boolean operators (`AND`, `OR`), and wildcards (`*`) to target specific terms and concepts.\n*   **Comprehensiveness:** Combines both distinct requirements (medical records & R0 research) while addressing all critical sub-elements within each.\n*   **Relevance:** Forces results to include the unique term \"unredacted\" for records and the specific adjustments, location, and R0 value for the research.",
+      "refined": "unredacted medical records\" AND (\"five years preceding\" OR \"five years prior to onset\") AND \"pre-existing condition\" AND baseline AND (\"SARS-CoV-2\" OR \"COVID-19\") AND R0 AND Wuhan AND (adjust* OR calibrat*) AND (\"under-ascertainment\" OR \"testing intensity\" OR seroprevalence OR mobility OR \"SEIR model\") AND (\"5.7\" OR \"5.7*\" OR \"point estimate of 5.7\") AND (\"confidence interval\" OR \"95% CI\") AND published:2020-2021",
+      "novelty": 0.344108780225118
+    },
+    {
+      "round": 1,
+      "side": "Defense Counsel",
+      "original": "Here is a precise search query targeting the required evidence:\n\n```sql\n(\"Wuhan\" OR \"China\") AND (\"COVID-19 outbreak\" OR \"initial outbreak\") AND (\"Dec 2019\" OR \"Jan 2020\") AND (\"R0 estimates\" OR \"basic reproduction number\") AND (\"underreporting adjustment\" OR \"testing limitations\" OR \"case ascertainment\") AND (\"modeling study\" OR \"epidemiological model\") AND \"R0 < 5\"\n```\n\n**Key elements covered:**\n1. **Location/Time:** `(\"Wuhan\" OR \"China\") AND (\"COVID-19 outbreak\") AND (\"Dec 2019\" OR \"Jan 2020\")`\n2. **Core Parameter:** `(\"R0 estimates\" OR \"basic reproduction number\")`\n3. **Critical Adjustments:** `(\"underreporting adjustment\" OR \"testing limitations\" OR \"case ascertainment\")`\n4. **Methodology:** `(\"modeling study\" OR \"epidemiological model\")`\n5. **Required Evidentiary Threshold:** `\"R0 < 5\"` (Directly targets studies contradicting the claimed 5.7 value)\n\nThis query retrieves peer-reviewed modeling studies analyzing the early Wuhan outbreak with specific corrections for surveillance bias, explicitly reporting R0 estimates below 5.0.",
+      "refined": "```sql\n(\"Wuhan\" OR \"Hubei Province\") AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"outbreak\" OR \"epidemic\") AND (\"December 2019\" OR \"January 2020\" OR \"early 2020\") AND (\"R0\" OR \"basic reproduction number\") AND (\"estimate\" OR \"estimation\") AND (\"underreporting\" OR \"case ascertainment\" OR \"surveillance bias\" OR \"testing capacity\") AND (\"mathematical model\" OR \"statistical model\" OR \"epidemiological model\") AND (\"R0 < 5.0\") AND (\"peer-reviewed\")\n```",
+      "novelty": 0.3045509258906047
+    },
+    {
+      "round": 2,
+      "side": "Plaintiff Counsel",
+      "original": "Based on the legal request for the original Wuhan COVID-19 data and the specific peer-reviewed study calculating a corrected R0 of ~5.7, the precise search query is:\n\n> **(\"Wuhan\" OR \"Hubei\") AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"R0\" OR \"reproduction number\" OR \"basic reproduction number\") AND (\"5.7\" OR \"5.7\") AND (\"raw data\" OR \"source data\" OR \"epidemiological data\" OR \"case data\")**\n> **AND/OR**\n> **(\"Wuhan\" OR \"Hubei\") AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"R0\" OR \"reproduction number\") AND (\"5.7\" OR \"5.7\") AND (\"underascertainment\" OR \"under-reporting\" OR \"testing limitations\" OR \"ascertainment bias\" OR \"corrected\" OR \"adjusted\") AND (\"peer-reviewed\" OR \"study\" OR \"research\")**\n\n### Why this query works\n1.  **Core Elements:** Mandatory inclusion of location (`Wuhan/Hubei`), disease (`COVID-19/SARS-CoV-2`), metric (`R0/reproduction number`), and the contested value (`5.7`).\n2.  **Original Data Request:** The first line explicitly targets the underlying data using terms like `raw data`, `source data`, `epidemiological data`, `case data`.\n3.  **Specific Study Request:** The second line adds the critical methodological context (`underascertainment`, `testing limitations`, `corrected`, `adjusted`) and specifies the document type (`peer-reviewed`, `study`, `research`) needed to identify the publication calculating the corrected R0 of 5.7.\n4.  **Structure:** Using `AND/OR` allows searching for both requested items simultaneously or structuring them as separate precise searches if needed. The parentheses ensure logical grouping.",
+      "refined": "(\"Wuhan\" OR \"Hubei\") AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"R0\" OR \"reproduction number\" OR \"basic reproduction number\") AND (\"5.7\" OR \"5.70\") AND (\"underascertainment\" OR \"under-reporting\" OR \"testing limitations\" OR \"ascertainment bias\" OR \"corrected\" OR \"adjusted\") AND (\"peer-reviewed\" AND (\"study\" OR \"research article\") AND (\"epidemiological data\" OR \"case data\" OR \"raw data\")) AND (\"early outbreak\" OR \"initial outbreak\")",
+      "novelty": -1.1920928955078125e-07
+    },
+    {
+      "round": 2,
+      "side": "Defense Counsel",
+      "original": "Based on the legal request and debate context, here is the precise search query:\n\n> **\"Wuhan\" AND (\"line-list\" OR \"contact tracing dataset\") AND (\"Nov 2019\" OR \"December 2019\" OR \"Jan 2020\") AND (\"patient-level\" OR \"anonymized\") AND (\"symptom onset\" OR \"exposure window\" OR \"contact link\" OR \"household contact\" OR \"outcome\")**  \n> **PLUS**  \n> **(\"R0\" OR \"reproduction number\") AND (\"5.7\" OR \"5-6\" OR \"Sanche et al. 2020\") AND (\"uncertainty estimates\" OR \"methods\") AND (\"testing trajectory\" OR \"ascertainment rate\") AND (\"December 2019\" OR \"January 2020\")**\n\n### Why this query works:\n1. **Datasets Focus:** Targets core evidence (`line-list`, `contact tracing dataset`) with required attributes (`patient-level`, `anonymized`, `symptom onset`, `exposure window`, etc.) for Wuhan during the critical period.  \n2. **High-R0 Studies:** Specifically retrieves studies like *Sanche et al. 2020* reporting R0\u22485\u20136, demanding methodological details (`methods`, `uncertainty estimates`).  \n3. **Testing Context:** Captures `testing trajectory`/`ascertainment rate` data essential for validating R0 estimates in Dec 2019/Jan 2020.  \n4. **Debate Alignment:** Directly addresses the evidentiary gap highlighted by the Expert Witness regarding unsupported R0=5.7 claims.  \n\nThis query isolates *empirical outbreak data* and *methodological analyses* critical for independently verifying transmission dynamics, as requested in the proceedings.",
+      "refined": "(\"Wuhan\" OR \"Wuhan, China\") AND (\"line-list\" OR \"contact tracing dataset\") AND (\"November 2019\" OR \"December 2019\" OR \"January 2020\") AND (\"patient-level\" OR \"individual-level\" OR \"anonymized\") AND (\"symptom onset\" OR \"exposure window\" OR \"contact link\" OR \"household transmission\" OR \"clinical outcome\") AND (\"R0\" OR \"reproduction number\") AND (\"5.7\" OR \"5.5\u20136.0\" OR \"Sanche et al. 2020\") AND (\"uncertainty interval\" OR \"confidence interval\" OR \"methodology\") AND (\"testing rate\" OR \"ascertainment rate\" OR \"surveillance sensitivity\")",
+      "novelty": 0.41624053319295246
+    }
+  ]
+}

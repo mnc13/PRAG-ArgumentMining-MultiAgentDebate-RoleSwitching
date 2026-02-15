@@ -1,0 +1,212 @@
+{
+  "shared_pool": [
+    {
+      "source_id": "34793199",
+      "text": "[Science (New York, N.Y.) 2021] Dissecting the early COVID-19 cases in Wuhan.\n\nElucidating the origin of the pandemic requires understanding of the Wuhan outbreak.",
+      "relevance_score": 0.9
+    },
+    {
+      "source_id": "33926395",
+      "text": "[BMC public health 2021] Does lock-down of Wuhan effectively restrict early geographic spread of novel coronavirus epidemic during chunyun in China? A spatial model study.\n\nRESULTS: Compared with the baseline, scenario 1 resulted in 3.84% less cases by February 9 while scenario 2 and 3 resulted in 2",
+      "relevance_score": 0.1
+    },
+    {
+      "source_id": "32138266",
+      "text": "[International journal of environmental research and public health 2020] Potential Factors Influencing Repeated SARS Outbreaks in China.\n\ne succeeding in making some initial human infections, spreading of the disease was made convenient with increased social gathering and holiday travel. These natur",
+      "relevance_score": 0.2
+    },
+    {
+      "source_id": "33325821",
+      "text": "[Vector borne and zoonotic diseases (Larchmont, N.Y.) 2021] The Perspective of Coronavirus Disease Outbreak: Epidemiology, Transmission, and Possible Treatment.\n\ngeneral. The focus of the study is based on the transmission, epidemiology, genetic makeup, and possible remedies to control and contain t",
+      "relevance_score": 0.5
+    },
+    {
+      "source_id": "32020915",
+      "text": "[The international journal of occupational and environmental medicine 2020] The Novel Coronavirus: A Bird's Eye View.\n\nThe novel coronavirus (2019-nCoV) outbreak, which initially began in China, has spread to many countries around the globe, with the number of confirmed cases increasing every day. W",
+      "relevance_score": 0.1
+    },
+    {
+      "source_id": "37425245",
+      "text": "[HCA healthcare journal of medicine 2020] The Coronaviruses: Past, Present, Future.\n\nDescription The current coronavirus pandemic is unparalleled in recent memory and fundamentally unique. It has been more than a century since humanity fought the Spanish flu pandemic. That widespread disease devasta",
+      "relevance_score": 0.1
+    },
+    {
+      "source_id": "32965016",
+      "text": "[European review for medical and pharmacological sciences 2020] Advances in SARS-CoV-2: a systematic review.\n\nCONCLUSIONS: SARS-CoV-2 is a novel coronavirus that has caused a global pandemic. We should pay more attention to prevent SARS-CoV-2 and try to control it sooner.",
+      "relevance_score": 0.2
+    },
+    {
+      "source_id": "35132591",
+      "text": "[Advances in experimental medicine and biology 2021] Origin and Structural Biology of Novel Coronavirus (SARS-CoV-2).\n\nINTRODUCTION: A recent rapid outbreak of infection around the globe has been caused by a novel coronavirus, now known as severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2)",
+      "relevance_score": 0.1
+    },
+    {
+      "source_id": "33646361",
+      "text": "[Der Pathologe 2021] [Biology and pathology of coronaviruses].\n\nThe worldwide novel coronavirus SARS-CoV\u20112 pandemic is ongoing. SARS-CoV\u20112 belongs to the coronavirus family, the first representatives of which have been known since the 1960s. Coronaviruses are present in animals and humans and show s",
+      "relevance_score": 0.1
+    },
+    {
+      "source_id": "34035567",
+      "text": "[Indian journal of community medicine : official publication of Indian Association of Preventive & Social Medicine 2021] Demystifying R Naught: Understanding What Does it Hide?\n\nit is a rate over time. It can measure the disease severity and also gives an estimate about the herd immunity required fo",
+      "relevance_score": 0.7
+    },
+    {
+      "source_id": "33384521",
+      "text": "[Indian journal of critical care medicine : peer-reviewed, official publication of Indian Society of Critical Care Medicine 2020] R0 and Re of COVID-19: Can We Predict When the Pandemic Outbreak will be Contained?\n\nUNLABELLED: R0 (R naught) is the basic reproduction number, also known as basic repro",
+      "relevance_score": 0.1
+    },
+    {
+      "source_id": "33143594",
+      "text": "[Journal of the Royal Society, Interface 2020] Beyond R0: heterogeneity in secondary infections and probabilistic epidemic forecasting.\n\ndata on the heterogeneity in secondary infections for emerging infectious diseases like COVID-19 the uncertainty in outbreak size ranges dramatically. Taken togeth",
+      "relevance_score": 0.5
+    },
+    {
+      "source_id": "32574315",
+      "text": "[Frontiers in public health 2020] COVID-19 UK Lockdown Forecasts and R 0.\n\nDISCUSSION: The R0 estimate is compatible with some international estimates but over twice the value quoted by the UK government. An earlier lockdown could have saved many thousands of lives.",
+      "relevance_score": 0.3
+    },
+    {
+      "source_id": "36241688",
+      "text": "[Scientific reports 2022] Estimation of R0 for the spread of SARS-CoV-2 in Germany from excess mortality.\n\nd of SARS-CoV-2 based on RT-PCR incidence data was 2.56 (95% CI 2.52-2.60) for Covid-19 cases and 2.03 (95% CI 1.96-2.10) for Covid-19-related deaths. However, because the number of RT-PCR test",
+      "relevance_score": 0.7
+    },
+    {
+      "source_id": "32431085",
+      "text": "[Reviews in medical virology 2020] The basic reproduction number of SARS-CoV-2 in Wuhan is about to die out, how about the rest of the World?\n\nThe virologically confirmed cases of a new coronavirus disease (COVID-19) in the world are rapidly increasing, leading epidemiologists and mathematicians to ",
+      "relevance_score": 0.2
+    },
+    {
+      "source_id": "33253212",
+      "text": "[PloS one 2020] Study on SARS-CoV-2 transmission and the effects of control measures in China.\n\nRESULTS: Basic reproduction number, R0, was 3.6 before the city was lockdown on Jan 23, 2020. The actual infected number the model predicted was 4508 in Wuhan before Jan 23, 2020. By January 22 2020, it w",
+      "relevance_score": 0.9
+    },
+    {
+      "source_id": "33859951",
+      "text": "[Frontiers in cellular and infection microbiology 2021] Wuhan to World: The COVID-19 Pandemic.\n\nCOVID-19 is a Severe Acute Respiratory Syndrome (SARS), caused by SARS-CoV-2, a novel virus which belongs to the family Coronaviridae. It was first reported in December 2019 in the Wuhan city of China and",
+      "relevance_score": 0.5
+    }
+  ],
+  "proponent_pool": [
+    {
+      "source_id": "33460673",
+      "text": "[Mathematical biosciences 2021] Interpreting SARS-CoV-2 seroprevalence, deaths, and fatality rate - Making a case for standardized reporting to improve communication.\n\nThe SARS-CoV-2 virus has spread across the world, testing each nation's ability to understand the state of the pandemic in their cou",
+      "relevance_score": 0.2
+    },
+    {
+      "source_id": "33672367",
+      "text": "[Healthcare (Basel, Switzerland) 2021] The Most Widely Disseminated COVID-19-Related Scientific Publications in Online Media: A Bibliometric Analysis of the Top 100 Articles with the Highest Altmetric Attention Scores.\n\nThe novel coronavirus disease 2019 (COVID-19) is a global pandemic. This study's",
+      "relevance_score": 0.2
+    },
+    {
+      "source_id": "39093736",
+      "text": "[Medicine 2024] Global research on emerging trends of obstetrics during the COVID-19 pandemic: A bibliometric analysis.\n\nCoronavirus disease-2019 (COVID-19) has caused continuous effects on the global public, especially for susceptible and vulnerable populations like pregnant women. COVID-19-related",
+      "relevance_score": 0.1
+    }
+  ],
+  "opponent_pool": [
+    {
+      "source_id": "33952194",
+      "text": "[BMC infectious diseases 2021] Estimating effects of intervention measures on COVID-19 outbreak in Wuhan taking account of improving diagnostic capabilities using a modelling approach.\n\nRESULTS: Our model captured the local Wuhan epidemic pattern as two-peak transmission dynamics, with one peak on F",
+      "relevance_score": 0.9
+    },
+    {
+      "source_id": "32219006",
+      "text": "[Quantitative biology (Beijing, China) 2020] Modeling the epidemic dynamics and control of COVID-19 outbreak in China.\n\nRESULTS: The SUQC model is applied to the daily released data of the confirmed infections to analyze the outbreak of COVID-19 in Wuhan, Hubei (excluding Wuhan), China (excluding Hu",
+      "relevance_score": 0.6
+    },
+    {
+      "source_id": "33556763",
+      "text": "[Epidemics 2021] COVID-19 outbreak in Wuhan demonstrates the limitations of publicly available case numbers for epidemiological modeling.\n\noften unrealistic and the confidence/credibility intervals did not cover plausible values of critical parameters obtained using different approaches. These findi",
+      "relevance_score": 0.85
+    }
+  ],
+  "judge_state": {
+    "admissible_evidence": [
+      {
+        "id": "34793199",
+        "weight": 0.9,
+        "stance": 1,
+        "stance_confidence": 0.95,
+        "reason": "The cited Science study directly estimated the early Wuhan outbreak R0 at 5.7, explicitly supporting the claim with primary epidemiological analysis.",
+        "text": "[Science (New York, N.Y.) 2021] Dissecting the early COVID-19 cases in Wuhan.\n\nElucidating the origin of the pandemic requires understanding of the Wu"
+      },
+      {
+        "id": "33253212",
+        "weight": 0.9,
+        "stance": -1,
+        "stance_confidence": 0.95,
+        "reason": "The evidence directly reports an R0 of 3.6 for Wuhan before lockdown (Dec 08, 2019 - Jan 22, 2020), explicitly contradicting the claim of R0=5.7. This R0 estimate is the core finding from a peer-reviewed study modeling the initial outbreak period referenced in the claim.",
+        "text": "[PloS one 2020] Study on SARS-CoV-2 transmission and the effects of control measures in China.\n\nRESULTS: Basic reproduction number, R0, was 3.6 before"
+      },
+      {
+        "id": "33952194",
+        "weight": 0.9,
+        "stance": -1,
+        "stance_confidence": 0.95,
+        "reason": "The evidence directly estimates the initial effective reproduction number (Re) at 3.23 (95% CI 2.22-4.20) prior to interventions, which is substantially lower than the claimed R0 of 5.7. This quantifiable estimate from peer-reviewed modeling research contradicts the higher value.",
+        "text": "[BMC infectious diseases 2021] Estimating effects of intervention measures on COVID-19 outbreak in Wuhan taking account of improving diagnostic capabi"
+      },
+      {
+        "id": "33556763",
+        "weight": 0.85,
+        "stance": -1,
+        "stance_confidence": 0.8,
+        "reason": "Evidence critiques the reliability of epidemiological models using public case data from Wuhan, explicitly stating they produce unrealistic parameter estimates and fail to cover plausible values. This directly undermines confidence in any specific R0 value (like 5.7) derived from such models.",
+        "text": "[Epidemics 2021] COVID-19 outbreak in Wuhan demonstrates the limitations of publicly available case numbers for epidemiological modeling.\n\noften unrea"
+      },
+      {
+        "id": "34035567",
+        "weight": 0.7,
+        "stance": -1,
+        "stance_confidence": 0.9,
+        "reason": "The evidence highlights the model-dependency and potential obsolescence of R0 values, directly challenging the certainty of a specific figure like 5.7. It emphasizes that R0 is highly sensitive to modeling assumptions and that reported values can quickly become outdated, undermining the reliability of the claim's fixed R0 number.",
+        "text": "[Indian journal of community medicine : official publication of Indian Association of Preventive & Social Medicine 2021] Demystifying R Naught: Unders"
+      },
+      {
+        "id": "36241688",
+        "weight": 0.7,
+        "stance": -1,
+        "stance_confidence": 0.8,
+        "reason": "Evidence reports significantly lower R0 estimates (1.34-1.86) from German data after rigorous adjustments, directly contradicting the claim of R0=5.7 in Wuhan. While contextual differences exist, the magnitude of discrepancy challenges the claim's validity.",
+        "text": "[Scientific reports 2022] Estimation of R0 for the spread of SARS-CoV-2 in Germany from excess mortality.\n\nd of SARS-CoV-2 based on RT-PCR incidence d"
+      }
+    ],
+    "disputed_items": [
+      {
+        "id": "33325821",
+        "weight": 0.5,
+        "text": "[Vector borne and zoonotic diseases (Larchmont, N.Y.) 2021] The Perspective of Coronavirus Disease Outbreak: Epidemiology, Transmission, and Possible "
+      },
+      {
+        "id": "33143594",
+        "weight": 0.5,
+        "text": "[Journal of the Royal Society, Interface 2020] Beyond R0: heterogeneity in secondary infections and probabilistic epidemic forecasting.\n\ndata on the h"
+      },
+      {
+        "id": "32574315",
+        "weight": 0.3,
+        "text": "[Frontiers in public health 2020] COVID-19 UK Lockdown Forecasts and R 0.\n\nDISCUSSION: The R0 estimate is compatible with some international estimates"
+      },
+      {
+        "id": "33859951",
+        "weight": 0.5,
+        "text": "[Frontiers in cellular and infection microbiology 2021] Wuhan to World: The COVID-19 Pandemic.\n\nCOVID-19 is a Severe Acute Respiratory Syndrome (SARS)"
+      },
+      {
+        "id": "32219006",
+        "weight": 0.6,
+        "text": "[Quantitative biology (Beijing, China) 2020] Modeling the epidemic dynamics and control of COVID-19 outbreak in China.\n\nRESULTS: The SUQC model is app"
+      }
+    ],
+    "claim_metrics": {
+      "claim_score": -3.1500000000000004,
+      "probability": 0.041091278200464994,
+      "confidence": 0.91781744359907,
+      "total_support_weight": 0.9,
+      "total_refute_weight": 4.05,
+      "neutral_weight": 0.0,
+      "evidence_count": 6
+    },
+    "verdict": "REFUTE"
+  }
+}

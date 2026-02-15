@@ -218,12 +218,22 @@ def main():
             verdicts_path = os.path.join(outcome_dir, "all_verdicts.jsonl")
             
             # Prepare record with specific fields requested by user
+            claim_metrics = neg_result['judge_state'].get('claim_metrics', {})
+            
             record = {
                 "claim_id": input_claim.id,
                 "verdict": final_result['verdict'],
                 "confidence": final_result['confidence'],
                 "ground_truth": final_result['ground_truth_label'],
-                "correct": final_result['correct']
+                "correct": final_result['correct'],
+                # Negotiation Metrics
+                "claim_score": claim_metrics.get('claim_score'),
+                "probability": claim_metrics.get('probability'),
+                "negotiation_confidence": claim_metrics.get('confidence'),
+                "evidence_count": claim_metrics.get('evidence_count'),
+                "total_support_weight": claim_metrics.get('total_support_weight'),
+                "total_refute_weight": claim_metrics.get('total_refute_weight'),
+                "neutral_weight": claim_metrics.get('neutral_weight')
             }
             
             with open(verdicts_path, "a", encoding="utf-8") as f:
