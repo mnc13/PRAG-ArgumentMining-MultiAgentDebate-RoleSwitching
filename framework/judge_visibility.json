@@ -1,5 +1,5 @@
 {
-  "claim": "During the initial outbreak in Wuhan, the novel coronavirus spread with an R0 of 5.7.",
+  "claim": "In the most severe COVID-19 cases, women often had a higher level of antibodies than men.",
   "total_rounds": 2,
   "prag_history": {
     "total_retrievals": 8,
@@ -7,141 +7,141 @@
     "history": [
       {
         "round": 1,
-        "query": "Original uncompressed DICOM files\" AND (\"X-ray\" OR \"CT\" OR \"MRI\") AND \"specific injured anatomical region\" AND \"final signed radiology report\" AND \"radiology dictation audit trail\" AND \"study date within alleged injury period",
+        "query": "> Retrieve complete original DICOM files for all clinically indicated MRI, CT, and X-ray imaging studies performed from the date of injury through six months post-injury, inclusive, accompanied by finalized, signed radiology reports, examination-specific technician acquisition logs, and any subsequent addenda or amendments directly related to the initial interpretation; exclude preliminary, draft, or duplicate studies and non-diagnostic image series.",
         "context": "Round 1 - Plaintiff Counsel",
         "num_retrieved": 3,
         "num_accepted": 3,
         "num_rejected": 0,
         "avg_novelty": 1.0,
-        "avg_relevance": 0.522045503060023,
-        "relevance_gain": 0.522045503060023,
+        "avg_relevance": 0.5238716999689738,
+        "relevance_gain": 0.5238716999689738,
         "redundancy_ratio": 0.0,
         "stop_reason": null,
         "evidence_ids": [
-          "34748101",
-          "36796147",
-          "39616551"
+          "37969632",
+          "36895661",
+          "34748101"
         ]
       },
       {
         "round": 1,
-        "query": "Wuhan\" AND \"COVID-19\" AND (\"line list\" OR \"contact tracing data\") AND (\"epidemiological parameters\" OR \"transmission dynamics\") AND (\"early outbreak\" OR \"initial spread\") AND (\"R0\" OR \"basic reproduction number\") AND \"5.7\" AND (\"peer-reviewed\" OR \"published study\") AND (\"2019-12\" OR \"2020-01\")",
+        "query": "Plaintiff medical records AND (serology OR antibody titer measurements) AND COVID-19 AND (clinical progression OR disease severity OR inflammatory markers OR ICU admission OR respiratory failure)",
         "context": "Round 1 - Defense Counsel",
         "num_retrieved": 3,
         "num_accepted": 3,
         "num_rejected": 0,
-        "avg_novelty": 0.7565690080324808,
-        "avg_relevance": 0.6707459290822347,
-        "relevance_gain": 0.14870042602221178,
+        "avg_novelty": 0.5984046856562296,
+        "avg_relevance": 0.6252527038256327,
+        "relevance_gain": 0.10138100385665894,
         "redundancy_ratio": 0.0,
         "stop_reason": null,
         "evidence_ids": [
-          "32382449",
-          "32219006",
-          "33556763"
+          "38487373",
+          "38700929",
+          "37101164"
         ]
       },
       {
         "round": 2,
-        "query": "(\"Wuhan\" OR \"Hubei\") AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"R0\" OR \"basic reproductive number\") AND (\"line list\" OR \"patient-level data\" OR \"epidemiological data\") AND (\"serial interval\" OR \"transmission dynamics\") AND (\"December 2019\" OR \"January 2020\" OR \"early outbreak\") AND (\"R0 \u2265 5.7\" OR \"R0 > 5.7\") AND (\"genomic phylodynamics\" OR \"serology\" OR \"exportation model\" OR \"ascertainment correction\") AND (\"source code\" OR \"modeling code\" OR \"parameter settings\" OR \"raw data\")",
+        "query": "(\"sex differences\" OR \"gender differences\") AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (hospitalized OR ICU OR \"severe disease\") AND (\"neutralizing antibodies\" OR \"binding antibodies\" OR \"IgG avidity\") AND (longitudinal OR \"antibody kinetics\" OR \"peak titer\") AND (adjusted OR controlled OR stratified) AND (age OR comorbidity OR \"comorbid conditions\") AND (\"multivariate analysis\" OR \"confounder adjustment\")",
         "context": "Round 2 - Plaintiff Counsel",
         "num_retrieved": 3,
         "num_accepted": 3,
         "num_rejected": 0,
-        "avg_novelty": 0.48520029584566754,
-        "avg_relevance": 0.6531476775805155,
-        "relevance_gain": -0.01759825150171923,
+        "avg_novelty": 0.40715909004211426,
+        "avg_relevance": 0.6530096729596456,
+        "relevance_gain": 0.027756969134012932,
         "redundancy_ratio": 0.0,
-        "stop_reason": "Diminishing relevance gain (-0.0176 < 0.05)",
+        "stop_reason": "Diminishing relevance gain (0.0278 < 0.05)",
         "evidence_ids": [
-          "38806176",
-          "33460673",
-          "38806176"
+          "38283615",
+          "36456004",
+          "34268521"
         ]
       },
       {
         "round": 2,
-        "query": "((\"Wuhan Municipal Health Commission\" AND (\"testing protocol*\" OR \"testing criteria\" OR \"daily testing capacity\") AND (\"December 2019\" OR \"January 2020\")) OR ((\"basic reproduction number\" OR R0) AND Wuhan AND (\"initial outbreak\" OR \"early transmission\") AND (\"testing limitation*\" OR \"ascertainment bias\" OR \"underreporting\" OR \"under-ascertainment\") AND (\"corrected estimate*\" OR \"adjusted estimate*\") AND (\"peer-reviewed\" OR \"methodological adjustment\") NOT (\"R0 = 5.7\" OR \"R\u2080 = 5.7\"))) AND (\"COVID-19\" OR \"SARS-CoV-2\" OR \"2019-nCoV\")",
+        "query": "Greek longitudinal study\" AND (\"SARS-CoV-2 antibody titers\" OR \"peak antibody levels\" OR \"antibody stability\") AND (\"sex differences\" OR \"gender differences\") AND \"hospitalized patients\" AND (\"serial antibody measurements\" OR \"longitudinal antibody response\") AND (\"clinical severity adjustment\" OR \"symptom severity control\" OR \"age-adjusted\" OR \"comorbidity-adjusted\") AND \"patient-level data\" AND \"peer-reviewed",
+        "context": "Round 2 - Defense Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 3,
+        "num_rejected": 0,
+        "avg_novelty": 0.2769244909286499,
+        "avg_relevance": 0.6743966937065125,
+        "relevance_gain": 0.021387020746866825,
+        "redundancy_ratio": 0.0,
+        "stop_reason": "Diminishing relevance gain (0.0214 < 0.05)",
+        "evidence_ids": [
+          "35851013",
+          "34167321",
+          "35458488"
+        ]
+      },
+      {
+        "round": 1,
+        "query": "1. `\"pre-incident medical records\" OR \"medical history\" AND (\"diagnostic imaging\" OR \"treatment notes\") AND (\"causation\" AND \"pre-existing conditions\")`  \n2. `(\"severe COVID-19\" OR \"hospitalized COVID-19\") AND (\"sex\" OR \"gender\") AND (\"neutralizing antibody titers\" OR \"binding antibody titers\" OR \"IgG avidity\" OR \"antibody durability\") NOT (\"vaccinated\" OR \"vaccination\")`  \n3. `PMID:35458488 AND (\"neutralizing titers\" OR \"antibody response\") AND (\"sex differences\" OR \"gender stratification\" OR \"disease severity\")`",
+        "context": "Round 1 - Plaintiff Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 2,
+        "num_rejected": 1,
+        "avg_novelty": 0.21809113025665283,
+        "avg_relevance": 0.6475850343704224,
+        "relevance_gain": -0.026811659336090088,
+        "redundancy_ratio": 0.3333333333333333,
+        "stop_reason": null,
+        "evidence_ids": [
+          "34739458",
+          "32278764"
+        ]
+      },
+      {
+        "round": 1,
+        "query": "(\"hospitalized due to COVID-19\" OR \"severe COVID-19\") AND (\"neutralizing antibody titers\" OR \"anti-SARS-CoV-2 IgG levels\") AND (\"sex differences\" OR \"gender differences\") AND (\"antibody avidity\" OR \"antibody persistence\" OR \"antibody durability\") AND (\"longitudinal study\" OR \"prospective cohort\")",
+        "context": "Round 1 - Defense Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 2,
+        "num_rejected": 1,
+        "avg_novelty": 0.17087707916895548,
+        "avg_relevance": 0.7064348459243774,
+        "relevance_gain": 0.05884981155395508,
+        "redundancy_ratio": 0.3333333333333333,
+        "stop_reason": null,
+        "evidence_ids": [
+          "38926676",
+          "35378574"
+        ]
+      },
+      {
+        "round": 2,
+        "query": "(\"SARS-CoV-2\" OR \"COVID-19\") AND (\"hospitalized\" OR \"ICU\" OR \"critically ill\") AND (\"neutralizing antibody titers\" OR \"antibody avidity\" OR \"antibody persistence\") AND (\"sex differences\" OR \"gender differences\") AND (\"multivariate analysis\" OR \"adjusted for age\" OR \"adjusted for comorbidities\") AND (\"individual participant data\" OR \"patient-level data\") AND (\"severe disease\" OR \"critical disease\") NOT (\"mild\" OR \"asymptomatic\" OR \"outpatient\")",
+        "context": "Round 2 - Plaintiff Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 1,
+        "num_rejected": 2,
+        "avg_novelty": 0.10183850924173991,
+        "avg_relevance": 0.6917485594749451,
+        "relevance_gain": -0.014686286449432373,
+        "redundancy_ratio": 0.6666666666666666,
+        "stop_reason": "Diminishing relevance gain (-0.0147 < 0.05)",
+        "evidence_ids": [
+          "34363885"
+        ]
+      },
+      {
+        "round": 2,
+        "query": "(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"severe\" OR \"hospitalized\" OR \"critical\") AND (\"IgG\" OR \"neutralizing antibody*\" OR \"NAb\") AND (\"sex difference*\" OR \"gender difference*\" OR \"male\" OR \"female\" OR \"men\" OR \"women\") AND (\"adjusted\" OR \"multivariable\" OR \"covariate\" OR \"odds ratio\" OR \"relative risk\" OR \"effect size\") AND (\"cohort\" OR \"prospective\" OR \"longitudinal\")",
         "context": "Round 2 - Defense Counsel",
         "num_retrieved": 3,
         "num_accepted": 2,
         "num_rejected": 1,
-        "avg_novelty": 0.22020363807678223,
-        "avg_relevance": 0.6615435481071472,
-        "relevance_gain": 0.00839587052663171,
+        "avg_novelty": 0.17497469981511435,
+        "avg_relevance": 0.6606144905090332,
+        "relevance_gain": -0.031134068965911865,
         "redundancy_ratio": 0.3333333333333333,
-        "stop_reason": "Diminishing relevance gain (0.0084 < 0.05)",
+        "stop_reason": "Diminishing relevance gain (-0.0311 < 0.05)",
         "evidence_ids": [
-          "35162344",
-          "32407306"
-        ]
-      },
-      {
-        "round": 1,
-        "query": "unredacted medical records\" AND (\"five years preceding\" OR \"five years prior to onset\") AND \"pre-existing condition\" AND baseline AND (\"SARS-CoV-2\" OR \"COVID-19\") AND R0 AND Wuhan AND (adjust* OR calibrat*) AND (\"under-ascertainment\" OR \"testing intensity\" OR seroprevalence OR mobility OR \"SEIR model\") AND (\"5.7\" OR \"5.7*\" OR \"point estimate of 5.7\") AND (\"confidence interval\" OR \"95% CI\") AND published:2020-2021",
-        "context": "Round 1 - Plaintiff Counsel",
-        "num_retrieved": 3,
-        "num_accepted": 3,
-        "num_rejected": 0,
-        "avg_novelty": 0.344108780225118,
-        "avg_relevance": 0.7170180877049764,
-        "relevance_gain": 0.05547453959782922,
-        "redundancy_ratio": 0.0,
-        "stop_reason": null,
-        "evidence_ids": [
-          "33247638",
-          "38700929",
-          "38455320"
-        ]
-      },
-      {
-        "round": 1,
-        "query": "```sql\n(\"Wuhan\" OR \"Hubei Province\") AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"outbreak\" OR \"epidemic\") AND (\"December 2019\" OR \"January 2020\" OR \"early 2020\") AND (\"R0\" OR \"basic reproduction number\") AND (\"estimate\" OR \"estimation\") AND (\"underreporting\" OR \"case ascertainment\" OR \"surveillance bias\" OR \"testing capacity\") AND (\"mathematical model\" OR \"statistical model\" OR \"epidemiological model\") AND (\"R0 < 5.0\") AND (\"peer-reviewed\")\n```",
-        "context": "Round 1 - Defense Counsel",
-        "num_retrieved": 3,
-        "num_accepted": 3,
-        "num_rejected": 0,
-        "avg_novelty": 0.3045509258906047,
-        "avg_relevance": 0.6203229427337646,
-        "relevance_gain": -0.09669514497121179,
-        "redundancy_ratio": 0.0,
-        "stop_reason": null,
-        "evidence_ids": [
-          "34258629",
-          "35677068",
-          "33927237"
-        ]
-      },
-      {
-        "round": 2,
-        "query": "(\"Wuhan\" OR \"Hubei\") AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"R0\" OR \"reproduction number\" OR \"basic reproduction number\") AND (\"5.7\" OR \"5.70\") AND (\"underascertainment\" OR \"under-reporting\" OR \"testing limitations\" OR \"ascertainment bias\" OR \"corrected\" OR \"adjusted\") AND (\"peer-reviewed\" AND (\"study\" OR \"research article\") AND (\"epidemiological data\" OR \"case data\" OR \"raw data\")) AND (\"early outbreak\" OR \"initial outbreak\")",
-        "context": "Round 2 - Plaintiff Counsel",
-        "num_retrieved": 3,
-        "num_accepted": 0,
-        "num_rejected": 3,
-        "avg_novelty": -1.1920928955078125e-07,
-        "avg_relevance": 0.0,
-        "relevance_gain": -0.6203229427337646,
-        "redundancy_ratio": 1.0,
-        "stop_reason": "High redundancy detected (1.00 > 0.7)",
-        "evidence_ids": []
-      },
-      {
-        "round": 2,
-        "query": "(\"Wuhan\" OR \"Wuhan, China\") AND (\"line-list\" OR \"contact tracing dataset\") AND (\"November 2019\" OR \"December 2019\" OR \"January 2020\") AND (\"patient-level\" OR \"individual-level\" OR \"anonymized\") AND (\"symptom onset\" OR \"exposure window\" OR \"contact link\" OR \"household transmission\" OR \"clinical outcome\") AND (\"R0\" OR \"reproduction number\") AND (\"5.7\" OR \"5.5\u20136.0\" OR \"Sanche et al. 2020\") AND (\"uncertainty interval\" OR \"confidence interval\" OR \"methodology\") AND (\"testing rate\" OR \"ascertainment rate\" OR \"surveillance sensitivity\")",
-        "context": "Round 2 - Defense Counsel",
-        "num_retrieved": 3,
-        "num_accepted": 3,
-        "num_rejected": 0,
-        "avg_novelty": 0.41624053319295246,
-        "avg_relevance": 0.5593786636988322,
-        "relevance_gain": 0.5593786636988322,
-        "redundancy_ratio": 0.0,
-        "stop_reason": null,
-        "evidence_ids": [
-          "34850420",
-          "35723606",
-          "33006944"
+          "33851190",
+          "34584899"
         ]
       }
     ]
@@ -150,30 +150,30 @@
     {
       "round": 1,
       "side": "Plaintiff Counsel",
-      "original": "Based on the context and legal request, here is a precise search query:\n\n> **\"unredacted medical records\" AND (\"five years preceding\" OR \"five years prior\") AND \"pre-existing condition\" AND baseline**\n> **AND**\n> **(\"SARS-CoV-2\" OR \"COVID-19\") AND R0 AND Wuhan AND (adjust* OR calibrat*) AND (\"under-ascertainment\" OR \"testing intensity\" OR seroprevalence OR mobility OR \"SEIR model\") AND (\"5.7\" OR \"5.7*\" OR \"point estimate\") AND (\"confidence interval\" OR CI)**\n\n**Why this query works:**\n\n1.  **Medical Records (First Line):**\n    *   `\"unredacted medical records\"`: Exact phrase for the critical requirement.\n    *   `(\"five years preceding\" OR \"five years prior\")`: Captures the required time frame.\n    *   `\"pre-existing condition\" AND baseline`: Focuses on the purpose of establishing the baseline condition.\n\n2.  **COVID R0 Research (Second Line):**\n    *   `(\"SARS-CoV-2\" OR \"COVID-19\") AND R0 AND Wuhan`: Specifies the virus, metric, and location.\n    *   `(adjust* OR calibrat*)`: Covers \"adjust for\" and \"calibrated\" models.\n    *   `(\"under-ascertainment\" OR \"testing intensity\" OR seroprevalence OR mobility OR \"SEIR model\")`: Includes all the specific adjustment factors and model types requested.\n    *   `(\"5.7\" OR \"5.7*\" OR \"point estimate\")`: Targets the specific R0 value requested (5.7, near 5.7, or explicit point estimates).\n    *   `(\"confidence interval\" OR CI)`: Ensures results report confidence intervals.\n\n**Key features of the query:**\n\n*   **Conciseness:** Fits within 1-2 sentences.\n*   **Precision:** Uses exact phrases (`\" \"`), Boolean operators (`AND`, `OR`), and wildcards (`*`) to target specific terms and concepts.\n*   **Comprehensiveness:** Combines both distinct requirements (medical records & R0 research) while addressing all critical sub-elements within each.\n*   **Relevance:** Forces results to include the unique term \"unredacted\" for records and the specific adjustments, location, and R0 value for the research.",
-      "refined": "unredacted medical records\" AND (\"five years preceding\" OR \"five years prior to onset\") AND \"pre-existing condition\" AND baseline AND (\"SARS-CoV-2\" OR \"COVID-19\") AND R0 AND Wuhan AND (adjust* OR calibrat*) AND (\"under-ascertainment\" OR \"testing intensity\" OR seroprevalence OR mobility OR \"SEIR model\") AND (\"5.7\" OR \"5.7*\" OR \"point estimate of 5.7\") AND (\"confidence interval\" OR \"95% CI\") AND published:2020-2021",
-      "novelty": 0.344108780225118
+      "original": "Based on the legal request and context, here is the precise search query:\n\n**Search Query:**\n\n1.  `\"pre-incident medical records\" OR \"medical history\" \"diagnostic imaging\" \"treatment notes\" causation \"pre-existing conditions\"`  \n2.  `((\"severe COVID-19\" OR hospitalized COVID-19) AND (sex OR gender) AND (\"binding antibody titers\" OR \"neutralizing antibody titers\" OR \"IgG avidity\" OR durability)) OR (PMID:35458488 AND (\"antibody titers\" OR \"neutralizing titers\") AND (severity OR sex OR gender))`\n\n**Breakdown & Rationale:**\n\n1.  **Pre-Incident Medical Records:**\n    *   `\"pre-incident medical records\" OR \"medical history\"`: Captures core terminology for the records request.\n    *   `\"diagnostic imaging\" \"treatment notes\"`: Specifically targets the required record types.\n    *   `causation \"pre-existing conditions\"`: Focuses the query on records relevant to establishing/challenging causation of alleged injuries based on pre-existing conditions, aligning with the defense's objective.\n\n2.  **COVID-19 Antibody Studies (a & b):**\n    *   `(\"severe COVID-19\" OR hospitalized COVID-19)`: Targets the relevant patient population (hospitalized/severe).\n    *   `AND (sex OR gender)`: Ensures stratification/reporting by sex (as explicitly requested).\n    *   `AND (\"binding antibody titers\" OR \"neutralizing antibody titers\" OR \"IgG avidity\" OR durability)`: Captures the key immunological measures requested (peak titers, avidity, durability).\n    *   **Specific Source Check (b):**\n        *   `OR (PMID:35458488 AND (\"antibody titers\" OR \"neutralizing titers\") AND (severity OR sex OR gender))`: Directly checks if the specific study (Source 35458488) reported antibody titers stratified by severity and/or sex. This uses the PubMed ID (PMID) for precise identification.\n\nThis query combines precise legal terminology for the medical records request with highly specific scientific terms and conditions for the COVID-19 studies, including the direct check of the cited source. It addresses both core objectives of the defense request.",
+      "refined": "1. `\"pre-incident medical records\" OR \"medical history\" AND (\"diagnostic imaging\" OR \"treatment notes\") AND (\"causation\" AND \"pre-existing conditions\")`  \n2. `(\"severe COVID-19\" OR \"hospitalized COVID-19\") AND (\"sex\" OR \"gender\") AND (\"neutralizing antibody titers\" OR \"binding antibody titers\" OR \"IgG avidity\" OR \"antibody durability\") NOT (\"vaccinated\" OR \"vaccination\")`  \n3. `PMID:35458488 AND (\"neutralizing titers\" OR \"antibody response\") AND (\"sex differences\" OR \"gender stratification\" OR \"disease severity\")`",
+      "novelty": 0.21809113025665283
     },
     {
       "round": 1,
       "side": "Defense Counsel",
-      "original": "Here is a precise search query targeting the required evidence:\n\n```sql\n(\"Wuhan\" OR \"China\") AND (\"COVID-19 outbreak\" OR \"initial outbreak\") AND (\"Dec 2019\" OR \"Jan 2020\") AND (\"R0 estimates\" OR \"basic reproduction number\") AND (\"underreporting adjustment\" OR \"testing limitations\" OR \"case ascertainment\") AND (\"modeling study\" OR \"epidemiological model\") AND \"R0 < 5\"\n```\n\n**Key elements covered:**\n1. **Location/Time:** `(\"Wuhan\" OR \"China\") AND (\"COVID-19 outbreak\") AND (\"Dec 2019\" OR \"Jan 2020\")`\n2. **Core Parameter:** `(\"R0 estimates\" OR \"basic reproduction number\")`\n3. **Critical Adjustments:** `(\"underreporting adjustment\" OR \"testing limitations\" OR \"case ascertainment\")`\n4. **Methodology:** `(\"modeling study\" OR \"epidemiological model\")`\n5. **Required Evidentiary Threshold:** `\"R0 < 5\"` (Directly targets studies contradicting the claimed 5.7 value)\n\nThis query retrieves peer-reviewed modeling studies analyzing the early Wuhan outbreak with specific corrections for surveillance bias, explicitly reporting R0 estimates below 5.0.",
-      "refined": "```sql\n(\"Wuhan\" OR \"Hubei Province\") AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"outbreak\" OR \"epidemic\") AND (\"December 2019\" OR \"January 2020\" OR \"early 2020\") AND (\"R0\" OR \"basic reproduction number\") AND (\"estimate\" OR \"estimation\") AND (\"underreporting\" OR \"case ascertainment\" OR \"surveillance bias\" OR \"testing capacity\") AND (\"mathematical model\" OR \"statistical model\" OR \"epidemiological model\") AND (\"R0 < 5.0\") AND (\"peer-reviewed\")\n```",
-      "novelty": 0.3045509258906047
+      "original": "Based on the debate context and legal request, the precise search query is:\n\n> **(\"hospitalized COVID-19\" OR \"severe COVID-19\") AND (\"neutralizing antibody titers\" OR \"IgG levels\") AND (\"sex differences\" OR \"gender differences\") AND (\"avidity\" OR \"durability\")**\n\n### Key Elements Explained:\n1.  **`(\"hospitalized COVID-19\" OR \"severe COVID-19\")`**  \n    Targets the specific patient population (hospitalized/severe cases).  \n2.  **`(\"neutralizing antibody titers\" OR \"IgG levels\")`**  \n    Focuses on the requested antibody measures (peak titers/total IgG).  \n3.  **`(\"sex differences\" OR \"gender differences\")`**  \n    Ensures direct comparison stratified by sex.  \n4.  **`(\"avidity\" OR \"durability\")`**  \n    Captures studies analyzing antibody quality/persistence as requested.  \n\n### Why This Works:\n-   **Specificity:** Combines critical elements (severity, antibodies, sex stratification, avidity/durability) with Boolean operators to filter irrelevant studies.  \n-   **Implicit Coverage:** Terms like \"longitudinal,\" \"clinical severity,\" \"age,\" and \"comorbidities\" are typically included in studies meeting the above criteria but are omitted to avoid overcomplicating the query.  \n-   **Focus on Evidence:** Retrieves studies likely to contain patient-level data comparisons or explicitly discuss sex-based differences in antibody quality/kinetics in severe COVID-19.  \n\n**Example Relevant Results:**  \nThis query would retrieve studies such as:  \n*\"Sex-based differences in antibody avidity and durability following severe SARS-CoV-2 infection\"*  \n*\"Gender disparities in neutralizing antibody kinetics and Fc-mediated functions in hospitalized COVID-19 patients.\"*",
+      "refined": "(\"hospitalized due to COVID-19\" OR \"severe COVID-19\") AND (\"neutralizing antibody titers\" OR \"anti-SARS-CoV-2 IgG levels\") AND (\"sex differences\" OR \"gender differences\") AND (\"antibody avidity\" OR \"antibody persistence\" OR \"antibody durability\") AND (\"longitudinal study\" OR \"prospective cohort\")",
+      "novelty": 0.17087707916895548
     },
     {
       "round": 2,
       "side": "Plaintiff Counsel",
-      "original": "Based on the legal request for the original Wuhan COVID-19 data and the specific peer-reviewed study calculating a corrected R0 of ~5.7, the precise search query is:\n\n> **(\"Wuhan\" OR \"Hubei\") AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"R0\" OR \"reproduction number\" OR \"basic reproduction number\") AND (\"5.7\" OR \"5.7\") AND (\"raw data\" OR \"source data\" OR \"epidemiological data\" OR \"case data\")**\n> **AND/OR**\n> **(\"Wuhan\" OR \"Hubei\") AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"R0\" OR \"reproduction number\") AND (\"5.7\" OR \"5.7\") AND (\"underascertainment\" OR \"under-reporting\" OR \"testing limitations\" OR \"ascertainment bias\" OR \"corrected\" OR \"adjusted\") AND (\"peer-reviewed\" OR \"study\" OR \"research\")**\n\n### Why this query works\n1.  **Core Elements:** Mandatory inclusion of location (`Wuhan/Hubei`), disease (`COVID-19/SARS-CoV-2`), metric (`R0/reproduction number`), and the contested value (`5.7`).\n2.  **Original Data Request:** The first line explicitly targets the underlying data using terms like `raw data`, `source data`, `epidemiological data`, `case data`.\n3.  **Specific Study Request:** The second line adds the critical methodological context (`underascertainment`, `testing limitations`, `corrected`, `adjusted`) and specifies the document type (`peer-reviewed`, `study`, `research`) needed to identify the publication calculating the corrected R0 of 5.7.\n4.  **Structure:** Using `AND/OR` allows searching for both requested items simultaneously or structuring them as separate precise searches if needed. The parentheses ensure logical grouping.",
-      "refined": "(\"Wuhan\" OR \"Hubei\") AND (\"COVID-19\" OR \"SARS-CoV-2\") AND (\"R0\" OR \"reproduction number\" OR \"basic reproduction number\") AND (\"5.7\" OR \"5.70\") AND (\"underascertainment\" OR \"under-reporting\" OR \"testing limitations\" OR \"ascertainment bias\" OR \"corrected\" OR \"adjusted\") AND (\"peer-reviewed\" AND (\"study\" OR \"research article\") AND (\"epidemiological data\" OR \"case data\" OR \"raw data\")) AND (\"early outbreak\" OR \"initial outbreak\")",
-      "novelty": -1.1920928955078125e-07
+      "original": "Based on the legal request and debate context, here is a precise search query:\n\n```sql\n(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"hospitalized\" OR \"ICU\" OR \"critical illness\") AND (\"neutralizing antibody titers\" OR \"antibody avidity\" OR \"antibody durability\") AND (\"gender differences\" OR \"sex differences\" OR \"men vs women\") AND (\"controlling for age\" OR \"adjusting for comorbidities\" OR \"multivariate analysis\") AND (\"patient-level data\" OR \"individual participant data\")\n```\n\n**Key elements addressed:**\n1.  **Population:** `(\"hospitalized\" OR \"ICU\" OR \"critical illness\")` - Focuses exclusively on severe cases.\n2.  **Antibody Measures:** `(\"neutralizing antibody titers\" OR \"antibody avidity\" OR \"antibody durability\")` - Targets specific antibody properties requested (peak & quality/persistence).\n3.  **Comparison:** `(\"gender differences\" OR \"sex differences\" OR \"men vs women\")` - Directly compares males and females.\n4.  **Confounding Control:** `(\"controlling for age\" OR \"adjusting for comorbidities\" OR \"multivariate analysis\")` - Ensures studies account for age, comorbidities, and implicitly treatment protocols via analysis methods.\n5.  **Data Requirement:** `(\"patient-level data\" OR \"individual participant data\")` - Crucial for independent re-analysis to test confounding/severe disease timelines.\n6.  **Disease Context:** `(\"COVID-19\" OR \"SARS-CoV-2\")` - Specifies the pathogen.",
+      "refined": "(\"SARS-CoV-2\" OR \"COVID-19\") AND (\"hospitalized\" OR \"ICU\" OR \"critically ill\") AND (\"neutralizing antibody titers\" OR \"antibody avidity\" OR \"antibody persistence\") AND (\"sex differences\" OR \"gender differences\") AND (\"multivariate analysis\" OR \"adjusted for age\" OR \"adjusted for comorbidities\") AND (\"individual participant data\" OR \"patient-level data\") AND (\"severe disease\" OR \"critical disease\") NOT (\"mild\" OR \"asymptomatic\" OR \"outpatient\")",
+      "novelty": 0.10183850924173991
     },
     {
       "round": 2,
       "side": "Defense Counsel",
-      "original": "Based on the legal request and debate context, here is the precise search query:\n\n> **\"Wuhan\" AND (\"line-list\" OR \"contact tracing dataset\") AND (\"Nov 2019\" OR \"December 2019\" OR \"Jan 2020\") AND (\"patient-level\" OR \"anonymized\") AND (\"symptom onset\" OR \"exposure window\" OR \"contact link\" OR \"household contact\" OR \"outcome\")**  \n> **PLUS**  \n> **(\"R0\" OR \"reproduction number\") AND (\"5.7\" OR \"5-6\" OR \"Sanche et al. 2020\") AND (\"uncertainty estimates\" OR \"methods\") AND (\"testing trajectory\" OR \"ascertainment rate\") AND (\"December 2019\" OR \"January 2020\")**\n\n### Why this query works:\n1. **Datasets Focus:** Targets core evidence (`line-list`, `contact tracing dataset`) with required attributes (`patient-level`, `anonymized`, `symptom onset`, `exposure window`, etc.) for Wuhan during the critical period.  \n2. **High-R0 Studies:** Specifically retrieves studies like *Sanche et al. 2020* reporting R0\u22485\u20136, demanding methodological details (`methods`, `uncertainty estimates`).  \n3. **Testing Context:** Captures `testing trajectory`/`ascertainment rate` data essential for validating R0 estimates in Dec 2019/Jan 2020.  \n4. **Debate Alignment:** Directly addresses the evidentiary gap highlighted by the Expert Witness regarding unsupported R0=5.7 claims.  \n\nThis query isolates *empirical outbreak data* and *methodological analyses* critical for independently verifying transmission dynamics, as requested in the proceedings.",
-      "refined": "(\"Wuhan\" OR \"Wuhan, China\") AND (\"line-list\" OR \"contact tracing dataset\") AND (\"November 2019\" OR \"December 2019\" OR \"January 2020\") AND (\"patient-level\" OR \"individual-level\" OR \"anonymized\") AND (\"symptom onset\" OR \"exposure window\" OR \"contact link\" OR \"household transmission\" OR \"clinical outcome\") AND (\"R0\" OR \"reproduction number\") AND (\"5.7\" OR \"5.5\u20136.0\" OR \"Sanche et al. 2020\") AND (\"uncertainty interval\" OR \"confidence interval\" OR \"methodology\") AND (\"testing rate\" OR \"ascertainment rate\" OR \"surveillance sensitivity\")",
-      "novelty": 0.41624053319295246
+      "original": "Based on the legal request and debate context, the precise search query is:\n\n> `(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"severe\" OR \"hospitali?ed\" OR \"critical\") AND (\"antibod*\" OR \"IgG\" OR \"neutrali?ing antibod*\" OR \"NAb\") AND (\"sex difference*\" OR \"gender difference*\" OR \"male female\" OR \"men women\") AND (\"adjusted\" OR \"multivariable\" OR \"confounder\" OR \"covariate\" OR \"effect size\" OR \"odds ratio\" OR \"relative risk\")`\n\n**Key elements explained:**\n\n1.  **Population/Disease:** `(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"severe\" OR \"hospitali?ed\" OR \"critical\")` - Targets studies specifically on hospitalized or severe COVID-19 patients.\n2.  **Exposure/Comparison:** `(\"sex difference*\" OR \"gender difference*\" OR \"male female\" OR \"men women\")` - Explicitly requires sex-stratified comparisons.\n3.  **Outcome:** `(\"antibod*\" OR \"IgG\" OR \"neutrali?ing antibod*\" OR \"NAb\")` - Captures general antibody studies and specifically IgG & neutralizing antibodies (using wildcards `*` and `?` for variants).\n4.  **Methodology/Data Requirement:** `(\"adjusted\" OR \"multivariable\" OR \"confounder\" OR \"covariate\" OR \"effect size\" OR \"odds ratio\" OR \"relative risk\")` - Ensures results include studies performing adjusted analyses (for age/comorbidities) and reporting effect sizes. This directly addresses the request for multivariable adjustments and quantitative comparisons.\n\n**Why this query works for the request:**\n\n*   **Focus on Severe Cases:** Explicitly includes terms for hospitalization and severity.\n*   **Mandates Sex Stratification:** Requires terms indicating male/female comparisons.\n*   **Targets Specific Antibodies:** Includes IgG and neutralizing antibodies (NAb).\n*   **Requires Adjusted Analyses & Effect Sizes:** Filters for studies that statistically control for confounders (like age/comorbidities) and report the magnitude of differences (effect sizes, ORs, RRs), crucial for evaluating the claim's validity.\n*   **Concise & Precise:** Combines essential concepts without irrelevant terms, maximizing relevance for retrieving cohort studies and clinical evidence meeting the legal specifications.",
+      "refined": "(\"COVID-19\" OR \"SARS-CoV-2\") AND (\"severe\" OR \"hospitalized\" OR \"critical\") AND (\"IgG\" OR \"neutralizing antibody*\" OR \"NAb\") AND (\"sex difference*\" OR \"gender difference*\" OR \"male\" OR \"female\" OR \"men\" OR \"women\") AND (\"adjusted\" OR \"multivariable\" OR \"covariate\" OR \"odds ratio\" OR \"relative risk\" OR \"effect size\") AND (\"cohort\" OR \"prospective\" OR \"longitudinal\")",
+      "novelty": 0.17497469981511435
     }
   ]
 }

@@ -209,7 +209,9 @@ def main():
             
             log("\n11. Generating Final Verdict...")
             from final_verdict import FinalVerdict
-            verdict_generator = FinalVerdict(extracted_claim, debate_result, judge_result, consistency_report, reflection_result)
+            # Prepare negotiation metrics for the verdict generator
+            claim_metrics = neg_result['judge_state'].get('claim_metrics', {})
+            verdict_generator = FinalVerdict(extracted_claim, debate_result, judge_result, consistency_report, reflection_result, claim_metrics)
             final_result = verdict_generator.generate_verdict()
             log(f"   Verdict: {final_result['verdict']}")
             log(f"   Confidence: {final_result['confidence']:.3f}")
@@ -217,24 +219,12 @@ def main():
             # 12. Save Verdict and Update Processed List
             verdicts_path = os.path.join(outcome_dir, "all_verdicts.jsonl")
             
-            # Prepare record with specific fields requested by user
-            claim_metrics = neg_result['judge_state'].get('claim_metrics', {})
+
             
-            record = {
-                "claim_id": input_claim.id,
-                "verdict": final_result['verdict'],
-                "confidence": final_result['confidence'],
-                "ground_truth": final_result['ground_truth_label'],
-                "correct": final_result['correct'],
-                # Negotiation Metrics
-                "claim_score": claim_metrics.get('claim_score'),
-                "probability": claim_metrics.get('probability'),
-                "negotiation_confidence": claim_metrics.get('confidence'),
-                "evidence_count": claim_metrics.get('evidence_count'),
-                "total_support_weight": claim_metrics.get('total_support_weight'),
-                "total_refute_weight": claim_metrics.get('total_refute_weight'),
-                "neutral_weight": claim_metrics.get('neutral_weight')
-            }
+            # Use the structured result from FinalVerdict which now contains all probabilistic metrics
+            record = final_result
+            # Ensure claim_id matches the input claim (safeguard)
+            record["claim_id"] = input_claim.id
             
             with open(verdicts_path, "a", encoding="utf-8") as f:
                 f.write(json.dumps(record) + "\n")

@@ -1,0 +1,181 @@
+{
+  "shared_pool": [
+    {
+      "source_id": "34888282",
+      "text": "[Frontiers in public health 2021] Application of SARS-CoV-2 Serology to Address Public Health Priorities.\n\nBACKGROUND: Antibodies against SARS-CoV-2 can be detected by various testing platforms, but a detailed understanding of assay performance is critical.",
+      "relevance_score": 0.2
+    },
+    {
+      "source_id": "33227517",
+      "text": "[International journal of infectious diseases : IJID : official publication of the International Society for Infectious Diseases 2021] Clinical performance evaluation of a SARS-CoV-2 Rapid Antibody Test for determining past exposure to SARS-CoV-2.\n\nCONCLUSION: The SARS-CoV-2 Rapid Antibody Test demo",
+      "relevance_score": 0.1
+    },
+    {
+      "source_id": "33163984",
+      "text": "[Med (New York, N.Y.) 2021] A Public Health Antibody Screening Indicates a 6-Fold Higher SARS-CoV-2 Exposure Rate than Reported Cases in Children.\n\nBACKGROUND: Antibody responses to virus reflect exposure and potential protection.",
+      "relevance_score": 0.1
+    },
+    {
+      "source_id": "33547814",
+      "text": "[Journal of medical virology 2021] Impact of both socioeconomic level and occupation\u00a0on antibody prevalence to SARS-CoV-2 in an Egyptian cohort: The first episode.\n\nWe studied the impact of socioeconomic level on the anti-SARS-CoV-2-antibodies prevalence in an Egyptian cohort. The low socioeconomic ",
+      "relevance_score": 0.1
+    },
+    {
+      "source_id": "35048229",
+      "text": "[Irish journal of medical science 2022] Nine-month course of SARS-CoV-2 antibodies in individuals with COVID-19 infection.\n\nRESULTS: Of 37 cases between 18 and 57\u00a0years old, 54% were women. The findings showed that anti-N antibodies decreased significantly after the 15th week (between 15 and 20\u00a0week",
+      "relevance_score": 0.6
+    },
+    {
+      "source_id": "32607519",
+      "text": "[medRxiv : the preprint server for health sciences 2020] Sex, age, and hospitalization drive antibody responses in a COVID-19 convalescent plasma donor population.\n\nalizing titers. Using neutralization titer as the reference, the sensitivity of the IgG ELISAs ranged between 95-98%, but specificity w",
+      "relevance_score": 0.9
+    },
+    {
+      "source_id": "34766646",
+      "text": "[Journal of medical virology 2022] Analysis of long-term antibody response in COVID-19 patients by symptoms grade, gender, age, BMI, and medication.\n\ntically higher in men than women at all times (p\u2009<\u20090.01). Antibody titer was higher in older participants compared to younger participants (p\u2009<\u20090.02).",
+      "relevance_score": 0.9
+    },
+    {
+      "source_id": "35226399",
+      "text": "[Obesity (Silver Spring, Md.) 2022] Sex-associated differences between BMI and SARS-CoV-2 antibody titers following the BNT162b2 vaccine.\n\nRESULTS: The relationship between BMI and anti-SARS-CoV-2 spike IgG titers markedly differed by sex (p value for interaction = 0.04). Spike IgG antibody titers t",
+      "relevance_score": 0.7
+    },
+    {
+      "source_id": "38948624",
+      "text": "[Journal of family medicine and primary care 2024] Seroprevalence of SARS-CoV-2 IgG in blood donors in a teaching institute from Western part of Maharashtra.\n\nRESULT: It was observed that 21% of the participants were seropositive, and 78% of the population was seronegative across the different gende",
+      "relevance_score": 0.6
+    },
+    {
+      "source_id": "33693749",
+      "text": "[The Journal of infectious diseases 2021] Sex Differences in the Evolution of Neutralizing Antibodies to Severe Acute Respiratory Syndrome Coronavirus 2.\n\nWe measured anti-spike (S), nucleoprotein (N), and neutralizing antibodies in sera from 308 healthcare workers with a positive reverse-transcript",
+      "relevance_score": 0.7
+    },
+    {
+      "source_id": "32636204",
+      "text": "[BJGP open 2020] Social distancing, population density, and spread of COVID-19 in England: a longitudinal study.\n\nRESULTS: Incidence rates per 100 000 people peaked in the week of March 30-April 5, showing higher adjusted incidence rate per 100 000 people (46.2; 95% confidence interval [CI] = 40.6 t",
+      "relevance_score": 0.0
+    },
+    {
+      "source_id": "32931792",
+      "text": "[Environmental research 2020] Effects of long-term exposure to air pollutants on the spatial spread of COVID-19 in Catalonia, Spain.\n\nCONCLUSION: Although it is possible that there are biological mechanisms that explain, at least partially, the association between long-term exposure to air pollutant",
+      "relevance_score": 0.1
+    },
+    {
+      "source_id": "33362283",
+      "text": "[PloS one 2020] Spreading of COVID-19: Density matters.\n\nthmic scale are also included. Spatial regression models with a spatial error specification are also used to account for the spatial spillover effect. Population density alone accounts for 57% of the variation (R-squared) in the aspatial model",
+      "relevance_score": 0.2
+    }
+  ],
+  "proponent_pool": [
+    {
+      "source_id": "38283615",
+      "text": "[Journal of the American College of Emergency Physicians open 2024] Sex-specific disparities in COVID-19 outcomes.\n\nOBJECTIVES: Sex-specific disparities in morbidity and mortality of COVID-19 illness are not well understood. Neutralizing antibodies (Ab) may protect against severe COVID-19 illness. W",
+      "relevance_score": 0.3
+    },
+    {
+      "source_id": "38416704",
+      "text": "[PloS one 2024] Risk factors contributing to infection with SARS-CoV-2 are modulated by sex.\n\nThroughout the early stages of the COVID-19 pandemic in Mexico (August-December 2020), we closely followed a cohort of n = 100 healthcare workers. These workers were initially seronegative for Immunoglobuli",
+      "relevance_score": 0.2
+    },
+    {
+      "source_id": "34129909",
+      "text": "[Microbes and infection 2021] The role of sexual dimorphism in susceptibility to SARS-CoV-2 infection, disease severity, and mortality: facts, controversies and future perspectives.\n\nFormer studies have revealed intersex variability in immune response to infectious diseases, including Coronavirus di",
+      "relevance_score": 0.4
+    }
+  ],
+  "opponent_pool": [
+    {
+      "source_id": "34766646",
+      "text": "[Journal of medical virology 2022] Analysis of long-term antibody response in COVID-19 patients by symptoms grade, gender, age, BMI, and medication.\n\ntically higher in men than women at all times (p\u2009<\u20090.01). Antibody titer was higher in older participants compared to younger participants (p\u2009<\u20090.02).",
+      "relevance_score": 0.7323243021965027
+    },
+    {
+      "source_id": "38400067",
+      "text": "[Viruses 2024] Performance of Three Anti-SARS-CoV-2 Anti-S and One Anti-N Immunoassays for the Monitoring of Immune Status and Vaccine Response.\n\nThis study aimed to evaluate and compare the performance of three anti-S and one anti-N assays that were available to the project in detecting antibody le",
+      "relevance_score": 0.5
+    },
+    {
+      "source_id": "33790892",
+      "text": "[Frontiers in immunology 2021] Longitudinal Profiling of Antibody Response in Patients With COVID-19 in a Tertiary Care Hospital in Beijing, China.\n\nective of sex. Severe cases were found to have higher levels of antibody response, larger numbers of inflammatory cells and C-reactive protein levels. ",
+      "relevance_score": 0.6
+    }
+  ],
+  "judge_state": {
+    "admissible_evidence": [
+      {
+        "id": "32607519",
+        "weight": 0.9,
+        "stance": 1,
+        "stance_confidence": 0.95,
+        "reason": "The evidence explicitly states 'Male sex... was consistently associated with increased antibody responses across the serological assays,' directly supporting the claim that men have higher antibody levels after COVID-19 exposure. The association holds across multiple assays and remains significant even when accounting for other factors like age and hospitalization.",
+        "text": "[medRxiv : the preprint server for health sciences 2020] Sex, age, and hospitalization drive antibody responses in a COVID-19 convalescent plasma dono"
+      },
+      {
+        "id": "34766646",
+        "weight": 0.9,
+        "stance": 1,
+        "stance_confidence": 0.95,
+        "reason": "Evidence directly states antibody titers were 'statistically higher in men than women at all times (p < 0.01)' and explicitly concludes 'higher antibody response [...] in the men gender,' providing statistically significant, gender-specific measurements that align precisely with the claim.",
+        "text": "[Journal of medical virology 2022] Analysis of long-term antibody response in COVID-19 patients by symptoms grade, gender, age, BMI, and medication.\n\n"
+      },
+      {
+        "id": "35226399",
+        "weight": 0.7,
+        "stance": -1,
+        "stance_confidence": 0.8,
+        "reason": "Evidence shows women with obesity (BMI\u226530) had higher antibody titers (GMT 5,506) than men with obesity (GMT 4,655) after vaccination, contradicting the claim. However, the evidence measures vaccine response, not natural infection.",
+        "text": "[Obesity (Silver Spring, Md.) 2022] Sex-associated differences between BMI and SARS-CoV-2 antibody titers following the BNT162b2 vaccine.\n\nRESULTS: Th"
+      },
+      {
+        "id": "33693749",
+        "weight": 0.7,
+        "stance": 1,
+        "stance_confidence": 0.8,
+        "reason": "The study found that at 1 month post-infection, men aged >50 and those with BMI >25 had higher anti-S and anti-N antibody levels. This partially supports the claim, though the effect is age- and BMI-specific, and antibody decline rates complicate longer-term conclusions.",
+        "text": "[The Journal of infectious diseases 2021] Sex Differences in the Evolution of Neutralizing Antibodies to Severe Acute Respiratory Syndrome Coronavirus"
+      }
+    ],
+    "disputed_items": [
+      {
+        "id": "35048229",
+        "weight": 0.6,
+        "text": "[Irish journal of medical science 2022] Nine-month course of SARS-CoV-2 antibodies in individuals with COVID-19 infection.\n\nRESULTS: Of 37 cases betwe"
+      },
+      {
+        "id": "38948624",
+        "weight": 0.6,
+        "text": "[Journal of family medicine and primary care 2024] Seroprevalence of SARS-CoV-2 IgG in blood donors in a teaching institute from Western part of Mahar"
+      },
+      {
+        "id": "38283615",
+        "weight": 0.3,
+        "text": "[Journal of the American College of Emergency Physicians open 2024] Sex-specific disparities in COVID-19 outcomes.\n\nOBJECTIVES: Sex-specific dispariti"
+      },
+      {
+        "id": "34129909",
+        "weight": 0.4,
+        "text": "[Microbes and infection 2021] The role of sexual dimorphism in susceptibility to SARS-CoV-2 infection, disease severity, and mortality: facts, controv"
+      },
+      {
+        "id": "38400067",
+        "weight": 0.5,
+        "text": "[Viruses 2024] Performance of Three Anti-SARS-CoV-2 Anti-S and One Anti-N Immunoassays for the Monitoring of Immune Status and Vaccine Response.\n\nThis"
+      },
+      {
+        "id": "33790892",
+        "weight": 0.6,
+        "text": "[Frontiers in immunology 2021] Longitudinal Profiling of Antibody Response in Patients With COVID-19 in a Tertiary Care Hospital in Beijing, China.\n\ne"
+      }
+    ],
+    "claim_metrics": {
+      "claim_score": 1.8,
+      "probability": 0.8581489350995123,
+      "confidence": 0.7162978701990246,
+      "total_support_weight": 2.5,
+      "total_refute_weight": 0.7,
+      "neutral_weight": 0.0,
+      "evidence_count": 4
+    },
+    "verdict": "SUPPORT"
+  }
+}

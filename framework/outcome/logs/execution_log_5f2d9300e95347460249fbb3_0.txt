@@ -1,0 +1,601 @@
+   [CLAIM ID: 5f2d9300e95347460249fbb3_0]
+   Claim Text: Men often have higher levels of antibodies than women once exposed to COVID-19.
+
+2. Preprocessing & Extraction...
+   Extracted: Men often have higher levels of antibodies than women once exposed to COVID-19.
+
+3. Argument Mining...
+   [DECOMPOSED PREMISES/ARGUMENTS]:
+   - 1. Humans produce measurable antibodies after exposure to SARS-CoV-2
+   - 2. Antibody levels vary between individuals
+   - 3. Mean antibody level differs between men and women
+   - 4. Men have higher mean antibody levels than women
+   - 5. This difference occurs frequently in exposed populations
+
+4. Initial RAG Retrieval...
+   [DEBUG] Checking paths:
+   Index: E:\thesis(12feb)\PRAG-ArgumentMining-MultiAgentDebate-RoleSwitching\framework\pubmed_faiss.index (Exists: True)
+   Meta: E:\thesis(12feb)\PRAG-ArgumentMining-MultiAgentDebate-RoleSwitching\framework\pubmed_meta.jsonl (Exists: True)
+   Offsets: E:\thesis(12feb)\PRAG-ArgumentMining-MultiAgentDebate-RoleSwitching\framework\pubmed_meta_offsets.npy (Exists: True)
+Loading embedding model: sentence-transformers/all-MiniLM-L6-v2...
+Loading FAISS index from E:\thesis(12feb)\PRAG-ArgumentMining-MultiAgentDebate-RoleSwitching\framework\pubmed_faiss.index...
+Loading offsets from E:\thesis(12feb)\PRAG-ArgumentMining-MultiAgentDebate-RoleSwitching\framework\pubmed_meta_offsets.npy...
+   [INITIAL RETRIEVED EVIDENCE]:
+   - Evidence 1 (ID: 32372818): [New scientist (1971) 2020] Men hit harder by covid-19.
+
+From lifestyle to immune system differences, there are a number of reasons why men may be mor...
+   - Evidence 2 (ID: 38283615): [Journal of the American College of Emergency Physicians open 2024] Sex-specific disparities in COVID-19 outcomes.
+
+OBJECTIVES: Sex-specific dispariti...
+   - Evidence 3 (ID: 32411652): [Frontiers in public health 2020] Gender Differences in Patients With COVID-19: Focus on Severity and Mortality.
+
+CONCLUSION: While men and women have...
+   - Evidence 4 (ID: 34225644): [BMC infectious diseases 2021] Sex-based clinical and immunological differences in COVID-19.
+
+BACKGROUND: Males and females differ in their immunologi...
+   - Evidence 5 (ID: 34225644): [BMC infectious diseases 2021] Sex-based clinical and immunological differences in COVID-19.
+
+CONCLUSIONS: Males had an unfavorable prognosis, higher ...
+
+5. Evidence Negotiation & Arbitration...
+
+--- [Negotiator] Step 1: Premise-Grounded Shared Retrieval ---
+   > Aggregated 13 shared evidence items.
+
+--- [Negotiator] Step 2: Stance / Perspective Retrieval ---
+   > Generating Plaintiff Counsel-conditioned queries...
+   > Plaintiff Counsel gathered 3 perspective-specific items.
+   > Generating Defense Counsel-conditioned queries...
+   > Defense Counsel gathered 3 perspective-specific items.
+
+--- [Negotiator] Step 5: Multi-Agent Negotiation Injection ---
+   > [Plaintiff Counsel] Reviewing prospective evidence pools...
+   > [Defense Counsel] Reviewing prospective evidence pools...
+   > Negotiation complete. Proceeding to Judicial arbitration.
+
+--- [The Court] Step 4: Evidence Arbitration & Admissibility ---
+   > Evaluating Source ID: 34888282
+   > Evaluating Source ID: 33227517
+   > Evaluating Source ID: 33163984
+   > Evaluating Source ID: 33547814
+   > Evaluating Source ID: 35048229
+   > Evaluating Source ID: 32607519
+   > Evaluating Source ID: 34766646
+   > Evaluating Source ID: 35226399
+   > Evaluating Source ID: 38948624
+   > Evaluating Source ID: 33693749
+   > Evaluating Source ID: 32636204
+   > Evaluating Source ID: 32931792
+   > Evaluating Source ID: 33362283
+   > Evaluating Source ID: 38283615
+   > Evaluating Source ID: 38416704
+   > Evaluating Source ID: 34129909
+   > Evaluating Source ID: 38400067
+   > Evaluating Source ID: 33790892
+   > Admitted 4 high-weight items. Flagged 6 for dispute.
+   > Negotiation Verdict: SUPPORT (Prob: 0.858, Conf: 0.716)
+   [SAVED] Negotiation state saved to E:\thesis(12feb)\PRAG-ArgumentMining-MultiAgentDebate-RoleSwitching\framework\outcome\negotiation_state_5f2d9300e95347460249fbb3_0.json
+
+   [JUDICIAL ADMISSION] Admitted 4 exhibits for global discovery.
+   - 1. Source ID: 32607519 (Weight: 0.90)
+   - 2. Source ID: 34766646 (Weight: 0.90)
+   - 3. Source ID: 35226399 (Weight: 0.70)
+   - 4. Source ID: 33693749 (Weight: 0.70)
+
+6. Initializing Multi-Agent Legal Proceedings ( Courtroom MAD)...
+DEBUG: Loading personas.py from E:\thesis(12feb)\PRAG-ArgumentMining-MultiAgentDebate-RoleSwitching\framework\personas.py
+
+7. Presiding Over Courtroom Proceedings...
+
+============================================================
+PROCEEDINGS PHASE 1
+============================================================
+
+--- [Plaintiff Counsel] Step 1: Evidence Discovery (Integrative Discovery) ---
+   > [Plaintiff Counsel] Discovery Need: I request production of the original, unredacted DICOM imaging files for all CT and MRI studies related to the injury, together with contemporaneous radiology reports and technologist logs (including timestamps and machine settings), so our expert can independently verify the timing, extent, and interpretation of the injuries.
+   > [Plaintiff Counsel] Formulated Query: Based on the context and legal request, the precise search query is:
+
+> **`(CT OR MRI) AND DICOM AND (radiology reports OR technologist logs) AND (timestamps OR machine settings OR acquisition parameters) AND injury AND original AND unredacted AND contemporaneous`**
+
+**Why this query works:**
+
+1.  **`(CT OR MRI)`**: Specifies the required imaging modalities.
+2.  **`DICOM`**: Demands the original, unprocessed imaging file format.
+3.  **`(radiology reports OR technologist logs)`**: Targets both key supporting documents.
+4.  **`(timestamps OR machine settings OR acquisition parameters)`**: Captures critical metadata within the reports/logs (using synonymous terms for machine settings).
+5.  **`injury`**: Anchors the search to the relevant medical condition/subject.
+6.  **`original AND unredacted`**: Explicitly requires the source files without alterations.
+7.  **`contemporaneous`**: Ensures documents and files are from the time of the relevant studies.
+--- [The Court] Reviewing Discovery Request ---
+   > [The Court] QUERY REFINED: `(CT OR MRI) AND DICOM AND (radiology report* OR technologist log*) AND (timestamp* OR machine setting* OR acquisition parameter*) AND injury AND original AND unredacted AND contemporaneous AND (metadata OR header data) AND (study date OR exam date) AND (patient identifier OR accession number)`
+   > [Plaintiff Counsel] Admitted 3 new exhibits.
+--- [Plaintiff Counsel] Step 2: Generating Legal Argument ---
+
+Your Honor, the preponderance of contemporary immunological evidence supports the proposition that males, once exposed to SARS-CoV-2, frequently mount higher antibody responses than females. Large cohort analyses have identified male sex as an independent predictor of increased antibody levels: convalescent-plasma donor data show that male sex, older age, and hospitalization were each consistently associated with higher responses across multiple serological assays, including neutralizing titers (32607519). A longitudinal clinical study likewise found that antibody titers were statistically higher in men than women at all measured timepoints following infection (p < 0.01), with men also experiencing more pronounced clinical symptoms (which are known correlates of stronger humoral responses) (34766646).
+
+Further corroborating this sex-associated disparity, focused analyses of neutralizing-antibody kinetics have documented significant sex differences in the evolution and magnitude of neutralizing responses after SARS-CoV-2 infection (33693749). Independent work examining humoral responses to SARS-CoV-2 antigens — including post-vaccination studies that underscore sex-based differences in spike IgG levels — reinforces that biological sex materially influences the magnitude and trajectory of antibody responses to SARS-CoV-2 exposure (35226399). Taken together, these peer-reviewed and preprint data establish that men often exhibit higher SARS-CoV-2 antibody levels than women following exposure, a conclusion supported across assay types, cohorts, and timepoints (32607519; 34766646; 33693749; 35226399).
+
+--- [Defense Counsel] Step 1: Evidence Discovery (Integrative Discovery) ---
+   > [Defense Counsel] Discovery Need: We require the comorbidity-stratified immunological data from the cited large cohort studies to determine if the observed sex-based differences are confounded by underlying health conditions rather than being solely attributable to sex.
+   > [Defense Counsel] Formulated Query: Based on the legal request for comorbidity-stratified immunological data from large cohort studies to assess confounding in sex-based antibody differences post-SARS-CoV-2 exposure, here is the precise search query:
+
+**("COVID-19" OR "SARS-CoV-2") AND ("antibody response" OR "immunological response") AND ("sex differences" OR "gender differences") AND ("comorbidities" OR "comorbidity" OR "underlying conditions" OR "chronic disease") AND ("stratified" OR "adjusted" OR "confounding") AND "cohort study"**
+
+### Key Rationale:
+1. **Core Concepts:** Explicitly includes the disease (`COVID-19/SARS-CoV-2`), immune response (`antibody/immunological response`), and population comparison (`sex/gender differences`).  
+2. **Critical Legal Requirement:** Mandates `comorbidity` terms and stratification/adjustment (`stratified/confounding`) to isolate sex as a variable.  
+3. **Study Type:** Specifies `cohort study` to target longitudinal datasets with sufficient scale for subgroup analysis.  
+4. **Precision:** Uses Boolean operators and synonym coverage to ensure retrieval of studies where comorbidities are analyzed as potential confounders in sex-based immune outcomes.  
+
+This query directly addresses the need to discern whether observed sex differences are biologically inherent or influenced by comorbidities.
+--- [The Court] Reviewing Discovery Request ---
+   > [The Court] QUERY REFINED: ("SARS-CoV-2" OR "COVID-19") AND ("antibody response" OR "humoral immune response") AND ("sex differences" OR "sex-specific" OR "male vs female") AND ("comorbidity" OR "comorbid conditions" OR "chronic comorbidity") AND ("stratified analysis" OR "multivariable adjustment" OR "confounder adjustment") AND ("prospective cohort study" OR "longitudinal cohort study") NOT ("review" OR "case report" OR "editorial")
+   > [Defense Counsel] Admitted 3 new exhibits.
+--- [Defense Counsel] Step 2: Generating Legal Argument ---
+
+Your Honor, the plaintiff's assertion that men "often" have higher antibody levels post-exposure is an overgeneralization built on a selective and flawed reading of the evidence. The defense will demonstrate that the cited studies do not support a broad, consistent conclusion and are critically limited by confounding variables and population biases.
+
+First, the plaintiff's key evidence is derived from non-representative cohorts, invalidating any claim about the general population. Evidence 1 (32607519) explicitly studies a "convalescent plasma donor population," a group inherently biased toward individuals with robust, detectable antibody responses. Furthermore, it identifies "hospitalization" as a major driver of higher titers. If men were more frequently hospitalized—a well-documented epidemiological fact—then the observed association with male sex is a confounded by disease severity, not an independent effect of sex itself. Similarly, Evidence 2 (34766646) notes men in their cohort had more severe symptoms (fever, shortness of breath), which again conflates sex with disease severity as the true driver of antibody levels. These studies do not isolate sex as an independent variable in mild or asymptomatic cases, which constitute the majority of infections.
+
+Second, contrary evidence and significant interactions directly undermine the plaintiff's sweeping claim. Evidence 3 (35226399) reveals a critical sex-specific interaction with BMI, where antibody titers *decrease* with increasing BMI in men but show no such clear trend in women following vaccination. This demonstrates that the relationship between sex and antibody response is not straightforward and is heavily modified by other factors. Moreover, Evidence 4 (33693749) studied healthcare workers with *mild disease*, a population where the plaintiff's alleged sex disparity may not hold. Most damningly, Evidence 10 (37194021), a seroprevalence study in healthcare workers, found that "Male sex was not associated with seropositivity," directly contradicting the plaintiff's core claim when examining a broad, at-risk population.
+
+In conclusion, the plaintiff has presented evidence from narrow, severity-skewed cohorts and mistakenly presented correlation as causation. When the full body of evidence is considered, it shows that any apparent sex difference is likely an artifact of differential disease severity and is inconsistent across populations. The claim that men "often" have higher antibody levels is not substantiated by the available scientific record.
+
+--- [The Court] Step 3: Evaluating Expert Witness Requirements ---
+   > [Plaintiff Counsel] Proposed Expert Witness Type: Infectious-disease/clinical immunologist with expertise in sex-based immune responses and serology, supported by a biostatistician experienced in meta-analysis/epidemiology
+   > [The Court] REQUEST GRANTED. Calling expert witness...
+   [Token Usage] Input: 156, Output: 118, Total: 274
+
+[EXPERT TESTIMONY]: As an expert witness, I have reviewed the available evidence and must conclude that the relationship between sex and antibody response to SARS-CoV-2 is complex and influenced by multiple factors. While some studies suggest that males may exhibit higher antibody levels than females following exposure (32607519, 34766646), these findings are not universal and are often confounded by variables such as disease severity and hospitalization.
+
+Notably, Evidence 3 (35226399) highlights a significant interaction between sex and BMI, where antibody titers decrease with increasing BMI in men but show no clear trend in women following vaccination. This suggests that the relationship between sex and antibody response is not straightforward and is heavily modified by other factors. Furthermore, Evidence 4 (33693749) studied healthcare workers with mild disease and found no significant sex disparity in neutralizing antibody responses. Most importantly, Evidence 10 (37194021), a seroprevalence study in healthcare workers, found that male sex was not associated with seropositivity, directly contradicting the claim that men often have higher antibody levels.
+
+In light of these findings, I must conclude that the available evidence does not support the broad claim that men often have higher antibody levels than women following exposure to SARS-CoV-2. Any apparent sex difference is likely an artifact of differential disease severity and is inconsistent across populations. Therefore, I recommend that the court consider the complexity of the relationship between sex and antibody response and avoid overgeneralizing the findings of individual studies.
+
+--- [Audit] Step 4: Multi-Round Self-Reflection ---
+   > [Plaintiff Counsel] Performing self-reflection for Phase 1...
+     * Logic: 0.68, Novelty: 0.35, Rebuttal: 0.30
+     * Total Score: 0.467
+     * Discovery Need: Locate a meta-analysis or large, population-representative cohort study that reports sex differences in SARS-CoV-2 antibody titers while adjusting for disease severity, age, BMI, hospitalization, and time since infection.
+   > [Defense Counsel] Performing self-reflection for Phase 1...
+     * Logic: 0.80, Novelty: 0.60, Rebuttal: 0.70
+     * Total Score: 0.710
+     * Discovery Need: Look up studies that control for COVID-19 disease severity when examining sex differences in antibody levels across diverse populations.
+--- [Critic] Step 5: Round Integrity Review ---
+   > Critic Recommendations: 3 for Plaintiff, 3 for Defense
+     * [Plaintiff Rec]: Quantify 'often' with meta-analysis data showing the percentage of studies supporting the claim.
+     * [Plaintiff Rec]: Address confounding variables preemptively by presenting studies that control for age/hospitalization.
+     * [Plaintiff Rec]: Differentiate between antibody *levels* and *persistence* to strengthen specificity.
+     * [Defense Rec]: Provide concrete examples of 'population biases' in cited studies (e.g., regional, ethnic, or health-status imbalances).
+     * [Defense Rec]: Cite counter-studies showing no significant sex-based difference or higher female responses.
+     * [Defense Rec]: Clarify if biological factors (e.g., hormonal influences) were adequately controlled in disputed research.
+--- [Convergence] Score Delta: 1.1770 ---
+
+============================================================
+PROCEEDINGS PHASE 2
+============================================================
+
+--- [Plaintiff Counsel] Step 1: Evidence Discovery (Integrative Discovery) ---
+   > [Plaintiff Counsel] Discovery Need: I request production of de-identified individual-level longitudinal quantitative SARS-CoV-2 antibody data (including IgG and neutralizing antibody titers) linked to sex, age, symptom severity, vaccination status, comorbidities, and exact dates of infection and sample collection from all relevant cohort studies and clinical laboratories to permit adjusted comparative analyses between males and females. Focus also on: Locate a meta-analysis or large, population-representative cohort study that reports sex differences in SARS-CoV-2 antibody titers while adjusting for disease severity, age, BMI, hospitalization, and time since infection.
+   > [Plaintiff Counsel] Formulated Query: Based on the legal debate context and the specific evidentiary request, here is a precise search query:
+
+```sql
+("SARS-CoV-2" OR "COVID-19") AND ("antibody response" OR "antibody titer*" OR "IgG" OR "neutralizing antibody") AND ("sex difference*" OR "sex factor*" OR gender) AND (longitudinal OR "cohort study" OR "meta-analysis") AND ("individual-level data" OR "patient-level data") AND ("adjust* for" OR "control* for" OR "account* for") AND (age OR "body mass index" OR BMI OR "disease severity" OR "symptom severity" OR hospitalization OR "time since infection" OR comorbidities OR "vaccination status")
+```
+
+**Key elements explained:**
+
+1.  **Core Concepts:** `("SARS-CoV-2" OR "COVID-19")` captures the virus. `("antibody response" OR "antibody titer*" OR "IgG" OR "neutralizing antibody")` targets the specific immune markers requested.
+2.  **Sex Difference Focus:** `("sex difference*" OR "sex factor*" OR gender)` directly addresses the central dispute.
+3.  **Required Study Design/Data:** `(longitudinal OR "cohort study" OR "meta-analysis")` specifies the needed study types. `("individual-level data" OR "patient-level data")` explicitly demands the granular data requested for adjusted analysis.
+4.  **Critical Adjustments:** `("adjust* for" OR "control* for" OR "account* for")` combined with `(age OR "body mass index" OR BMI OR "disease severity" OR "symptom severity" OR hospitalization OR "time since infection" OR comorbidities OR "vaccination status")` ensures retrieval of studies that statistically account for the confounding variables highlighted in the expert testimony and the agent's request. This is crucial for refuting overgeneralization claims.
+5.  **Structure:** Uses Boolean operators (`AND`, `OR`) and wildcards (`*`) for comprehensive yet precise retrieval. Parentheses group related concepts logically.
+
+This query prioritizes studies providing the granular data needed for adjusted comparative analyses (individual-level longitudinal data) *and* specifically seeks meta-analyses/large cohorts reporting sex differences *while adjusting for the key confounders* identified in the debate and request. It directly addresses the evidentiary gaps challenged by the Defense and the Expert.
+--- [The Court] Reviewing Discovery Request ---
+   > [The Court] QUERY REFINED: ("SARS-CoV-2" OR "COVID-19") AND ("antibody response" OR "antibody titer*" OR IgG OR "neutralizing antibody*") AND ("sex difference*" OR "sex-specific" OR "by sex" OR gender) AND (longitudinal OR "cohort study" OR "prospective study") AND ("individual-level data" OR "patient-level data") AND ("adjusted for" OR "multivariable analysis" OR "multivariate model*" OR "confounder-adjusted") AND (age OR "body mass index" OR BMI OR "disease severity" OR "symptom severity" OR hospitalization OR "time since infection" OR comorbidities OR "vaccination status") AND ("effect modification by sex" OR "interaction term" OR "sex interaction")
+   > [PRAG STOP] Diminishing relevance gain (-0.0202 < 0.05)
+   > [Plaintiff Counsel] Admitted 3 new exhibits.
+--- [Plaintiff Counsel] Step 2: Generating Legal Argument ---
+
+Your Honor, the preponderance of the available, contemporaneous immunologic data supports the proposition that males frequently mount higher antibody responses than females after SARS‑CoV‑2 exposure. Large cohort analyses of convalescent donors and longitudinal patient series report male sex as an independent predictor of greater antibody magnitude, including neutralizing titers — for example, one convalescent‑plasma donor study found that male sex, older age, and hospitalization were each consistently associated with increased responses across multiple serologic assays, using neutralization as a reference (32607519). A separate longitudinal analysis documented that antibody titers were statistically higher in men than women at all measured timepoints following infection (p < 0.01), demonstrating persistence of the sex difference over time (34766646). Studies that directly assessed neutralizing‑antibody kinetics likewise observed significant sex differences in the evolution and magnitude of neutralizing responses after infection (33693749), confirming that the disparity is not limited to binding assays but extends to functional antibody measures.
+
+While disease severity, hospitalization, and other host factors (e.g., BMI) clearly modulate humoral responses, these factors do not negate the consistent observation of higher male antibody levels across multiple independent cohorts and assay types. Indeed, the presence of sex‑specific interactions with variables such as BMI in vaccine studies underscores that biological sex meaningfully modifies antibody magnitude rather than rendering sex irrelevant (35226399). Taken together, the weight of the evidence across convalescent, longitudinal, and vaccine‑response studies supports the Conclusion that men, once exposed to SARS‑CoV‑2, often exhibit higher antibody levels than women (32607519; 34766646; 33693749; 35226399).
+
+--- [Defense Counsel] Step 1: Evidence Discovery (Integrative Discovery) ---
+   > [Defense Counsel] Discovery Need: Your Honor, the defense requests the underlying stratified data from the cited cohort studies, segmented by age and pre-existing comorbidities, to demonstrate that any observed sex-based differences in antibody response are not universal but are confounded by these critical variables. Focus also on: Look up studies that control for COVID-19 disease severity when examining sex differences in antibody levels across diverse populations.
+   > [Defense Counsel] Formulated Query: Here is a precise search query targeting the required evidence:
+
+> ("antibody response" OR "antibody level*") AND ("sex difference*" OR "gender difference*") AND ("SARS-CoV-2" OR COVID-19) AND ("cohort stud*" OR longitudinal) AND (stratif* OR adjust* OR control*) AND ("age group*" OR "comorbidit*" OR "underlying condition*" OR diabetes OR hypertension OR immunocompromised) AND ("disease severity" OR "clinical severity" OR "WHO scale" OR "mild disease" OR "severe disease")
+
+**Why this query works:**
+
+1.  **Core Concepts:** Directly targets `antibody response/levels`, `sex/gender differences`, and `SARS-CoV-2/COVID-19`.
+2.  **Study Type:** Specifies `cohort studies` (as cited) or `longitudinal` designs.
+3.  **Stratification/Control:** Requires terms like `stratify`, `adjust`, `control` to find studies handling confounders.
+4.  **Key Confounders:** Explicitly includes `age groups`, `comorbidities` (with examples like `diabetes`, `hypertension`), and `underlying conditions`.
+5.  **Critical Variable:** Mandates inclusion of `disease severity` (with specific terms like `WHO scale`, `mild/severe disease`).
+6.  **Population Diversity:** Implied by the focus on confounders and severity control across populations.
+
+This query efficiently retrieves studies examining sex-based antibody differences *while explicitly controlling for age, comorbidities, and crucially, COVID-19 disease severity* within cohort data, directly addressing the defense's request for stratified evidence.
+--- [The Court] Reviewing Discovery Request ---
+   > [The Court] QUERY REFINED: ("antibody response" OR "antibody level*") AND ("sex difference*" OR "gender difference*" OR "male*" OR "female*") AND ("SARS-CoV-2" OR "COVID-19") AND ("cohort study" OR "longitudinal study") AND (stratif* OR "adjusted analysis" OR "multivariable model*" OR "confounder-adjusted") AND ("age group*" OR "comorbidit*" OR "underlying condition*" OR diabetes OR hypertension OR "immunocompromised status") AND ("disease severity" OR "clinical severity" OR "WHO ordinal scale" OR "mild disease" OR "severe disease" OR "critical disease") AND ("peer-reviewed") AND ("humans" NOT animals)
+   > [PRAG STOP] Diminishing relevance gain (0.0104 < 0.05)
+   > [Defense Counsel] Admitted 1 new exhibits.
+--- [Defense Counsel] Step 2: Generating Legal Argument ---
+
+Your Honor, the plaintiff continues to rely on a narrow and confounded subset of evidence to support an overbroad claim. The assertion that men "often" have higher antibody levels is not sustained by a rigorous review of the full record, which reveals critical limitations in their cited studies and direct contradictory findings.
+
+The plaintiff's foundational studies are fundamentally compromised by confounding with disease severity. Evidence 1 (32607519) is explicitly drawn from a convalescent plasma donor population—a group self-selected for high antibody titers—and itself identifies hospitalization as a key driver of response. If men experience more severe disease requiring hospitalization, the observed association is with severity, not sex. This is corroborated by Evidence 2 (34766646), which notes the men in that cohort had significantly more severe symptoms, again making it impossible to disentangle sex from disease severity as the true causative factor. The plaintiff mistakes this correlation for causation. Furthermore, Evidence 3 (35226399) demonstrates the relationship is not straightforward, showing a significant interaction where antibody levels *decrease* with higher BMI in men post-vaccination, a critical modifier that negates any simple, universal rule about sex.
+
+Most decisively, direct evidence from a broader, at-risk population refutes the claim entirely. Evidence 10 (37194021), a seroprevalence study in healthcare workers, concluded that "Male sex was not associated with seropositivity." This finding in a key demographic directly contradicts the plaintiff's core proposition. When the evidence from mild cases (Evidence 4, 33693749) and general populations is considered alongside the severe confounding in the plaintiff's preferred studies, the claim collapses. The available science shows that apparent sex differences are inconsistent and likely artifacts of differential disease progression, not a reliable or generalizable biological rule.
+
+--- [The Court] Step 3: Evaluating Expert Witness Requirements ---
+   > [Plaintiff Counsel] Proposed Expert Witness Type: Clinical immunologist/epidemiologist with biostatistics expertise in sex‑based immune responses to SARS‑CoV‑2
+   > [The Court] REQUEST GRANTED. Calling expert witness...
+   [Token Usage] Input: 147, Output: 131, Total: 278
+
+[EXPERT TESTIMONY]: As an expert witness, I have reviewed the available evidence and must conclude that the relationship between sex and antibody response to SARS-CoV-2 is complex and influenced by multiple factors. While some studies suggest that males may exhibit higher antibody levels than females following exposure (32607519, 34766646), these findings are not universal and are often confounded by variables such as disease severity and hospitalization. For example, Evidence 1 (32607519) is drawn from a convalescent plasma donor population, which is inherently biased towards individuals with robust, detectable antibody responses.
+
+Moreover, studies that directly assessed neutralizing-antibody kinetics have observed significant sex differences in the evolution and magnitude of neutralizing responses after infection (33693749). However, this disparity is not consistently observed across all populations and is likely modified by other factors such as BMI (35226399). Notably, Evidence 10 (37194021), a seroprevalence study in healthcare workers, found that male sex was not associated with seropositivity, directly contradicting the claim that men often have higher antibody levels. This finding suggests that any apparent sex difference is likely an artifact of differential disease severity and is inconsistent across populations.
+
+In light of these findings, I must conclude that the available evidence does not support the broad claim that men often have higher antibody levels than women following exposure to SARS-CoV-2. The relationship between sex and antibody response is complex and influenced by multiple factors, including disease severity, hospitalization, and BMI. Therefore, I recommend that the court consider the complexity of this relationship and avoid overgeneralizing the findings of individual studies. A more nuanced understanding of the factors that influence antibody response is necessary to accurately assess the relationship between sex and antibody levels.
+
+   > [Defense Counsel] Proposed Expert Witness Type: Immunologist or Epidemiologist with expertise in statistical analysis of biomedical data
+   > [The Court] REQUEST GRANTED. Calling expert witness...
+   [Token Usage] Input: 135, Output: 143, Total: 278
+
+[EXPERT TESTIMONY]: As an expert witness, I have reviewed the available evidence and must conclude that the relationship between sex and antibody response to SARS-CoV-2 is complex and influenced by multiple factors. While some studies suggest that males may exhibit higher antibody levels than females following exposure (32607519, 34766646), these findings are not universal and are often confounded by variables such as disease severity and hospitalization. For example, Evidence 1 (32607519) is drawn from a convalescent plasma donor population, which is inherently biased towards individuals with robust, detectable antibody responses.
+
+Moreover, studies that directly assessed neutralizing-antibody kinetics have observed significant sex differences in the evolution and magnitude of neutralizing responses after infection (33693749). However, this disparity is not consistently observed across all populations and is likely modified by other factors such as BMI (35226399). Notably, Evidence 10 (37194021), a seroprevalence study in healthcare workers, found that male sex was not associated with seropositivity, directly contradicting the claim that men often have higher antibody levels. This finding suggests that any apparent sex difference is likely an artifact of differential disease severity and is inconsistent across populations.
+
+In light of these findings, I must conclude that the available evidence does not support the broad claim that men often have higher antibody levels than women following exposure to SARS-CoV-2. The relationship between sex and antibody response is complex and influenced by multiple factors, including disease severity, hospitalization, and BMI. Therefore, I recommend that the court consider the complexity of this relationship and avoid overgeneralizing the findings of individual studies. A more nuanced understanding of the factors that influence antibody response is necessary to accurately assess the relationship between sex and antibody levels.
+
+--- [Audit] Step 4: Multi-Round Self-Reflection ---
+   > [Plaintiff Counsel] Performing self-reflection for Phase 2...
+     * Logic: 0.75, Novelty: 0.35, Rebuttal: 0.45
+     * Total Score: 0.540
+     * Discovery Need: Locate large, population-representative cohort studies or meta-analyses that report multivariable-adjusted associations (controlling for disease severity, hospitalization, age, BMI) between biological sex and SARS‑CoV‑2 antibody magnitude, including neutralizing titers.
+   > [Defense Counsel] Performing self-reflection for Phase 2...
+     * Logic: 0.80, Novelty: 0.40, Rebuttal: 0.60
+     * Total Score: 0.620
+     * Discovery Need: Look for a meta-analysis or large-scale study that specifically adjusts for disease severity and hospitalization status to isolate the independent effect of biological sex on antibody titers in a general population.
+--- [Critic] Step 5: Round Integrity Review ---
+   > Critic Recommendations: 3 for Plaintiff, 3 for Defense
+     * [Plaintiff Rec]: Address confounding variables explicitly in study re-analysis
+     * [Plaintiff Rec]: Provide meta-analysis data showing consistency across diverse cohorts
+     * [Plaintiff Rec]: Differentiate between antibody magnitude and functional neutralization capacity
+     * [Defense Rec]: Introduce specific contradictory studies with effect sizes
+     * [Defense Rec]: Analyze plaintiff's cited studies for residual confounding
+     * [Defense Rec]: Demonstrate how female immune advantages (e.g., T-cell response) counterbalance findings
+--- [Convergence] Score Delta: -0.0170 ---
+   > [ADAPTIVE STOP] Argument quality plateaued (delta < 5%). Proceedings concluded.
+
+8. Legal Consistency Check (Role-Switching)...
+
+============================================================
+ROLE-SWITCHING ROUND
+============================================================
+Swapping Plaintiff Counsel ↔ Defense Counsel roles...
+
+
+============================================================
+PROCEEDINGS PHASE 1
+============================================================
+
+--- [Plaintiff Counsel] Step 1: Evidence Discovery (Integrative Discovery) ---
+   > [Plaintiff Counsel] Discovery Need: I request the production of all pre-accident medical imaging studies for comparative analysis to establish a definitive anatomical baseline and refute allegations of pre-existing degenerative conditions. Focus also on: Locate large, population-representative cohort studies or meta-analyses that report multivariable-adjusted associations (controlling for disease severity, hospitalization, age, BMI) between biological sex and SARS‑CoV‑2 antibody magnitude, including neutralizing titers.
+   > [Plaintiff Counsel] Formulated Query: Based on the distinct requirements in the Agent Request, two separate precise search queries are necessary:
+
+1.  **For Pre-Accident Medical Imaging:**
+    `("pre-accident" OR "pre-injury") AND ("medical imaging" OR MRI OR "CT scan" OR radiograph OR x-ray) AND ("degenerative condition" OR "degenerative disc disease" OR osteoarthritis OR spondylosis) AND ("baseline" OR "comparative analysis" OR "prior condition")`
+    *(Focuses on retrieving specific patient imaging records/exhibits for establishing a pre-existing anatomical baseline against degenerative claims.)*
+
+2.  **For COVID-19 Sex-Difference Studies:**
+    `("SARS-CoV-2" OR "COVID-19") AND ("antibody response" OR "antibody magnitude" OR "neutralizing antibody" OR "neutralizing titer") AND ("biological sex" OR sex OR male OR female) AND ("cohort study" OR "meta-analysis") AND ("multivariable-adjusted" OR "adjusted for" OR "controlling for") AND ("disease severity" OR hospitalization OR age OR "body mass index" OR BMI)`
+    *(Focuses on retrieving relevant epidemiological studies controlling for specified confounders.)*
+
+**Rationale:**
+
+*   **Query 1:** Uses terms directly related to the legal request for *specific patient records* ("pre-accident", "medical imaging", specific modalities), the target condition ("degenerative condition" and examples), and the legal purpose ("baseline", "comparative analysis"). Boolean operators ensure all key concepts are present.
+*   **Query 2:** Uses precise epidemiological terminology. It includes the virus/condition, the outcomes (antibody magnitude, neutralizing titers), the exposure (biological sex), the study types (cohort, meta-analysis), the critical methodological requirement ("multivariable-adjusted", "controlling for"), and the specific confounders listed (disease severity, hospitalization, age, BMI). This ensures results are large studies with the necessary statistical adjustment.
+--- [The Court] Reviewing Discovery Request ---
+   > [The Court] QUERY REFINED: 1.  **For Pre-Accident Medical Imaging:**  
+`("pre-accident" OR "pre-injury") AND (MRI OR "CT scan" OR radiograph OR "x-ray") AND ("degenerative disc disease" OR "degenerative joint disease" OR osteoarthritis OR spondylosis) AND ("baseline assessment" OR "prior imaging" OR "pre-existing condition") AND ("lumbar spine" OR "cervical spine" OR "thoracic spine")`
+
+2.  **For COVID-19 Sex-Difference Studies:**  
+`("SARS-CoV-2" OR "COVID-19") AND ("antibody response" OR "neutralizing antibody" OR "neutralizing titer") AND (sex OR "biological sex" OR male OR female) AND ("cohort study" OR "meta-analysis") AND ("multivariable analysis" OR "adjusted model" OR "confounder adjustment") AND (age OR "body mass index" OR BMI OR hospitalization OR "disease severity") NOT ("in vitro" OR review OR case report)`
+   > [Plaintiff Counsel] Admitted 3 new exhibits.
+--- [Plaintiff Counsel] Step 2: Generating Legal Argument ---
+
+Your Honor, opposing counsel,
+
+The defense acknowledges the studies presented but must contest the sweeping conclusion that men "often" have higher antibody levels post-exposure. The evidence cited is neither universal nor dispositive, and its interpretation fails to account for critical confounding variables and contradictory data.
+
+First, the association between male sex and higher antibody titers is heavily conflated with disease severity. Evidence 1 explicitly states that hospitalization is a driver of increased antibody responses. Evidence 2 corroborates this, noting men in that cohort had more severe symptoms like higher fever and shortness of breath. Therefore, the observed higher antibody levels in men may be a proxy for more severe clinical presentation, not an inherent function of sex. A study not accounting for severity cannot isolate sex as an independent variable.
+
+Second, the relationship is not consistent across all contexts and can be reversed by other factors. Evidence 3 demonstrates that the effect of BMI on vaccine-induced antibodies differs significantly by sex, indicating a complex interaction where sex alone is not predictive. Furthermore, Evidence 11, a large cohort study on post-vaccination responses, used multivariable models to assess demographics and health conditions, but its results for natural infection in relation to sex are not presented here, suggesting the picture is incomplete. The claim's reliance on selected, unadjusted associations from early convalescent cohorts does not withstand scrutiny when
+
+--- [Defense Counsel] Step 1: Evidence Discovery (Integrative Discovery) ---
+   > [Defense Counsel] Discovery Need: I request production of a peer‑reviewed, sex‑stratified longitudinal dataset reporting quantitative neutralizing and binding antibody titers at standardized timepoints post‑exposure (e.g., 1, 3, 6, and 12 months), using validated assays and adjusted for age, disease severity, vaccination status, and comorbidities, to verify whether males truly "often" exhibit higher antibody responses. Focus also on: Look for a meta-analysis or large-scale study that specifically adjusts for disease severity and hospitalization status to isolate the independent effect of biological sex on antibody titers in a general population.
+   > [Defense Counsel] Formulated Query: Here is a precise search query targeting the required evidence:
+
+```sql
+("antibody titer*" OR "neutralizing antibody" OR "binding antibody" OR "immunoglobulin level*") AND ("sex difference*" OR "sex stratif*" OR gender) AND (longitudinal OR "follow-up") AND ("1 month" OR "3 month" OR "6 month" OR "12 month") AND ("disease severity" OR "hospitalization status" OR "clinical severity") AND (adjust* OR control* OR stratif*) AND ("meta-analysis" OR "large cohort" OR "population-based")
+```
+
+**Key elements explained:**
+
+1.  **Antibody Measurement:** `("antibody titer*" OR "neutralizing antibody" OR "binding antibody" OR "immunoglobulin level*")` - Captures specific antibody types requested.
+2.  **Sex Stratification:** `("sex difference*" OR "sex stratif*" OR gender)` - Focuses on studies comparing males/females.
+3.  **Longitudinal Design:** `(longitudinal OR "follow-up")` - Ensures data is collected over time.
+4.  **Standard Timepoints:** `("1 month" OR "3 month" OR "6 month" OR "12 month")` - Specifies the critical post-exposure intervals.
+5.  **Critical Adjustment:** `("disease severity" OR "hospitalization status" OR "clinical severity") AND (adjust* OR control* OR stratif*)` - Explicitly demands studies that account for/control disease severity/hospitalization as a confounder.
+6.  **Study Type & Size:** `("meta-analysis" OR "large cohort" OR "population-based")` - Prioritizes high-quality evidence with sufficient power to isolate biological sex effects.
+
+**This query efficiently combines all agent requirements:** peer-reviewed longitudinal data, sex-stratification, specific antibody titers, standardized timepoints, *mandatory adjustment for disease severity/hospitalization*, preference for meta-analysis/large studies, and implied adjustment for other factors (age, vaccination, comorbidities) through the `adjust* OR control*` term. It directly addresses the challenge to the claim "men 'often' have higher levels".
+--- [The Court] Reviewing Discovery Request ---
+   > [The Court] QUERY REFINED: ```sql
+("antibody titer*" OR "neutralizing antibody" OR "binding antibody" OR "immunoglobulin level*") AND ("sex difference*" OR "sex stratif*" OR "biological sex") AND (longitudinal OR "follow-up") AND ("1 month" OR "3 month" OR "6 month" OR "12 month") AND ("disease severity" OR "hospitalization status" OR "clinical severity") AND (adjust* OR control* OR stratif*) AND ("multivariable analysis" OR "multivariate adjustment") AND ("meta-analysis" OR "large cohort" AND (n > 1000) OR "population-based")
+```
+   > [Defense Counsel] Admitted 3 new exhibits.
+--- [Defense Counsel] Step 2: Generating Legal Argument ---
+
+Your claim that men "often" have higher antibody levels after SARS‑CoV‑2 exposure rests on selected associations that do not establish sex as an independent determinant. Crucially, several studies show that greater antibody responses are driven by disease severity and hospitalization rather than sex per se: the convalescent plasma study explicitly identifies hospitalization and age as consistent drivers of higher antibody titers, with male sex reported alongside these factors but not disentangled from them (32607519). In the long‑term cohort cited, men experienced more severe symptoms (higher fever, shortness of breath, chest pain), which plausibly explains their higher titers in that sample—again linking antibody magnitude to clinical severity rather than to sex alone (34766646). The reliability of some serologic findings is further limited by low assay specificity reported in the same body of work (32607519), undermining confidence in unadjusted comparisons.
+
+Beyond confounding by severity, the evidence is heterogeneous and context‑dependent. Vaccine and infection responses show different sex interactions (e.g., BMI influences antibody titers differently by sex after vaccination), demonstrating that sex effects are neither uniform nor simple (35226399). Longitudinal measurements likewise show evolving neutralizing responses over time, without a clear, consistent pattern that men remain higher across all timepoints and cohorts (33693749). Larger multivariable analyses routinely adjust for age, comorbidity, severity and other factors (36456004), and when those confounders are accounted for the assertion that men “often” have higher post‑exposure antibody levels is not conclusively supported. In short, the evidence is inconsistent, confounded, and insufficient to sustain the broad, general claim.
+
+--- [The Court] Step 3: Evaluating Expert Witness Requirements ---
+   > [Plaintiff Counsel] Proposed Expert Witness Type: Immunology or Epidemiology Expert
+   > [The Court] REQUEST GRANTED. Calling expert witness...
+   [Token Usage] Input: 127, Output: 154, Total: 281
+
+[EXPERT TESTIMONY]: As an expert witness in the field of immunology, I have reviewed the provided evidence regarding the claim that men often have higher levels of antibodies than women once exposed to COVID-19. Upon examination, I conclude that the evidence does not support this claim as a general statement. While some studies suggest an association between male sex and higher antibody titers, this relationship is heavily confounded by disease severity and hospitalization (Evidence 1, Source: 32607519; Evidence 2, Source: 34766646). In fact, these studies demonstrate that the observed higher antibody levels in men may be a proxy for more severe clinical presentation, rather than an inherent function of sex.
+
+Furthermore, the relationship between sex and antibody levels is not consistent across all contexts and can be reversed by other factors. For example, Evidence 3 (Source: 35226399) shows that the effect of BMI on vaccine-induced antibodies differs significantly by sex, indicating a complex interaction where sex alone is not predictive. Additionally, Evidence 11 (Source: 36456004) highlights the importance of adjusting for confounding variables such as age, comorbidity, and severity in order to accurately assess the relationship between sex and antibody levels. In light of these findings, I argue that the claim's reliance on selected, unadjusted associations from early convalescent cohorts does not withstand scrutiny.
+
+In conclusion, the evidence presented does not support the broad, general claim that men often have higher levels of antibodies than women once exposed to COVID-19. Instead, the data suggest that the relationship between sex and antibody levels is complex, context-dependent, and influenced by various factors such as disease severity, hospitalization, and BMI. Therefore, I recommend that any conclusions drawn from the evidence should be nuanced and take into account the limitations and confounding variables present in the studies.
+
+   > [Defense Counsel] Proposed Expert Witness Type: Clinical immunologist / immuno-epidemiologist (with strong biostatistics experience)
+   > [The Court] REQUEST GRANTED. Calling expert witness...
+   [Token Usage] Input: 138, Output: 131, Total: 269
+
+[EXPERT TESTIMONY]: Based on the provided evidence, I conclude that the claim "men often have higher levels of antibodies than women once exposed to COVID-19" is not supported as a general statement. The association between male sex and higher antibody titers is heavily confounded by disease severity and hospitalization, as demonstrated by Evidence 1 (Source: 32607519) and Evidence 2 (Source: 34766646). These studies suggest that the observed higher antibody levels in men may be a proxy for more severe clinical presentation, rather than an inherent function of sex.
+
+Furthermore, the relationship between sex and antibody levels is not consistent across all contexts and can be reversed by other factors. Evidence 3 (Source: 35226399) shows that the effect of BMI on vaccine-induced antibodies differs significantly by sex, indicating a complex interaction where sex alone is not predictive. Additionally, Evidence 11 (Source: 36456004) highlights the importance of adjusting for confounding variables such as age, comorbidity, and severity in order to accurately assess the relationship between sex and antibody levels. These findings suggest that the claim's reliance on selected, unadjusted associations from early convalescent cohorts does not withstand scrutiny.
+
+In conclusion, the evidence presented does not support the broad, general claim that men often have higher levels of antibodies than women once exposed to COVID-19. Instead, the data suggest that the relationship between sex and antibody levels is complex, context-dependent, and influenced by various factors such as disease severity, hospitalization, and BMI. Therefore, I recommend that any conclusions drawn from the evidence should be nuanced and take into account the limitations and confounding variables present in the studies.
+
+--- [Audit] Step 4: Multi-Round Self-Reflection ---
+   > [Plaintiff Counsel] Performing self-reflection for Phase 1...
+     * Logic: 0.70, Novelty: 0.30, Rebuttal: 0.20
+     * Total Score: 0.430
+     * Discovery Need: Find peer-reviewed studies that use multivariate analysis to control for disease severity and other confounders, assessing sex as an independent predictor of antibody levels in diverse populations post-COVID-19 exposure.
+   > [Defense Counsel] Performing self-reflection for Phase 1...
+     * Logic: 0.80, Novelty: 0.40, Rebuttal: 0.55
+     * Total Score: 0.605
+     * Discovery Need: Locate peer-reviewed studies or meta-analyses that report SARS‑CoV‑2 antibody titers (binding and neutralizing) by sex with multivariable adjustment for disease severity, hospitalization status, age, BMI, and time since infection.
+--- [Critic] Step 5: Round Integrity Review ---
+   > Critic Recommendations: 2 for Plaintiff, 2 for Defense
+     * [Plaintiff Rec]: Introduce studies controlling for hospitalization status to isolate sex effects
+     * [Plaintiff Rec]: Quantify 'often' with epidemiological data on antibody distribution variance
+     * [Defense Rec]: Preemptively address potential biological mechanisms for sex differences
+     * [Defense Rec]: Clarify if any subgroups show consistent sex-based differences despite severity controls
+--- [Convergence] Score Delta: -0.1420 ---
+
+============================================================
+PROCEEDINGS PHASE 2
+============================================================
+
+--- [Plaintiff Counsel] Step 1: Evidence Discovery (Integrative Discovery) ---
+   > [Plaintiff Counsel] Discovery Need: We request the raw, patient-level data from the cited studies, including all demographic and clinical variables, to perform a multivariate analysis controlling for potential confounders such as age, comorbidities, and vaccination status. Focus also on: Find peer-reviewed studies that use multivariate analysis to control for disease severity and other confounders, assessing sex as an independent predictor of antibody levels in diverse populations post-COVID-19 exposure.
+   > [Plaintiff Counsel] Formulated Query: Based on the legal request and debate context, here is the precise search query:
+
+```sql
+("SARS-CoV-2" OR "COVID-19") AND ("antibody levels" OR "neutralizing antibodies" OR IgG) AND ("sex factors" OR gender OR "sex differences") AND ("multivariate analysis" OR "regression analysis" OR "confounding factors") AND ("disease severity" OR comorbidities OR "vaccination status" OR age) AND ("independent predictor" OR "confounder control" OR "adjusted analysis")
+```
+
+**Key elements covered:**
+1.  **Core Subject:** `("SARS-CoV-2" OR "COVID-19") AND ("antibody levels" OR ...)`
+2.  **Key Predictor:** `AND ("sex factors" OR gender OR "sex differences")`
+3.  **Required Methodology:** `AND ("multivariate analysis" OR ...)`
+4.  **Specific Confounders:** `AND ("disease severity" OR comorbidities OR "vaccination status" OR age)`
+5.  **Focus on Independence:** `AND ("independent predictor" OR "confounder control" OR "adjusted analysis")`
+
+**Why this query works:**
+*   **Precision:** Combines all critical elements from the request (post-COVID antibodies, sex comparison, multivariate analysis, specific confounders, independence assessment).
+*   **Terminology:** Uses controlled vocabulary (MeSH terms like "Sex Factors," "Confounding Factors") alongside natural language for recall.
+*   **Methodology Focus:** Explicitly requires studies using statistical methods (`multivariate analysis`, `regression`, `adjusted analysis`) capable of isolating sex as an independent factor.
+*   **Confounder Specificity:** Directly names the confounders (disease severity, comorbidities, vaccination status, age) mentioned in the request.
+*   **Independence Emphasis:** Includes phrases like `"independent predictor"` and `"confounder control"` to filter for studies designed to answer the specific question in dispute.
+*   **Context Fit:** Excludes terms like "often" or "general statement," focusing purely on the empirical evidence and statistical methodology needed to test the claim.
+--- [The Court] Reviewing Discovery Request ---
+   > [The Court] QUERY REFINED: ```sql
+("SARS-CoV-2" OR "COVID-19") AND ("antibody levels" OR "neutralizing antibodies" OR IgG) AND ("sex differences" OR "sex factors") AND ("multivariate analysis" OR "logistic regression" OR "linear regression" OR "adjusted analysis") AND ("disease severity" OR comorbidities OR "vaccination status" OR age) AND ("independent predictor" OR "adjusted odds ratio" OR "adjusted effect estimate" OR "confounder adjustment")
+```
+   > [Plaintiff Counsel] Admitted 1 new exhibits.
+--- [Plaintiff Counsel] Step 2: Generating Legal Argument ---
+
+Your Honor, opposing counsel, and expert witnesses,
+
+The plaintiff's position is firmly supported by consistent, statistically significant evidence demonstrating that male sex is independently associated with higher antibody levels following SARS-CoV-2 exposure. Contrary to the defense's assertions, the cited studies control for key variables and reveal a clear pattern. **Evidence 1 (32607519)** explicitly concludes that "Male sex, older age, and hospitalization with COVID-19 were all consistently associated with increased antibody responses across the serological assays." This study lists male sex as a distinct and consistent driver alongside hospitalization, not merely a proxy for it. Furthermore, **Evidence 2 (34766646)** provides longitudinal data showing antibody titers were "statistically higher in men than women at all times (p < 0.01)." This persistent difference over time strongly indicates a fundamental sex-based disparity in humoral immune response, not one transiently explained by acute disease severity.
+
+While the defense correctly notes that disease severity is a contributing factor, the evidence does not show that severity wholly accounts for the observed sex difference. The studies present male sex as an independent correlate. The argument that multivariable adjustments would nullify this effect is speculative and unsupported by the provided data; in fact, the studies highlight male sex as a significant factor in their analyses. Therefore, based on the direct, reproducible findings from multiple cohorts, the claim that men often have higher antibody levels post-exposure is substantiated by the preponder
+
+--- [Defense Counsel] Step 1: Evidence Discovery (Integrative Discovery) ---
+   > [Defense Counsel] Discovery Need: I request individual‑level data or a pooled meta‑analysis of longitudinal SARS‑CoV‑2 antibody measurements presenting sex‑disaggregated multivariable analyses that adjust for age, disease severity, time since infection/vaccination, comorbidities, and assay type to determine whether male sex independently predicts higher antibody levels. Focus also on: Locate peer-reviewed studies or meta-analyses that report SARS‑CoV‑2 antibody titers (binding and neutralizing) by sex with multivariable adjustment for disease severity, hospitalization status, age, BMI, and time since infection.
+   > [Defense Counsel] Formulated Query: Based on the proceedings and request, here is a precise search query:
+
+```pubmed
+("SARS-CoV-2" OR COVID-19) AND (antibod* OR "antibody titer" OR "neutralizing antibody") AND ("sex difference" OR gender OR male OR female) AND ("longitudinal study" OR "prospective cohort") AND ("multivariable analysis" OR "adjusted analysis" OR "regression model") AND ("adjusting for" OR "controlled for") AND (age OR "disease severity" OR hospitalization OR "time since infection" OR "time since vaccination" OR BMI OR comorbidity OR "assay type")
+```
+
+**Key elements captured:**
+1.  **Population/Exposure:** `("SARS-CoV-2" OR COVID-19)`
+2.  **Outcome:** `(antibod* OR "antibody titer" OR "neutralizing antibody")`
+3.  **Key Predictor:** `("sex difference" OR gender OR male OR female)`
+4.  **Required Study Design:** `("longitudinal study" OR "prospective cohort")`
+5.  **Essential Analysis Type:** `("multivariable analysis" OR "adjusted analysis" OR "regression model")`
+6.  **Mandatory Adjustments:** `("adjusting for" OR "controlled for") AND (age OR "disease severity" OR hospitalization OR "time since infection" OR "time since vaccination" OR BMI OR comorbidity OR "assay type")`
+
+**Why this query works:**
+*   Combines precise terms from the legal request (`longitudinal`, `multivariable analysis`, `adjusting for`, specific confounders).
+*   Ensures studies explicitly report sex-stratified results with statistical adjustment.
+*   Targets studies measuring antibody levels (binding/neutralizing) over time.
+*   Filters for the highest level of evidence (longitudinal/cohort designs with adjusted analyses).
+*   Uses parentheses and `AND` to enforce all critical components are present.
+*   Includes synonyms for key concepts (`gender`, `titer`, `controlled for`, `comorbidity`).
+
+**Execute this in PubMed/Google Scholar/Embase.** Refine using filters (e.g., Humans, Meta-Analysis, Publication Date).
+--- [The Court] Reviewing Discovery Request ---
+   > [The Court] QUERY REFINED: ```pubmed
+("SARS-CoV-2" OR "COVID-19") AND (antibod* OR "antibody titer" OR "neutralizing antibody") AND (male OR female OR "sex difference" OR gender) AND ("longitudinal study" OR "prospective cohort") AND ("multivariable regression" OR "adjusted regression model" OR "adjusted for confounders") AND ("adjusted for" OR "controlled for") AND (age AND ("disease severity" OR hospitalization) AND ("time since infection" OR "time since vaccination") AND BMI AND comorbidity AND "assay type") NOT ("review" OR "meta-analysis" OR "case report")
+```
+   > [PRAG STOP] Diminishing relevance gain (0.0491 < 0.05)
+   > [Defense Counsel] Admitted 2 new exhibits.
+--- [Defense Counsel] Step 2: Generating Legal Argument ---
+
+Your claim that men “often” have higher antibody levels after SARS‑CoV‑2 exposure rests on selective readings of observational datasets that do not establish sex as an independent, generalizable determinant. The largest and most cited studies in the plaintiff’s bundle explicitly identify hospitalization, age, and disease severity as consistent drivers of higher antibody responses, and show male sex appearing alongside these factors rather than being disentangled from them (32607519). In the same convalescent plasma work the authors report very low specificity for some IgG ELISAs, undermining confidence in unadjusted serologic comparisons (32607519). The longitudinal cohort cited by the plaintiff likewise documents that men in that sample experienced more severe symptoms (higher fever, dyspnea, chest pain), a plausible alternative explanation for their higher titers (34766646). Selection and severity bias in convalescent and donor cohorts therefore make it improper to infer a general sex effect from those samples alone (34696806).
+
+Beyond confounding and assay limitations, the evidence is heterogeneous and context‑dependent: antibody kinetics differ by timepoint, by whether the response follows infection versus vaccination, and by interacting host factors such as BMI (33693749; 35226399). Large cohort studies that apply multivariable adjustment illustrate the necessity of controlling for age, comorbidity, exposure severity and other covariates before attributing differences to sex (36456004; 34070196). In short, the record does not support the broad allegation that men “often” mount higher antibody responses as a general biological rule — the data are inconsistent, frequently confounded by severity and selection, and insufficient to sustain the plaintiff’s sweeping claim.
+
+--- [The Court] Step 3: Evaluating Expert Witness Requirements ---
+   > [Plaintiff Counsel] Proposed Expert Witness Type: Epidemiologist and Biostatistician
+   > [The Court] REQUEST GRANTED. Calling expert witness...
+   [Token Usage] Input: 129, Output: 129, Total: 258
+
+[EXPERT TESTIMONY]: As an expert witness, I have reviewed the evidence provided and conclude that the claim "men often have higher levels of antibodies than women once exposed to COVID-19" is not supported by the data. While some studies suggest an association between male sex and higher antibody titers, this relationship is heavily confounded by disease severity and hospitalization (Source: 32607519; Source: 34766646). In fact, these studies demonstrate that the observed higher antibody levels in men may be a proxy for more severe clinical presentation, rather than an inherent function of sex.
+
+Furthermore, the relationship between sex and antibody levels is not consistent across all contexts and can be reversed by other factors. For example, Source: 35226399 shows that the effect of BMI on vaccine-induced antibodies differs significantly by sex, indicating a complex interaction where sex alone is not predictive. Additionally, Source: 36456004 highlights the importance of adjusting for confounding variables such as age, comorbidity, and severity in order to accurately assess the relationship between sex and antibody levels. These findings suggest that the claim's reliance on selected, unadjusted associations from early convalescent cohorts does not withstand scrutiny.
+
+In conclusion, the evidence presented does not support the broad, general claim that men often have higher levels of antibodies than women once exposed to COVID-19. Instead, the data suggest that the relationship between sex and antibody levels is complex, context-dependent, and influenced by various factors such as disease severity, hospitalization, and BMI. Therefore, I recommend that any conclusions drawn from the evidence should be nuanced and take into account the limitations and confounding variables present in the studies.
+
+   > [Defense Counsel] Proposed Expert Witness Type: Immunologist-epidemiologist (expertise in serology/antibody kinetics and observational study methods/statistics)
+   > [The Court] REQUEST GRANTED. Calling expert witness...
+   [Token Usage] Input: 143, Output: 171, Total: 314
+
+[EXPERT TESTIMONY]: As an expert witness, I have reviewed the provided evidence regarding the claim that men often have higher levels of antibodies than women once exposed to COVID-19. Upon examination, I conclude that the evidence does not support this claim as a general statement. While some studies suggest an association between male sex and higher antibody titers, this relationship is heavily confounded by disease severity and hospitalization (Source: 32607519; Source: 34766646). In fact, these studies demonstrate that the observed higher antibody levels in men may be a proxy for more severe clinical presentation, rather than an inherent function of sex.
+
+Furthermore, the relationship between sex and antibody levels is not consistent across all contexts and can be reversed by other factors. For example, Source: 35226399 shows that the effect of BMI on vaccine-induced antibodies differs significantly by sex, indicating a complex interaction where sex alone is not predictive. Additionally, Source: 36456004 highlights the importance of adjusting for confounding variables such as age, comorbidity, and severity in order to accurately assess the relationship between sex and antibody levels. These findings suggest that the claim's reliance on selected, unadjusted associations from early convalescent cohorts does not withstand scrutiny.
+
+In conclusion, the evidence presented does not support the broad, general claim that men often have higher levels of antibodies than women once exposed to COVID-19. Instead, the data suggest that the relationship between sex and antibody levels is complex, context-dependent, and influenced by various factors such as disease severity, hospitalization, and BMI. Therefore, I recommend that any conclusions drawn from the evidence should be nuanced and take into account the limitations and confounding variables present in the studies.
+
+--- [Audit] Step 4: Multi-Round Self-Reflection ---
+   > [Plaintiff Counsel] Performing self-reflection for Phase 2...
+     * Logic: 0.70, Novelty: 0.40, Rebuttal: 0.30
+     * Total Score: 0.490
+     * Discovery Need: Search for large-scale, population-based serological studies that control for disease severity, age, and comorbidities to isolate the independent effect of sex on SARS-CoV-2 antibody levels.
+   > [Defense Counsel] Performing self-reflection for Phase 2...
+     * Logic: 0.75, Novelty: 0.35, Rebuttal: 0.65
+     * Total Score: 0.600
+     * Discovery Need: Locate systematic reviews or large cohort studies that report SARS‑CoV‑2 antibody (binding and neutralizing) levels by sex with multivariable adjustment for disease severity, age, BMI, and hospitalization status.
+--- [Critic] Step 5: Round Integrity Review ---
+   > Critic Recommendations: 2 for Plaintiff, 2 for Defense
+     * [Plaintiff Rec]: Present studies isolating sex as a variable through matched severity cohorts
+     * [Plaintiff Rec]: Clarify epidemiological thresholds for 'often' (e.g., prevalence metrics)
+     * [Defense Rec]: Introduce meta-analyses showing inconsistent sex-based antibody patterns across geographies
+     * [Defense Rec]: Challenge biological plausibility of sex-driven antibody differences via immunological literature
+--- [Convergence] Score Delta: 0.0550 ---
+
+============================================================
+CONSISTENCY ANALYSIS
+============================================================
+
+Consistency Analysis:
+### Analysis of Logical Consistency in Role-Switched Arguments
+
+#### 1. **Does Agent A Maintain Logical Consistency When Switching from Plaintiff Counsel to Defense Counsel?**
+
+**Agent A** transitions from arguing *for* the proposition that men "often" have higher antibody levels post-SARS-CoV-2 exposure (as Plaintiff Counsel) to arguing *against* it (as Defense Counsel). This role reversal requires Agent A to critique the same evidence they previously endorsed. 
+
+- **Consistency in Critique**: Agent A maintains logical consistency by focusing on the limitations of the evidence they previously cited. For example, they highlight that **Evidence 1 (32607519)** and **Evidence 2 (34766646)** conflate male sex with disease severity, arguing that hospitalization and symptom severity—not sex—are the primary drivers of higher antibody levels. This critique aligns with their earlier acknowledgment of these factors as confounders, even if they previously emphasized sex as an independent predictor.
+  
+- **New Emphasis**: As Defense Counsel, Agent A introduces additional nuances, such as the heterogeneity of antibody kinetics (**Evidence 3, 35226399**) and the limitations of serologic assays (**Evidence 1, 32607519**). These points were not emphasized in their original argument but do not contradict it; instead, they provide a more comprehensive critique of the evidence.
+
+- **Logical Flow**: Agent A’s argument remains coherent, as they consistently argue that the evidence does not isolate sex as an independent factor and that the claim is overstated. There is no contradiction in their reasoning.
+
+**Conclusion**: Agent A maintains logical consistency when switching roles. Their critique of the evidence aligns with their earlier acknowledgment of its limitations, and they introduce additional points without contradicting their original stance.
+
+---
+
+#### 2. **Does Agent B Maintain Logical Consistency When Switching from Defense Counsel to Plaintiff Counsel?**
+
+**Agent B** transitions from arguing *against* the proposition that men "often" have higher antibody levels (as Defense Counsel) to arguing *for* it (as Plaintiff Counsel). This requires them to reinterpret the same evidence they previously critiqued.
+
+- **Consistency in Interpretation**: Agent B’s arguments as Plaintiff Counsel focus on the statistical significance of male sex as an independent predictor of higher antibody levels, citing **Evidence 1 (32607519)** and **Evidence 2 (34766646)**. They emphasize that these studies control for severity and other factors, presenting male sex as a distinct correlate. This interpretation is consistent with their earlier acknowledgment of these studies but shifts the emphasis from confounding to independence.
+
+- **New Emphasis**: As Plaintiff Counsel, Agent B downplays the confounding factors (e.g., disease severity) they previously highlighted and instead emphasizes the reproducibility of sex-based differences across cohorts. This shift in emphasis is not inherently contradictory but represents a change in perspective rather than logic.
+
+- **Logical Flow**: Agent B’s argument remains coherent, as they consistently rely on the same evidence but reinterpret its implications. There is no direct contradiction in their reasoning.
+
+**Conclusion**: Agent B maintains logical consistency when switching roles. They reinterpret the evidence to support their new position without contradicting their earlier critique.
+
+---
+
+#### 3. **Are There Contradictions in Their Arguments?**
+
+- **Agent A**: No contradictions are observed. Agent A’s critique of the evidence as Defense Counsel aligns with their earlier acknowledgment of its limitations as Plaintiff Counsel. They introduce new points (e.g., assay limitations, heterogeneity) without undermining their original argument.
+
+- **Agent B**: No direct contradictions are observed. Agent B’s reinterpretation of the evidence as Plaintiff Counsel is consistent with their earlier acknowledgment of its validity as Defense Counsel. They shift emphasis from confounding to independence but do not contradict their earlier points.
+
+**Conclusion**: Neither agent exhibits contradictions in their arguments. Both maintain logical coherence while adapting their interpretations to their new roles.
+
+---
+
+#### 4. **Overall Consistency Score**
+
+- **Agent A**: 9/10  
+  Agent A demonstrates strong logical consistency, seamlessly transitioning from Plaintiff to Defense Counsel. Their critique of the evidence aligns with their earlier acknowledgment of its limitations, and they introduce additional points without contradiction.
+
+- **Agent B**: 8/10  
+  Agent B maintains logical consistency but exhibits a more noticeable shift in emphasis when switching roles. Their reinterpretation of the evidence is coherent but relies more heavily on perspective change than Agent A.
+
+**Overall Consistency Score**: 8.5/10  
+Both agents maintain logical consistency when switching roles, with Agent A showing slightly stronger coherence. Their arguments adapt to their new positions without contradiction, demonstrating effective role-switching in argumentation.
+
+
+9. Judicial Panel Evaluation...
+
+============================================================
+JUDICIAL PANEL EVALUATION
+============================================================
+
+Judge 1 (deepseek/deepseek-r1) deliberating...
+  Verdict: NOT SUPPORTED
+  Evidence Strength: 5/10
+  Argument Validity: 6/10
+  Scientific Reliability: 4/10
+
+Judge 2 (meta-llama/llama-3.1-405b-instruct) deliberating...
+  Verdict: INCONCLUSIVE
+  Evidence Strength: 6/10
+  Argument Validity: 7/10
+  Scientific Reliability: 6/10
+
+Judge 3 (qwen/qwen3-235b-a22b-2507) deliberating...
+  Verdict: INCONCLUSIVE
+  Evidence Strength: 6/10
+  Argument Validity: 7/10
+  Scientific Reliability: 6/10
+
+
+Final Verdict: INCONCLUSIVE
+Vote Breakdown: {'NOT SUPPORTED': 1, 'INCONCLUSIVE': 2}
+Dissent Present: Yes
+
+11. Generating Final Verdict...
+
+============================================================
+FINAL VERDICT GENERATION (PROBABILISTIC FUSION)
+============================================================
+
+Negotiation P_neg: 0.8581 (L_neg: 1.8000)
+Panel L_panel: -1.0931
+Total Log-Odds: 0.7069
+Final Probability: 0.6697
+Verdict: SUPPORT (Confidence: 0.3394)
+   Verdict: SUPPORT
+   Confidence: 0.339
+
+   [SAVED] Verdict appended to E:\thesis(12feb)\PRAG-ArgumentMining-MultiAgentDebate-RoleSwitching\framework\outcome\all_verdicts.jsonl
+   [SAVED] Claim ID appended to E:\thesis(12feb)\PRAG-ArgumentMining-MultiAgentDebate-RoleSwitching\framework\outcome\processed_claims.txt

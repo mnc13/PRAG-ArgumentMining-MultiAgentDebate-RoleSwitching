@@ -1,0 +1,261 @@
+{
+  "shared_pool": [
+    {
+      "source_id": "35124599",
+      "text": "[Technology and health care : official journal of the European Society for Engineering and Medicine 2022] Clinical analysis of severe COVID-19 patients.\n\nOBJECTIVE: To analyze the clinical data of patients with severe COVID-19.",
+      "relevance_score": 0.2
+    },
+    {
+      "source_id": "33208116",
+      "text": "[BMC infectious diseases 2020] Proposal of COVID-19 Clinical Risk Score for the management of suspected COVID-19 cases: a case control study.\n\nMETHODS: This was a single-center, retrospective, observational study of patients with suspected COVID-19 and confirmed COVID-19. Patient background, clinica",
+      "relevance_score": 0.1
+    },
+    {
+      "source_id": "33750984",
+      "text": "[PloS one 2021] Antibody kinetics and clinical course of COVID-19 a prospective observational study.\n\nBACKGROUND: Serological response and association to clinical manifestation is important for understanding the pathogenesis of COVID-19.",
+      "relevance_score": 0.5
+    },
+    {
+      "source_id": "34050885",
+      "text": "[Infectious diseases and therapy 2021] Dynamic Antibody Responses in Patients with Different Severity of COVID-19: A Retrospective Study.\n\nCONCLUSION: We observed differences in antibody responses among patients with different severity of COVID-19. A high IgG level in the first 14\u00a0days of disease ma",
+      "relevance_score": 0.5
+    },
+    {
+      "source_id": "34489974",
+      "text": "[Frontiers in immunology 2021] Different Profiles of Antibodies and Cytokines Were Found Between Severe and Moderate COVID-19 Patients.\n\nOBJECTIVES: Our objective was to determine the antibody and cytokine profiles in different COVID-19 patients.",
+      "relevance_score": 0.3
+    },
+    {
+      "source_id": "34950219",
+      "text": "[Future virology 2021] A systematic review and meta-analysis of the sensitivity of antibody tests for the laboratory confirmation of COVID-19.\n\nCONCLUSION: Serological tests have low sensitivity within the first week of symptom onset and cannot replace nucleic acid amplification tests. However, sero",
+      "relevance_score": 0.1
+    },
+    {
+      "source_id": "37630512",
+      "text": "[Microorganisms 2023] Use of Monoclonal Antibodies in Pregnant Women Infected by COVID-19: A Case Series.\n\nMETHODS: A total of 22 pregnant women with mild to moderate infection were treated with three different monoclonal antibodies, and efficacy and safety were evaluated in the first period and unt",
+      "relevance_score": 0.1
+    },
+    {
+      "source_id": "35719313",
+      "text": "[F1000Research 2021] A systematic review of the case findings, testing and management of COVID-19.\n\nRESULTS: A total of 21 articles from 13 countries met the inclusion criteria and were further analyzed qualitatively. However, 62% of the articles used a rapid antibody test for screening rather than ",
+      "relevance_score": 0.7
+    },
+    {
+      "source_id": "35048229",
+      "text": "[Irish journal of medical science 2022] Nine-month course of SARS-CoV-2 antibodies in individuals with COVID-19 infection.\n\nRESULTS: Of 37 cases between 18 and 57\u00a0years old, 54% were women. The findings showed that anti-N antibodies decreased significantly after the 15th week (between 15 and 20\u00a0week",
+      "relevance_score": 0.4
+    },
+    {
+      "source_id": "35477230",
+      "text": "[Mikrobiyoloji bulteni 2022] [Antibody Sustainability in SARS-CoV-2 Healthcare Professionals' Patient Cohort].\n\nto 38.8% (n= 108) in days 211st to 240th. Antibody response could not be detected in 76 (20.7%) of 367 employees who have initially been followed up. The percentage of total antibody posit",
+      "relevance_score": 0.4
+    },
+    {
+      "source_id": "36028796",
+      "text": "[BMC infectious diseases 2022] Age- and sex-based changes in spike protein antibody status after SARS-CoV-2 vaccination and effect of past-infection in healthcare workers in Osaka.\n\nRESULTS: Among participants younger than 30\u00a0years, the antibody titres of spike protein were significantly higher in w",
+      "relevance_score": 0.6
+    },
+    {
+      "source_id": "34766646",
+      "text": "[Journal of medical virology 2022] Analysis of long-term antibody response in COVID-19 patients by symptoms grade, gender, age, BMI, and medication.\n\ntically higher in men than women at all times (p\u2009<\u20090.01). Antibody titer was higher in older participants compared to younger participants (p\u2009<\u20090.02).",
+      "relevance_score": 0.8
+    },
+    {
+      "source_id": "32607519",
+      "text": "[medRxiv : the preprint server for health sciences 2020] Sex, age, and hospitalization drive antibody responses in a COVID-19 convalescent plasma donor population.\n\nalizing titers. Using neutralization titer as the reference, the sensitivity of the IgG ELISAs ranged between 95-98%, but specificity w",
+      "relevance_score": 0.7
+    },
+    {
+      "source_id": "38283615",
+      "text": "[Journal of the American College of Emergency Physicians open 2024] Sex-specific disparities in COVID-19 outcomes.\n\nOBJECTIVES: Sex-specific disparities in morbidity and mortality of COVID-19 illness are not well understood. Neutralizing antibodies (Ab) may protect against severe COVID-19 illness. W",
+      "relevance_score": 0.5
+    },
+    {
+      "source_id": "32411652",
+      "text": "[Frontiers in public health 2020] Gender Differences in Patients With COVID-19: Focus on Severity and Mortality.\n\nCONCLUSION: While men and women have the same prevalence, men with COVID-19 are more at risk for worse outcomes and death, independent of age.",
+      "relevance_score": 0.4
+    },
+    {
+      "source_id": "34225644",
+      "text": "[BMC infectious diseases 2021] Sex-based clinical and immunological differences in COVID-19.\n\nBACKGROUND: Males and females differ in their immunological responses to foreign pathogens. However, most of the current COVID-19 clinical practices and trials do not take the sex factor into consideration.",
+      "relevance_score": 0.5
+    },
+    {
+      "source_id": "34986676",
+      "text": "[The Journal of international medical research 2022] Measurement of antibody levels in patients with COVID-19 over time by immunofluorescence assay: a longitudinal observational study.\n\nBACKGROUND: During the coronavirus disease 2019 (COVID-19) pandemic, antibody screening is a critical tool to asse",
+      "relevance_score": 0.5
+    },
+    {
+      "source_id": "36288342",
+      "text": "[PloS one 2022] Infection with SARS-CoV-2 is associated with menstrual irregularities among women of reproductive age.\n\nRESULTS: Among 182 women enrolled, 73 were enrolled after pandemic onset, and 36 provided vaccination data. Having detectable SARS-CoV-2 IgG antibodies was associated with a higher",
+      "relevance_score": 0.4
+    },
+    {
+      "source_id": "35458488",
+      "text": "[Viruses 2022] Characterizing Kinetics and Avidity of SARS-CoV-2 Antibody Responses in COVID-19 Greek Patients.\n\nd ones only at a time-point of twelve to fifteen months. Antibody levels of women in total remain more stable months after infection, compared to men. Furthermore, we examined the differe",
+      "relevance_score": 0.7
+    },
+    {
+      "source_id": "39006174",
+      "text": "[Nigerian medical journal : journal of the Nigeria Medical Association 2024] Comparative study of the severity of Covid-19 infection between female and male patients.\n\nBACKGROUND: Different studies have identified the prognostic factors of COVID-19 infection. These studies have revealed that COVID-1",
+      "relevance_score": 0.3
+    },
+    {
+      "source_id": "35602223",
+      "text": "[Communications medicine 2021] Analysis of sex-specific risk factors and clinical outcomes in COVID-19.\n\nCONCLUSIONS: We conducted a comprehensive sex-stratified analysis of a large cohort of hospitalized COVID-19 patients, highlighting clinical factors that may contribute to sex differences in the ",
+      "relevance_score": 0.2
+    }
+  ],
+  "proponent_pool": [
+    {
+      "source_id": "34604571",
+      "text": "[Journal of preventive medicine and hygiene 2021] Case fatality rate of COVID-19: a systematic review and meta-analysis.\n\nMETHODS: Electronic databases: PubMed, Science Direct, Scopus, and Google Scholar were searched to retrieve the eligible primary studies that reported CFR of COVID-19. Keywords: ",
+      "relevance_score": 0.1
+    },
+    {
+      "source_id": "32637978",
+      "text": "[medRxiv : the preprint server for health sciences 2020] The sensitivity of respiratory tract specimens for the detection of SARS-CoV-2: A protocol for a living systematic review and meta-analysis.\n\nMETHODS: Searches will be conducted in the bibliographic databases Medline, Embase, bioRxiv, medRxiv,",
+      "relevance_score": 0.1
+    },
+    {
+      "source_id": "32250960",
+      "text": "[JMIR public health and surveillance 2020] Misinformation of COVID-19 on the Internet: Infodemiology Study.\n\nMETHODS: The search was based on the term \"Wuhan Coronavirus\" on the Google website (February 6, 2020). At the search time, the terms \"COVID-19\" or \"SARS-CoV-2\" (severe acute respiratory synd",
+      "relevance_score": 0.0
+    }
+  ],
+  "opponent_pool": [
+    {
+      "source_id": "32785570",
+      "text": "[Clinics (Sao Paulo, Brazil) 2020] Diagnostic Characteristics of Serological-Based COVID-19 Testing: A Systematic Review and Meta-Analysis.\n\nerating characteristic curve (SROC) with corresponding 95% confidence intervals (CIs). Five studies (n=1,166 individual tests) met inclusion criteria. The pool",
+      "relevance_score": 0.1
+    },
+    {
+      "source_id": "35100295",
+      "text": "[PloS one 2022] Assessing the performance of a serological point-of-care test in measuring detectable antibodies against SARS-CoV-2.\n\ne 91.5% (95% CI 89.2%-93.5%), 88.2% (95% CI 85.1%-90.9%), and 100% (95% CI 98.2%-100%), respectively, with a Cohen's kappa of 0.81 (95% CI 0.78-0.84). Excluding speci",
+      "relevance_score": 0.3
+    },
+    {
+      "source_id": "33532418",
+      "text": "[Journal of family medicine and primary care 2020] Does COVID-19 antibody serology testing correlate with disease severity? An analytical descriptive retrospective study.\n\nMETHODS: This study is a case series of 44 consecutive patients confirmed with COVID-19 who are divided into a group of 23 patie",
+      "relevance_score": 0.3
+    }
+  ],
+  "judge_state": {
+    "admissible_evidence": [
+      {
+        "id": "34766646",
+        "weight": 0.8,
+        "stance": -1,
+        "stance_confidence": 0.9,
+        "reason": "The evidence directly refutes the claim by showing significantly higher antibody titers in men (p < 0.01) across all time points, with men also exhibiting more severe symptoms. This contradicts the claim that women had higher antibodies in severe cases.",
+        "text": "[Journal of medical virology 2022] Analysis of long-term antibody response in COVID-19 patients by symptoms grade, gender, age, BMI, and medication.\n\n"
+      },
+      {
+        "id": "35719313",
+        "weight": 0.7,
+        "stance": 0,
+        "stance_confidence": 0.9,
+        "reason": "Evidence reports infection rates and test performance but lacks gender-stratified antibody level data in severe cases.",
+        "text": "[F1000Research 2021] A systematic review of the case findings, testing and management of COVID-19.\n\nRESULTS: A total of 21 articles from 13 countries "
+      },
+      {
+        "id": "32607519",
+        "weight": 0.7,
+        "stance": -1,
+        "stance_confidence": 0.9,
+        "reason": "Evidence explicitly states 'Male sex [...] was consistently associated with increased antibody responses' across assays, directly refuting the claim that women had higher levels in severe cases. Hospitalization (a proxy for severity) is noted as amplifying this effect.",
+        "text": "[medRxiv : the preprint server for health sciences 2020] Sex, age, and hospitalization drive antibody responses in a COVID-19 convalescent plasma dono"
+      },
+      {
+        "id": "35458488",
+        "weight": 0.7,
+        "stance": 0,
+        "stance_confidence": 0.9,
+        "reason": "Evidence shows women maintain more stable antibody levels long-term (12-15 months) but does not address antibody levels during severe acute infection or compare peak levels between genders in severe cases. The claim specifies 'most severe cases' and 'higher level,' while evidence focuses on persistence and avidity maturation unrelated to severity or initial magnitude.",
+        "text": "[Viruses 2022] Characterizing Kinetics and Avidity of SARS-CoV-2 Antibody Responses in COVID-19 Greek Patients.\n\nd ones only at a time-point of twelve"
+      }
+    ],
+    "disputed_items": [
+      {
+        "id": "33750984",
+        "weight": 0.5,
+        "text": "[PloS one 2021] Antibody kinetics and clinical course of COVID-19 a prospective observational study.\n\nBACKGROUND: Serological response and association"
+      },
+      {
+        "id": "34050885",
+        "weight": 0.5,
+        "text": "[Infectious diseases and therapy 2021] Dynamic Antibody Responses in Patients with Different Severity of COVID-19: A Retrospective Study.\n\nCONCLUSION:"
+      },
+      {
+        "id": "34489974",
+        "weight": 0.3,
+        "text": "[Frontiers in immunology 2021] Different Profiles of Antibodies and Cytokines Were Found Between Severe and Moderate COVID-19 Patients.\n\nOBJECTIVES: O"
+      },
+      {
+        "id": "35048229",
+        "weight": 0.4,
+        "text": "[Irish journal of medical science 2022] Nine-month course of SARS-CoV-2 antibodies in individuals with COVID-19 infection.\n\nRESULTS: Of 37 cases betwe"
+      },
+      {
+        "id": "35477230",
+        "weight": 0.4,
+        "text": "[Mikrobiyoloji bulteni 2022] [Antibody Sustainability in SARS-CoV-2 Healthcare Professionals' Patient Cohort].\n\nto 38.8% (n= 108) in days 211st to 240"
+      },
+      {
+        "id": "36028796",
+        "weight": 0.6,
+        "text": "[BMC infectious diseases 2022] Age- and sex-based changes in spike protein antibody status after SARS-CoV-2 vaccination and effect of past-infection i"
+      },
+      {
+        "id": "38283615",
+        "weight": 0.5,
+        "text": "[Journal of the American College of Emergency Physicians open 2024] Sex-specific disparities in COVID-19 outcomes.\n\nOBJECTIVES: Sex-specific dispariti"
+      },
+      {
+        "id": "32411652",
+        "weight": 0.4,
+        "text": "[Frontiers in public health 2020] Gender Differences in Patients With COVID-19: Focus on Severity and Mortality.\n\nCONCLUSION: While men and women have"
+      },
+      {
+        "id": "34225644",
+        "weight": 0.5,
+        "text": "[BMC infectious diseases 2021] Sex-based clinical and immunological differences in COVID-19.\n\nBACKGROUND: Males and females differ in their immunologi"
+      },
+      {
+        "id": "34986676",
+        "weight": 0.5,
+        "text": "[The Journal of international medical research 2022] Measurement of antibody levels in patients with COVID-19 over time by immunofluorescence assay: a"
+      },
+      {
+        "id": "36288342",
+        "weight": 0.4,
+        "text": "[PloS one 2022] Infection with SARS-CoV-2 is associated with menstrual irregularities among women of reproductive age.\n\nRESULTS: Among 182 women enrol"
+      },
+      {
+        "id": "39006174",
+        "weight": 0.3,
+        "text": "[Nigerian medical journal : journal of the Nigeria Medical Association 2024] Comparative study of the severity of Covid-19 infection between female an"
+      },
+      {
+        "id": "35100295",
+        "weight": 0.3,
+        "text": "[PloS one 2022] Assessing the performance of a serological point-of-care test in measuring detectable antibodies against SARS-CoV-2.\n\ne 91.5% (95% CI "
+      },
+      {
+        "id": "33532418",
+        "weight": 0.3,
+        "text": "[Journal of family medicine and primary care 2020] Does COVID-19 antibody serology testing correlate with disease severity? An analytical descriptive "
+      }
+    ],
+    "claim_metrics": {
+      "claim_score": -1.5,
+      "probability": 0.18242552380635635,
+      "confidence": 0.6351489523872873,
+      "total_support_weight": 0.0,
+      "total_refute_weight": 1.5,
+      "neutral_weight": 1.4,
+      "evidence_count": 4
+    },
+    "verdict": "REFUTE"
+  }
+}
