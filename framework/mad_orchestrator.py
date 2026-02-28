@@ -295,5 +295,9 @@ class MADOrchestrator:
                 })
         
         import json
-        with open("judge_visibility.json", "w") as f:
-            json.dump(visibility, f, indent=2)
+        try:
+            from logging_extension import append_framework_json
+            append_framework_json("judge_visibility.jsonl", self.claim.id, visibility)
+        except ImportError:
+            with open("judge_visibility.json", "w") as f:
+                json.dump(visibility, f, indent=2)
