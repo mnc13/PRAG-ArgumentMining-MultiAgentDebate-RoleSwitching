@@ -1,0 +1,214 @@
+{
+  "claim": "During the initial outbreak in Wuhan, the novel coronavirus spread with an R0 of 5.7.",
+  "total_rounds": 2,
+  "prag_history": {
+    "total_retrievals": 10,
+    "rounds_with_prag": 3,
+    "history": [
+      {
+        "round": 1,
+        "query": "Produce original DICOM files and corresponding final radiology reports for CT, MRI, and X-ray imaging of the anatomically specified injured region, limited to studies performed during the emergency department visit and all follow-up examinations within the first 90 days post-injury, to permit independent assessment of injury onset, progression, and diagnostic accuracy; exclude non-diagnostic or duplicate series, and provide metadata confirming acquisition parameters and imaging dates.",
+        "context": "Round 1 - Plaintiff Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 3,
+        "num_rejected": 0,
+        "avg_novelty": 1.0,
+        "avg_relevance": 0.5132432480653127,
+        "relevance_gain": 0.5132432480653127,
+        "redundancy_ratio": 0.0,
+        "stop_reason": null,
+        "evidence_ids": [
+          "36895661",
+          "36895661",
+          "34748101"
+        ]
+      },
+      {
+        "round": 1,
+        "query": "Primary anonymized epidemiological case data Wuhan SARS-CoV-2 R0 5.7\" AND (\"line-listed cases\" OR \"contact tracing network\") AND (\"model input\" OR \"selection bias assessment\") NOT (\"review\" OR \"meta-analysis\" OR \"secondary analysis\" OR \"commentary\") AND (\"raw data\" OR \"individual-level data\") AND (\"early outbreak\" OR \"December 2019\" OR \"January 2020\")",
+        "context": "Round 1 - Defense Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 3,
+        "num_rejected": 0,
+        "avg_novelty": 0.7289256006479263,
+        "avg_relevance": 0.6754063169161478,
+        "relevance_gain": 0.1621630688508351,
+        "redundancy_ratio": 0.0,
+        "stop_reason": null,
+        "evidence_ids": [
+          "38806176",
+          "33460673",
+          "36288362"
+        ]
+      },
+      {
+        "round": 2,
+        "query": "Search Query:\"  \n\"Wuhan SARS-CoV-2 line list\" AND (de-identified OR anonymized) AND (\"symptom onset\" OR \"testing date\" OR \"contact tracing\" OR hospitalization OR demographics)  \nAND  \n(\"peer-reviewed\" AND (study OR journal)) AND (\"seroprevalence\" OR \"retrospective PCR\" OR \"reconstructed incidence\") AND (\"case ascertainment rate\" OR \"generation interval\" OR \"serial interval\") AND (\"epidemic growth rate\" OR \"R0 estimation\" OR \"basic reproduction number\")  \nAND (\"early pandemic\" OR \"Nov 2019\u2013Feb 2020\") AND (\"quantitative bias correction\" OR \"underreporting adjustment\")  \nAND (\"China\" OR \"Wuhan\") NOT (preprint OR conference abstract)",
+        "context": "Round 2 - Plaintiff Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 3,
+        "num_rejected": 0,
+        "avg_novelty": 0.4584955374399821,
+        "avg_relevance": 0.6517516771952311,
+        "relevance_gain": -0.023654639720916748,
+        "redundancy_ratio": 0.0,
+        "stop_reason": "Diminishing relevance gain (-0.0237 < 0.05)",
+        "evidence_ids": [
+          "34591781",
+          "34869935",
+          "39300391"
+        ]
+      },
+      {
+        "round": 2,
+        "query": "raw unadjusted epidemiological line lists\" AND \"Wuhan CDC\" AND (December 2019 OR January 2020) AND \"peer-reviewed studies\" AND (\"bias-correction methods\" OR \"adjustment for surveillance biases\") AND (\"R\u2080 estimation\" OR \"basic reproduction number\") AND (validity OR reliability) AND \"SARS-CoV-2\" AND (\"early outbreak\" OR \"initial transmission\")",
+        "context": "Round 2 - Defense Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 2,
+        "num_rejected": 1,
+        "avg_novelty": 0.22055522600809732,
+        "avg_relevance": 0.6761836409568787,
+        "relevance_gain": 0.02443196376164758,
+        "redundancy_ratio": 0.3333333333333333,
+        "stop_reason": "Diminishing relevance gain (0.0244 < 0.05)",
+        "evidence_ids": [
+          "35405084",
+          "34310444"
+        ]
+      },
+      {
+        "round": 3,
+        "query": "basic reproduction number\" OR R\u2080 5.7 AND Wuhan AND (\"early outbreak\" OR \"initial outbreak\") AND (under-ascertainment OR \"asymptomatic transmission\" OR \"presymptomatic transmission\") AND (\"serial interval\" OR \"generation time\") AND (\"modeling study\" OR \"epidemiological reconstruction\") AND (\"peer-reviewed\") AND (\"2020/01/01\"..\"2020/04/30\")",
+        "context": "Round 3 - Plaintiff Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 3,
+        "num_rejected": 0,
+        "avg_novelty": 0.3241051236788432,
+        "avg_relevance": 0.7047908306121826,
+        "relevance_gain": 0.028607189655303955,
+        "redundancy_ratio": 0.0,
+        "stop_reason": "Diminishing relevance gain (0.0286 < 0.05)",
+        "evidence_ids": [
+          "33296580",
+          "35176766",
+          "33079987"
+        ]
+      },
+      {
+        "round": 3,
+        "query": "line-list data\" AND (\"SARS-CoV-2\" OR \"COVID-19\") AND Wuhan AND (\"R0 estimate\" OR \"basic reproduction number\") AND (bias OR \"under-ascertainment\" OR \"serial interval\") AND \"methodological assumptions\" AND (\"peer-reviewed\" OR \"epidemiological model\") AND (2020) AND (\"uncertainty analysis\" OR \"sensitivity analysis\")",
+        "context": "Round 3 - Defense Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 0,
+        "num_rejected": 3,
+        "avg_novelty": 0.05193495750427246,
+        "avg_relevance": 0.0,
+        "relevance_gain": -0.7047908306121826,
+        "redundancy_ratio": 0.6666666666666666,
+        "stop_reason": "Diminishing relevance gain (-0.7048 < 0.05)",
+        "evidence_ids": []
+      },
+      {
+        "round": 1,
+        "query": "Complete unredacted medical records of [CLAIMANT NAME] from [START DATE] to [END DATE], inclusive, specifically documenting pre-existing conditions, prior diagnoses, treatments, and clinical history directly relevant to the claimed injury or condition.",
+        "context": "Round 1 - Plaintiff Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 3,
+        "num_rejected": 0,
+        "avg_novelty": 0.6120908657709757,
+        "avg_relevance": 0.5697266062100729,
+        "relevance_gain": 0.5697266062100729,
+        "redundancy_ratio": 0.0,
+        "stop_reason": null,
+        "evidence_ids": [
+          "35619126",
+          "35619126",
+          "33864979"
+        ]
+      },
+      {
+        "round": 1,
+        "query": "Search Query\":  \n(\"Wuhan COVID-19 outbreak November 2019-January 2020\") AND (\"anonymized patient-level line list\" OR \"contact-tracing dataset\") AND (\"symptom onset date\" OR \"exposure history\" OR \"PCR test date\" OR \"travel history\")  \nAND  \n\"basic reproduction number (R\u2080)\" AND (\"bias-corrected estimate\" OR \"under-ascertainment adjustment\") AND (\"non-pharmaceutical interventions\" OR \"containment measures\") AND \"peer-reviewed\" AND (\"R\u2080 < 5.7\" AND \"95% CI\")  \nAND NOT (\"modelled data\" OR \"forecast\" OR \"projection\")",
+        "context": "Round 1 - Defense Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 3,
+        "num_rejected": 0,
+        "avg_novelty": 0.2892750104268392,
+        "avg_relevance": 0.6820633014043173,
+        "relevance_gain": 0.11233669519424438,
+        "redundancy_ratio": 0.0,
+        "stop_reason": null,
+        "evidence_ids": [
+          "32640418",
+          "33525250",
+          "33574582"
+        ]
+      },
+      {
+        "round": 2,
+        "query": "Retrospective study\" AND \"Wuhan outbreak\" AND (\"basic reproduction number\" OR \"R0\") AND (\"R0 estimation\" OR \"R0 calculation\") AND (\"methodological assumptions\" OR \"epidemiological modeling\") AND SARS-CoV-2 AND (\"peer-reviewed\" OR \"journal of infectious diseases\" OR \"Lancet\" OR \"Nature\" OR \"Science\") AND (\"bias-corrected model*\" OR \"adjusted transmission model*\" OR \"unmitigated R0\") AND (\"5.7\" OR \"five point seven\") AND (\"early phase epidemic\" OR \"initial spread\") AND (\"2019-2020\" OR \"early 2020\")",
+        "context": "Round 2 - Plaintiff Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 2,
+        "num_rejected": 1,
+        "avg_novelty": 0.22268239657084146,
+        "avg_relevance": 0.7399486601352692,
+        "relevance_gain": 0.05788535873095191,
+        "redundancy_ratio": 0.0,
+        "stop_reason": null,
+        "evidence_ids": [
+          "35714080",
+          "33384521"
+        ]
+      },
+      {
+        "round": 2,
+        "query": "Peer-reviewed studies estimating SARS-CoV-2 R0 in Wuhan during early 2020 using empirical data, incorporating adjustments for under-ascertainment, presymptomatic transmission, serial interval distribution, right-censoring, and heterogeneity in transmission (e.g., superspreading), reporting 95% confidence intervals, methodological reproducibility, and an estimated R0 \u2265 5.0.",
+        "context": "Round 2 - Defense Counsel",
+        "num_retrieved": 3,
+        "num_accepted": 3,
+        "num_rejected": 0,
+        "avg_novelty": 0.3481793999671936,
+        "avg_relevance": 0.7484929362932841,
+        "relevance_gain": 0.008544276158014896,
+        "redundancy_ratio": 0.0,
+        "stop_reason": "Diminishing relevance gain (0.0085 < 0.05)",
+        "evidence_ids": [
+          "33762027",
+          "34853105",
+          "32693656"
+        ]
+      }
+    ]
+  },
+  "query_evolution": [
+    {
+      "round": 1,
+      "side": "Plaintiff Counsel",
+      "original": "**Search Query:**  \n\"Complete unredacted medical records [CLAIMANT NAME] from [DATE] to [DATE] (five years pre-incident) showing pre-existing conditions, prior treatments, and clinical history.\"  \nAND  \n\"(peer-reviewed OR preprint) modeling studies reconstructing early Wuhan COVID-19 transmission with corrections for case ascertainment bias, presymptomatic transmission, superspreading, serial-interval/right-censoring biases AND quantitative R0 estimates (median \u22655 OR 95% CI \u22485.7)\".  \n\n**Rationale:**  \n1. **Medical Records**: Specifies timeframe, unredacted status, and focus on pre-existing conditions/treatments.  \n2. **Studies**: Targets methodological rigor (modeling with named biases) and explicit R0 thresholds from the described epidemiological context.",
+      "refined": "Complete unredacted medical records of [CLAIMANT NAME] from [START DATE] to [END DATE], inclusive, specifically documenting pre-existing conditions, prior diagnoses, treatments, and clinical history directly relevant to the claimed injury or condition.",
+      "novelty": 0.6120908657709757
+    },
+    {
+      "round": 1,
+      "side": "Defense Counsel",
+      "original": "**Search Query:**  \n\"Wuhan COVID-19 November 2019-January 2020\" AND (\"anonymized patient-level line list\" OR \"contact-tracing records\") AND (\"symptom-onset dates\" OR \"exposure history\" OR \"testing dates\" OR \"travel data\")  \nAND  \n\"basic reproduction number (R0)\" AND (\"bias-corrected estimates\" OR \"under-ascertainment adjustment\") AND (\"interventions\" OR \"containment measures\") AND \"peer-reviewed\" AND \"R0 <5.7\"  \n\n**Explanation:**  \n- The first segment targets raw epidemiological records (line lists, contact tracing) with granular case-level data for verifying transmission chains.  \n- The second isolates peer-reviewed studies with adjusted R0 estimates addressing surveillance gaps and control measures, specifically refuting values \u22655.7. Combining both ensures alignment with the legal request\u2019s dual evidentiary goals.",
+      "refined": "Search Query\":  \n(\"Wuhan COVID-19 outbreak November 2019-January 2020\") AND (\"anonymized patient-level line list\" OR \"contact-tracing dataset\") AND (\"symptom onset date\" OR \"exposure history\" OR \"PCR test date\" OR \"travel history\")  \nAND  \n\"basic reproduction number (R\u2080)\" AND (\"bias-corrected estimate\" OR \"under-ascertainment adjustment\") AND (\"non-pharmaceutical interventions\" OR \"containment measures\") AND \"peer-reviewed\" AND (\"R\u2080 < 5.7\" AND \"95% CI\")  \nAND NOT (\"modelled data\" OR \"forecast\" OR \"projection\")",
+      "novelty": 0.2892750104268392
+    },
+    {
+      "round": 2,
+      "side": "Plaintiff Counsel",
+      "original": "**Search Query:**  \n\"Retrospective study\" AND \"Wuhan outbreak\" AND (\"basic reproduction number (R0)\" OR \"R0 calculation\") AND (\"methodological assumptions\" OR \"epidemiological data\") AND SARS-CoV-2.  \n**Additional Focus:** peer-reviewed studies AND (\"bias-corrected transmission models\" OR \"unmitigated R0\") AND (\"5.7\" OR \"5.7 approximation\") AND Wuhan.  \n\nThis query isolates the plaintiff\u2019s cited study while targeting alternative analyses using adjusted models to validate or contest the contested R0 value of 5.7.",
+      "refined": "Retrospective study\" AND \"Wuhan outbreak\" AND (\"basic reproduction number\" OR \"R0\") AND (\"R0 estimation\" OR \"R0 calculation\") AND (\"methodological assumptions\" OR \"epidemiological modeling\") AND SARS-CoV-2 AND (\"peer-reviewed\" OR \"journal of infectious diseases\" OR \"Lancet\" OR \"Nature\" OR \"Science\") AND (\"bias-corrected model*\" OR \"adjusted transmission model*\" OR \"unmitigated R0\") AND (\"5.7\" OR \"five point seven\") AND (\"early phase epidemic\" OR \"initial spread\") AND (\"2019-2020\" OR \"early 2020\")",
+      "novelty": 0.22268239657084146
+    },
+    {
+      "round": 2,
+      "side": "Defense Counsel",
+      "original": "**Search Query:**  \n\"Peer-reviewed studies estimating SARS-CoV-2 R0 in Wuhan incorporating corrections for under-ascertainment, presymptomatic transmission, serial-interval, right-censoring, or superspreading biases, reporting confidence intervals, reproducibility, and R0 \u2265 5.0.\"  \n\n**Rationale:**  \n- Targets methodological adjustments critical to the debate (under-ascertainment, presymptomatic transmission, etc.).  \n- Specifies Wuhan outbreak data and thresholds (R0 \u2265 5.0) to align with Evidence 15\u2019s contested claim.  \n- Prioritizes reproducibility, confidence intervals, and peer-reviewed rigor as requested.",
+      "refined": "Peer-reviewed studies estimating SARS-CoV-2 R0 in Wuhan during early 2020 using empirical data, incorporating adjustments for under-ascertainment, presymptomatic transmission, serial interval distribution, right-censoring, and heterogeneity in transmission (e.g., superspreading), reporting 95% confidence intervals, methodological reproducibility, and an estimated R0 \u2265 5.0.",
+      "novelty": 0.3481793999671936
+    }
+  ]
+}
