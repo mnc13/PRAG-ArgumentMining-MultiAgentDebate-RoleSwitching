@@ -258,10 +258,14 @@ class MADOrchestrator:
             self.last_total_reflection_score = total_ref_score
             last_novelty = avg_novelty
             
-        # Save results
+        # Save transcript to file for inspection
         import json
-        with open("debate_transcript.json", "w") as f:
-            json.dump(debate_result, f, indent=2)
+        try:
+            from logging_extension import append_framework_json
+            append_framework_json("debate_transcript.jsonl", self.claim.id, debate_result)
+        except ImportError:
+            with open("debate_transcript.json", "w") as f:
+                json.dump(debate_result, f, indent=2)
             
         # Save reflection history
         self.self_reflection.save_reflection_history()

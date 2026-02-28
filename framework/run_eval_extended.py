@@ -78,11 +78,15 @@ def apply_monkey_patches():
         pass
 
 
-def safe_load_json(filename: str) -> dict:
-    if os.path.exists(filename):
+def safe_load_last_jsonl(filename: str) -> dict:
+    filepath = os.path.join(ARTIFACTS_DIR, "..", "outcome", "all_output_jsons", filename)
+    if os.path.exists(filepath):
         try:
-            with open(filename, "r", encoding="utf-8") as f:
-                return json.load(f)
+            with open(filepath, "r", encoding="utf-8") as f:
+                lines = f.read().strip().split('\n')
+                if lines and lines[-1]:
+                    record = json.loads(lines[-1])
+                    return record.get("data", {})
         except Exception:
             return {}
     return {}
@@ -92,10 +96,10 @@ def extract_and_log_claim_metrics(claim_obj):
     claim_id = getattr(claim_obj, "id", "unknown")
     gt = getattr(claim_obj, "ground_truth", "UNKNOWN")
     
-    # Read state files
-    fv_data = safe_load_json("final_verdict.json")
-    je_data = safe_load_json("judge_evaluation.json")
-    dt_data = safe_load_json("debate_transcript.json")
+    # Read state files from the new jsonl destinations
+    fv_data = safe_load_last_jsonl("final_verdict.jsonl")
+    je_data = safe_load_last_jsonl("judge_evaluation.jsonl")
+    dt_data = safe_load_last_jsonl("debate_transcript.jsonl")
     
     pred = fv_data.get("verdict", "INCONCLUSIVE")
     conf = fv_data.get("confidence_score", 0.5)

@@ -66,8 +66,12 @@ class RoleSwitcher:
         switched_result = self.original_mad.run_full_debate(max_rounds=max_rounds)
         
         # Save switched transcript
-        with open("debate_transcript_switched.json", "w") as f:
-            json.dump(switched_result, f, indent=2)
+        try:
+            from logging_extension import append_framework_json
+            append_framework_json("debate_transcript_switched.jsonl", "unknown", switched_result)
+        except ImportError:
+            with open("debate_transcript_switched.json", "w") as f:
+                json.dump(switched_result, f, indent=2)
         
         return switched_result
     
@@ -160,8 +164,12 @@ Provide detailed analysis:"""
         }
         
         # Save report
-        with open("role_switch_report.json", "w") as f:
-            json.dump(consistency_report, f, indent=2)
+        try:
+            from logging_extension import append_framework_json
+            append_framework_json("role_switch_report.jsonl", "unknown", consistency_report)
+        except ImportError:
+            with open("role_switch_report.json", "w") as f:
+                json.dump(consistency_report, f, indent=2)
         
         print(f"Consistency Analysis:\n{analysis}\n")
         

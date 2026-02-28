@@ -126,8 +126,12 @@ class JudicialPanel:
         
         # Save results
         import json
-        with open("judge_evaluation.json", "w") as f:
-            json.dump(result, f, indent=2)
+        try:
+            from logging_extension import append_framework_json
+            append_framework_json("judge_evaluation.jsonl", claim.id, result)
+        except ImportError:
+            with open("judge_evaluation.json", "w") as f:
+                json.dump(result, f, indent=2)
         
         print(f"\nFinal Verdict: {aggregation['final_verdict']}")
         print(f"Vote Breakdown: {aggregation['vote_breakdown']}")

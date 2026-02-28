@@ -129,3 +129,21 @@ def log_run_summary(metrics: dict, efficiency: dict, ks_stability: dict, config_
     }
     append_jsonl(RUNS_FILE, record)
 
+ALL_OUTPUT_JSONS_DIR = os.path.join(ARTIFACTS_DIR, "..", "outcome", "all_output_jsons")
+os.makedirs(ALL_OUTPUT_JSONS_DIR, exist_ok=True)
+
+def append_framework_json(filename: str, claim_id: str, data: dict):
+    """
+    Appends intermediate JSON artifacts (e.g. final_verdict, judge_evaluation)
+    as JSONL lines, preserving claim ID and run ID so they are not lost.
+    """
+    filepath = os.path.join(ALL_OUTPUT_JSONS_DIR, filename)
+    record = {
+        "claim_id": getattr(claim_id, "id", claim_id) if claim_id else "unknown",
+        "run_id": ExtensionState.run_id,
+        "timestamp": time.time(),
+        "data": data
+    }
+    with open(filepath, "a", encoding="utf-8") as f:
+        f.write(json.dumps(record) + "\n")
+

@@ -83,9 +83,14 @@ class FinalVerdict:
         }
         
         # Save results
+        # Save results
         import json
-        with open("final_verdict.json", "w") as f:
-            json.dump(result, f, indent=2)
+        try:
+            from logging_extension import append_framework_json
+            append_framework_json("final_verdict.jsonl", self.claim.id, result)
+        except ImportError:
+            with open("final_verdict.json", "w") as f:
+                json.dump(result, f, indent=2)
         
         print(f"Verdict: {verdict}")
         print(f"Confidence: {confidence:.3f}")
