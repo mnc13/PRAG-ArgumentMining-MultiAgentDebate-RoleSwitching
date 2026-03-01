@@ -262,18 +262,18 @@ class MADOrchestrator:
         import json
         try:
             from logging_extension import append_framework_json
-            append_framework_json("debate_transcript.jsonl", self.claim.id, debate_result)
+            append_framework_json("debate_transcript.jsonl", self.claim, debate_result)
         except ImportError:
             with open("debate_transcript.json", "w") as f:
                 json.dump(debate_result, f, indent=2)
             
         # Save reflection history
-        self.self_reflection.save_reflection_history()
+        self.self_reflection.save_reflection_history(claim_id=self.claim)
             
         # Judge Visibility JSON
         self._save_judge_visibility(debate_result)
         
-        self.prag.save_history()
+        self.prag.save_history(claim_id=self.claim)
         return debate_result
 
     def _save_judge_visibility(self, debate_result):
@@ -297,7 +297,7 @@ class MADOrchestrator:
         import json
         try:
             from logging_extension import append_framework_json
-            append_framework_json("judge_visibility.jsonl", self.claim.id, visibility)
+            append_framework_json("judge_visibility.jsonl", self.claim, visibility)
         except ImportError:
             with open("judge_visibility.json", "w") as f:
                 json.dump(visibility, f, indent=2)

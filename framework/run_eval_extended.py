@@ -93,7 +93,7 @@ def safe_load_last_jsonl(filename: str) -> dict:
 
 def extract_and_log_claim_metrics(claim_obj):
     """Reads disk state directly after a claim finishes to generate appended logs."""
-    claim_id = getattr(claim_obj, "id", "unknown")
+    claim_id = getattr(claim_obj, "id", claim_obj) if claim_obj else "unknown"
     gt = getattr(claim_obj, "ground_truth", "UNKNOWN")
     
     # Read state files from the new jsonl destinations
@@ -175,7 +175,7 @@ def extract_and_log_claim_metrics(claim_obj):
 # Runner
 # ---------------------------------------------------------------------------
 
-def run_evaluation(args):
+def run_evaluation(args, is_last_run=True, run_index=0):
     """Runs a single evaluation pipeline execution."""
     import main_pipeline
     
@@ -194,6 +194,9 @@ def run_evaluation(args):
         sys.argv = [original_argv[0]]
         if args.limit: sys.argv.extend(['--limit', str(args.limit)])
         if args.offset: sys.argv.extend(['--offset', str(args.offset)])
+        if args.force: sys.argv.append('--force')
+        if not is_last_run: sys.argv.append('--no-mark-processed')
+        sys.argv.extend(['--run-index', str(run_index)])
         
         main_pipeline.main()
         
@@ -281,6 +284,7 @@ def main():
     parser.add_argument("--limit", type=int, help="Limit number of claims to process")
     parser.add_argument("--offset", type=int, default=0, help="Offset for claim list")
     parser.add_argument("--runs", type=int, default=1, help="Number of repeated runs to execute")
+    parser.add_argument("--force", action="store_true", help="Force restart all claims and runs")
     parser.add_argument("--inconclusive-policy", type=str, choices=["A", "B", "C"], default="A", 
                         help="A: Support, B: Refute, C: Exclude")
     
@@ -292,7 +296,8 @@ def main():
     for r in range(args.runs):
         if args.runs > 1:
             print(f"\n--- Starting Run {r+1}/{args.runs} ---")
-        run_evaluation(args)
+        is_last = (r == args.runs - 1)
+        run_evaluation(args, is_last_run=is_last, run_index=r)
 
 if __name__ == "__main__":
     main()

@@ -68,7 +68,7 @@ class RoleSwitcher:
         # Save switched transcript
         try:
             from logging_extension import append_framework_json
-            append_framework_json("debate_transcript_switched.jsonl", "unknown", switched_result)
+            append_framework_json("debate_transcript_switched.jsonl", self.original_mad.claim, switched_result)
         except ImportError:
             with open("debate_transcript_switched.json", "w") as f:
                 json.dump(switched_result, f, indent=2)
@@ -155,18 +155,20 @@ Provide detailed analysis:"""
         analysis = analyzer.generate(prompt)
         
         consistency_report = {
-            "claim": original_transcript['claim'],
-            "original_agents": original_transcript['agents'],
-            "switched_agents": switched_transcript['agents'],
+            "claim": original_transcript.get('claim', 'unknown'),
+            "claim_id": original_transcript.get('claim_id', 'unknown'),
+            "original_agents": original_transcript.get('agents', {}),
+            "switched_agents": switched_transcript.get('agents', {}),
             "analysis": analysis,
-            "original_rounds": len(original_transcript['rounds']),
-            "switched_rounds": len(switched_transcript['rounds'])
+            "original_rounds": len(original_transcript.get('rounds', [])),
+            "switched_rounds": len(switched_transcript.get('rounds', []))
         }
         
         # Save report
         try:
             from logging_extension import append_framework_json
-            append_framework_json("role_switch_report.jsonl", "unknown", consistency_report)
+            # Use the actual claim object or ID instead of the claim text
+            append_framework_json("role_switch_report.jsonl", self.original_mad.claim, consistency_report)
         except ImportError:
             with open("role_switch_report.json", "w") as f:
                 json.dump(consistency_report, f, indent=2)

@@ -114,12 +114,12 @@ class SelfReflection:
                 "round": round_num
             }
 
-    def save_reflection_history(self, filename: str = "self_reflection.json"):
+    def save_reflection_history(self, claim_id: str = "unknown", filename: str = "self_reflection.json"):
         """Save history to disk"""
         import json
         try:
             from logging_extension import append_framework_json
-            append_framework_json(filename.replace('.json', '.jsonl'), "unknown", self.reflection_history)
+            append_framework_json(filename.replace('.json', '.jsonl'), claim_id, self.reflection_history)
         except ImportError:
             with open(filename, "w") as f:
                 json.dump(self.reflection_history, f, indent=2)

@@ -18,6 +18,9 @@ def main():
     parser = argparse.ArgumentParser(description="Run Check-COVID Debate Pipeline")
     parser.add_argument("--limit", type=int, default=1, help="Number of claims to process in this run")
     parser.add_argument("--offset", type=int, default=0, help="Skip first N claims")
+    parser.add_argument("--force", action="store_true", help="Process claims even if they are in processed_claims.txt")
+    parser.add_argument("--no-mark-processed", action="store_true", help="Do not append bare claim ID to processed_claims.txt")
+    parser.add_argument("--run-index", type=int, default=0, help="The index of the current run (for multi-run setups)")
     args = parser.parse_args()
 
     # Use script directory as base for resources (reliable even if cwd changes)
@@ -69,11 +72,16 @@ def main():
             print(f"Reached limit of {args.limit} claims. Stopping.")
             break
 
-        if str(input_claim.id) in processed_ids:
-            continue
+        # Resume Logic: Check if whole claim is done OR this specific run is done
+        run_key = f"{input_claim.id}:{args.run_index}"
+        if not args.force:
+            if str(input_claim.id) in processed_ids or run_key in processed_ids:
+                continue
 
-        # 2. Setup Logging with Claim ID
-        log_filename = f"{logs_dir}/execution_log_{input_claim.id}.txt"
+        # 2. Setup Logging with Claim ID and Run ID
+        from logging_extension import ExtensionState
+        run_id = ExtensionState.run_id
+        log_filename = f"{logs_dir}/execution_log_{input_claim.id}_{run_id}.txt"
         
         class DualLogger:
             def __init__(self, filename):
@@ -231,10 +239,15 @@ def main():
                 
             # Append to processed_claims.txt
             with open(processed_claims_path, "a", encoding="utf-8") as f:
-                f.write(f"{input_claim.id}\n")
+                # 1. Mark this specific run as done
+                f.write(f"{input_claim.id}:{args.run_index}\n")
                 
-            log(f"\n   [SAVED] Verdict appended to {verdicts_path}")
-            log(f"   [SAVED] Claim ID appended to {processed_claims_path}")
+                # 2. Mark the whole claim as done ONLY if this is the final intended run
+                if not args.no_mark_processed:
+                    f.write(f"{input_claim.id}\n")
+                    log(f"   [SAVED] Claim ID appended to {processed_claims_path}")
+                else:
+                    log(f"   [SAVED] Run {args.run_index} marked as successful in {processed_claims_path}")
             
             # Increment processed count
             claims_processed_count += 1

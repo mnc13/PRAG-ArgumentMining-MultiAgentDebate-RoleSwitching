@@ -128,7 +128,7 @@ class JudicialPanel:
         import json
         try:
             from logging_extension import append_framework_json
-            append_framework_json("judge_evaluation.jsonl", claim.id, result)
+            append_framework_json("judge_evaluation.jsonl", claim, result)
         except ImportError:
             with open("judge_evaluation.json", "w") as f:
                 json.dump(result, f, indent=2)
