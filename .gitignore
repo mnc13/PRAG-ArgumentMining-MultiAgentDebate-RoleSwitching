@@ -169,8 +169,8 @@ framework/pubmed_covid_2020_2024_edat_upto_2024.jsonl.gz
 framework/pubmed_meta.jsonl
 
 # Appended evaluation outputs
-framework/outcome/all_output_jsons/
-artifacts/metrics/
+framework/outcome/
+artifacts/
 
 
 

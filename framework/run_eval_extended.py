@@ -94,15 +94,21 @@ def safe_load_last_jsonl(filename: str) -> dict:
 def extract_and_log_claim_metrics(claim_obj):
     """Reads disk state directly after a claim finishes to generate appended logs."""
     claim_id = getattr(claim_obj, "id", claim_obj) if claim_obj else "unknown"
-    gt = getattr(claim_obj, "ground_truth", "UNKNOWN")
     
     # Read state files from the new jsonl destinations
     fv_data = safe_load_last_jsonl("final_verdict.jsonl")
     je_data = safe_load_last_jsonl("judge_evaluation.jsonl")
     dt_data = safe_load_last_jsonl("debate_transcript.jsonl")
+
+    # Try multiple sources for Ground Truth
+    gt = fv_data.get("ground_truth_label")
+    if not gt or gt == "UNKNOWN":
+        gt = getattr(claim_obj, "ground_truth", "UNKNOWN")
+    if gt == "UNKNOWN" and hasattr(claim_obj, "metadata"):
+        gt = claim_obj.metadata.get("label", "UNKNOWN")
     
     pred = fv_data.get("verdict", "INCONCLUSIVE")
-    conf = fv_data.get("confidence_score", 0.5)
+    conf = fv_data.get("confidence", 0.5)
     
     # Rounds count
     rounds = 1
@@ -110,11 +116,12 @@ def extract_and_log_claim_metrics(claim_obj):
         rounds = len(dt_data["rounds"])
         
     # Judge votes tracking
-    opinions = je_data.get("opinions", {})
+    judge_verdicts = je_data.get("judge_verdicts", [])
     judge_votes = {}
-    for j_name, j_data in opinions.items():
+    for j_data in judge_verdicts:
         if isinstance(j_data, dict) and "verdict" in j_data:
-            judge_votes[j_name] = j_data["verdict"]
+            name = j_data.get("judge_name", "Unknown Judge")
+            judge_votes[name] = j_data["verdict"]
             
     # Pairwise Kappa (Mean) for this single claim makes less sense statistically,
     # but we can format the judge summary string. We'll compute full dataset Kappa at the end.
