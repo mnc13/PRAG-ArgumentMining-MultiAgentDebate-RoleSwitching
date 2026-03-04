@@ -28,7 +28,8 @@ class MADOrchestrator:
             prag_engine: ProgressiveRAG instance
         """
         self.claim = claim
-        self.evidence_pool = initial_evidence
+        self.initial_evidence = initial_evidence # Store for resetting
+        self.evidence_pool = list(initial_evidence)
         self.prag = prag_engine
         self.debate_transcript = []
         self.current_round = 0
@@ -61,6 +62,26 @@ class MADOrchestrator:
         
         # Experts will be summoned dynamically
         self.agents['experts'] = []
+
+    def reset_state(self):
+        """
+        Reset the orchestrator state for a fresh debate (e.g., after role switching)
+        """
+        print("\n[Orchestrator] Resetting debate state for dynamic rounds...")
+        self.debate_transcript.clear()
+        self.current_round = 0
+        self.evidence_pool = list(self.initial_evidence)
+        self.last_total_reflection_score = 0.0
+        self.reflection_discovery_needs = {"proponent": "", "opponent": ""}
+        
+        # Reset reflection history
+        self.self_reflection.reflection_history.clear()
+        self.self_reflection.debate_transcript = self.debate_transcript
+        
+        # Reset PRAG state
+        self.prag.round_counter = 0
+        self.prag.retrieval_history.clear()
+        self.prag.total_evidence_pool = list(self.initial_evidence)
     
     def run_debate_round(self, round_num: int) -> Dict:
         """
@@ -145,7 +166,7 @@ class MADOrchestrator:
             if expert_req:
                 display_side = "Plaintiff" if side == "proponent" else "Defense"
                 print(f"   > [{display_side} Counsel] Proposed Expert Witness Type: {expert_req['expert_type']}")
-                if self.agents['judge'].evaluate_expert_request(side, expert_req):
+                if expert_req and self.agents['judge'].evaluate_expert_request(side, expert_req):
                     print(f"   > [The Court] REQUEST GRANTED. Calling expert witness...")
                     from expertise_extractor import extract_single_expert
                     expert_config = extract_single_expert(expert_req['expert_type'], self.claim.text)
@@ -197,7 +218,7 @@ class MADOrchestrator:
         self.debate_transcript.append(entry)
         print(f"\n{text}\n")
 
-    def run_full_debate(self, max_rounds: int = 10) -> Dict:
+    def run_full_debate(self, max_rounds: int = 10, save_transcript: bool = True, file_suffix: str = "") -> Dict:
         """
         Run proceedings with adaptive convergence rules
         """
@@ -259,24 +280,31 @@ class MADOrchestrator:
             last_novelty = avg_novelty
             
         # Save transcript to file for inspection
-        import json
-        try:
-            from logging_extension import append_framework_json
-            append_framework_json("debate_transcript.jsonl", self.claim, debate_result)
-        except ImportError:
-            with open("debate_transcript.json", "w") as f:
-                json.dump(debate_result, f, indent=2)
+        if save_transcript:
+            import json
+            try:
+                from logging_extension import append_framework_json
+                append_framework_json(f"debate_transcript{file_suffix}.jsonl", self.claim, debate_result)
+            except ImportError:
+                with open(f"debate_transcript{file_suffix}.json", "w") as f:
+                    json.dump(debate_result, f, indent=2)
+                
+            # Save reflection history
+            self.self_reflection.save_reflection_history(
+                claim_id=self.claim, 
+                filename=f"self_reflection{file_suffix}.json"
+            )
+                
+            # Judge Visibility JSON
+            self._save_judge_visibility(debate_result, file_suffix=file_suffix)
             
-        # Save reflection history
-        self.self_reflection.save_reflection_history(claim_id=self.claim)
-            
-        # Judge Visibility JSON
-        self._save_judge_visibility(debate_result)
-        
-        self.prag.save_history(claim_id=self.claim)
+            self.prag.save_history(
+                filepath=f"prag_history{file_suffix}.json", 
+                claim_id=self.claim
+            )
         return debate_result
 
-    def _save_judge_visibility(self, debate_result):
+    def _save_judge_visibility(self, debate_result, file_suffix: str = ""):
         """Extract and save judge-specific metrics for transparency"""
         visibility = {
             "claim": debate_result["claim"],
@@ -297,7 +325,7 @@ class MADOrchestrator:
         import json
         try:
             from logging_extension import append_framework_json
-            append_framework_json("judge_visibility.jsonl", self.claim, visibility)
+            append_framework_json(f"judge_visibility{file_suffix}.jsonl", self.claim, visibility)
         except ImportError:
-            with open("judge_visibility.json", "w") as f:
+            with open(f"judge_visibility{file_suffix}.json", "w") as f:
                 json.dump(visibility, f, indent=2)

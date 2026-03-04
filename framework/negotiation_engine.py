@@ -56,7 +56,7 @@ class EvidenceNegotiator:
         """
         5. Negotiation Injection - Agents discuss the pools
         """
-        print("\n--- [Negotiator] Step 5: Multi-Agent Negotiation Injection ---")
+        print("\n--- [Negotiator] Step 3: Multi-Agent Negotiation Injection ---")
         
         # Prepare context for agents
         context = {
@@ -97,23 +97,38 @@ class EvidenceNegotiator:
         disputed = []
 
         for ev in all_candidate_evidence:
-            print(f"   > Evaluating Source ID: {ev.source_id}")
-            # Weight = relevance * credibility (mocked via LLM or heuristic)
+            # Calculate dynamic weight
             weight_data = self._calculate_weight(claim.text, ev.text)
-            ev.relevance_score = weight_data['weight']
             
-            if weight_data['weight'] > 0.6:
+            # Extract metrics
+            weight = weight_data.get('weight', 0.0)
+            relevance = weight_data.get('relevance', 0.0)
+            credibility = weight_data.get('credibility', 0.0)
+            reason = weight_data.get('reason', 'No reason provided.')
+            
+            # Log the metadata for each evidence item as requested
+            print(f"   > Evidence Arbitration [{ev.source_id}]: "
+                  f"{{\"weight\": {weight:.3f}, \"relevance\": {relevance:.3f}, \"credibility\": {credibility:.3f}, \"reason\": \"{reason}\"}}")
+            
+            ev.relevance_score = weight
+            
+            if weight > 0.6:
                 admissible.append({
                     "id": ev.source_id,
-                    "weight": weight_data['weight'],
-                    "reason": weight_data['reason'],
+                    "weight": weight,
+                    "relevance": relevance,
+                    "credibility": credibility,
+                    "reason": reason,
                     "text": ev.text[:150]
                 })
-            elif weight_data['weight'] > 0.2:
+            elif weight > 0.2:
                 # Disputed if not highly weighted but still somewhat relevant
                 disputed.append({
                     "id": ev.source_id,
-                    "weight": weight_data['weight'],
+                    "weight": weight,
+                    "relevance": relevance,
+                    "credibility": credibility,
+                    "reason": reason,
                     "text": ev.text[:150]
                 })
 
@@ -153,13 +168,52 @@ class EvidenceNegotiator:
         return self.llm.generate(prompt).strip().strip('"')
 
     def _calculate_weight(self, claim: str, evidence_text: str) -> Dict:
-        # Mocking weighting - in production use LLM evaluation
-        prompt = (f"Evaluate the scientific relevance and credibility of the following evidence for the claim.\n"
-                  f"Claim: {claim}\nEvidence: {evidence_text[:500]}\n"
-                  f"Provide a JSON response with 'weight' (0-1) and 'reason'.")
-        # For efficiency in this task, we use a simple heuristic or a fast LLM call
-        # Here we mock it to return deterministic-looking values for the walkthrough
-        return {"weight": 0.75, "reason": "Demonstrates clear clinical correlation with the claim premises."}
+        """
+        Evaluate scientific relevance and credibility using LLM.
+        Formula: weight = relevance * credibility
+        """
+        prompt = f"""Evaluate the scientific relevance and credibility of the following medical evidence for the claim.
+        
+        CLAIM: {claim}
+        EVIDENCE: {evidence_text[:1000]}
+        
+        Provide a evaluation based on:
+        1. Relevance: How directly does this evidence address the premises of the claim? (0.0 - 1.0)
+        2. Credibility: Does the evidence come from a reliable scientific context or contain high-quality data? (0.0 - 1.0)
+        
+        Respond ONLY in valid JSON format:
+        {{
+            "relevance": 0.0-1.0,
+            "credibility": 0.0-1.0,
+            "reason": "Brief scientific justification for these scores"
+        }}"""
+        
+        response = self.llm.generate(prompt)
+        try:
+            import re
+            match = re.search(r'\{[\s\S]*\}', response)
+            data = json.loads(match.group()) if match else {}
+            
+            relevance = float(data.get("relevance", 0.5))
+            credibility = float(data.get("credibility", 0.5))
+            
+            # Joint Admissibility Weight Logic
+            weight = round(relevance * credibility, 3)
+            
+            return {
+                "weight": weight,
+                "relevance": round(relevance, 3),
+                "credibility": round(credibility, 3),
+                "reason": data.get("reason", "No reason provided.")
+            }
+        except Exception as e:
+            print(f"   > [Warning] Admissibility evaluation failed: {e}")
+            return {
+                "weight": 0.5,
+                "relevance": 0.5,
+                "credibility": 1.0,
+                "reason": "Fallback due to evaluation error."
+            }
 
     def _deduplicate(self, evidence_list: List[Evidence]) -> List[Evidence]:
         seen_ids = set()

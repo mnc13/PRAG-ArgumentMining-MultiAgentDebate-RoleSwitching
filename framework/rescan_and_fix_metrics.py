@@ -1,0 +1,553 @@
+"""
+rescan_and_fix_metrics.py
+=========================
+Scans processed_claims.txt to identify successful claims, then cross-references
+claims_added.jsonl to find run IDs whose aggregate metrics were never written
+to runs_added.jsonl (due to interrupted runs).  For each such run, recomputes
+and appends the missing run-level summary to both runs_added.jsonl and
+run_reports_added.md.
+
+Usage:
+    cd framework
+    python rescan_and_fix_metrics.py [--dry-run] [--policy {A,B,C}] [--force-rewrite]
+
+Flags:
+    --dry-run        Print what would be done without writing anything.
+    --policy         Inconclusive-label policy (A=SUPPORT, B=REFUTE, C=Exclude). Default: A
+    --force-rewrite  Re-write run summaries even if they already exist in runs_added.jsonl
+                     (useful to fix runs that exist but have wrong avg_rounds).
+"""
+
+import sys
+import os
+import json
+import argparse
+import time
+import re
+import glob
+import numpy as np
+
+# ---------------------------------------------------------------------------
+# Paths (same layout as logging_extension.py)
+# ---------------------------------------------------------------------------
+FRAMEWORK_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR       = os.path.dirname(FRAMEWORK_DIR)
+ARTIFACTS_DIR  = os.path.join(BASE_DIR, "artifacts", "metrics")
+CLAIMS_FILE    = os.path.join(ARTIFACTS_DIR, "claims_added.jsonl")
+RUNS_FILE      = os.path.join(ARTIFACTS_DIR, "runs_added.jsonl")
+REPORT_FILE    = os.path.join(ARTIFACTS_DIR, "run_reports_added.md")
+PROCESSED_FILE = os.path.join(FRAMEWORK_DIR, "outcome", "processed_claims.txt")
+LOGS_DIR       = os.path.join(FRAMEWORK_DIR, "outcome", "logs")
+
+# ---------------------------------------------------------------------------
+# Import the same metric helpers as the main framework
+# ---------------------------------------------------------------------------
+sys.path.insert(0, FRAMEWORK_DIR)
+from metrics_extension import (
+    compute_classification_metrics,
+    compute_auc_and_sweep,
+    compute_judge_reliability,
+)
+
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+def load_processed_successes():
+    """
+    Returns:
+        succeeded_pairs : set of (claim_id, run_index) tuples
+        run_id_to_index : dict  run_id_str -> run_index  (int)
+
+    processed_claims.txt line format:
+        <claim_id>:<run_index>   (run_index is 0, 1, 2 …)
+    Lines without a colon are treated as run_index=0.
+
+    The *order* of unique (claim_id, run_index=0) entries implicitly tells us
+    which batch run_id owns run_index=0, and (claim_id, run_index=1) tells us
+    which batch run_id owns run_index=1, etc.  We cannot derive that mapping
+    here — callers that need it should pass the claims list alongside.
+    """
+    if not os.path.exists(PROCESSED_FILE):
+        print(f"[WARN] processed_claims.txt not found at {PROCESSED_FILE}")
+        return set()
+
+    succeeded_pairs = set()
+    with open(PROCESSED_FILE, "r", encoding="utf-8") as f:
+        for raw in f:
+            line = raw.strip()
+            if not line:
+                continue
+            # Format: "claim_id:run_index"  or bare "claim_id" (legacy → run_index=0)
+            parts = line.split(":")
+            claim_id = parts[0].strip()
+            try:
+                run_index = int(parts[1].strip()) if len(parts) > 1 else 0
+            except ValueError:
+                run_index = 0
+            succeeded_pairs.add((claim_id, run_index))
+
+    unique_claims = {cid for cid, _ in succeeded_pairs}
+    print(f"[INFO] processed_claims.txt: {len(succeeded_pairs)} (claim, run_index) pairs found "
+          f"({len(unique_claims)} unique claim IDs across all runs).")
+    return succeeded_pairs
+
+
+def load_all_claims():
+    """Load every record from claims_added.jsonl, newest records last."""
+    if not os.path.exists(CLAIMS_FILE):
+        print(f"[ERROR] claims_added.jsonl not found at {CLAIMS_FILE}")
+        return []
+
+    records = []
+    with open(CLAIMS_FILE, "r", encoding="utf-8") as f:
+        for lineno, raw in enumerate(f, 1):
+            raw = raw.strip()
+            if not raw:
+                continue
+            try:
+                rec = json.loads(raw)
+                records.append(rec)
+            except json.JSONDecodeError as e:
+                print(f"[WARN] Skipping malformed line {lineno}: {e}")
+    print(f"[INFO] claims_added.jsonl: {len(records)} total claim records loaded.")
+    return records
+
+
+def load_existing_run_ids():
+    """Return set of run IDs already present in runs_added.jsonl."""
+    existing = set()
+    if not os.path.exists(RUNS_FILE):
+        return existing
+    with open(RUNS_FILE, "r", encoding="utf-8") as f:
+        for raw in f:
+            raw = raw.strip()
+            if raw:
+                try:
+                    rec = json.loads(raw)
+                    existing.add(rec.get("run_id", ""))
+                except json.JSONDecodeError:
+                    pass
+    return existing
+
+
+def get_actual_rounds(claim_record: dict) -> int:
+    """
+    Extract the true total round count from a claim record.
+    Handles various naming schemes:
+    - 'total_rounds'
+    - 'rounds_normal' + 'rounds_switched'
+    - 'normal_rounds' + 'switched_rounds'
+    """
+    if "total_rounds" in claim_record:
+        return claim_record["total_rounds"]
+    
+    # Try all known combinations
+    nr = claim_record.get("rounds_normal", claim_record.get("normal_rounds", 0))
+    sr = claim_record.get("rounds_switched", claim_record.get("switched_rounds", 0))
+    
+    if nr or sr:
+        return nr + sr
+        
+    return claim_record.get("rounds", 0)
+
+
+def normalize_label(label: str) -> str:
+    """Standardizes labels to SUPPORT or REFUTE."""
+    if not label or not isinstance(label, str):
+        return "UNKNOWN"
+    l_up = label.upper().strip()
+    if l_up in ("SUPPORT", "SUPPORTED"):
+        return "SUPPORT"
+    if l_up in ("REFUTE", "NOT SUPPORTED", "NOT_SUPPORTED"):
+        return "REFUTE"
+    return l_up
+
+
+def enrich_record_from_log(record: dict) -> dict:
+    """
+    Parses the corresponding execution log to find judge votes and convergence deltas.
+    """
+    cid = record.get("claim_id")
+    rid = record.get("run_id")
+    if not cid or not rid:
+        return record
+    
+    # Try to find the log file
+    log_name = f"execution_log_{cid}_{rid}.txt"
+    log_path = os.path.join(LOGS_DIR, log_name)
+    
+    if not os.path.exists(log_path):
+        return record
+    
+    judge_votes = {}
+    stability_traces = []
+    
+    try:
+        with open(log_path, "r", encoding="utf-8") as f:
+            content = f.read()
+            
+            # 1. Parse Judge Votes
+            # Pattern: Judge 1 ... Verdict: SUPPORT
+            # There's also an EXTRA METRICS block we can leverage:
+            # [CLAIM ...] judges: INCONCLUSIVE, INCONCLUSIVE, INCONCLUSIVE
+            extra_match = re.search(r"judges:\s*([^|]+)", content)
+            if extra_match:
+                v_str = extra_match.group(1).strip()
+                votes = [v.strip() for v in v_str.split(",")]
+                for i, v in enumerate(votes, 1):
+                    judge_votes[f"Judge {i}"] = v
+            else:
+                # Fallback to individual judge blocks
+                matches = re.findall(r"Judge (\d)[^|]*?Verdict:\s*(\w+)", content, re.DOTALL)
+                for jnum, verdict in matches:
+                    judge_votes[f"Judge {jnum}"] = verdict
+            
+            # 2. Parse Convergence (Score Delta)
+            # Pattern: --- [Convergence] Score Delta: 1.1650 ---
+            deltas = re.findall(r"Convergence\] Score Delta:\s*([\d\.-]+)", content)
+            for i, d in enumerate(deltas, 1):
+                stability_traces.append({"round": i, "score_delta": float(d)})
+                
+    except Exception as e:
+        print(f"[WARN] Error enrichment {cid}: {e}")
+
+    record["judge_votes"] = judge_votes
+    record["stability_traces"] = stability_traces
+    return record
+
+
+def map_policy(pred_label: str, confidence: float, policy: str, threshold: float = 0.5) -> str:
+    # First normalize the prediction if it's already a hard label
+    normalized = normalize_label(pred_label)
+    
+    if normalized == "INCONCLUSIVE":
+        if policy == "A":
+            return "SUPPORT"
+        elif policy == "B":
+            return "REFUTE"
+        elif policy == "T":
+            return "SUPPORT" if confidence >= threshold else "REFUTE"
+            
+    return normalized
+
+
+def compute_run_metrics(history: list, policy: str, threshold: float = 0.5) -> tuple:
+    """
+    Given a list of claim records belonging to ONE run, compute run-level metrics.
+    """
+    # Filter claims that have a known GT label
+    valid = [h for h in history if h.get("gt_label") not in ("UNKNOWN", None, "", "N/A", "NA")]
+
+    # Normalize labels and collect confidences
+    y_true = [normalize_label(h["gt_label"]) for h in valid]
+    y_pred = [map_policy(h.get("pred_label", "INCONCLUSIVE"), h.get("confidence", 0.5), policy, threshold) for h in valid]
+    confs  = [h.get("confidence", 0.5) for h in valid]
+
+    # Pass enriched data (if available) to Kappa/Stability tools
+    metrics = {}
+    if y_true and y_pred:
+        metrics = compute_classification_metrics(y_true, y_pred)
+        auc_data = compute_auc_and_sweep(y_true, confs)
+        if auc_data:
+            metrics["auc"]             = auc_data.get("auc")
+            metrics["threshold_sweep"] = auc_data.get("threshold_sweep")
+        
+        # Judge Reliability
+        j_voter_list = [h.get("judge_votes", {}) for h in valid]
+        if any(j_voter_list):
+            metrics["judge_reliability"] = compute_judge_reliability(j_voter_list, y_true)
+    
+    # Efficiency
+    total = len(history)
+    avg_tok   = sum(h.get("token_total",   0) for h in history) / total if total else 0
+    avg_rd    = sum(get_actual_rounds(h)       for h in history) / total if total else 0
+    avg_ev    = sum(h.get("evidence_count", 0) for h in history) / total if total else 0
+    avg_ret   = sum(h.get("retrieval_calls",0) for h in history) / total if total else 0
+
+    eff = {
+        "avg_tokens":         avg_tok,
+        "avg_rounds":         avg_rd,
+        "avg_evidence":       avg_ev,
+        "avg_retrieval_calls": avg_ret,
+        "claim_count":        total,
+        "valid_gt_count":     len(valid),
+        "threshold":          threshold
+    }
+
+    # Stability (Manual aggregation of D_t from enriched traces)
+    d_vals = {}
+    all_round_counts = []
+    for h in history:
+        traces = h.get("stability_traces", [])
+        all_round_counts.append(len(traces))
+        for t in traces:
+            rd = t["round"]
+            d_vals.setdefault(rd, []).append(t["score_delta"])
+    
+    avg_d_vals = {str(r): float(np.mean(ds)) for r, ds in d_vals.items()} if d_vals else {}
+    avg_stab_rd = float(np.mean(all_round_counts)) if all_round_counts else 0.0
+    
+    ks = {
+        "D_t": avg_d_vals,
+        "stabilization_rounds": {"eps_0.05": avg_stab_rd}
+    }
+
+    return metrics, eff, ks
+
+
+
+def format_markdown_summary(run_id: str, metrics: dict, eff: dict, ks: dict,
+                             policy: str, source: str = "RESCAN") -> str:
+    lines = [f"\n=== RUN SUMMARY ({source}) ==="]
+    lines.append(f"Run ID: {run_id}")
+    lines.append(f"Claims processed: {eff.get('claim_count', 0)} "
+                 f"(GT-known: {eff.get('valid_gt_count', 0)})")
+    
+    if policy == "T":
+        lines.append(f"Inconclusive policy: {policy} (threshold={eff.get('threshold', 0.5)})")
+    else:
+        lines.append(f"Inconclusive policy: {policy}")
+
+    # Full Classification Metrics
+    acc  = metrics.get("accuracy", 0.0)
+    mf1  = metrics.get("macro_f1", 0.0)
+    mpr  = metrics.get("macro_precision", 0.0)
+    mre  = metrics.get("macro_recall", 0.0)
+    bacc = metrics.get("balanced_accuracy", 0.0)
+    
+    micro_f1   = metrics.get("micro_f1", 0.0)
+    micro_prec = metrics.get("micro_precision", 0.0)
+    micro_rec  = metrics.get("micro_recall", 0.0)
+    
+    lines.append(f"Metrics: Acc={acc:.4f}, MacroF1={mf1:.4f}, MicroF1={micro_f1:.4f}")
+    lines.append(f"Macros: Prec={mpr:.4f}, Rec={mre:.4f}, BalancedAcc={bacc:.4f}")
+    lines.append(f"Micros: Prec={micro_prec:.4f}, Rec={micro_rec:.4f}")
+
+    conf = metrics.get("confusion_matrix", {})
+    # Handle potentially missing keys in confusion matrix
+    c_list = sorted(conf.keys())
+    conf_str = "Confusion: "
+    for c1 in c_list:
+        inner = conf[c1]
+        sum_row = sum(inner.values())
+        line_part = f"{c1}({sum_row})[" + " ".join([f"{c2}:{inner[c2]}" for c2 in sorted(inner.keys())]) + "] "
+        conf_str += line_part
+    lines.append(conf_str)
+
+    # Judge Reliability
+    jr = metrics.get("judge_reliability", {})
+    if jr:
+        k = jr
+        k_str = f"Kappa: κ12={k.get('k_12', 0.0):.3f} κ13={k.get('k_13', 0.0):.3f} κ23={k.get('k_23', 0.0):.3f} mean={k.get('mean_kappa', 0.0):.3f}"
+        lines.append(k_str)
+        gt_str = f"Judge-vs-GT: k_gt1={k.get('k_gt1', 0.0):.3f} k_gt2={k.get('k_gt2', 0.0):.3f} k_gt3={k.get('k_gt3', 0.0):.3f}"
+        lines.append(gt_str)
+        agr_str = f"Agreement: avg_raw={k.get('avg_raw_agreement', 0.0):.3f} unanimity={k.get('unanimity_rate', 0.0):.3f} split={k.get('split_rate', 0.0):.3f}"
+        lines.append(agr_str)
+
+    # Cost / Efficiency
+    lines.append(
+        f"Efficiency: avg_tok={eff.get('avg_tokens', 0):.1f} "
+        f"avg_round={eff.get('avg_rounds', 0):.2f} "
+        f"avg_retr={eff.get('avg_retrieval_calls', 0):.1f} "
+        f"avg_ev={eff.get('avg_evidence', 0):.1f}"
+    )
+
+    # Stability
+    D_vals   = ks.get("D_t", {})
+    stab_str = ", ".join([f"D_{r}={d:.3f}" for r, d in sorted(D_vals.items(), key=lambda x: int(x[0]))])
+    stop_r   = ks.get("stabilization_rounds", {}).get("eps_0.05", "N/A")
+    if isinstance(stop_r, (int, float)):
+        lines.append(f"Stability: {stab_str} ..., avg_stop_round={stop_r:.2f}")
+    else:
+        lines.append(f"Stability: {stab_str} ..., avg_stop_round={stop_r}")
+
+    if metrics.get("auc") is not None:
+        lines.append(f"AUC: {metrics.get('auc'):.4f}")
+
+    lines.append("===========================\n")
+    return "\n".join(lines)
+
+
+# ---------------------------------------------------------------------------
+# Main logic
+# ---------------------------------------------------------------------------
+
+def main():
+    parser = argparse.ArgumentParser(description="Rescan and fix missing run-level metrics.")
+    parser.add_argument("--dry-run",       action="store_true",
+                        help="Print what would be done without writing files.")
+    parser.add_argument("--policy",        choices=["A", "B", "C", "T"], default="A",
+                        help="Inconclusive-label policy (A=SUPPORT, B=REFUTE, C=Exclude, T=Threshold). Default: A")
+    parser.add_argument("--threshold",     type=float, default=0.5,
+                        help="Threshold for policy T (0.0 to 1.0). Default: 0.5")
+    parser.add_argument("--force-rewrite", action="store_true",
+                        help="Re-write run summaries even if already in runs_added.jsonl.")
+    args = parser.parse_args()
+
+    print("\n=== RESCAN & FIX METRICS ===")
+    print(f"Policy: {args.policy} | DryRun: {args.dry_run} | ForceRewrite: {args.force_rewrite}\n")
+
+    # 1. Load all data
+    succeeded_pairs = load_processed_successes()   # set of (claim_id, run_index) tuples
+    all_claims      = load_all_claims()             # list of claim records
+    existing_runs   = load_existing_run_ids()       # already-completed run IDs
+
+    # Build a flat set of succeeded claim_ids for quick fallback lookup
+    succeeded_claim_ids = {cid for cid, _ in succeeded_pairs}
+
+    # 2. Group claims by run_id and determine run_index per run_id.
+    #    run_index is the order in which a given claim_id was processed across
+    #    multiple batch runs.  We reconstruct it by tracking how many times
+    #    each claim_id has appeared so far as we iterate over all_claims in
+    #    file order (oldest → newest).
+    runs_map: dict[str, list] = {}
+    claim_id_run_counter: dict[str, int] = {}   # claim_id -> how many runs seen so far
+    for rec in all_claims:
+        rid = rec.get("run_id", "unknown")
+        cid = rec.get("claim_id", "")
+        
+        # Enrich from log
+        rec = enrich_record_from_log(rec)
+        
+        # Determine which run_index
+        # Prefer an explicit '_run_index' field if the record carries one.
+        if "_run_index" in rec:
+            ri = int(rec["_run_index"])
+        else:
+            ri = claim_id_run_counter.get(cid, 0)
+            claim_id_run_counter[cid] = ri + 1
+        # Attach inferred run_index so the confirmation step can use it
+        rec["_inferred_run_index"] = ri
+        runs_map.setdefault(rid, []).append(rec)
+
+    print(f"[INFO] Distinct run IDs in claims_added.jsonl: {len(runs_map)}")
+    print(f"[INFO] Already summarised run IDs in runs_added.jsonl: {len(existing_runs)}")
+
+    # 3. Identify missing runs
+    missing_runs = []
+    for rid, claims in runs_map.items():
+        if args.force_rewrite or rid not in existing_runs:
+            missing_runs.append((rid, claims))
+
+    if not missing_runs:
+        print("\n[OK] All run IDs already have summaries. Nothing to do.")
+        print("     Use --force-rewrite to regenerate existing summaries.\n")
+        return
+
+    print(f"\n[INFO] {len(missing_runs)} individual run(s) need metric computation.\n")
+
+    if args.force_rewrite and not args.dry_run:
+        print("[INFO] --force-rewrite requested. Truncating output files for a clean start.")
+        open(RUNS_FILE, "w", encoding="utf-8").close()
+        open(REPORT_FILE, "w", encoding="utf-8").close()
+
+    # 4. Collection for Aggregates
+    all_confirmed_history = []
+    index_groups: dict[int, list] = {}
+
+    # 4. Standard Case: Process missing individual runs
+    for rid, claims in missing_runs:
+        # Cross-reference with processed_claims.txt using (claim_id, run_index) pairs.
+        confirmed = []
+        if succeeded_pairs:
+            confirmed = [
+                c for c in claims
+                if (c.get("claim_id", ""), c.get("_inferred_run_index", 0)) in succeeded_pairs
+            ]
+            if not confirmed:
+                confirmed = [c for c in claims if c.get("claim_id", "") in succeeded_claim_ids]
+        else:
+            confirmed = claims
+
+        if not confirmed:
+            continue
+
+        # Add to global collection for the final summary
+        all_confirmed_history.extend(confirmed)
+        for c in confirmed:
+            idx = c.get("_inferred_run_index", 0)
+            index_groups.setdefault(idx, []).append(c)
+
+        metrics, eff, ks = compute_run_metrics(confirmed, args.policy, args.threshold)
+        eff["threshold"] = args.threshold
+
+        md_text = format_markdown_summary(rid, metrics, eff, ks, args.policy, source="RESCAN-ADDED")
+        jsonl_rec = {
+            "run_id": rid,
+            "timestamp": time.time(),
+            "source": "rescan",
+            "metrics": metrics,
+            "efficiency": eff,
+            "ks_stability": ks,
+            "config": {"runs": 1, "inconclusive_policy": args.policy, "threshold": args.threshold},
+        }
+
+        if not args.dry_run:
+            with open(RUNS_FILE, "a", encoding="utf-8") as f:
+                f.write(json.dumps(jsonl_rec) + "\n")
+            with open(REPORT_FILE, "a", encoding="utf-8") as f:
+                f.write(md_text + "\n")
+
+    # 5. Global Aggregates (Always compute if we have data)
+    # If no missing runs were processed, we still need to collect all confirmed claims from the whole file
+    if not all_confirmed_history:
+        for rid, claims in runs_map.items():
+            confirmed = [
+                c for c in claims
+                if (c.get("claim_id", ""), c.get("_inferred_run_index", 0)) in succeeded_pairs
+            ]
+            all_confirmed_history.extend(confirmed)
+            for c in confirmed:
+                idx = c.get("_inferred_run_index", 0)
+                index_groups.setdefault(idx, []).append(c)
+
+    if all_confirmed_history:
+        print("\n" + "="*40)
+        print("AGGREGATE EXPERIMENT SUMMARY")
+        print("="*40)
+
+        # 5a. Per Run-Index Summaries (Performance across attempts)
+        sorted_indices = sorted(index_groups.keys())
+        for idx in sorted_indices:
+            idx_claims = index_groups[idx]
+            m, e, k = compute_run_metrics(idx_claims, args.policy, args.threshold)
+            e["threshold"] = args.threshold
+            header = f"EXPERIMENT-WIDE-RUN-INDEX-{idx}"
+            summary = format_markdown_summary(header, m, e, k, args.policy, source="AGGREGATE-INDEX")
+            print(summary)
+            if not args.dry_run:
+                with open(REPORT_FILE, "a", encoding="utf-8") as f:
+                    f.write(summary + "\n")
+
+        # 5b. Grand Total Summary
+        global_m, global_e, global_k = compute_run_metrics(all_confirmed_history, args.policy, args.threshold)
+        global_e["threshold"] = args.threshold
+        header = "GRAND-TOTAL-EXPERIMENT-AGGREGATE"
+        summary = format_markdown_summary(header, global_m, global_e, global_k, args.policy, source="GRAND-TOTAL")
+        
+        print(summary)
+        
+        if not args.dry_run:
+            # We also record the grand total in the JSONL for tracking
+            jsonl_rec = {
+                "run_id": header,
+                "timestamp": time.time(),
+                "source": "aggregate",
+                "metrics": global_m,
+                "efficiency": global_e,
+                "ks_stability": global_k,
+                "config": {"total_claims": len(all_confirmed_history), "policy": args.policy, "threshold": args.threshold},
+            }
+            with open(RUNS_FILE, "a", encoding="utf-8") as f:
+                f.write(json.dumps(jsonl_rec) + "\n")
+            with open(REPORT_FILE, "a", encoding="utf-8") as f:
+                f.write(summary + "\n")
+
+    print("=== DONE ===\n")
+
+
+if __name__ == "__main__":
+    main()

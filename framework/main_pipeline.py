@@ -190,7 +190,7 @@ def main():
             log("\n8. Legal Consistency Check (Role-Switching)...")
             from role_switcher import RoleSwitcher
             switcher = RoleSwitcher(mad)
-            switched_result = switcher.switch_roles(max_rounds=2)
+            switched_result = switcher.switch_roles(max_rounds=10)
             consistency_report = switcher.check_consistency(debate_result, switched_result)
             
             log("\n9. Judicial Panel Evaluation...")
@@ -223,34 +223,43 @@ def main():
             log(f"   Confidence: {final_result['confidence']:.3f}")
 
             # 12. Save Verdict and Update Processed List
-            verdicts_path = os.path.join(outcome_dir, "all_verdicts.jsonl")
-            
-            # Prepare record with specific fields requested by user
-            record = {
-                "claim_id": input_claim.id,
-                "verdict": final_result['verdict'],
-                "confidence": final_result['confidence'],
-                "ground_truth": final_result['ground_truth_label'],
-                "correct": final_result['correct']
-            }
-            
-            with open(verdicts_path, "a", encoding="utf-8") as f:
-                f.write(json.dumps(record) + "\n")
+            try:
+                verdicts_path = os.path.join(outcome_dir, "all_verdicts.jsonl")
                 
-            # Append to processed_claims.txt
-            with open(processed_claims_path, "a", encoding="utf-8") as f:
-                # 1. Mark this specific run as done
-                f.write(f"{input_claim.id}:{args.run_index}\n")
+                # Prepare record with specific fields
+                # Defensive check for final_result fields
+                record = {
+                    "claim_id": str(input_claim.id) if hasattr(input_claim, 'id') else str(input_claim),
+                    "verdict": final_result.get('verdict', 'UNKNOWN'),
+                    "confidence": final_result.get('confidence', 0.0),
+                    "ground_truth": final_result.get('ground_truth_label', 'UNKNOWN'),
+                    "correct": final_result.get('correct', False)
+                }
                 
-                # 2. Mark the whole claim as done ONLY if this is the final intended run
-                if not args.no_mark_processed:
-                    f.write(f"{input_claim.id}\n")
-                    log(f"   [SAVED] Claim ID appended to {processed_claims_path}")
-                else:
-                    log(f"   [SAVED] Run {args.run_index} marked as successful in {processed_claims_path}")
-            
-            # Increment processed count
-            claims_processed_count += 1
+                with open(verdicts_path, "a", encoding="utf-8") as f:
+                    f.write(json.dumps(record) + "\n")
+                    f.flush() # Ensure it's written to disk
+                    
+                # Append to processed_claims.txt
+                with open(processed_claims_path, "a", encoding="utf-8") as f:
+                    # 1. Mark this specific run as done
+                    f.write(f"{input_claim.id}:{args.run_index}\n")
+                    
+                    # 2. Mark the whole claim as done ONLY if this is the final intended run
+                    if not args.no_mark_processed:
+                        f.write(f"{input_claim.id}\n")
+                        log(f"   [SAVED] Claim ID appended to {processed_claims_path}")
+                    else:
+                        log(f"   [SAVED] Run {args.run_index} marked as successful in {processed_claims_path}")
+                    f.flush() # Ensure it's written to disk
+                
+                # Increment processed count
+                claims_processed_count += 1
+                
+            except Exception as save_error:
+                log(f"   [ERROR] Failed to save verdict or update processed list: {save_error}")
+                # We still increment if we believe the claim was work actually done
+                claims_processed_count += 1
             
         finally:
             sys.stdout = dual_logger.terminal

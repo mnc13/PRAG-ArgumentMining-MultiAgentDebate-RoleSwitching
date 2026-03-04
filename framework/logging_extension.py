@@ -60,13 +60,14 @@ def append_markdown(filepath: str, content: str):
 # Console Formatters
 # ---------------------------------------------------------------------------
 
-def print_extra_claim_metrics(claim_id: str, rounds: int, tokens: int, 
-                              retrievals: int, evidence: int, p_final: float, 
-                              confidence: float, judge_summary: str, 
+def print_extra_claim_metrics(claim_id: str, normal_rounds: int, switched_rounds: int, 
+                              tokens: int, retrievals: int, evidence: int, 
+                              p_final: float, confidence: float, judge_summary: str, 
                               kappa_pair_mean: float):
     """Prints the per-claim added metrics block without altering surrounding flow."""
     print("\n=== EXTRA METRICS (ADDED) ===")
-    print(f"[CLAIM {claim_id}] rounds={rounds} tok={tokens} retr={retrievals} ev={evidence} p_final={p_final:.3f} conf={confidence:.3f}")
+    print(f"[CLAIM {claim_id}] rounds_norm={normal_rounds} rounds_switch={switched_rounds} "
+          f"tok={tokens} retr={retrievals} ev={evidence} conf={confidence:.3f}")
     if judge_summary:
         print(f"[CLAIM {claim_id}] judges: {judge_summary} | kappa_mean={kappa_pair_mean:.3f}")
     print("="*29 + "\n")

@@ -35,11 +35,11 @@ class JudicialPanel:
             {
                 "name": "Judge 2",
                 "llm": OpenRouterLLMClient(
-                    model_name="meta-llama/llama-3.1-405b-instruct",
+                    model_name="nousresearch/hermes-3-llama-3.1-405b",
                     system_prompt="You are an independent appellate judge presiding over a legal proceeding. Your role is to perform a comprehensive holistic evaluation of the case, focusing on evidence admissibility, logical coherence of advocacy, and scientific accuracy of expert testimonies.",
                     temperature=0.3
                 ),
-                "model": "meta-llama/llama-3.1-405b-instruct"
+                "model": "nousresearch/hermes-3-llama-3.1-405b"
             },
             {
                 "name": "Judge 3",

@@ -57,24 +57,17 @@ class RoleSwitcher:
         self.original_mad.agents['opponent'].job_title = "Defense Counsel"
         self.original_mad.agents['opponent'].name = "Defense Counsel"
         
-        # Reset debate state
-        self.original_mad.debate_transcript = []
-        self.original_mad.current_round = 0
-        self.original_mad.prag.round_counter = 0
+        # Reset debate state using the new clean reset method
+        self.original_mad.reset_state()
         
         # Run switched debate
-        switched_result = self.original_mad.run_full_debate(max_rounds=max_rounds)
+        switched_result = self.original_mad.run_full_debate(max_rounds=max_rounds, save_transcript=True, file_suffix="_switched")
         
-        # Save switched transcript
-        try:
-            from logging_extension import append_framework_json
-            append_framework_json("debate_transcript_switched.jsonl", self.original_mad.claim, switched_result)
-        except ImportError:
-            with open("debate_transcript_switched.json", "w") as f:
-                json.dump(switched_result, f, indent=2)
+        # We no longer need manual saving here as MADOrchestrator handles it with the suffix
         
         return switched_result
     
+    # Extract individual arguments for consistency check (always from switched run)
     def check_consistency(self, original_transcript: Dict, switched_transcript: Dict) -> Dict:
         """
         Analyze consistency between original and switched debates
@@ -132,17 +125,17 @@ class RoleSwitcher:
 
 ORIGINAL PROCEEDINGS:
 Plaintiff Counsel (Agent A) Arguments:
-{chr(10).join(original_pro_args[:2])}
+{chr(10).join(original_pro_args)}
 
 Defense Counsel (Agent B) Arguments:
-{chr(10).join(original_opp_args[:2])}
+{chr(10).join(original_opp_args)}
 
 SWITCHED PROCEEDINGS (Roles Swapped):
 Plaintiff Counsel (Agent B - formerly Defense) Arguments:
-{chr(10).join(switched_pro_args[:2])}
+{chr(10).join(switched_pro_args)}
 
 Defense Counsel (Agent A - formerly Plaintiff) Arguments:
-{chr(10).join(switched_opp_args[:2])}
+{chr(10).join(switched_opp_args)}
 
 Analyze:
 1. Does Agent A maintain logical consistency when switching from Plaintiff Counsel to Defense Counsel?

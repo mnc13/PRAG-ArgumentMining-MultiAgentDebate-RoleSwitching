@@ -800,3 +800,136 @@ This framework represents a sophisticated multi-agent fact-checking system that 
 - **Self-awareness**: Winner performs self-critique
 
 The system processes claims through 11 distinct stages, generating comprehensive audit trails and confidence-weighted verdicts for COVID-19 fact-checking.
+
+---
+
+## 🔄 UPDATE — V1.2 ANALYSIS (2026-03-04)
+*Deep inspection of current codebase. All changes verified against live source files.*
+
+### 🆕 Key Architecture Changes Since v1.0/v1.1
+
+#### Stage 6 & 8: Role-Switch Rounds Now Fully Dynamic
+- **Previous (v1.0)**: Hard-coded to `max_rounds=2` for the switched debate.
+- **Current (v1.2)**: `main_pipeline.py:193` now calls `switcher.switch_roles(max_rounds=10)`.
+- This means the role-switched debate uses the **same adaptive convergence algorithm** as the original debate — it runs up to 10 rounds but terminates early when `delta_score < 0.05` (convergence) or evidence novelty plateaus.
+
+#### Stage 6: `MADOrchestrator.reset_state()` Added
+- A new method `reset_state()` was systematically added to `MADOrchestrator` (lines 66–84).
+- Called by `RoleSwitcher.switch_roles()` **before** re-running the debate, this cleanly purges all in-memory state: `debate_transcript`, `current_round`, `evidence_pool`, `last_total_reflection_score`, `reflection_discovery_needs`, `self_reflection.reflection_history`, `prag.round_counter`, and `prag.retrieval_history`.
+- Previously these were reset ad-hoc; now the design is robust and explicit.
+
+#### Stage 8: Consistency Analyzer Updated
+- **Previous**: The previous report cited **Groq Llama-4-Maverick** for consistency analysis.
+- **Current**: `role_switcher.py:85` uses `openrouter` + `deepseek/deepseek-chat` (temperature=0.3) for the consistency analysis prompt. Groq is no longer used here.
+
+#### Stage 9: Expert Witness Model Updated
+- **Previous**: Expert Witness used `meta-llama/llama-3.1-405b`.
+- **Current**: `personas.py:43` assigns `nousresearch/hermes-3-llama-3.1-405b` to the `expert_slot` role.
+
+#### Stage 9: Judicial Panel — PRAG Rigor Audit Injection
+- `main_pipeline.py:203–210` now passes `prag_metrics`, `critic_evaluations`, and `reflection_history` **directly to `panel.evaluate_debate()`** alongside the existing transcript and evidence.
+- Judges now see a full picture of discovery rigor, convergence, and self-reflection data before rendering a verdict.
+
+#### Stage 10: Self-Reflection Selection Logic Refined
+- `main_pipeline.py:214–216` identifies the **winning side** from `judge_result['final_verdict']` and selects only the **last reflection entry** from the winning counsel's reflection history for confidence adjustment.
+- This prevents the losing side's potentially negative reflection from distorting the final confidence calculation — a significant bias-reduction improvement.
+
+#### Judge Visibility Artifact
+- `MADOrchestrator._save_judge_visibility()` saves `judge_visibility.json` with query evolution, novelty trends, and convergence score deltas, creating a transparent PRAG audit trail visible to judges before deliberation.
+
+---
+
+### 🆕 New Utility & Analysis Scripts Added to `framework/`
+
+| File | Purpose | Status |
+|------|---------|--------|
+| [`rescan_and_fix_metrics.py`](file:///d:/thesis/PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID/framework/rescan_and_fix_metrics.py) | Rescans `processed_claims.txt` and missing run metrics; recalculates all extended metrics for any run that doesn't have aggregated results yet. Supports policies `A`, `B`, `T`. | ✅ Active |
+| [`run_eval_extended.py`](file:///d:/thesis/PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID/framework/run_eval_extended.py) | Wraps `main_pipeline.py` via monkey-patching. Intercepts LLM token counts and retrieval calls. Runs multi-run loops and writes extended metrics to `artifacts/metrics/`. | ✅ Active |
+| [`summarize_added_metrics.py`](file:///d:/thesis/PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID/framework/summarize_added_metrics.py) | Reads all cross-run data from `runs_added.jsonl` to compile multi-run stability and sensitivity reports. | ✅ Active |
+| [`sync_logs_to_outcomes.py`](file:///d:/thesis/PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID/framework/sync_logs_to_outcomes.py) | Scans `outcome/logs/` and synchronizes them with `processed_claims.txt`, `all_verdicts.jsonl`, and `claims_added.jsonl`. | ✅ Active |
+| [`combine_all_metrics.py`](file:///d:/thesis/PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID/framework/combine_all_metrics.py) | Aggregates results from multiple `claims_added.jsonl` sources (e.g., different devices/runs) into a unified "GRAND GRAND TOTAL" report. Appended to `artifacts/metrics/run_reports_added.md`. | ✅ Active |
+| [`evaluate_results.py`](file:///d:/thesis/PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID/framework/evaluate_results.py) | Standalone evaluator reading `all_verdicts.jsonl` against ground truth labels. | ✅ Active |
+| [`logging_extension.py`](file:///d:/thesis/PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID/framework/logging_extension.py) | Non-destructive tracking module; manages global `ExtensionState`, `run_id` generation, per-claim token/retrieval counters, and append-only JSONL/Markdown writes. | ✅ Active |
+
+---
+
+### 🆕 Experiment Outcome Structure (Multi-Device)
+
+The framework now supports multi-device experimental tracking:
+
+```
+artifacts/
+├── metrics/                         # Primary device outcomes
+│   ├── claims_added.jsonl           # 32 claims with full extended metrics
+│   ├── runs_added.jsonl             # Run-level aggregate results
+│   └── run_reports_added.md        # Human-readable summaries
+│
+├── device 2/metrics/               # Secondary device outcomes (Friend's run)
+│   ├── claims_added.jsonl           # 24 claims with full extended metrics
+│   ├── runs_added.jsonl
+│   └── run_reports_added.md
+│
+└── combined/                        # *** NEW *** Unified workspace
+    ├── claims_added.jsonl           # 56 merged claims
+    ├── all_verdicts.jsonl          # All merged verdicts
+    ├── processed_claims.txt        # Merged processed IDs
+    ├── logs/                       # All execution logs from both devices
+    ├── runs_added.jsonl
+    ├── run_reports_added.md        # Grand unified report
+    └── calculate_combined_metrics.py  # Analysis script
+```
+
+---
+
+### 🔧 Updated LLM Model Assignment (Current Verified)
+
+| Role | Provider | Model | File Reference |
+|------|----------|-------|----------------|
+| Premise Decomposition | OpenRouter | `deepseek/deepseek-r1` | `main_pipeline.py:119` |
+| Plaintiff Counsel | OpenAI | `gpt-5-mini` | `personas.py:13` |
+| Defense Counsel | OpenRouter | `deepseek/deepseek-v3.2` | `personas.py:20` |
+| The Court | OpenRouter | `qwen/qwen3-235b-a22b-2507` | `personas.py:30` |
+| Expert Witness | OpenRouter | `nousresearch/hermes-3-llama-3.1-405b` | `personas.py:43` *(Updated)* |
+| Critic Agent | OpenRouter | `deepseek/deepseek-r1` | `personas.py:50` |
+| Consistency Analysis | OpenRouter | `deepseek/deepseek-chat` | `role_switcher.py:86` *(Updated)* |
+| Judge 1 | OpenRouter | `deepseek/deepseek-r1` | `judge_evaluator.py` |
+| Judge 2 | OpenRouter | `nousresearch/hermes-3-llama-3.1-405b` | `judge_evaluator.py` |
+| Judge 3 | OpenRouter | `qwen/qwen3-235b-a22b-2507` | `judge_evaluator.py` |
+
+---
+
+### 📊 Experimental Results Summary (v1.2 Snapshot)
+
+Based on the full combined experimental run (56 unique claims):
+
+| Dataset | Claims | Acc | MacroF1 | MacroPrec | MacroRec | BalAcc | MeanKappa | AUC | avg_tok | avg_rounds |
+|---------|--------|-----|---------|-----------|---------|--------|-----------|-----|---------|------------|
+| User Device | 32 | 0.8125 | 0.8095 | 0.8571 | 0.8235 | 0.8235 | 0.417 | 0.3922 | 204,205 | 5.16 |
+| Device 2 | 24 | 0.8750 | 0.8748 | 0.8929 | 0.8846 | 0.8846 | 0.690 | 0.2727 | 222,399 | 2.00 |
+| **COMBINED** | **56** | **0.8393** | **0.8388** | **0.8432** | **0.8393** | **0.8393** | **0.844** | **0.3304** | **212,002** | **3.80** |
+
+#### Combined Confusion Matrix
+```
+REFUTE(28)[REFUTE:22 SUPPORT:6]  SUPPORT(28)[REFUTE:3 SUPPORT:25]
+TN=22, FP=6, FN=3, TP=25
+```
+
+#### Combined Judge Agreement
+| Metric | Value |
+|--------|-------|
+| κ12 | 0.969 |
+| κ13 | 0.766 |
+| κ23 | 0.796 |
+| Mean Kappa | 0.844 |
+| avg_raw_agreement | 0.917 |
+| unanimity_rate | 0.875 |
+| split_rate | 0.125 |
+
+#### Combined Stability
+```
+D_1=1.115, D_2=0.065, D_3=0.036, D_4=-0.039, D_5=0.005, D_6=-0.006, D_7=0.096, D_8=0.100, avg_stop_round=3.80
+```
+
+---
+
+

@@ -40,7 +40,7 @@ AGENT_SLOTS = {
         "expertise": ["scientific domain"],
         "system_prompt": "You are a scientific expert witness. Provide technical analysis based on your expertise.",
         "llm_provider": "openrouter",
-        "llm_model": "meta-llama/llama-3.1-405b-instruct",
+        "llm_model": "nousresearch/hermes-3-llama-3.1-405b",
         "temperature": 0.5
     },
     "critic": {

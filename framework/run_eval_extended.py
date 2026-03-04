@@ -45,6 +45,42 @@ def apply_monkey_patches():
         openrouter_client.requests.post = new_post
     except ImportError:
         pass
+
+    try:
+        import openai
+        # Patch ChatCompletions
+        orig_chat_create = openai.resources.chat.completions.Completions.create
+        
+        def new_chat_create(self, *args, **kwargs):
+            res = orig_chat_create(self, *args, **kwargs)
+            try:
+                if hasattr(res, 'usage') and res.usage:
+                    ExtensionState.current_claim_tokens += res.usage.total_tokens
+            except Exception:
+                pass
+            return res
+            
+        openai.resources.chat.completions.Completions.create = new_chat_create
+        
+        # Patch GPT-5 Responses if they exist in the library version
+        try:
+            orig_resp_create = openai.resources.responses.Responses.create
+            def new_resp_create(self, *args, **kwargs):
+                res = orig_resp_create(self, *args, **kwargs)
+                # Tracking for GPT-5 might vary; assuming usage is available or handled by output_text length proxy if needed
+                # For now, we try to capture usage if present
+                try:
+                    if hasattr(res, 'usage') and res.usage:
+                        ExtensionState.current_claim_tokens += res.usage.total_tokens
+                except Exception:
+                    pass
+                return res
+            openai.resources.responses.Responses.create = new_resp_create
+        except AttributeError:
+            pass
+            
+    except ImportError:
+        pass
         
     try:
         import rag_engine
@@ -99,6 +135,7 @@ def extract_and_log_claim_metrics(claim_obj):
     fv_data = safe_load_last_jsonl("final_verdict.jsonl")
     je_data = safe_load_last_jsonl("judge_evaluation.jsonl")
     dt_data = safe_load_last_jsonl("debate_transcript.jsonl")
+    dt_switched_data = safe_load_last_jsonl("debate_transcript_switched.jsonl")
 
     # Try multiple sources for Ground Truth
     gt = fv_data.get("ground_truth_label")
@@ -111,9 +148,15 @@ def extract_and_log_claim_metrics(claim_obj):
     conf = fv_data.get("confidence", 0.5)
     
     # Rounds count
-    rounds = 1
+    normal_rounds = 0
     if dt_data and "rounds" in dt_data:
-        rounds = len(dt_data["rounds"])
+        normal_rounds = len(dt_data["rounds"])
+        
+    switched_rounds = 0
+    if dt_switched_data and "rounds" in dt_switched_data:
+        switched_rounds = len(dt_switched_data["rounds"])
+    
+    total_rounds = normal_rounds + switched_rounds
         
     # Judge votes tracking
     judge_verdicts = je_data.get("judge_verdicts", [])
@@ -136,21 +179,19 @@ def extract_and_log_claim_metrics(claim_obj):
         
     correct = (pred == gt) if gt not in ("UNKNOWN", None, "") else None
     
-    # Store in history
+    # Store in history (Legacy Structure)
     record = {
         "run_id": ExtensionState.run_id,
         "claim_id": claim_id,
         "gt_label": gt,
         "pred_label": pred,
         "correct": correct,
-        "p_final": conf,
         "confidence": conf,
-        "rounds": rounds,
+        "rounds_normal": normal_rounds,
+        "rounds_switched": switched_rounds,
         "token_total": ExtensionState.current_claim_tokens,
         "retrieval_calls": ExtensionState.current_claim_retrievals,
-        "evidence_count": ExtensionState.current_claim_evidence,
-        "judge_votes": judge_votes,
-        "judge_scores": je_data # dump full structure
+        "evidence_count": ExtensionState.current_claim_evidence
     }
     
     ExtensionState.claims_history.append(record)
@@ -165,11 +206,11 @@ def extract_and_log_claim_metrics(claim_obj):
     # Print extra block
     print_extra_claim_metrics(
         claim_id=claim_id,
-        rounds=rounds,
+        normal_rounds=normal_rounds,
+        switched_rounds=switched_rounds,
         tokens=ExtensionState.current_claim_tokens,
         retrievals=ExtensionState.current_claim_retrievals,
         evidence=ExtensionState.current_claim_evidence,
-        p_final=conf,
         confidence=conf,
         judge_summary=judge_summary,
         kappa_pair_mean=k_pair_mean
@@ -253,7 +294,7 @@ def compile_and_log_run_summary(policy: str):
     
     # Efficiency Cost Metrics
     avg_tok = sum(h["token_total"] for h in history) / len(history)
-    avg_rd = sum(h["rounds"] for h in history) / len(history)
+    avg_rd = sum(h.get("total_rounds", 0) for h in history) / len(history)
     avg_ev = sum(h["evidence_count"] for h in history) / len(history)
     avg_ret = sum(h["retrieval_calls"] for h in history) / len(history)
     eff = {

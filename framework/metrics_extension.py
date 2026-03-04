@@ -57,7 +57,9 @@ def compute_classification_metrics(y_true: List[str], y_pred: List[str]) -> Dict
     macro_f1 = np.mean([per_class[c]["f1"] for c in classes]) if classes else 0.0
     balanced_acc = macro_recall # Balanced accuracy is macro recall for multi-class
     
-    # Micro F1 (same as accuracy in single-label classification)
+    # Micros
+    micro_precision = accuracy
+    micro_recall = accuracy
     micro_f1 = accuracy
     
     return {
@@ -65,6 +67,8 @@ def compute_classification_metrics(y_true: List[str], y_pred: List[str]) -> Dict
         "macro_precision": macro_precision,
         "macro_recall": macro_recall,
         "macro_f1": macro_f1,
+        "micro_precision": micro_precision,
+        "micro_recall": micro_recall,
         "micro_f1": micro_f1,
         "balanced_accuracy": balanced_acc,
         "per_class": per_class,

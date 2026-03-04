@@ -34,60 +34,77 @@ class OpenRouterLLMClient(LLMClient):
         self.api_url = "https://openrouter.ai/api/v1/chat/completions"
 
     def generate(self, prompt: str, **kwargs) -> str:
-        try:
-            messages = []
-            if self.system_prompt:
-                messages.append({"role": "system", "content": self.system_prompt})
-            
-            # Helper to append reasoning details if they exist in the prompt context (simple heuristic)
-            # For now, we just append the user prompt
-            messages.append({"role": "user", "content": prompt})
-            
-            headers = {
-                "Authorization": f"Bearer {self.api_key}",
-                "Content-Type": "application/json",
-            }
-            
-            if self.site_url:
-                headers["HTTP-Referer"] = self.site_url
-            if self.site_name:
-                headers["X-Title"] = self.site_name
+        max_retries = 15
+        base_delay = 2  # seconds
+        
+        last_exception = None
+        for attempt in range(max_retries):
+            try:
+                messages = []
+                if self.system_prompt:
+                    messages.append({"role": "system", "content": self.system_prompt})
+                
+                messages.append({"role": "user", "content": prompt})
+                
+                headers = {
+                    "Authorization": f"Bearer {self.api_key}",
+                    "Content-Type": "application/json",
+                }
+                
+                if self.site_url:
+                    headers["HTTP-Referer"] = self.site_url
+                if self.site_name:
+                    headers["X-Title"] = self.site_name
 
-            data = {
-                "model": self.model_name,
-                "messages": messages,
-                "temperature": self.temperature
-            }
+                data = {
+                    "model": self.model_name,
+                    "messages": messages,
+                    "temperature": self.temperature
+                }
 
-            # Handle explicit reasoning parameter (for deepseek-v3.2 etc)
-            if kwargs.get('reasoning_enabled', False) or "deepseek" in self.model_name.lower():
-                 # Default to enabling reasoning for deepseek models if not explicitly disabled
-                 # But specifically for v3.2 as per user request
-                 data["reasoning"] = {"enabled": True}
+                # Handle explicit reasoning parameter (for deepseek-v3.2 etc)
+                if kwargs.get('reasoning_enabled', False) or "deepseek" in self.model_name.lower():
+                     data["reasoning"] = {"enabled": True}
 
-            if 'max_completion_tokens' in kwargs:
-                data['max_completion_tokens'] = kwargs['max_completion_tokens']
-            elif 'max_tokens' in kwargs:
-                data['max_tokens'] = kwargs['max_tokens']
+                if 'max_completion_tokens' in kwargs:
+                    data['max_completion_tokens'] = kwargs['max_completion_tokens']
+                elif 'max_tokens' in kwargs:
+                    data['max_tokens'] = kwargs['max_tokens']
 
-            response = requests.post(
-                url=self.api_url,
-                headers=headers,
-                data=json.dumps(data)
-            )
-            
-            response.raise_for_status()
-            result = response.json()
-            
-            # Extract content
-            if 'choices' in result and len(result['choices']) > 0:
-                return result['choices'][0]['message']['content']
-            else:
-                return f"Error: Empty response from OpenRouter. Raw: {result}"
+                response = requests.post(
+                    url=self.api_url,
+                    headers=headers,
+                    data=json.dumps(data),
+                    timeout=120  # 2 minute timeout per request
+                )
+                
+                response.raise_for_status()
+                result = response.json()
+                
+                # Extract content
+                if 'choices' in result and len(result['choices']) > 0:
+                    content = result['choices'][0]['message'].get('content')
+                    if content:
+                        return content
+                    else:
+                        raise ValueError(f"Empty content in response. Raw: {result}")
+                else:
+                    raise ValueError(f"No choices in response. Raw: {result}")
 
-        except Exception as e:
-            print(f"Error calling OpenRouter ({self.model_name}): {e}")
-            return f"Error generating response: {e}"
+            except Exception as e:
+                last_exception = e
+                print(f"Error calling OpenRouter ({self.model_name}) - Attempt {attempt + 1}/{max_retries}: {e}")
+                
+                if attempt < max_retries - 1:
+                    sleep_time = base_delay * (2 ** attempt)
+                    # Cap the sleep time to something reasonable (e.g. 60s)
+                    sleep_time = min(sleep_time, 60)
+                    import time
+                    time.sleep(sleep_time)
+                else:
+                    return f"Error generating response after {max_retries} attempts: {last_exception}"
+        
+        return f"Error generating response: {last_exception}"
     
     @property
     def provider_name(self) -> str:
