@@ -189,6 +189,8 @@ def extract_and_log_claim_metrics(claim_obj):
         "confidence": conf,
         "rounds_normal": normal_rounds,
         "rounds_switched": switched_rounds,
+        "total_rounds": total_rounds,
+        "judge_votes": judge_votes,
         "token_total": ExtensionState.current_claim_tokens,
         "retrieval_calls": ExtensionState.current_claim_retrievals,
         "evidence_count": ExtensionState.current_claim_evidence

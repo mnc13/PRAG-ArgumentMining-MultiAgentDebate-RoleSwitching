@@ -62,7 +62,7 @@ def append_markdown(filepath: str, content: str):
 
 def print_extra_claim_metrics(claim_id: str, normal_rounds: int, switched_rounds: int, 
                               tokens: int, retrievals: int, evidence: int, 
-                              p_final: float, confidence: float, judge_summary: str, 
+                              confidence: float, judge_summary: str, 
                               kappa_pair_mean: float):
     """Prints the per-claim added metrics block without altering surrounding flow."""
     print("\n=== EXTRA METRICS (ADDED) ===")
