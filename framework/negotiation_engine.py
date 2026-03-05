@@ -112,7 +112,7 @@ class EvidenceNegotiator:
             
             ev.relevance_score = weight
             
-            if weight > 0.6:
+            if weight > 0.5:
                 admissible.append({
                     "id": ev.source_id,
                     "weight": weight,
@@ -121,7 +121,7 @@ class EvidenceNegotiator:
                     "reason": reason,
                     "text": ev.text[:150]
                 })
-            elif weight > 0.2:
+            elif weight > 0.1:
                 # Disputed if not highly weighted but still somewhat relevant
                 disputed.append({
                     "id": ev.source_id,

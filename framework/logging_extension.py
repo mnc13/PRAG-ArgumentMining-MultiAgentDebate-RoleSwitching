@@ -16,8 +16,20 @@ import hashlib
 class ExtensionState:
     run_id: str = "init"
     current_claim_tokens: int = 0
+    current_claim_input_tokens: int = 0
+    current_claim_output_tokens: int = 0
+    current_claim_openai_tokens: int = 0
+    current_claim_openai_input_tokens: int = 0
+    current_claim_openai_output_tokens: int = 0
+    current_claim_openrouter_tokens: int = 0
+    current_claim_openrouter_input_tokens: int = 0
+    current_claim_openrouter_output_tokens: int = 0
+    current_claim_groq_tokens: int = 0
     current_claim_retrievals: int = 0
     current_claim_evidence: int = 0
+    
+    # Per-model detailed tracking: { "model_name": {"in": int, "out": int, "tot": int} }
+    current_claim_model_tokens: dict = {}
     
     # Run level aggregation
     claims_history: list = []
@@ -34,8 +46,18 @@ class ExtensionState:
     @classmethod
     def reset_claim_state(cls):
         cls.current_claim_tokens = 0
+        cls.current_claim_input_tokens = 0
+        cls.current_claim_output_tokens = 0
+        cls.current_claim_openai_tokens = 0
+        cls.current_claim_openai_input_tokens = 0
+        cls.current_claim_openai_output_tokens = 0
+        cls.current_claim_openrouter_tokens = 0
+        cls.current_claim_openrouter_input_tokens = 0
+        cls.current_claim_openrouter_output_tokens = 0
+        cls.current_claim_groq_tokens = 0
         cls.current_claim_retrievals = 0
         cls.current_claim_evidence = 0
+        cls.current_claim_model_tokens = {}
 
 # ---------------------------------------------------------------------------
 # File I/O

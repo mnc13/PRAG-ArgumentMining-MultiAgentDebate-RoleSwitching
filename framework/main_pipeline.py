@@ -60,17 +60,16 @@ def main():
         print(f"No claims found in {test_file_path}")
         return
 
-    # Apply offset
-    if args.offset > 0:
-        all_claims = all_claims[args.offset:]
+    # Slice the claims list to the intended window immediately
+    start_idx = args.offset
+    end_idx = args.offset + args.limit if args.limit is not None else len(all_claims)
+    all_claims = all_claims[start_idx:end_idx]
 
-    claims_processed_count = 0
-    
+    if not all_claims:
+        print(f"No claims to process in range [{start_idx}:{end_idx}]")
+        return
+
     for input_claim in all_claims:
-        # Check limit
-        if args.limit is not None and claims_processed_count >= args.limit:
-            print(f"Reached limit of {args.limit} claims. Stopping.")
-            break
 
         # Resume Logic: Check if whole claim is done OR this specific run is done
         run_key = f"{input_claim.id}:{args.run_index}"
@@ -253,13 +252,11 @@ def main():
                         log(f"   [SAVED] Run {args.run_index} marked as successful in {processed_claims_path}")
                     f.flush() # Ensure it's written to disk
                 
-                # Increment processed count
-                claims_processed_count += 1
+                pass
                 
             except Exception as save_error:
                 log(f"   [ERROR] Failed to save verdict or update processed list: {save_error}")
-                # We still increment if we believe the claim was work actually done
-                claims_processed_count += 1
+                pass
             
         finally:
             sys.stdout = dual_logger.terminal

@@ -27,56 +27,137 @@ from metrics_extension import (
 # ---------------------------------------------------------------------------
 
 def apply_monkey_patches():
-    """Dynamically patches methods to intercept metrics."""
+    """Dynamically patches methods to intercept metrics with recursion guards."""
     try:
         import openrouter_client
-        orig_post = openrouter_client.requests.post
+        import requests
         
-        def new_post(*args, **kwargs):
-            resp = orig_post(*args, **kwargs)
-            try:
-                data = resp.json()
-                if 'usage' in data and 'total_tokens' in data['usage']:
-                    ExtensionState.current_claim_tokens += data['usage']['total_tokens']
-            except Exception:
-                pass
-            return resp
-        
-        openrouter_client.requests.post = new_post
+        if not hasattr(requests.post, "_patched"):
+            orig_post = requests.post
+            
+            def new_post(*args, **kwargs):
+                resp = orig_post(*args, **kwargs)
+                try:
+                    data = resp.json()
+                    if 'usage' in data:
+                        itoks = data['usage'].get('prompt_tokens', 0)
+                        otoks = data['usage'].get('completion_tokens', 0)
+                        ttoks = data['usage'].get('total_tokens', itoks + otoks)
+                        
+                        ExtensionState.current_claim_tokens += ttoks
+                        ExtensionState.current_claim_input_tokens += itoks
+                        ExtensionState.current_claim_output_tokens += otoks
+                        ExtensionState.current_claim_openrouter_tokens += ttoks
+                        ExtensionState.current_claim_openrouter_input_tokens += itoks
+                        ExtensionState.current_claim_openrouter_output_tokens += otoks
+                        
+                        try:
+                            req_data = json.loads(kwargs.get('data', '{}'))
+                            model = req_data.get('model', 'unknown_openrouter')
+                        except:
+                            model = 'unknown_openrouter'
+                            
+                        if model not in ExtensionState.current_claim_model_tokens:
+                            ExtensionState.current_claim_model_tokens[model] = {"in": 0, "out": 0, "tot": 0}
+                        ExtensionState.current_claim_model_tokens[model]["in"] += itoks
+                        ExtensionState.current_claim_model_tokens[model]["out"] += otoks
+                        ExtensionState.current_claim_model_tokens[model]["tot"] += ttoks
+                        
+                        # Also print to log so calculate_tokens.py can parse it from text files
+                        print(f"   [Token Usage] Model: {model}, Input: {itoks}, Output: {otoks}, Total: {ttoks}")
+                except Exception:
+                    pass
+                return resp
+            
+            new_post._patched = True
+            openrouter_client.requests.post = new_post
     except ImportError:
         pass
 
     try:
         import openai
-        # Patch ChatCompletions
-        orig_chat_create = openai.resources.chat.completions.Completions.create
-        
-        def new_chat_create(self, *args, **kwargs):
-            res = orig_chat_create(self, *args, **kwargs)
-            try:
-                if hasattr(res, 'usage') and res.usage:
-                    ExtensionState.current_claim_tokens += res.usage.total_tokens
-            except Exception:
-                pass
-            return res
-            
-        openai.resources.chat.completions.Completions.create = new_chat_create
-        
-        # Patch GPT-5 Responses if they exist in the library version
+        # Explicitly import submodules to ensure they are available for patching
+        import openai.resources.chat.completions
         try:
-            orig_resp_create = openai.resources.responses.Responses.create
-            def new_resp_create(self, *args, **kwargs):
-                res = orig_resp_create(self, *args, **kwargs)
-                # Tracking for GPT-5 might vary; assuming usage is available or handled by output_text length proxy if needed
-                # For now, we try to capture usage if present
+            import openai.resources.responses
+        except ImportError:
+            pass
+
+        # Patch ChatCompletions
+        target_chat = openai.resources.chat.completions.Completions
+        if not hasattr(target_chat.create, "_patched"):
+            orig_chat_create = target_chat.create
+            
+            def new_chat_create(self, *args, **kwargs):
+                res = orig_chat_create(self, *args, **kwargs)
                 try:
                     if hasattr(res, 'usage') and res.usage:
-                        ExtensionState.current_claim_tokens += res.usage.total_tokens
+                        itoks = getattr(res.usage, 'prompt_tokens', 0)
+                        otoks = getattr(res.usage, 'completion_tokens', 0)
+                        ttoks = getattr(res.usage, 'total_tokens', itoks + otoks)
+                        
+                        ExtensionState.current_claim_tokens += ttoks
+                        ExtensionState.current_claim_input_tokens += itoks
+                        ExtensionState.current_claim_openai_tokens += ttoks
+                        ExtensionState.current_claim_openai_input_tokens += itoks
+                        ExtensionState.current_claim_openai_output_tokens += otoks
+                        
+                        model = getattr(res, 'model', 'unknown_openai')
+                        if model not in ExtensionState.current_claim_model_tokens:
+                            ExtensionState.current_claim_model_tokens[model] = {"in": 0, "out": 0, "tot": 0}
+                        ExtensionState.current_claim_model_tokens[model]["in"] += itoks
+                        ExtensionState.current_claim_model_tokens[model]["out"] += otoks
+                        ExtensionState.current_claim_model_tokens[model]["tot"] += ttoks
+
+                        # Also print to log
+                        print(f"   [Token Usage] Model: {model}, Input: {itoks}, Output: {otoks}, Total: {ttoks}")
                 except Exception:
                     pass
                 return res
-            openai.resources.responses.Responses.create = new_resp_create
-        except AttributeError:
+            
+            new_chat_create._patched = True
+            target_chat.create = new_chat_create
+        
+        # Patch GPT-5 Responses (Responses.create)
+        try:
+            target_resp = openai.resources.responses.Responses
+            if not hasattr(target_resp.create, "_patched"):
+                orig_resp_create = target_resp.create
+                def new_resp_create(self, *args, **kwargs):
+                    res = orig_resp_create(self, *args, **kwargs)
+                    try:
+                        usage = getattr(res, 'usage', None)
+                        if usage:
+                            # Responses API uses input_tokens/output_tokens (not prompt_tokens/completion_tokens)
+                            itoks = getattr(usage, 'input_tokens', None)
+                            if itoks is None:
+                                itoks = getattr(usage, 'prompt_tokens', 0)
+                            otoks = getattr(usage, 'output_tokens', None)
+                            if otoks is None:
+                                otoks = getattr(usage, 'completion_tokens', 0)
+                            ttoks = getattr(usage, 'total_tokens', itoks + otoks)
+                            
+                            ExtensionState.current_claim_tokens += ttoks
+                            ExtensionState.current_claim_input_tokens += itoks
+                            ExtensionState.current_claim_openai_tokens += ttoks
+                            ExtensionState.current_claim_openai_input_tokens += itoks
+                            ExtensionState.current_claim_openai_output_tokens += otoks
+
+                            model = getattr(res, 'model', 'unknown_openai')
+                            if model not in ExtensionState.current_claim_model_tokens:
+                                ExtensionState.current_claim_model_tokens[model] = {"in": 0, "out": 0, "tot": 0}
+                            ExtensionState.current_claim_model_tokens[model]["in"] += itoks
+                            ExtensionState.current_claim_model_tokens[model]["out"] += otoks
+                            ExtensionState.current_claim_model_tokens[model]["tot"] += ttoks
+
+                            # Also print to log
+                            print(f"   [Token Usage] Model: {model}, Input: {itoks}, Output: {otoks}, Total: {ttoks}")
+                    except Exception:
+                        pass
+                    return res
+                new_resp_create._patched = True
+                target_resp.create = new_resp_create
+        except (AttributeError, ImportError):
             pass
             
     except ImportError:
@@ -84,32 +165,33 @@ def apply_monkey_patches():
         
     try:
         import rag_engine
-        
-        orig_retrieve = rag_engine.PubMedRetriever.retrieve
-        
-        def new_retrieve(self, query, top_k=5, **kwargs):
-            ExtensionState.current_claim_retrievals += 1
-            res = orig_retrieve(self, query, top_k=top_k, **kwargs)
-            if res:
-                ExtensionState.current_claim_evidence += len(res)
-            return res
+        if not hasattr(rag_engine.PubMedRetriever.retrieve, "_patched"):
+            orig_retrieve = rag_engine.PubMedRetriever.retrieve
             
-        rag_engine.PubMedRetriever.retrieve = new_retrieve
+            def new_retrieve(self, query, top_k=5, **kwargs):
+                ExtensionState.current_claim_retrievals += 1
+                res = orig_retrieve(self, query, top_k=top_k, **kwargs)
+                if res:
+                    ExtensionState.current_claim_evidence += len(res)
+                return res
+                
+            new_retrieve._patched = True
+            rag_engine.PubMedRetriever.retrieve = new_retrieve
     except ImportError:
         pass
         
     try:
         import final_verdict
-        
-        orig_generate_verdict = final_verdict.FinalVerdict.generate_verdict
-        
-        def new_generate_verdict(self):
-            res = orig_generate_verdict(self)
-            # The claim has just finished. Read overwritten JSONs for metrics.
-            extract_and_log_claim_metrics(self.claim)
-            return res
+        if not hasattr(final_verdict.FinalVerdict.generate_verdict, "_patched"):
+            orig_generate_verdict = final_verdict.FinalVerdict.generate_verdict
             
-        final_verdict.FinalVerdict.generate_verdict = new_generate_verdict
+            def new_generate_verdict(self):
+                res = orig_generate_verdict(self)
+                extract_and_log_claim_metrics(self.claim)
+                return res
+                
+            new_generate_verdict._patched = True
+            final_verdict.FinalVerdict.generate_verdict = new_generate_verdict
     except ImportError:
         pass
 
@@ -192,6 +274,16 @@ def extract_and_log_claim_metrics(claim_obj):
         "total_rounds": total_rounds,
         "judge_votes": judge_votes,
         "token_total": ExtensionState.current_claim_tokens,
+        "token_input": ExtensionState.current_claim_input_tokens,
+        "token_output": ExtensionState.current_claim_output_tokens,
+        "token_openai": ExtensionState.current_claim_openai_tokens,
+        "token_openai_input": ExtensionState.current_claim_openai_input_tokens,
+        "token_openai_output": ExtensionState.current_claim_openai_output_tokens,
+        "token_openrouter": ExtensionState.current_claim_openrouter_tokens,
+        "token_openrouter_input": ExtensionState.current_claim_openrouter_input_tokens,
+        "token_openrouter_output": ExtensionState.current_claim_openrouter_output_tokens,
+        "token_groq": ExtensionState.current_claim_groq_tokens,
+        "token_models": ExtensionState.current_claim_model_tokens,
         "retrieval_calls": ExtensionState.current_claim_retrievals,
         "evidence_count": ExtensionState.current_claim_evidence
     }

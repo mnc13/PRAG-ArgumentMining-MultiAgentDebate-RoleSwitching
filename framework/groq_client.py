@@ -68,7 +68,19 @@ class GroqLLMClient(LLMClient):
             
             if hasattr(completion, 'usage'):
                 print(f"   [Token Usage] Input: {completion.usage.prompt_tokens}, Output: {completion.usage.completion_tokens}, Total: {completion.usage.total_tokens}")
-
+            
+                # Tracking for PRAG Extensions
+                try:
+                    from logging_extension import ExtensionState
+                    itoks = completion.usage.prompt_tokens
+                    otoks = completion.usage.completion_tokens
+                    ExtensionState.current_claim_input_tokens += itoks
+                    ExtensionState.current_claim_output_tokens += otoks
+                    ExtensionState.current_claim_groq_tokens += completion.usage.total_tokens
+                    ExtensionState.current_claim_tokens += completion.usage.total_tokens
+                except Exception:
+                    pass
+                
             return completion.choices[0].message.content
         except Exception as e:
             print(f"Error calling Groq ({self.model_name}): {e}")
