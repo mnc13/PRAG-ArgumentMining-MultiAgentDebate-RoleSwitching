@@ -85,13 +85,16 @@ def append_markdown(filepath: str, content: str):
 def print_extra_claim_metrics(claim_id: str, normal_rounds: int, switched_rounds: int, 
                               tokens: int, retrievals: int, evidence: int, 
                               confidence: float, judge_summary: str, 
-                              kappa_pair_mean: float):
+                              kappa_pair_mean: any):
     """Prints the per-claim added metrics block without altering surrounding flow."""
-    print("\n=== EXTRA METRICS (ADDED) ===")
+    # Calculate costs
+    cost = calculate_token_cost(tokens)
+    
+    print("\n" + "="*50)
     print(f"[CLAIM {claim_id}] rounds_norm={normal_rounds} rounds_switch={switched_rounds} "
           f"tok={tokens} retr={retrievals} ev={evidence} conf={confidence:.3f}")
     if judge_summary:
-        print(f"[CLAIM {claim_id}] judges: {judge_summary} | kappa_mean={kappa_pair_mean:.3f}")
+        print(f"[CLAIM {claim_id}] judges: {judge_summary} | kappa_mean={kappa_pair_mean if isinstance(kappa_pair_mean, str) else f'{kappa_pair_mean:.3f}'}")
     print("="*29 + "\n")
 
 
