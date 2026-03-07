@@ -253,11 +253,9 @@ def extract_and_log_claim_metrics(claim_obj):
     j_vals = list(judge_votes.values())
     judge_summary = ", ".join(j_vals)
     
-    # Basic Kappa pair mean for this claim context (just for local logging)
-    k_pair_mean = 0.0
-    if len(j_vals) == 3:
-        pairs_match = sum([j_vals[0]==j_vals[1], j_vals[0]==j_vals[2], j_vals[1]==j_vals[2]])
-        k_pair_mean = pairs_match / 3.0 # Simplified agreement ratio for console
+    # Basic Kappa pair mean for this claim context is statistically invalid for a single claim.
+    # We will compute full dataset Kappa at the end.
+    k_pair_mean = "N/A"
         
     correct = (pred == gt) if gt not in ("UNKNOWN", None, "") else None
     

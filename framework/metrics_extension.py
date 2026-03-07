@@ -170,11 +170,11 @@ def compute_judge_reliability(judge_votes_list: List[Dict[str, str]], y_true: Li
     # Reorganize lists
     j1, j2, j3 = [], [], []
     for votes in judge_votes_list:
-        # Expected format: {"Judge 1": "SUPPORTED", "Judge 2": "NOT SUPPORTED", ...}
-        # If a judge is missing, fallback to "INCONCLUSIVE"
-        j1.append(votes.get("Judge 1", "INCONCLUSIVE"))
-        j2.append(votes.get("Judge 2", "INCONCLUSIVE"))
-        j3.append(votes.get("Judge 3", "INCONCLUSIVE"))
+        # Extract up to 3 verdicts dynamically regardless of the judge's role/name
+        vals = list(votes.values())
+        j1.append(vals[0] if len(vals) > 0 else "INCONCLUSIVE")
+        j2.append(vals[1] if len(vals) > 1 else "INCONCLUSIVE")
+        j3.append(vals[2] if len(vals) > 2 else "INCONCLUSIVE")
         
     # Map raw judicial verdicts to matched ground truth classes for GT comparison
     def map_v(v):
