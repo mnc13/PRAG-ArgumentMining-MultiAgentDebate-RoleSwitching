@@ -87,8 +87,6 @@ def print_extra_claim_metrics(claim_id: str, normal_rounds: int, switched_rounds
                               confidence: float, judge_summary: str, 
                               kappa_pair_mean: any):
     """Prints the per-claim added metrics block without altering surrounding flow."""
-    # Calculate costs
-    cost = calculate_token_cost(tokens)
     
     print("\n" + "="*50)
     print(f"[CLAIM {claim_id}] rounds_norm={normal_rounds} rounds_switch={switched_rounds} "

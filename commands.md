@@ -51,3 +51,75 @@ Key differences:
 --policy T: Tells the tool to use the threshold comparison instead of a fixed label.
 --threshold 0.5: Sets the cutoff (you can change this to 0.6, 0.7, etc.).
 Policies A, B, and C still work exactly as they did before if you prefer fixed mapping!
+
+
+
+
+ABLATION 1 -
+python run_ablation1_standard_mad.py --limit 20 --offset 0
+python run_ablation1_standard_mad.py --limit 20 --offset 20
+python run_ablation1_standard_mad.py --limit 20 --offset 40
+python run_ablation1_standard_mad.py --limit 20 --offset 60
+python run_ablation1_standard_mad.py --limit 20 --offset 80
+python run_ablation1_standard_mad.py --limit 20 --offset 100
+
+
+ABLATION 2 -
+python run_ablation2_standard_mad.py --limit 20 --offset 0
+python run_ablation2_standard_mad.py --limit 20 --offset 20
+python run_ablation2_standard_mad.py --limit 20 --offset 40
+python run_ablation2_standard_mad.py --limit 20 --offset 60
+python run_ablation2_standard_mad.py --limit 20 --offset 80
+python run_ablation2_standard_mad.py --limit 20 --offset 100
+
+
+ABLATION 3 -
+python run_ablation3_single_judge.py --limit 20 --offset 0
+python run_ablation3_single_judge.py --limit 20 --offset 20
+python run_ablation3_single_judge.py --limit 20 --offset 40
+python run_ablation3_single_judge.py --limit 20 --offset 60
+python run_ablation3_single_judge.py --limit 20 --offset 80
+python run_ablation3_single_judge.py --limit 20 --offset 100
+
+
+ABLATION 4 -
+python run_ablation4_single_judge.py --limit 20 --offset 0
+python run_ablation4_single_judge.py --limit 20 --offset 20
+python run_ablation4_single_judge.py --limit 20 --offset 40
+python run_ablation4_single_judge.py --limit 20 --offset 60
+python run_ablation4_single_judge.py --limit 20 --offset 80
+python run_ablation4_single_judge.py --limit 20 --offset 100
+
+
+ABLATION 5 -
+python run_ablation5_single_judge.py --limit 20 --offset 0
+python run_ablation5_single_judge.py --limit 20 --offset 20
+python run_ablation5_single_judge.py --limit 20 --offset 40
+python run_ablation5_single_judge.py --limit 20 --offset 60
+python run_ablation5_single_judge.py --limit 20 --offset 80
+python run_ablation5_single_judge.py --limit 20 --offset 100
+
+
+Check live metrics mid-run (can be safely run during processing): Open a separate terminal and run:
+python aggregate_ablation_results.py --ablation ablation1_standard_mad --partial
+python aggregate_ablation_results.py --ablation ablation2_no_role_switch --partial
+python aggregate_ablation_results.py --ablation ablation3_single_judge --partial
+python aggregate_ablation_results.py --ablation ablation4_no_prag --partial
+python aggregate_ablation_results.py --ablation ablation5_fixed_rounds --partial
+
+
+
+Generate Final Results (Run this once all 120 claims finish per ablation):
+python aggregate_ablation_results.py --ablation ablation1_standard_mad
+python aggregate_ablation_results.py --ablation ablation2_no_role_switch
+python aggregate_ablation_results.py --ablation ablation3_single_judge
+python aggregate_ablation_results.py --ablation ablation4_no_prag
+python aggregate_ablation_results.py --ablation ablation5_fixed_rounds
+
+
+
+python aggregate_ablation_results.py --ablation ablation1_standard_mad --policy T --threshold 0.5
+python aggregate_ablation_results.py --ablation ablation2_no_role_switch --policy A
+python aggregate_ablation_results.py --ablation ablation3_single_judge --policy B
+python aggregate_ablation_results.py --ablation ablation4_no_prag --policy C
+
