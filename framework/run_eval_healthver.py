@@ -13,9 +13,14 @@ import argparse
 from copy import deepcopy
 
 # Import logging & metrics extensions
+import sys
+import logging_for_healthver
+sys.modules['logging_extension'] = logging_for_healthver
+
 from logging_for_healthver import (
     ExtensionState, print_extra_claim_metrics, log_run_summary,
-    append_jsonl, ARTIFACTS_DIR, CLAIMS_FILE, RUNS_FILE, STABILITY_FILE
+    append_jsonl, ARTIFACTS_DIR, CLAIMS_FILE, RUNS_FILE, STABILITY_FILE,
+    ALL_OUTPUT_JSONS_DIR
 )
 from metrics_extension import (
     compute_classification_metrics, compute_auc_and_sweep,
@@ -197,7 +202,7 @@ def apply_monkey_patches():
 
 
 def safe_load_last_jsonl(filename: str) -> dict:
-    filepath = os.path.join(ARTIFACTS_DIR, "..", "outcome", "all_output_jsons", filename)
+    filepath = os.path.join(ALL_OUTPUT_JSONS_DIR, filename)
     if os.path.exists(filepath):
         try:
             with open(filepath, "r", encoding="utf-8") as f:
