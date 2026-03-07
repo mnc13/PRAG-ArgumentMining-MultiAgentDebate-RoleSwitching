@@ -143,16 +143,50 @@ Analyze:
 3. Are there contradictions in their arguments?
 4. Overall consistency score (0-10)
 
-Provide detailed analysis:"""
+Provide your response in JSON format exactly as follows:
+{{
+  "agent_a_analysis": "...",
+  "agent_b_analysis": "...", 
+  "contradictions_found": "...",
+  "consistency_score": <integer 0-10>,
+  "is_consistent": <true or false, true if consistency_score >= 6, false if consistency_score < 6>,
+  "reasoning": "..."
+}}"""
         
         analysis = analyzer.generate(prompt)
+        
+        # Parse JSON output
+        import json
+        raw_json = analysis.strip()
+        if raw_json.startswith("```json"):
+            raw_json = raw_json[7:]
+        elif raw_json.startswith("```"):
+            raw_json = raw_json[3:]
+        if raw_json.endswith("```"):
+            raw_json = raw_json[:-3]
+            
+        try:
+            parsed = json.loads(raw_json)
+            consistency_score = parsed.get("consistency_score", 5)
+            is_consistent = parsed.get("is_consistent", False)
+            reasoning = parsed.get("reasoning", str(analysis))
+            analysis_data = parsed
+        except Exception as e:
+            print(f"Warning: Failed to parse consistency JSON: {e}")
+            consistency_score = 5
+            is_consistent = False
+            reasoning = str(analysis)
+            analysis_data = analysis
         
         consistency_report = {
             "claim": original_transcript.get('claim', 'unknown'),
             "claim_id": original_transcript.get('claim_id', 'unknown'),
             "original_agents": original_transcript.get('agents', {}),
             "switched_agents": switched_transcript.get('agents', {}),
-            "analysis": analysis,
+            "analysis": analysis_data,
+            "consistency_score": consistency_score,
+            "is_consistent": is_consistent,
+            "reasoning": reasoning,
             "original_rounds": len(original_transcript.get('rounds', [])),
             "switched_rounds": len(switched_transcript.get('rounds', []))
         }
