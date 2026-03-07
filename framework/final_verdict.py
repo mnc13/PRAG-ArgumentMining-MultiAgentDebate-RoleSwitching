@@ -48,8 +48,8 @@ class FinalVerdict:
         elif final_judicial_verdict == 'NOT SUPPORTED':
             verdict = "REFUTE"
         else:  # INCONCLUSIVE
-            # Default to plaintiff counsel if inconclusive
-            verdict = "SUPPORT"
+            # Keep as INCONCLUSIVE for threshold-based downstream evaluation
+            verdict = "INCONCLUSIVE"
         
         # Calculate confidence
         confidence = self._calculate_confidence()
@@ -138,11 +138,19 @@ class FinalVerdict:
         adjustments = 0.0
         
         # Role-switching consistency
-        if self._check_role_switch_consistency():
-            adjustments += 0.10
+        is_consistent = self._check_role_switch_consistency()
+        consistency_score = getattr(self, "consistency_score", 5)
+        
+        if consistency_score >= 7:
+            rs_adj = 0.10
+        elif consistency_score >= 5:
+            rs_adj = 0.0
         else:
-            # Soften penalty for inconsistency (it's hard to be consistent sometimes)
-            adjustments -= 0.05
+            rs_adj = -0.05
+            
+        adjustments += rs_adj
+        
+        print(f"[ROLE SWITCH] consistency_score={consistency_score}/10 | is_consistent={is_consistent} | adj={rs_adj:+.2f}")
         
         # Self-reflection (limit negative impact)
         # Defensive access to handle integrated multi-round reflection structure
@@ -169,21 +177,41 @@ class FinalVerdict:
     
     def _check_role_switch_consistency(self) -> bool:
         """
-        Check if role-switching showed consistency
+        Check if role-switching showed consistency and store the score.
         
         Returns:
             True if consistent, False otherwise
         """
-        # Simple heuristic: check if analysis mentions "consistent"
+        # If standard structured keys exist from the new json format
+        if 'is_consistent' in self.role_switch_result and 'consistency_score' in self.role_switch_result:
+            self.consistency_score = self.role_switch_result['consistency_score']
+            return self.role_switch_result['is_consistent']
+            
+        # Fallback for older formats where analysis might just be a string that we need to parse
         analysis = self.role_switch_result.get('analysis', '')
         
-        consistency_keywords = ['consistent', 'maintained', 'coherent', 'logical']
-        inconsistency_keywords = ['inconsistent', 'contradicted', 'conflicting', 'incoherent']
-        
-        consistent_count = sum(1 for word in consistency_keywords if word in analysis.lower())
-        inconsistent_count = sum(1 for word in inconsistency_keywords if word in analysis.lower())
-        
-        return consistent_count > inconsistent_count
+        import json
+        raw_json = str(analysis).strip()
+        if raw_json.startswith("```json"):
+            raw_json = raw_json[7:]
+        elif raw_json.startswith("```"):
+            raw_json = raw_json[3:]
+        if raw_json.endswith("```"):
+            raw_json = raw_json[:-3]
+            
+        try:
+            if isinstance(analysis, dict):
+                parsed = analysis
+            else:
+                parsed = json.loads(raw_json)
+                
+            self.consistency_score = parsed.get("consistency_score", 5)
+            return parsed.get("is_consistent", False)
+        except Exception as e:
+            # Fallback if old unstructured text or JSON parse fails
+            print(f"[ROLE SWITCH] Warning: Failed to parse consistency JSON: {e}")
+            self.consistency_score = 5
+            return False
     
     def _generate_reasoning(self, final_verdict: str) -> Dict:
         """
