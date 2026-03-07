@@ -172,6 +172,9 @@ framework/pubmed_meta.jsonl
 framework/outcome/
 artifacts/
 combined/
-
+framework/baseline/outcome_deepseek/
+framework/baseline/outcome_gpt/
+framework/outcome_healthver/
+artifacts_healthver/
 
 
