@@ -51,3 +51,71 @@ Key differences:
 --policy T: Tells the tool to use the threshold comparison instead of a fixed label.
 --threshold 0.5: Sets the cutoff (you can change this to 0.6, 0.7, etc.).
 Policies A, B, and C still work exactly as they did before if you prefer fixed mapping!
+
+
+
+
+ABLATION 1 - Standard MAD
+python run_ablation1_standard_mad.py --limit 20 --offset 0
+python run_ablation1_standard_mad.py --limit 20 --offset 20
+python run_ablation1_standard_mad.py --limit 20 --offset 40
+python run_ablation1_standard_mad.py --limit 20 --offset 60
+python run_ablation1_standard_mad.py --limit 20 --offset 80
+python run_ablation1_standard_mad.py --limit 20 --offset 100
+
+
+ABLATION 2 - No Role Switching
+python run_ablation2_no_role_switch.py --limit 20 --offset 0
+python run_ablation2_no_role_switch.py --limit 20 --offset 20
+python run_ablation2_no_role_switch.py --limit 20 --offset 40
+python run_ablation2_no_role_switch.py --limit 20 --offset 60
+python run_ablation2_no_role_switch.py --limit 20 --offset 80
+python run_ablation2_no_role_switch.py --limit 20 --offset 100
+
+
+ABLATION 3 - Single Judge
+python run_ablation3_single_judge.py --limit 20 --offset 0
+python run_ablation3_single_judge.py --limit 20 --offset 20
+python run_ablation3_single_judge.py --limit 20 --offset 40
+python run_ablation3_single_judge.py --limit 20 --offset 60
+python run_ablation3_single_judge.py --limit 20 --offset 80
+python run_ablation3_single_judge.py --limit 20 --offset 100
+
+
+ABLATION 4 - No PRAG
+python run_ablation4_no_prag.py --limit 20 --offset 0
+python run_ablation4_no_prag.py --limit 20 --offset 20
+python run_ablation4_no_prag.py --limit 20 --offset 40
+python run_ablation4_no_prag.py --limit 20 --offset 60
+python run_ablation4_no_prag.py --limit 20 --offset 80
+python run_ablation4_no_prag.py --limit 20 --offset 100
+
+
+ABLATION 5 - Fixed Rounds
+python run_ablation5_fixed_rounds.py --limit 20 --offset 0
+python run_ablation5_fixed_rounds.py --limit 20 --offset 20
+python run_ablation5_fixed_rounds.py --limit 20 --offset 40
+python run_ablation5_fixed_rounds.py --limit 20 --offset 60
+python run_ablation5_fixed_rounds.py --limit 20 --offset 80
+python run_ablation5_fixed_rounds.py --limit 20 --offset 100 
+
+
+
+python aggregate_ablation_results.py --ablation ablation1_standard_mad --partial
+python aggregate_ablation_results.py --ablation ablation2_no_role_switch --partial
+python aggregate_ablation_results.py --ablation ablation3_single_judge --partial
+python aggregate_ablation_results.py --ablation ablation4_no_prag --partial
+python aggregate_ablation_results.py --ablation ablation5_fixed_rounds --partial
+
+
+python aggregate_ablation_results.py --ablation ablation1_standard_mad
+python aggregate_ablation_results.py --ablation ablation2_no_role_switch
+python aggregate_ablation_results.py --ablation ablation3_single_judge
+python aggregate_ablation_results.py --ablation ablation4_no_prag
+python aggregate_ablation_results.py --ablation ablation5_fixed_rounds
+
+
+python aggregate_ablation_results.py --ablation ablation1_standard_mad --policy T --threshold 0.5
+python aggregate_ablation_results.py --ablation ablation2_no_role_switch --policy A
+python aggregate_ablation_results.py --ablation ablation3_single_judge --policy B
+python aggregate_ablation_results.py --ablation ablation4_no_prag --policy C

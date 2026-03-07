@@ -9,11 +9,11 @@ run_reports_added.md.
 
 Usage:
     cd framework
-    python rescan_and_fix_metrics.py [--dry-run] [--policy {A,B,C}] [--force-rewrite]
+    python rescan_and_fix_metrics.py [--dry-run] [--policy {A,B,C,T}] [--force-rewrite]
 
 Flags:
     --dry-run        Print what would be done without writing anything.
-    --policy         Inconclusive-label policy (A=SUPPORT, B=REFUTE, C=Exclude). Default: A
+    --policy         Inconclusive-label policy (A=SUPPORT, B=REFUTE, C=Exclude, T=Threshold). Default: A
     --force-rewrite  Re-write run summaries even if they already exist in runs_added.jsonl
                      (useful to fix runs that exist but have wrong avg_rounds).
 """
