@@ -13,7 +13,7 @@ import argparse
 from copy import deepcopy
 
 # Import logging & metrics extensions
-from logging_extension import (
+from logging_for_healthver import (
     ExtensionState, print_extra_claim_metrics, log_run_summary,
     append_jsonl, ARTIFACTS_DIR, CLAIMS_FILE, RUNS_FILE, STABILITY_FILE
 )
