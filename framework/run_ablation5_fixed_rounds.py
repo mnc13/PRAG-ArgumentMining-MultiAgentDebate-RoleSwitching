@@ -20,6 +20,8 @@ ABLATION_LOGS_DIR = os.path.join(ABLATION_BASE_DIR, "logs")
 ABLATION_OUTCOMES_DIR = os.path.join(ABLATION_BASE_DIR, "outcomes")
 os.makedirs(ABLATION_LOGS_DIR, exist_ok=True)
 os.makedirs(ABLATION_OUTCOMES_DIR, exist_ok=True)
+NEGOTIATION_DIR = os.path.join(ABLATION_LOGS_DIR, "negotiation_state")
+os.makedirs(NEGOTIATION_DIR, exist_ok=True)
 
 import logging_extension
 logging_extension.ARTIFACTS_DIR = os.path.join(ABLATION_OUTCOMES_DIR, "metrics")
@@ -94,10 +96,10 @@ class FixedRoundsRoleSwitcher(RoleSwitcher):
         print(f"STAGE 8: ROLE-SWITCHING (FIXED {max_rounds} ROUNDS)")
         print("="*60 + "\n")
         
-        self.orchestrator.reset_state()
+        self.original_mad.reset_state()
         
-        orig_proponent = self.orchestrator.agents['proponent']
-        orig_opponent = self.orchestrator.agents['opponent']
+        orig_proponent = self.original_mad.agents['proponent']
+        orig_opponent = self.original_mad.agents['opponent']
         
         orig_proponent.role = 'opponent'
         orig_proponent.job_title = 'Defense Counsel'
@@ -105,13 +107,13 @@ class FixedRoundsRoleSwitcher(RoleSwitcher):
         orig_opponent.role = 'proponent'
         orig_opponent.job_title = 'Plaintiff Counsel'
         
-        self.orchestrator.agents['proponent'] = orig_opponent
-        self.orchestrator.agents['opponent'] = orig_proponent
+        self.original_mad.agents['proponent'] = orig_opponent
+        self.original_mad.agents['opponent'] = orig_proponent
         
-        self.orchestrator.reflection_discovery_needs = {"proponent": "", "opponent": ""}
+        self.original_mad.reflection_discovery_needs = {"proponent": "", "opponent": ""}
         
         # Call the subclassed run_full_debate which has no adaptive stopping
-        switched_result = self.orchestrator.run_full_debate(
+        switched_result = self.original_mad.run_full_debate(
             max_rounds=max_rounds, 
             save_transcript=True, 
             file_suffix="_switched"
@@ -123,8 +125,8 @@ class FixedRoundsRoleSwitcher(RoleSwitcher):
         orig_opponent.role = 'opponent'
         orig_opponent.job_title = 'Defense Counsel'
         
-        self.orchestrator.agents['proponent'] = orig_proponent
-        self.orchestrator.agents['opponent'] = orig_opponent
+        self.original_mad.agents['proponent'] = orig_proponent
+        self.original_mad.agents['opponent'] = orig_opponent
         
         return switched_result
 
@@ -158,7 +160,15 @@ def run_ablation(args):
     miner = ArgumentMiner(miner_llm)
 
     ExtensionState.generate_run_id("ablation5")
+    
+    # Save original generate_verdict to prevent double-logging from the monkey patch
+    import final_verdict as _fv
+    orig_gen_verdict = _fv.FinalVerdict.generate_verdict
+    
     apply_monkey_patches()
+    
+    # Restore original generate_verdict so only ablation explicitly logs metrics
+    _fv.FinalVerdict.generate_verdict = orig_gen_verdict
 
     for input_claim in all_claims:
         if not args.force and str(input_claim.id) in processed_ids:
@@ -207,7 +217,12 @@ def run_ablation(args):
             print(f"   Meta: {meta_path} (Exists: {os.path.exists(meta_path)})")
             print(f"   Offsets: {offsets_path} (Exists: {os.path.exists(offsets_path)})")
             
-            retriever.retrieve(extracted_claim.text, top_k=5)
+            retrieved_evidence = retriever.retrieve(extracted_claim.text, top_k=5)
+            evidence_pool = retrieved_evidence
+            print("   [INITIAL RETRIEVED EVIDENCE]:")
+            for i, e in enumerate(evidence_pool):
+                 print(f"   - Evidence {i+1} (ID: {e.source_id}): {e.text}")
+            print("")
             
             # 5. Evidence Negotiation & Arbitration
             print("5. Evidence Negotiation & Arbitration...\n")
@@ -220,7 +235,7 @@ def run_ablation(args):
             neg_result = negotiator.get_negotiation_json()
             
             # Save negotiation state
-            neg_path = os.path.join(logging_extension.ALL_OUTPUT_JSONS_DIR, f"negotiation_state_{extracted_claim.id}_0.json")
+            neg_path = os.path.join(NEGOTIATION_DIR, f"negotiation_state_{extracted_claim.id}_0.json")
             with open(neg_path, "w") as f:
                 json.dump(neg_result, f, indent=2)
                 
@@ -235,19 +250,15 @@ def run_ablation(args):
             print(f"   [THE COURT] Admitted {len(final_evidence_set)} high-weight items.\n")
             print(f"   [JUDICIAL ADMISSION] Admitted {len(final_evidence_set)} exhibits for global discovery.")
             for i, ev in enumerate(final_evidence_set):
-                print(f"   - {i+1}. Source ID: {ev.source_id} (Weight: 0.75)")
+                print(f"   - {i+1}. Source ID: {ev.source_id} (Weight: {ev.relevance_score:.2f})")
             print("")
 
             # 6. Initializing Multi-Agent Legal Proceedings (Courtroom MAD)...
             print("6. Initializing Multi-Agent Legal Proceedings (Courtroom MAD)...\n")
             
             # Use ProgressiveRAG with actual retrieval enabled
+            # (P-RAG retrieves progressively during debate rounds — no upfront initialization)
             prag = ProgressiveRAG(retriever, miner_llm)
-            prag.initialize_evidence(extracted_claim)
-            print("   [INITIAL RETRIEVED EVIDENCE]:")
-            for i, e in enumerate(prag.evidence_pool):
-                 print(f"   - Evidence {i+1} (ID: {e.source_id}): {e.text}")
-            print("")
             
             # 7. Presiding Over Courtroom Proceedings...
             print("7. Presiding Over Courtroom Proceedings...\n")
@@ -310,8 +321,6 @@ def run_ablation(args):
             final_result = verdict_generator.generate_verdict()
             
             # Save files via append
-            logging_extension.append_framework_json("judge_evaluation.jsonl", extracted_claim.id, judge_result)
-            logging_extension.append_framework_json("final_verdict.jsonl", extracted_claim.id, final_result)
             
             # Note: debate_transcript.jsonl and switched are handled by orchestrator
             print(f"Verdict: {final_result['verdict']}")

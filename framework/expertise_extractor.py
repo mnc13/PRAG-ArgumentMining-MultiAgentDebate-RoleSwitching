@@ -1,8 +1,8 @@
-from groq_client import GroqLLMClient
 from typing import List, Dict
 import os
 import json
 from personas import AGENT_SLOTS
+from openrouter_client import OpenRouterLLMClient
 
 def extract_required_expertise(claim_text: str, premises: List[str]) -> List[Dict]:
     """
@@ -15,11 +15,14 @@ def extract_required_expertise(claim_text: str, premises: List[str]) -> List[Dic
     Returns:
         List of dynamic persona configurations (Role, Expertise, Name, System Prompt)
     """
-    api_key = os.getenv("GROQ_API_KEY")
-    llm = GroqLLMClient(
+    # Use the same provider family as the rest of the framework (OpenRouter).
+    # Model choice mirrors the high-capacity judge/expert models.
+    api_key = os.getenv("OPENROUTER_API_KEY")
+    llm = OpenRouterLLMClient(
         api_key=api_key,
-        model_name="meta-llama/llama-4-maverick-17b-128e-instruct",
-        temperature=0.7
+        model_name="nousresearch/hermes-3-llama-3.1-405b",
+        system_prompt=None,
+        temperature=0.7,
     )
     
     premises_text = "\n".join([f"{i+1}. {p}" for i, p in enumerate(premises)])
@@ -124,11 +127,12 @@ def extract_single_expert(expert_type: str, claim_text: str) -> Dict:
     """
     Generate a single targeted expert persona configuration
     """
-    api_key = os.getenv("GROQ_API_KEY")
-    llm = GroqLLMClient(
+    api_key = os.getenv("OPENROUTER_API_KEY")
+    llm = OpenRouterLLMClient(
         api_key=api_key,
-        model_name="meta-llama/llama-4-maverick-17b-128e-instruct",
-        temperature=0.7
+        model_name="nousresearch/hermes-3-llama-3.1-405b",
+        system_prompt=None,
+        temperature=0.7,
     )
     
     prompt = f"""Generate a scientific expert persona profile.

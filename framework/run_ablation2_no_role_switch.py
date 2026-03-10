@@ -18,6 +18,8 @@ ABLATION_LOGS_DIR = os.path.join(ABLATION_BASE_DIR, "logs")
 ABLATION_OUTCOMES_DIR = os.path.join(ABLATION_BASE_DIR, "outcomes")
 os.makedirs(ABLATION_LOGS_DIR, exist_ok=True)
 os.makedirs(ABLATION_OUTCOMES_DIR, exist_ok=True)
+NEGOTIATION_DIR = os.path.join(ABLATION_LOGS_DIR, "negotiation_state")
+os.makedirs(NEGOTIATION_DIR, exist_ok=True)
 
 import logging_extension
 logging_extension.ARTIFACTS_DIR = os.path.join(ABLATION_OUTCOMES_DIR, "metrics")
@@ -72,11 +74,19 @@ def run_ablation(args):
     meta_path = os.path.join(script_dir, 'pubmed_meta.jsonl')
     offsets_path = os.path.join(script_dir, 'pubmed_meta_offsets.npy')
     retriever = PubMedRetriever(index_path, meta_path, offsets_path)
-    miner_llm = OpenRouterLLMClient(llm_provider="openrouter", llm_model="deepseek/deepseek-v3.2")
+    miner_llm = OpenRouterLLMClient(model_name="deepseek/deepseek-r1")
     miner = ArgumentMiner(miner_llm)
 
     ExtensionState.generate_run_id("ablation2")
+    
+    # Save original generate_verdict to prevent double-logging from the monkey patch
+    import final_verdict as _fv
+    orig_gen_verdict = _fv.FinalVerdict.generate_verdict
+    
     apply_monkey_patches()
+    
+    # Restore original generate_verdict so only ablation2 explicitly logs metrics
+    _fv.FinalVerdict.generate_verdict = orig_gen_verdict
 
     for input_claim in all_claims:
         if not args.force and str(input_claim.id) in processed_ids:
@@ -125,10 +135,10 @@ def run_ablation(args):
             print(f"   Meta: {meta_path} (Exists: {os.path.exists(meta_path)})")
             print(f"   Offsets: {offsets_path} (Exists: {os.path.exists(offsets_path)})")
             
-            prag = ProgressiveRAG(retriever, miner_llm) # Initialize prag here
-            prag.initialize_evidence(extracted_claim)
+            retrieved_evidence = retriever.retrieve(extracted_claim.text, top_k=5)
+            evidence_pool = retrieved_evidence
             print("   [INITIAL RETRIEVED EVIDENCE]:")
-            for i, e in enumerate(prag.evidence_pool):
+            for i, e in enumerate(evidence_pool):
                  print(f"   - Evidence {i+1} (ID: {e.source_id}): {e.text}")
             print("")
             
@@ -142,7 +152,7 @@ def run_ablation(args):
             neg_result = negotiator.get_negotiation_json()
             
             # Save negotiation state
-            neg_path = os.path.join(logging_extension.ALL_OUTPUT_JSONS_DIR, f"negotiation_state_{extracted_claim.id}_0.json")
+            neg_path = os.path.join(NEGOTIATION_DIR, f"negotiation_state_{extracted_claim.id}_0.json")
             with open(neg_path, "w") as f:
                 json.dump(neg_result, f, indent=2)
                 
@@ -156,11 +166,12 @@ def run_ablation(args):
             print(f"   [THE COURT] Admitted {len(final_evidence_set)} high-weight items.\n")
             print(f"   [JUDICIAL ADMISSION] Admitted {len(final_evidence_set)} exhibits for global discovery.")
             for i, ev in enumerate(final_evidence_set):
-                print(f"   - {i+1}. Source ID: {ev.source_id} (Weight: 0.75)")
+                print(f"   - {i+1}. Source ID: {ev.source_id} (Weight: {ev.relevance_score:.2f})")
             print("")
 
             # 6. Initializing Multi-Agent Legal Proceedings (Courtroom MAD)...
             print("6. Initializing Multi-Agent Legal Proceedings (Courtroom MAD)...\n")
+            prag = ProgressiveRAG(retriever, miner_llm)
             
             # 7. Presiding Over Courtroom Proceedings...
             print("7. Presiding Over Courtroom Proceedings...\n")
@@ -173,9 +184,6 @@ def run_ablation(args):
             
             # 9. Judicial Panel Evaluation...
             print("9. Judicial Panel Evaluation...\n")
-            print("============================================================")
-            print("JUDICIAL PANEL EVALUATION")
-            print("============================================================\n")
             panel = JudicialPanel()
             critic_evals = [r.get('critic_evaluation') for r in debate_result['rounds']]
             ref_history = mad.self_reflection.reflection_history
@@ -188,15 +196,6 @@ def run_ablation(args):
                 critic_evaluations=critic_evals,
                 reflection_history=ref_history
             )
-            for j in judge_result.get("judge_verdicts", []):
-                print(f"Judge {j['judge_name']} ({j.get('model', 'N/A')}) deliberating...")
-                print(f"  Verdict: {j['verdict']}")
-                print(f"  Evidence Strength: {j['evidence_strength']}/10")
-                print(f"  Argument Validity: {j['argument_validity']}/10")
-                print(f"  Scientific Reliability: {j['scientific_reliability']}/10\n")
-            
-            print(f"Final Verdict: {judge_result['final_verdict']}")
-            print(f"Vote Breakdown: {judge_result.get('vote_breakdown', {})}\n")
             
             winner_side = 'proponent' if judge_result['final_verdict'] == 'SUPPORTED' else 'opponent'
             winner_reflections = [r for r in ref_history if r.get('side') == winner_side]
@@ -204,20 +203,15 @@ def run_ablation(args):
             
             # 11. Generating Final Verdict...
             print("11. Generating Final Verdict...\n")
-            print("============================================================")
-            print("FINAL VERDICT GENERATION")
-            print("============================================================\n")
             verdict_generator = FinalVerdict(extracted_claim, debate_result, judge_result, consistency_report, reflection_result)
             final_result = verdict_generator.generate_verdict()
             
-            # Save files via append
-            logging_extension.append_framework_json("judge_evaluation.jsonl", extracted_claim.id, judge_result)
-            logging_extension.append_framework_json("final_verdict.jsonl", extracted_claim.id, final_result)
+            # Save files via append (handled internally by JudicialPanel and FinalVerdict)
             print(f"Verdict: {final_result['verdict']}")
             print(f"Confidence: {final_result['confidence']:.3f}\n")
             
             # Map INCONCLUSIVE
-            pred = "REFUTE" if final_result['verdict'] == "NOT SUPPORTED" else ("SUPPORT" if final_result['verdict'] == "SUPPORTED" else "INCONCLUSIVE")
+            pred = "REFUTE" if final_result['verdict'] == "REFUTE" else ("SUPPORT" if final_result['verdict'] == "SUPPORT" else "INCONCLUSIVE")
             gt = extracted_claim.metadata.get('label', 'UNKNOWN')
             correct = (pred == gt) if gt != 'UNKNOWN' else None
             conf = final_result['confidence']

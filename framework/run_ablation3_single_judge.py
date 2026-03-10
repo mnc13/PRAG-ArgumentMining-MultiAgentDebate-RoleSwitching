@@ -19,6 +19,8 @@ ABLATION_LOGS_DIR = os.path.join(ABLATION_BASE_DIR, "logs")
 ABLATION_OUTCOMES_DIR = os.path.join(ABLATION_BASE_DIR, "outcomes")
 os.makedirs(ABLATION_LOGS_DIR, exist_ok=True)
 os.makedirs(ABLATION_OUTCOMES_DIR, exist_ok=True)
+NEGOTIATION_DIR = os.path.join(ABLATION_LOGS_DIR, "negotiation_state")
+os.makedirs(NEGOTIATION_DIR, exist_ok=True)
 
 import logging_extension
 logging_extension.ARTIFACTS_DIR = os.path.join(ABLATION_OUTCOMES_DIR, "metrics")
@@ -74,9 +76,7 @@ def run_ablation(args):
     offsets_path = os.path.join(script_dir, 'pubmed_meta_offsets.npy')
     retriever = PubMedRetriever(index_path, meta_path, offsets_path)
     
-    miner_llm = OpenRouterLLMClient(model_name="deepseek/deepseek-v3.2")
-    miner_llm.llm_provider = "openrouter"
-    miner_llm.llm_model = "deepseek/deepseek-v3.2"
+    miner_llm = OpenRouterLLMClient(model_name="deepseek/deepseek-r1")
     miner = ArgumentMiner(miner_llm)
     
     judge_llm = OpenRouterLLMClient(
@@ -84,11 +84,17 @@ def run_ablation(args):
         system_prompt="You are an independent appellate judge presiding over a legal proceeding.",
         temperature=0.3
     )
-    judge_llm.llm_provider = "openai"
-    judge_llm.llm_model = "gpt-5-mini"
 
     ExtensionState.generate_run_id("ablation3")
+    
+    # Save original generate_verdict to prevent double-logging from the monkey patch
+    import final_verdict as _fv
+    orig_gen_verdict = _fv.FinalVerdict.generate_verdict
+    
     apply_monkey_patches()
+    
+    # Restore original generate_verdict so only ablation explicitly logs metrics
+    _fv.FinalVerdict.generate_verdict = orig_gen_verdict
 
     for input_claim in all_claims:
         if not args.force and str(input_claim.id) in processed_ids:
@@ -137,7 +143,12 @@ def run_ablation(args):
             print(f"   Meta: {meta_path} (Exists: {os.path.exists(meta_path)})")
             print(f"   Offsets: {offsets_path} (Exists: {os.path.exists(offsets_path)})")
             
-            retriever.retrieve(extracted_claim.text, top_k=5)
+            retrieved_evidence = retriever.retrieve(extracted_claim.text, top_k=5)
+            evidence_pool = retrieved_evidence
+            print("   [INITIAL RETRIEVED EVIDENCE]:")
+            for i, e in enumerate(evidence_pool):
+                 print(f"   - Evidence {i+1} (ID: {e.source_id}): {e.text}")
+            print("")
             
             # 5. Evidence Negotiation & Arbitration
             print("5. Evidence Negotiation & Arbitration...\n")
@@ -150,7 +161,7 @@ def run_ablation(args):
             neg_result = negotiator.get_negotiation_json()
             
             # Save negotiation state
-            neg_path = os.path.join(logging_extension.ALL_OUTPUT_JSONS_DIR, f"negotiation_state_{extracted_claim.id}_0.json")
+            neg_path = os.path.join(NEGOTIATION_DIR, f"negotiation_state_{extracted_claim.id}_0.json")
             with open(neg_path, "w") as f:
                 json.dump(neg_result, f, indent=2)
                 
@@ -165,17 +176,12 @@ def run_ablation(args):
             print(f"   [THE COURT] Admitted {len(final_evidence_set)} high-weight items.\n")
             print(f"   [JUDICIAL ADMISSION] Admitted {len(final_evidence_set)} exhibits for global discovery.")
             for i, ev in enumerate(final_evidence_set):
-                print(f"   - {i+1}. Source ID: {ev.source_id} (Weight: 0.75)")
+                print(f"   - {i+1}. Source ID: {ev.source_id} (Weight: {ev.relevance_score:.2f})")
             print("")
 
-            # Step 3: Progressive RAG Initialization
-            print("--- Progressive RAG Initialization ---")
-            prag = ProgressiveRAG(retriever, miner_llm)
-            prag.initialize_evidence(extracted_claim)
-            print(f"Retrieved {len(prag.evidence_pool)} initial evidence chunks.")
-            
-            # 7. Presiding Over Courtroom Proceedings...
+            # 6. Initialize P-RAG and 7. Preside Over Courtroom Proceedings...
             print("7. Presiding Over Courtroom Proceedings...\n")
+            prag = ProgressiveRAG(retriever, miner_llm)
             mad = MADOrchestrator(extracted_claim, final_evidence_set, [], prag)
             debate_result = mad.run_full_debate(max_rounds=10)
             print(f"Debate completed in {len(debate_result['rounds'])} rounds.")
@@ -267,7 +273,6 @@ Respond ONLY in valid JSON format:
             final_result = verdict_generator.generate_verdict()
             
             # Save files via append
-            logging_extension.append_framework_json("final_verdict.jsonl", extracted_claim.id, final_result)
             pred = "REFUTE" if final_result['verdict'] == "NOT SUPPORTED" else ("SUPPORT" if final_result['verdict'] == "SUPPORTED" else "INCONCLUSIVE")
             gt = extracted_claim.metadata.get('label', 'UNKNOWN')
             correct = (pred == gt) if gt != 'UNKNOWN' else None

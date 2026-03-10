@@ -150,7 +150,14 @@ class FinalVerdict:
             
         adjustments += rs_adj
         
-        print(f"[ROLE SWITCH] consistency_score={consistency_score}/10 | is_consistent={is_consistent} | adj={rs_adj:+.2f}")
+        # Handle Role-Switching Disabled case (Ablation 2)
+        is_disabled = self.role_switch_result.get("analysis") == "Ablation 2: Role-Switching Disabled"
+        
+        if is_disabled:
+            rs_adj = 0.0
+            print(f"[ROLE SWITCH] Disabled (Ablation 2) | adj=+0.00")
+        else:
+            print(f"[ROLE SWITCH] consistency_score={consistency_score}/10 | is_consistent={is_consistent} | adj={rs_adj:+.2f}")
         
         # Self-reflection (limit negative impact)
         # Defensive access to handle integrated multi-round reflection structure
