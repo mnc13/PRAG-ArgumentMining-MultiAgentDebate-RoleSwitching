@@ -101,6 +101,21 @@ python run_ablation5_fixed_rounds.py --limit 20 --offset 100
 
 
 
+ABLATION 6 - No Self Reflection
+python run_ablation6_no_self_reflection.py --limit 20 --offset 0
+python run_ablation6_no_self_reflection.py --limit 20 --offset 20
+python run_ablation6_no_self_reflection.py --limit 20 --offset 40
+python run_ablation6_no_self_reflection.py --limit 20 --offset 60
+python run_ablation6_no_self_reflection.py --limit 20 --offset 80
+python run_ablation6_no_self_reflection.py --limit 20 --offset 100
+
+# Check progress at any time during the run:
+python aggregate_ablation_results.py --ablation ablation6_no_self_reflection --partial
+
+# Final aggregation after all 120 claims complete:
+python aggregate_ablation_results.py --ablation ablation6_no_self_reflection
+
+
 python aggregate_ablation_results.py --ablation ablation1_standard_mad --partial
 python aggregate_ablation_results.py --ablation ablation2_no_role_switch --partial
 python aggregate_ablation_results.py --ablation ablation3_single_judge --partial

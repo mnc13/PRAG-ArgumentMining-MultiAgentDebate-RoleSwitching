@@ -80,7 +80,7 @@ def run_ablation(args):
     miner = ArgumentMiner(miner_llm)
     
     judge_llm = OpenRouterLLMClient(
-        model_name="openai/gpt-5-mini",
+        model_name="qwen/qwen3-235b-a22b-2507",
         system_prompt="You are an independent appellate judge presiding over a legal proceeding.",
         temperature=0.3
     )
@@ -201,6 +201,23 @@ def run_ablation(args):
             
             # 9. Judicial Panel Evaluation...
             print(f"Judge 1 ({judge_llm.model_name}) deliberating...")
+            
+            # Extract arguments from both sides
+            p_args_text = [a['text'] for r in debate_result['rounds'] for a in r['arguments'] if a['role'] == 'proponent']
+            o_args_text = [a['text'] for r in debate_result['rounds'] for a in r['arguments'] if a['role'] == 'opponent']
+
+            # Include expert testimonies if present
+            for r in debate_result['rounds']:
+                if 'expert_testimonies' in r:
+                    for expert in r['expert_testimonies']:
+                        if expert.get('requesting_side') == 'proponent':
+                            p_args_text.append(f"[Expert Testimony]: {expert['text']}")
+                        elif expert.get('requesting_side') == 'opponent':
+                            o_args_text.append(f"[Expert Testimony]: {expert['text']}")
+
+            # Extract evidence summary
+            ev_summary = "\n".join([f"{i+1}. Source {e.source_id}: {e.text[:200]}..." for i, e in enumerate(final_evidence_set)])
+
             # Single Judge prompt evaluation
             prompt = f"""You are an appellate judge evaluating the following proceedings for medical fact-checking.
 

@@ -1,8 +1,9 @@
 """
-Ablation 4: Without P-RAG
-- Full system but P-RAG is removed entirely (no new evidence retrieved).
-- Debate uses only initial RAG evidence.
-- Debate runs for exactly 3 fixed rounds (MAD-level adaptive convergence disabled).
+ABLATION 6: Without Self-Reflection
+- Removes multi-round self-reflection calls from both sides.
+- Removes reflection_gap feedback into P-RAG discovery prompt.
+- Removes "Reflection plateau" stopping condition.
+- Neutralizes confidence_adjustment in final verdict (fixed at 0.0 and removed from adjustments).
 """
 
 import sys
@@ -14,22 +15,22 @@ from filelock import FileLock
 
 # Override paths before importing pipeline modules
 script_dir = os.path.dirname(os.path.abspath(__file__))
-# New hierarchy: framework/ablation/ablation4/logs and framework/ablation/ablation4/outcomes
-ABLATION_BASE_DIR = os.path.join(script_dir, "ablation", "ablation4")
+# New hierarchy: framework/ablation/ablation6/logs and framework/ablation/ablation6/outcome
+ABLATION_BASE_DIR = os.path.join(script_dir, "ablation", "ablation6")
 ABLATION_LOGS_DIR = os.path.join(ABLATION_BASE_DIR, "logs")
-ABLATION_OUTCOMES_DIR = os.path.join(ABLATION_BASE_DIR, "outcomes")
+ABLATION_OUTCOME_DIR = os.path.join(ABLATION_BASE_DIR, "outcome")
 os.makedirs(ABLATION_LOGS_DIR, exist_ok=True)
-os.makedirs(ABLATION_OUTCOMES_DIR, exist_ok=True)
+os.makedirs(ABLATION_OUTCOME_DIR, exist_ok=True)
 NEGOTIATION_DIR = os.path.join(ABLATION_LOGS_DIR, "negotiation_state")
 os.makedirs(NEGOTIATION_DIR, exist_ok=True)
 
 import logging_extension
-logging_extension.ARTIFACTS_DIR = os.path.join(ABLATION_OUTCOMES_DIR, "metrics")
+logging_extension.ARTIFACTS_DIR = os.path.join(ABLATION_OUTCOME_DIR, "metrics")
 logging_extension.CLAIMS_FILE = os.path.join(logging_extension.ARTIFACTS_DIR, "claims_added.jsonl")
 logging_extension.RUNS_FILE = os.path.join(logging_extension.ARTIFACTS_DIR, "runs_added.jsonl")
 logging_extension.STABILITY_FILE = os.path.join(logging_extension.ARTIFACTS_DIR, "stability_added.jsonl")
 logging_extension.REPORT_FILE = os.path.join(logging_extension.ARTIFACTS_DIR, "run_reports_added.md")
-logging_extension.ALL_OUTPUT_JSONS_DIR = ABLATION_OUTCOMES_DIR
+logging_extension.ALL_OUTPUT_JSONS_DIR = ABLATION_OUTCOME_DIR
 os.makedirs(logging_extension.ARTIFACTS_DIR, exist_ok=True)
 
 orig_append_jsonl = logging_extension.append_jsonl
@@ -52,53 +53,78 @@ from final_verdict import FinalVerdict
 from logging_extension import ExtensionState
 from run_eval_extended import apply_monkey_patches
 
-class DummyPRAG(ProgressiveRAG):
-    """PRAG stub that returns no evidence. The 'disabled' flag lets the
-    orchestrator skip the entire discovery block so logs stay clean."""
-    disabled = True  # signals FixedRoundsOrchestrator to bypass discovery
-
-    def retrieve_progressive(self, query, top_k=3, context=""):
-        return []
-
-    def formulate_query(self, debate_context, specific_need):
-        return specific_need
-
-class FixedRoundsOrchestrator(MADOrchestrator):
+class NoReflectionOrchestrator(MADOrchestrator):
     def run_debate_round(self, round_num: int) -> dict:
-        """Override to skip the PRAG discovery block entirely when PRAG is disabled."""
-        # If PRAG is disabled (DummyPRAG), bypass the whole discovery step to
-        # keep logs clean. Otherwise fall back to the standard implementation.
-        if not getattr(self.prag, 'disabled', False):
-            return super().run_debate_round(round_num)
-
-        # --- Stripped-down round: no discovery, no query formulation ---
+        """Override to remove self-reflection and discovery need feedback."""
         self.current_round = round_num
         self.prag.start_new_round()
-
+        
         round_data = {
             "round_number": round_num,
             "arguments": [],
             "expert_testimonies": [],
             "new_evidence": [],
             "prag_metrics": [],
-            "reflection_scores": {},
+            "reflection_scores": {},  # Will remain empty
             "critic_evaluation": {}
         }
-
+        
         print(f"\n{'='*60}")
         print(f"PROCEEDINGS PHASE {round_num}")
         print(f"{'='*60}\n")
-
-        # Step 1 skipped — no progressive retrieval in this ablation
-        print("--- [P-RAG DISABLED] Evidence Discovery skipped (Ablation 4: No P-RAG) ---")
-
-        # Step 2: Argument Generation
+        
         for side in ['proponent', 'opponent']:
             display_side = "Plaintiff Counsel" if side == 'proponent' else "Defense Counsel"
+            
+            # Step 1: Evidence Discovery (Integrative Discovery)
+            # REMOVAL: reflection_gap feedback removed
+            print(f"--- [{display_side}] Step 1: Evidence Discovery (Integrative Discovery) ---")
+            debate_context = self._get_debate_context()
+            gap_proposal = self.agents[side].propose_query_gap(debate_context)
+            
+            # Discovery prompt is now ONLY the gap proposal
+            discovery_prompt = gap_proposal
+            
+            if discovery_prompt and "None" not in discovery_prompt:
+                print(f"   > [{display_side}] Discovery Need: {discovery_prompt}")
+                original_query = self.prag.formulate_query(debate_context, discovery_prompt)
+                print(f"   > [{display_side}] Formulated Query: {original_query}")
+                
+                # Feedback Loop: The Court refines the query
+                print(f"--- [The Court] Reviewing Discovery Request ---")
+                refined_query = self.agents['judge'].refine_query(original_query, debate_context)
+                
+                if refined_query != original_query:
+                    print(f"   > [The Court] QUERY REFINED: {refined_query}")
+                
+                # PRAG Execution
+                new_evidence = self.prag.retrieve_progressive(
+                    refined_query, 
+                    top_k=3, 
+                    context=f"Round {round_num} - {display_side}"
+                )
+                
+                if new_evidence:
+                    self.evidence_pool.extend(new_evidence)
+                    round_data["new_evidence"].extend([{"id": e.source_id, "novelty": e.novelty_score} for e in new_evidence])
+                    print(f"   > [{display_side}] Admitted {len(new_evidence)} new exhibits.")
+                
+                # Log PRAG metrics for this side
+                if self.prag.retrieval_history:
+                    latest_prag = self.prag.retrieval_history[-1]
+                    round_data["prag_metrics"].append({
+                        "side": display_side,
+                        "original_query": original_query,
+                        "refined_query": refined_query,
+                        "novelty": latest_prag.get("avg_novelty"),
+                        "accepted": latest_prag.get("num_accepted")
+                    })
+
+            # Step 2: Argument Generation
             print(f"--- [{display_side}] Step 2: Generating Legal Argument ---")
             arg = self.agents[side].generate_argument(self.claim, self.evidence_pool, self.debate_transcript)
             self._add_to_transcript(round_data, side, arg)
-
+            
         # Step 3: Expert Witness
         print(f"--- [The Court] Step 3: Evaluating Expert Witness Requirements ---")
         for side in ['proponent', 'opponent']:
@@ -115,17 +141,14 @@ class FixedRoundsOrchestrator(MADOrchestrator):
                     from mad_system import DebateAgent
                     expert_agent = DebateAgent(expert_config, 'expert', self.prag)
                     testimony = expert_agent.generate_argument(self.claim, self.evidence_pool, self.debate_transcript)
+                    
                     expert_entry = {"agent": expert_agent.name, "role": "expert", "requesting_side": side, "text": testimony}
                     round_data["expert_testimonies"].append(expert_entry)
                     self.debate_transcript.append(expert_entry)
                     print(f"\n[EXPERT TESTIMONY]: {testimony}\n")
 
-        # Step 4: Self-Reflection
-        print(f"--- [Audit] Step 4: Multi-Round Self-Reflection ---")
-        for side in ['proponent', 'opponent']:
-            reflection = self.self_reflection.perform_round_reflection(self.agents[side], side, round_num, self.claim.text)
-            round_data["reflection_scores"][side] = reflection
-            self.reflection_discovery_needs[side] = reflection.get("discovery_need", "")
+        # Step 4: Self-Reflection REMOVED
+        print(f"--- [Ablation] Step 4: Multi-Round Self-Reflection SKIPPED ---")
 
         # Step 5: Critic
         print(f"--- [Critic] Step 5: Round Integrity Review ---")
@@ -143,7 +166,8 @@ class FixedRoundsOrchestrator(MADOrchestrator):
 
         return round_data
 
-    def run_full_debate(self, max_rounds: int = 3, save_transcript: bool = True, file_suffix: str = "") -> dict:
+    def run_full_debate(self, max_rounds: int = 10, save_transcript: bool = True, file_suffix: str = "") -> dict:
+        """Override to remove reflection plateau stopping condition."""
         debate_result = {
             "claim": self.claim.text,
             "claim_id": getattr(self.claim, 'id', 'Unknown'),
@@ -152,79 +176,127 @@ class FixedRoundsOrchestrator(MADOrchestrator):
                 "opponent": self.agents['opponent'].job_title,
                 "the_court": self.agents['judge'].job_title
             },
-            "llm_provider": "openrouter",
-            "llm_model": "deepseek/deepseek-v3.2",
             "rounds": [],
             "convergence_metrics": {}
         }
-
+        
+        last_novelty = 1.0
+        
         for round_num in range(1, max_rounds + 1):
             round_data = self.run_debate_round(round_num)
             debate_result["rounds"].append(round_data)
+            
+            # Adaptive Convergence Checks
+            # 1. Evidence Novelty Stabilization
+            current_novelties = [e['novelty'] for e in round_data["new_evidence"]]
+            avg_novelty = np.mean(current_novelties) if current_novelties else 0
+            
+            # 2. Reflection Delta Check (Convergence) -> REMOVED IN THIS ABLATION
+            # We still keep novelty and critic signals if they occurs
+            
+            if round_num >= 2:
+                # Terminate if Critic signals resolution
+                if round_data["critic_evaluation"].get("debate_resolved", False):
+                    print(f"   > [ADAPTIVE STOP] Critic signals all premises resolved. Deliberation begins.")
+                    debate_result["convergence_metrics"]["stop_reason"] = "Critic resolution"
+                    break
 
-            # NO ADAPTIVE CONVERGENCE STOPPING
-            # Reflection and critic run for logging only; never break early.
-
+                # Stop if novelty is very low
+                if avg_novelty < 0.1 and last_novelty < 0.1:
+                    print(f"   > [ADAPTIVE STOP] Evidence novelty stabilized (< 10%). Cases closed.")
+                    debate_result["convergence_metrics"]["stop_reason"] = "Novelty stabilization"
+                    break
+                
+                # Judge's internal signal
+                if self.agents['judge'].check_debate_completion(self.debate_transcript):
+                    print(f"   > [ADAPTIVE STOP] The Court signals sufficient evidence. Deliberation begins.")
+                    debate_result["convergence_metrics"]["stop_reason"] = "Judicial signal"
+                    break
+            
+            last_novelty = avg_novelty
+            
         if save_transcript:
             try:
                 logging_extension.append_framework_json(f"debate_transcript{file_suffix}.jsonl", self.claim, debate_result)
             except:
                 with open(f"debate_transcript{file_suffix}.json", "w") as f:
                     json.dump(debate_result, f, indent=2)
+            # Self-reflection is empty, but we call save to maintain file structure if needed (it will be empty)
             self.self_reflection.save_reflection_history(self.claim, f"self_reflection{file_suffix}.json")
             self._save_judge_visibility(debate_result, file_suffix=file_suffix)
             self.prag.save_history(f"prag_history{file_suffix}.json", self.claim)
 
         return debate_result
 
-class FixedRoundsRoleSwitcher(RoleSwitcher):
-    def __init__(self, orchestrator: FixedRoundsOrchestrator):
-        super().__init__(orchestrator)  # base class stores it as self.original_mad
+class NoReflectionRoleSwitcher(RoleSwitcher):
+    def switch_roles(self, max_rounds: int = 10) -> dict:
+        # Just ensure we use the custom orchestrator's run_full_debate
+        return super().switch_roles(max_rounds=max_rounds)
 
-    def switch_roles(self, max_rounds: int = 3) -> dict:
-        print("\n" + "="*60)
-        print(f"STAGE 8: ROLE-SWITCHING (FIXED {max_rounds} ROUNDS)")
-        print("="*60 + "\n")
+class AblationFinalVerdict(FinalVerdict):
+    def _calculate_confidence(self) -> float:
+        """Calculate confidence score with NO reflection adjustment."""
+        # 1. Base confidence from vote consensus
+        vote_breakdown = self.judge_result['vote_breakdown']
+        total_votes = sum(vote_breakdown.values())
+        
+        if total_votes > 0:
+            final_verdict = self.judge_result['final_verdict']
+            winning_votes = vote_breakdown.get(final_verdict, 0)
+            consensus_strength = winning_votes / total_votes
+            margin_score = consensus_strength * 0.8
+        else:
+            margin_score = 0.0
+            consensus_strength = 0.0
+            
+        # 2. Quality confidence from judge scores
+        avg_ev = sum(v['evidence_strength'] for v in self.judge_result['judge_verdicts']) / len(self.judge_result['judge_verdicts'])
+        avg_arg = sum(v['argument_validity'] for v in self.judge_result['judge_verdicts']) / len(self.judge_result['judge_verdicts'])
+        avg_sci = sum(v['scientific_reliability'] for v in self.judge_result['judge_verdicts']) / len(self.judge_result['judge_verdicts'])
+        
+        quality_score = ((avg_ev + avg_arg + avg_sci) / 30) * 0.3
+        
+        base_confidence = margin_score + quality_score
+        
+        # 3. Adjustments
+        adjustments = 0.0
+        
+        # Role-switching consistency
+        is_consistent = self._check_role_switch_consistency()
+        consistency_score = getattr(self, "consistency_score", 5)
+        
+        if consistency_score >= 7:
+            rs_adj = 0.10
+        elif consistency_score >= 5:
+            rs_adj = 0.0
+        else:
+            rs_adj = -0.05
+            
+        adjustments += rs_adj
+        print(f"[ROLE SWITCH] consistency_score={consistency_score}/10 | is_consistent={is_consistent} | adj={rs_adj:+.2f}")
+        
+        # Self-reflection REMOVED and reflection_adj = 0.0 explicitly
+        reflection_adj = 0.0
+        # No 'adjustments += reflection_adj' line exists here.
+        
+        final_confidence = base_confidence + adjustments
+        
+        if final_confidence < 0.1 and consensus_strength > 0.5:
+            final_confidence = 0.1
+            
+        return max(0.0, min(1.0, final_confidence))
 
-        # Use self.original_mad — the attribute name set by RoleSwitcher.__init__
-        self.original_mad.reset_state()
-
-        orig_proponent = self.original_mad.agents['proponent']
-        orig_opponent = self.original_mad.agents['opponent']
-
-        orig_proponent.role = 'opponent'
-        orig_proponent.job_title = 'Defense Counsel'
-
-        orig_opponent.role = 'proponent'
-        orig_opponent.job_title = 'Plaintiff Counsel'
-
-        self.original_mad.agents['proponent'] = orig_opponent
-        self.original_mad.agents['opponent'] = orig_proponent
-
-        self.original_mad.reflection_discovery_needs = {"proponent": "", "opponent": ""}
-
-        # Call the subclassed run_full_debate which has no adaptive stopping
-        switched_result = self.original_mad.run_full_debate(
-            max_rounds=max_rounds,
-            save_transcript=True,
-            file_suffix="_switched"
-        )
-
-        # Restore original role assignments
-        orig_proponent.role = 'proponent'
-        orig_proponent.job_title = 'Plaintiff Counsel'
-
-        orig_opponent.role = 'opponent'
-        orig_opponent.job_title = 'Defense Counsel'
-
-        self.original_mad.agents['proponent'] = orig_proponent
-        self.original_mad.agents['opponent'] = orig_opponent
-
-        return switched_result
+    def generate_verdict(self) -> dict:
+        """Override to ensure metadata reflects zero reflection adjustment."""
+        # Call base to get basic structure
+        result = super().generate_verdict()
+        # Explicitly overwrite the metadata for reflection adjustment
+        result['metadata']['self_reflection_adjustment'] = 0.0
+        return result
 
 def run_ablation(args):
     data_dir = os.path.join(script_dir, "..", "Check-COVID")
-    outcome_dir = ABLATION_OUTCOMES_DIR
+    outcome_dir = ABLATION_OUTCOME_DIR
     logs_dir = ABLATION_LOGS_DIR
 
     processed_claims_path = os.path.join(outcome_dir, "processed_claims.txt")
@@ -251,7 +323,7 @@ def run_ablation(args):
     miner_llm = OpenRouterLLMClient(model_name="deepseek/deepseek-r1")
     miner = ArgumentMiner(miner_llm)
 
-    ExtensionState.generate_run_id("ablation4")
+    ExtensionState.generate_run_id("ablation6")
     
     # Save original generate_verdict to prevent double-logging from the monkey patch
     import final_verdict as _fv
@@ -285,8 +357,7 @@ def run_ablation(args):
         sys.stdout = dual_logger
 
         try:
-            print(f"=== ABLATION 4: NO P-RAG (Claim {input_claim.id}) ===")
-            # 2. Preprocessing & Extraction
+            print(f"=== ABLATION 6: NO SELF-REFLECTION (Claim {input_claim.id}) ===")
             print(f"2. Preprocessing & Extraction...")
             extractor = ClaimExtractor()
             extracted_claim = extractor.extract_claim(input_claim.text)
@@ -294,7 +365,6 @@ def run_ablation(args):
             extracted_claim.metadata = input_claim.metadata
             print(f"   Extracted: {extracted_claim.text}\n")
             
-            # 3. Argument Mining
             print("3. Argument Mining...")
             argument = miner.mine_arguments(extracted_claim)
             print("   [DECOMPOSED PREMISES/ARGUMENTS]:")
@@ -302,13 +372,7 @@ def run_ablation(args):
                 print(f"   - {i+1}. {p}")
             print("")
             
-            # 4. Initial RAG Retrieval
             print("4. Initial RAG Retrieval...")
-            print("   [DEBUG] Checking paths:")
-            print(f"   Index: {index_path} (Exists: {os.path.exists(index_path)})")
-            print(f"   Meta: {meta_path} (Exists: {os.path.exists(meta_path)})")
-            print(f"   Offsets: {offsets_path} (Exists: {os.path.exists(offsets_path)})")
-            
             retrieved_evidence = retriever.retrieve(extracted_claim.text, top_k=5)
             evidence_pool = retrieved_evidence
             print("   [INITIAL RETRIEVED EVIDENCE]:")
@@ -316,7 +380,6 @@ def run_ablation(args):
                  print(f"   - Evidence {i+1} (ID: {e.source_id}): {e.text}")
             print("")
             
-            # 5. Evidence Negotiation & Arbitration
             print("5. Evidence Negotiation & Arbitration...\n")
             negotiator = EvidenceNegotiator(retriever, miner_llm)
             negotiator.prepare_pools(extracted_claim, argument.premises)
@@ -325,8 +388,6 @@ def run_ablation(args):
             negotiator.judge_arbitration(extracted_claim)
             
             neg_result = negotiator.get_negotiation_json()
-            
-            # Save negotiation state
             neg_path = os.path.join(NEGOTIATION_DIR, f"negotiation_state_{extracted_claim.id}_0.json")
             with open(neg_path, "w") as f:
                 json.dump(neg_result, f, indent=2)
@@ -340,41 +401,24 @@ def run_ablation(args):
             
             print(f"   [NEGOTIATOR] Negotiation complete. Proceeding to Judicial arbitration.")
             print(f"   [THE COURT] Admitted {len(final_evidence_set)} high-weight items.\n")
-            print(f"   [JUDICIAL ADMISSION] Admitted {len(final_evidence_set)} exhibits for global discovery.")
-            for i, ev in enumerate(final_evidence_set):
-                print(f"   - {i+1}. Source ID: {ev.source_id} (Weight: {ev.relevance_score:.2f})")
-            print("")
-
-            # 6. Initializing Multi-Agent Legal Proceedings (Courtroom MAD)...
+            
+            # MAD Proceedings
             print("6. Initializing Multi-Agent Legal Proceedings (Courtroom MAD)...\n")
+            prag = ProgressiveRAG(retriever, miner_llm)
             
-            # Use DummyPRAG to disable progressive retrieval
-            prag = DummyPRAG(retriever, miner_llm)
-            
-            # 7. Presiding Over Courtroom Proceedings...
             print("7. Presiding Over Courtroom Proceedings...\n")
-            
-            # Use FixedRoundsOrchestrator to ensure exactly 3 rounds
-            mad = FixedRoundsOrchestrator(extracted_claim, final_evidence_set, [], prag)
-            debate_result = mad.run_full_debate(max_rounds=3)
+            mad = NoReflectionOrchestrator(extracted_claim, final_evidence_set, [], prag)
+            debate_result = mad.run_full_debate(max_rounds=10)
             print(f"Debate finished after {len(debate_result['rounds'])} rounds.")
             
-            # 8. Legal Consistency Check (Role-Switching)...
             print("8. Legal Consistency Check (Role-Switching)...\n")
-            print("============================================================")
-            print("ROLE-SWITCHING ROUND")
-            print("============================================================")
-            print("Swapping Plaintiff Counsel ↔ Defense Counsel roles...\n")
-            
-            # Use FixedRoundsRoleSwitcher to ensure exactly 3 switched rounds
-            switcher = FixedRoundsRoleSwitcher(mad)
-            switched_result = switcher.switch_roles(max_rounds=3)
+            switcher = NoReflectionRoleSwitcher(mad)
+            switched_result = switcher.switch_roles(max_rounds=10)
             consistency_report = switcher.check_consistency(debate_result, switched_result)
-            print(f"Role switching completed. Consistency Score: {consistency_report['consistency_score']:.2f}")
+            print(f"Role switching completed. Consistency Score: {consistency_report.get('consistency_score', 0):.2f}")
             
             panel = JudicialPanel()
             critic_evals = [r.get('critic_evaluation') for r in debate_result['rounds']]
-            ref_history = mad.self_reflection.reflection_history
             
             judge_result = panel.evaluate_debate(
                 debate_result, 
@@ -382,18 +426,12 @@ def run_ablation(args):
                 role_switch_history=consistency_report,
                 prag_metrics=mad.prag.get_retrieval_summary(),
                 critic_evaluations=critic_evals,
-                reflection_history=ref_history
+                reflection_history=[] # Empty for this ablation
             )
             
-            winner_side = 'proponent' if judge_result['final_verdict'] == 'SUPPORTED' else 'opponent'
-            winner_reflections = [r for r in ref_history if r.get('side') == winner_side]
-            reflection_result = winner_reflections[-1] if winner_reflections else (ref_history[-1] if ref_history else {})
-            
-            # 11. Generating Final Verdict...
-            verdict_generator = FinalVerdict(extracted_claim, debate_result, judge_result, consistency_report, reflection_result)
+            # Generate Final Verdict
+            verdict_generator = AblationFinalVerdict(extracted_claim, debate_result, judge_result, consistency_report, {})
             final_result = verdict_generator.generate_verdict()
-            
-            # Save files via append
             
             pred = "REFUTE" if final_result['verdict'] == "REFUTE" else ("SUPPORT" if final_result['verdict'] == "SUPPORT" else "INCONCLUSIVE")
             gt = extracted_claim.metadata.get('label', 'UNKNOWN')
@@ -428,7 +466,17 @@ def run_ablation(args):
                 "token_groq": ExtensionState.current_claim_groq_tokens,
                 "token_models": ExtensionState.current_claim_model_tokens,
                 "retrieval_calls": ExtensionState.current_claim_retrievals,
-                "evidence_count": ExtensionState.current_claim_evidence
+                "evidence_count": ExtensionState.current_claim_evidence,
+                "reflection_logic_proponent": None,
+                "reflection_novelty_proponent": None,
+                "reflection_rebuttal_proponent": None,
+                "reflection_total_score_proponent": None,
+                "reflection_logic_opponent": None,
+                "reflection_novelty_opponent": None,
+                "reflection_rebuttal_opponent": None,
+                "reflection_total_score_opponent": None,
+                "reflection_confidence_adjustment": None,
+                "reflection_discovery_need": None
             }
             
             with FileLock(logging_extension.CLAIMS_FILE + ".lock"):
@@ -436,19 +484,10 @@ def run_ablation(args):
                     f.write(json.dumps(record) + "\n")
                     
             # Print console output
-            logging_extension.print_extra_claim_metrics(
-                claim_id=input_claim.id,
-                normal_rounds=len(debate_result['rounds']),
-                switched_rounds=len(switched_result['rounds']),
-                tokens=record['token_total'],
-                retrievals=record['retrieval_calls'],
-                evidence=record['evidence_count'],
-                confidence=conf,
-                judge_summary=", ".join(judge_votes.values()),
-                kappa_pair_mean="N/A",
-                ground_truth=gt,
-                verdict=pred
-            )
+            print(f"\n=== ABLATION METRICS [NO_SELF_REFLECTION] ===")
+            print(f"[CLAIM {input_claim.id}] rounds_norm={len(debate_result['rounds'])} rounds_switch={len(switched_result['rounds'])} tok={record['token_total']} retr={record['retrieval_calls']} ev={record['evidence_count']} conf={conf:.3f}")
+            print(f"[CLAIM {input_claim.id}] judges: {', '.join(judge_votes.values())} | agreement={np.mean([1 if v == pred else 0 for v in judge_votes.values()]):.2f}")
+            print(f"=============================================\n")
             
             verdicts_path = os.path.join(outcome_dir, "all_verdicts.jsonl")
             with FileLock(verdicts_path + ".lock"):
