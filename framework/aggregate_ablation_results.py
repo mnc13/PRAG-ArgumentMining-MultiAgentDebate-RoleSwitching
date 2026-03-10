@@ -9,6 +9,16 @@ import argparse
 import numpy as np
 from filelock import FileLock
 
+class NumpyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        if isinstance(obj, np.floating):
+            return float(obj)
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return super(NumpyEncoder, self).default(obj)
+
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 def compute_metrics(y_true, y_pred, confidences, policy="A", threshold=0.5):
@@ -156,11 +166,25 @@ def main():
                         help="Confidence threshold for Policy T (e.g., 0.5)")
     args = parser.parse_args()
     
-    ablation_dir = os.path.join(script_dir, "artifacts", "ablations", args.ablation)
-    claims_file = os.path.join(ablation_dir, "metrics", "claims_added.jsonl")
+    # Mapping for user convenience: maps long names to their folder names in d:\thesis\PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID\framework\ablation\
+    name_map = {
+        "ablation1_standard_mad": "ablation1",
+        "ablation2_no_role_switch": "ablation2",
+        "ablation3_single_judge": "ablation3",
+        "ablation4_no_prag": "ablation4",
+        "ablation5_fixed_rounds": "ablation5"
+    }
+    
+    folder_name = name_map.get(args.ablation, args.ablation)
+    
+    # New hierarchy: framework/ablation/ablationX/outcomes/metrics/
+    ablation_dir = os.path.join(script_dir, "ablation", folder_name)
+    metrics_dir = os.path.join(ablation_dir, "outcomes", "metrics")
+    claims_file = os.path.join(metrics_dir, "claims_added.jsonl")
     
     if not os.path.exists(claims_file):
         print(f"Error: Could not find metrics file at {claims_file}")
+        print(f"Advice: Check if {ablation_dir} exists and has outcomes/metrics/claims_added.jsonl")
         return
         
     records = []
@@ -191,10 +215,10 @@ def main():
     is_single = k_res is None
     
     # Efficiency
-    avg_tok = np.mean([r["token_total"] for r in records])
-    avg_round = np.mean([r["total_rounds"] for r in records])
-    avg_retr = np.mean([r["retrieval_calls"] for r in records])
-    avg_ev = np.mean([r["evidence_count"] for r in records])
+    avg_tok = float(np.mean([r["token_total"] for r in records]))
+    avg_round = float(np.mean([r["total_rounds"] for r in records]))
+    avg_retr = float(np.mean([r["retrieval_calls"] for r in records]))
+    avg_ev = float(np.mean([r["evidence_count"] for r in records]))
     
     # Format output
     lines = []
@@ -244,11 +268,11 @@ def main():
     if not is_single:
         final_json["kappas"] = k_res
         
-    json_path = os.path.join(ablation_dir, "metrics", "final_aggregated_results.json")
-    md_path = os.path.join(ablation_dir, "metrics", "final_report.md")
+    json_path = os.path.join(metrics_dir, "final_aggregated_results.json")
+    md_path = os.path.join(metrics_dir, "final_report.md")
     
     with open(json_path, "w") as f:
-        json.dump(final_json, f, indent=2)
+        json.dump(final_json, f, indent=2, cls=NumpyEncoder)
         
     with open(md_path, "w") as f:
         f.write("# Final Report\n```\n" + out_str + "\n```\n")

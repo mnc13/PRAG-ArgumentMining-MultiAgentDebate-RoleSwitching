@@ -164,10 +164,22 @@ class PubMedRetriever:
                 source_id = meta.get("pmid") or meta.get("doi") or f"chunk_{idx}"
                 
                 # Add context like Year/Journal if available
-                year = meta.get("year", "")
-                journal = meta.get("journal", "")
-                if year or journal:
-                    text_content = f"[{journal} {year}] {text_content}"
+                year = meta.get("year", "").strip()
+                journal = meta.get("journal", "").strip()
+                
+                # Format info string: [Journal Year]
+                info_parts = []
+                if journal: info_parts.append(journal)
+                if year: info_parts.append(year)
+                
+                if info_parts:
+                    info_str = f"[{' '.join(info_parts)}]"
+                    # Clean up text_content to remove any existing leading info or extra newlines
+                    # and prepend the new info_str
+                    cleaned_text = text_content.replace('\n', ' ').strip()
+                    text_content = f"{info_str} {cleaned_text}"
+                else:
+                    text_content = text_content.replace('\n', ' ').strip()
 
                 results.append(Evidence(
                     text=text_content,

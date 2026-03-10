@@ -17,21 +17,21 @@ from copy import deepcopy
 
 # Override paths before importing pipeline modules
 script_dir = os.path.dirname(os.path.abspath(__file__))
-# New hierarchy: framework/ablation/artifacts/ablation1 and framework/ablation/outcome/ablation1
-ABLATION_ARTIFACTS_DIR = os.path.join(script_dir, "ablation", "artifacts", "ablation1")
-ABLATION_OUTCOME_DIR = os.path.join(script_dir, "ablation", "outcome", "ablation1")
-os.makedirs(ABLATION_ARTIFACTS_DIR, exist_ok=True)
-os.makedirs(ABLATION_OUTCOME_DIR, exist_ok=True)
+# New hierarchy: framework/ablation/ablation1/logs and framework/ablation/ablation1/outcomes
+ABLATION_BASE_DIR = os.path.join(script_dir, "ablation", "ablation1")
+ABLATION_LOGS_DIR = os.path.join(ABLATION_BASE_DIR, "logs")
+ABLATION_OUTCOMES_DIR = os.path.join(ABLATION_BASE_DIR, "outcomes")
+os.makedirs(ABLATION_LOGS_DIR, exist_ok=True)
+os.makedirs(ABLATION_OUTCOMES_DIR, exist_ok=True)
 
 import logging_extension
-logging_extension.ARTIFACTS_DIR = os.path.join(ABLATION_ARTIFACTS_DIR, "metrics")
+logging_extension.ARTIFACTS_DIR = os.path.join(ABLATION_OUTCOMES_DIR, "metrics")
 logging_extension.CLAIMS_FILE = os.path.join(logging_extension.ARTIFACTS_DIR, "claims_added.jsonl")
 logging_extension.RUNS_FILE = os.path.join(logging_extension.ARTIFACTS_DIR, "runs_added.jsonl")
 logging_extension.STABILITY_FILE = os.path.join(logging_extension.ARTIFACTS_DIR, "stability_added.jsonl")
 logging_extension.REPORT_FILE = os.path.join(logging_extension.ARTIFACTS_DIR, "run_reports_added.md")
-logging_extension.ALL_OUTPUT_JSONS_DIR = os.path.join(ABLATION_OUTCOME_DIR, "all_output_jsons")
+logging_extension.ALL_OUTPUT_JSONS_DIR = ABLATION_OUTCOMES_DIR
 os.makedirs(logging_extension.ARTIFACTS_DIR, exist_ok=True)
-os.makedirs(logging_extension.ALL_OUTPUT_JSONS_DIR, exist_ok=True)
 
 from filelock import FileLock
 from logging_extension import ExtensionState, print_extra_claim_metrics
@@ -57,10 +57,8 @@ from run_eval_extended import apply_monkey_patches
 
 def run_ablation(args):
     data_dir = os.path.join(script_dir, "..", "Check-COVID")
-    outcome_dir = ABLATION_OUTCOME_DIR
-    logs_dir = os.path.join(ABLATION_OUTCOME_DIR, "logs")
-    os.makedirs(outcome_dir, exist_ok=True)
-    os.makedirs(logs_dir, exist_ok=True)
+    outcome_dir = ABLATION_OUTCOMES_DIR
+    logs_dir = ABLATION_LOGS_DIR
 
     processed_claims_path = os.path.join(outcome_dir, "processed_claims.txt")
     processed_ids = set()
@@ -172,12 +170,7 @@ def run_ablation(args):
             evidence_pool = retrieved_evidence
             print("   [INITIAL RETRIEVED EVIDENCE]:")
             for i, e in enumerate(evidence_pool):
-                 # Try to extract metadata if available
-                 meta = e.metadata if hasattr(e, 'metadata') else {}
-                 title = meta.get('title', 'No Title')
-                 journal = meta.get('journal', 'No Journal')
-                 year = meta.get('year', 'No Year')
-                 print(f"   - Evidence {i+1} (ID: {e.source_id}): [{journal} {year}] {title[:100]}...")
+                 print(f"   - Evidence {i+1} (ID: {e.source_id}): {e.text}")
             print("")
             
             # MAD Loop (Fixed 3 rounds)
@@ -351,10 +344,19 @@ Respond ONLY in valid JSON format:
                     f.write(json.dumps(record) + "\n")
             
             # Print console output
-            print("\n=== EXTRA METRICS (ADDED) ===")
-            print(f"[CLAIM {input_claim.id}] rounds=3 tok={record['token_total']} retr={record['retrieval_calls']} ev={record['evidence_count']} p_final={final_conf:.3f} conf={final_conf:.3f}")
-            print(f"[CLAIM {input_claim.id}] judges: {verdict_data['verdict']} | kappa_mean=N/A")
-            print("=============================\n")
+            logging_extension.print_extra_claim_metrics(
+                claim_id=input_claim.id,
+                normal_rounds=3,
+                switched_rounds=0,
+                tokens=record['token_total'],
+                retrievals=record['retrieval_calls'],
+                evidence=record['evidence_count'],
+                confidence=final_conf,
+                judge_summary=verdict_data['verdict'],
+                kappa_pair_mean="N/A",
+                ground_truth=gt,
+                verdict=pred
+            )
             
             # All completed, mark locally and globally
             verdicts_path = os.path.join(outcome_dir, "all_verdicts.jsonl")

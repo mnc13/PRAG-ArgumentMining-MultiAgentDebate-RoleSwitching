@@ -13,6 +13,9 @@ from dotenv import load_dotenv
 # Load env
 load_dotenv()
 
+import logging_extension
+from logging_extension import ExtensionState
+
 def main():
     import argparse
     parser = argparse.ArgumentParser(description="Run Check-COVID Debate Pipeline")
@@ -145,7 +148,8 @@ def main():
             # Log Initial RAG Evidence
             log("   [INITIAL RETRIEVED EVIDENCE]:")
             for i, ev in enumerate(retrieved_evidence):
-                log(f"   - Evidence {i+1} (ID: {ev.source_id}): {ev.text[:150]}...")
+                # ev.text now contains [Journal Year] Title (all on one line thanks to rag_engine update)
+                log(f"   - Evidence {i+1} (ID: {ev.source_id}): {ev.text}")
 
             log("\n5. Evidence Negotiation & Arbitration...")
             from negotiation_engine import EvidenceNegotiator
@@ -252,7 +256,23 @@ def main():
                         log(f"   [SAVED] Run {args.run_index} marked as successful in {processed_claims_path}")
                     f.flush() # Ensure it's written to disk
                 
-                pass
+                # Print console output
+                logging_extension.print_extra_claim_metrics(
+                    claim_id=input_claim.id,
+                    normal_rounds=len(debate_result['rounds']),
+                    switched_rounds=len(switched_result.get('rounds', [])),
+                    tokens=ExtensionState.current_claim_tokens,
+                    retrievals=ExtensionState.current_claim_retrievals,
+                    evidence=ExtensionState.current_claim_evidence,
+                    confidence=final_result['confidence'],
+                    judge_summary=judge_result['final_verdict'],
+                    kappa_pair_mean="N/A",
+                    ground_truth=record['ground_truth'],
+                    verdict=record['verdict']
+                )
+                
+                # Reset tracking vars
+                ExtensionState.reset_claim_state()
                 
             except Exception as save_error:
                 log(f"   [ERROR] Failed to save verdict or update processed list: {save_error}")

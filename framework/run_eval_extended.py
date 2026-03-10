@@ -305,7 +305,9 @@ def extract_and_log_claim_metrics(claim_obj):
         evidence=ExtensionState.current_claim_evidence,
         confidence=conf,
         judge_summary=judge_summary,
-        kappa_pair_mean=k_pair_mean
+        kappa_pair_mean=k_pair_mean,
+        ground_truth=gt,
+        verdict=pred
     )
     
     # Reset tracking vars

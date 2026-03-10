@@ -175,4 +175,4 @@ combined/
 framework/baseline/outcome_deepseek/
 framework/baseline/outcome_gpt/
 
-ablation/
+framework/ablation/

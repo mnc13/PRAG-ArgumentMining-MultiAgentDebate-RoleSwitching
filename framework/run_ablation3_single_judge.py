@@ -13,21 +13,21 @@ from filelock import FileLock
 
 # Override paths before importing pipeline modules
 script_dir = os.path.dirname(os.path.abspath(__file__))
-# New hierarchy: framework/ablation/artifacts/ablation3 and framework/ablation/outcome/ablation3
-ABLATION_ARTIFACTS_DIR = os.path.join(script_dir, "ablation", "artifacts", "ablation3")
-ABLATION_OUTCOME_DIR = os.path.join(script_dir, "ablation", "outcome", "ablation3")
-os.makedirs(ABLATION_ARTIFACTS_DIR, exist_ok=True)
-os.makedirs(ABLATION_OUTCOME_DIR, exist_ok=True)
+# New hierarchy: framework/ablation/ablation3/logs and framework/ablation/ablation3/outcomes
+ABLATION_BASE_DIR = os.path.join(script_dir, "ablation", "ablation3")
+ABLATION_LOGS_DIR = os.path.join(ABLATION_BASE_DIR, "logs")
+ABLATION_OUTCOMES_DIR = os.path.join(ABLATION_BASE_DIR, "outcomes")
+os.makedirs(ABLATION_LOGS_DIR, exist_ok=True)
+os.makedirs(ABLATION_OUTCOMES_DIR, exist_ok=True)
 
 import logging_extension
-logging_extension.ARTIFACTS_DIR = os.path.join(ABLATION_ARTIFACTS_DIR, "metrics")
+logging_extension.ARTIFACTS_DIR = os.path.join(ABLATION_OUTCOMES_DIR, "metrics")
 logging_extension.CLAIMS_FILE = os.path.join(logging_extension.ARTIFACTS_DIR, "claims_added.jsonl")
 logging_extension.RUNS_FILE = os.path.join(logging_extension.ARTIFACTS_DIR, "runs_added.jsonl")
 logging_extension.STABILITY_FILE = os.path.join(logging_extension.ARTIFACTS_DIR, "stability_added.jsonl")
 logging_extension.REPORT_FILE = os.path.join(logging_extension.ARTIFACTS_DIR, "run_reports_added.md")
-logging_extension.ALL_OUTPUT_JSONS_DIR = os.path.join(ABLATION_OUTCOME_DIR, "all_output_jsons")
+logging_extension.ALL_OUTPUT_JSONS_DIR = ABLATION_OUTCOMES_DIR
 os.makedirs(logging_extension.ARTIFACTS_DIR, exist_ok=True)
-os.makedirs(logging_extension.ALL_OUTPUT_JSONS_DIR, exist_ok=True)
 
 orig_append_jsonl = logging_extension.append_jsonl
 def locked_append_jsonl(filepath: str, data: dict):
@@ -50,10 +50,8 @@ from run_eval_extended import apply_monkey_patches
 
 def run_ablation(args):
     data_dir = os.path.join(script_dir, "..", "Check-COVID")
-    outcome_dir = ABLATION_OUTCOME_DIR
-    logs_dir = os.path.join(ABLATION_OUTCOME_DIR, "logs")
-    os.makedirs(outcome_dir, exist_ok=True)
-    os.makedirs(logs_dir, exist_ok=True)
+    outcome_dir = ABLATION_OUTCOMES_DIR
+    logs_dir = ABLATION_LOGS_DIR
 
     processed_claims_path = os.path.join(outcome_dir, "processed_claims.txt")
     processed_ids = set()
@@ -309,10 +307,20 @@ Respond ONLY in valid JSON format:
                 with open(logging_extension.CLAIMS_FILE, "a", encoding="utf-8") as f:
                     f.write(json.dumps(record) + "\n")
                     
-            print("\n=== EXTRA METRICS (ADDED) ===")
-            print(f"[CLAIM {input_claim.id}] rounds={record['total_rounds']} tok={record['token_total']} retr={record['retrieval_calls']} ev={record['evidence_count']} p_final={conf:.3f} conf={conf:.3f}")
-            print(f"[CLAIM {input_claim.id}] judges: {verdict_data['verdict']} | kappa_mean=N/A")
-            print("=============================\n")
+            # Print console output
+            logging_extension.print_extra_claim_metrics(
+                claim_id=input_claim.id,
+                normal_rounds=len(debate_result['rounds']),
+                switched_rounds=len(switched_result['rounds']),
+                tokens=record['token_total'],
+                retrievals=record['retrieval_calls'],
+                evidence=record['evidence_count'],
+                confidence=conf,
+                judge_summary=verdict_data['verdict'],
+                kappa_pair_mean="N/A",
+                ground_truth=gt,
+                verdict=pred
+            )
             
             verdicts_path = os.path.join(outcome_dir, "all_verdicts.jsonl")
             with FileLock(verdicts_path + ".lock"):

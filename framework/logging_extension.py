@@ -85,12 +85,14 @@ def append_markdown(filepath: str, content: str):
 def print_extra_claim_metrics(claim_id: str, normal_rounds: int, switched_rounds: int, 
                               tokens: int, retrievals: int, evidence: int, 
                               confidence: float, judge_summary: str, 
-                              kappa_pair_mean: any):
+                              kappa_pair_mean: any,
+                              ground_truth: str = None, verdict: str = None):
     """Prints the per-claim added metrics block without altering surrounding flow."""
-    # Calculate costs
-    cost = calculate_token_cost(tokens)
     
     print("\n" + "="*50)
+    if ground_truth is not None and verdict is not None:
+        print(f"[CLAIM {claim_id}] Ground Truth: {ground_truth} | Verdict: {verdict}")
+    
     print(f"[CLAIM {claim_id}] rounds_norm={normal_rounds} rounds_switch={switched_rounds} "
           f"tok={tokens} retr={retrievals} ev={evidence} conf={confidence:.3f}")
     if judge_summary:
