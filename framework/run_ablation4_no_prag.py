@@ -288,11 +288,6 @@ def run_ablation(args):
             consistency_report = switcher.check_consistency(debate_result, switched_result)
             print(f"Role switching completed. Consistency Score: {consistency_report['consistency_score']:.2f}")
             
-            # 9. Judicial Panel Evaluation...
-            print("9. Judicial Panel Evaluation...\n")
-            print("============================================================")
-            print("JUDICIAL PANEL EVALUATION")
-            print("============================================================\n")
             panel = JudicialPanel()
             critic_evals = [r.get('critic_evaluation') for r in debate_result['rounds']]
             ref_history = mad.self_reflection.reflection_history
@@ -305,33 +300,18 @@ def run_ablation(args):
                 critic_evaluations=critic_evals,
                 reflection_history=ref_history
             )
-            for j in judge_result.get("judge_verdicts", []):
-                print(f"Judge {j['judge_name']} ({j.get('model', 'N/A')}) deliberating...")
-                print(f"  Verdict: {j['verdict']}")
-                print(f"  Evidence Strength: {j['evidence_strength']}/10")
-                print(f"  Argument Validity: {j['argument_validity']}/10")
-                print(f"  Scientific Reliability: {j['scientific_reliability']}/10\n")
-            
-            print(f"Final Verdict: {judge_result['final_verdict']}")
-            print(f"Vote Breakdown: {judge_result.get('vote_breakdown', {})}\n")
             
             winner_side = 'proponent' if judge_result['final_verdict'] == 'SUPPORTED' else 'opponent'
             winner_reflections = [r for r in ref_history if r.get('side') == winner_side]
             reflection_result = winner_reflections[-1] if winner_reflections else (ref_history[-1] if ref_history else {})
             
             # 11. Generating Final Verdict...
-            print("11. Generating Final Verdict...\n")
-            print("============================================================")
-            print("FINAL VERDICT GENERATION")
-            print("============================================================\n")
             verdict_generator = FinalVerdict(extracted_claim, debate_result, judge_result, consistency_report, reflection_result)
             final_result = verdict_generator.generate_verdict()
             
             # Save files via append
-            print(f"Verdict: {final_result['verdict']}")
-            print(f"Confidence: {final_result['confidence']:.3f}\n")
             
-            pred = "REFUTE" if final_result['verdict'] == "NOT SUPPORTED" else ("SUPPORT" if final_result['verdict'] == "SUPPORTED" else "INCONCLUSIVE")
+            pred = "REFUTE" if final_result['verdict'] == "REFUTE" else ("SUPPORT" if final_result['verdict'] == "SUPPORT" else "INCONCLUSIVE")
             gt = extracted_claim.metadata.get('label', 'UNKNOWN')
             correct = (pred == gt) if gt != 'UNKNOWN' else None
             conf = final_result['confidence']

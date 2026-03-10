@@ -200,10 +200,6 @@ def run_ablation(args):
             ref_history = mad.self_reflection.reflection_history
             
             # 9. Judicial Panel Evaluation...
-            print("9. Judicial Panel Evaluation...\n")
-            print("============================================================")
-            print("JUDICIAL PANEL EVALUATION")
-            print("============================================================\n")
             print(f"Judge 1 ({judge_llm.model_name}) deliberating...")
             # Single Judge prompt evaluation
             prompt = f"""You are an appellate judge evaluating the following proceedings for medical fact-checking.
@@ -253,32 +249,27 @@ Respond ONLY in valid JSON format:
                     "verdict": "INCONCLUSIVE", "reasoning": "Parse failure."
                 }
             
-            print(f"  Verdict: {verdict_data['verdict']}")
-            print(f"  Evidence Strength: {verdict_data['evidence_strength']}/10")
-            print(f"  Argument Validity: {verdict_data['argument_validity']}/10")
-            print(f"  Scientific Reliability: {verdict_data['scientific_reliability']}/10\n")
-            
             print(f"Final Verdict: {verdict_data['verdict']}")
+            
+            mock_judge_result = {
+                "final_verdict": verdict_data['verdict'],
+                "judge_verdicts": [verdict_data],
+                "vote_breakdown": {verdict_data['verdict']: 1}
+            }
             
             winner_side = 'proponent' if mock_judge_result['final_verdict'] == 'SUPPORTED' else 'opponent'
             winner_reflections = [r for r in ref_history if r.get('side') == winner_side]
             reflection_result = winner_reflections[-1] if winner_reflections else (ref_history[-1] if ref_history else {})
             
             # 11. Generating Final Verdict...
-            print("11. Generating Final Verdict...\n")
-            print("============================================================")
-            print("FINAL VERDICT GENERATION")
-            print("============================================================\n")
             verdict_generator = FinalVerdict(extracted_claim, debate_result, mock_judge_result, consistency_report, reflection_result)
             final_result = verdict_generator.generate_verdict()
             
             # Save files via append
-            pred = "REFUTE" if final_result['verdict'] == "NOT SUPPORTED" else ("SUPPORT" if final_result['verdict'] == "SUPPORTED" else "INCONCLUSIVE")
+            pred = "REFUTE" if final_result['verdict'] == "REFUTE" else ("SUPPORT" if final_result['verdict'] == "SUPPORT" else "INCONCLUSIVE")
             gt = extracted_claim.metadata.get('label', 'UNKNOWN')
             correct = (pred == gt) if gt != 'UNKNOWN' else None
             conf = final_result['confidence']
-            print(f"Verdict: {pred}")
-            print(f"Confidence: {conf:.3f}\n")
             
             record = {
                 "run_id": ExtensionState.run_id,

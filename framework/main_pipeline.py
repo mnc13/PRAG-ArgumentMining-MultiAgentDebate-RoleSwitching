@@ -222,8 +222,6 @@ def main():
             from final_verdict import FinalVerdict
             verdict_generator = FinalVerdict(extracted_claim, debate_result, judge_result, consistency_report, reflection_result)
             final_result = verdict_generator.generate_verdict()
-            log(f"   Verdict: {final_result['verdict']}")
-            log(f"   Confidence: {final_result['confidence']:.3f}")
 
             # 12. Save Verdict and Update Processed List
             try:
