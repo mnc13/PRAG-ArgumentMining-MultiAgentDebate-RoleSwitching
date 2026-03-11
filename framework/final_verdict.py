@@ -76,7 +76,7 @@ class FinalVerdict:
                 "judicial_verdict": self.judge_result['final_verdict'],
                 "vote_breakdown": self.judge_result['vote_breakdown'],
                 "role_switch_consistent": self._check_role_switch_consistency(),
-                "self_reflection_adjustment": self.reflection_result['self_reflection']['confidence_adjustment'],
+                "self_reflection_adjustment": self.reflection_result.get('self_reflection', {}).get('confidence_adjustment', 0.0),
                 "debate_rounds": len(self.debate_result['rounds']),
                 "total_evidence_used": self._count_total_evidence()
             }
@@ -256,12 +256,12 @@ class FinalVerdict:
         
         # Self-reflection factor
         sr_data = self.reflection_result.get('self_reflection', {})
-        reflection_adj = sr_data.get('confidence_adjustment', 0.0)
-        
-        if reflection_adj < 0:
-            decision_factors.append(f"Self-reflection acknowledged weaknesses (confidence adjusted by {reflection_adj:+.2f})")
-        else:
-            decision_factors.append(f"Self-reflection reinforced arguments (confidence adjusted by {reflection_adj:+.2f})")
+        if sr_data:
+            reflection_adj = sr_data.get('confidence_adjustment', 0.0)
+            if reflection_adj < 0:
+                decision_factors.append(f"Self-reflection acknowledged weaknesses (confidence adjusted by {reflection_adj:+.2f})")
+            elif reflection_adj > 0:
+                decision_factors.append(f"Self-reflection reinforced arguments (confidence adjusted by {reflection_adj:+.2f})")
         
         reasoning = {
             "winner": "plaintiff_counsel" if winner == 'proponent' else "defense_counsel",
