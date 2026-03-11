@@ -242,11 +242,13 @@ class FinalVerdict:
         decision_factors = []
         
         # Add majority opinion
-        decision_factors.append(f"Majority Opinion: {self.judge_result['majority_opinion'][:300]}...")
+        majority = self.judge_result.get('majority_opinion', 'No majority opinion available.')
+        decision_factors.append(f"Majority Opinion: {majority[:300]}...")
         
         # Add dissenting opinion if exists
-        if self.judge_result['dissenting_opinion']:
-            decision_factors.append(f"Dissenting Opinion: {self.judge_result['dissenting_opinion'][:200]}...")
+        dissent = self.judge_result.get('dissenting_opinion')
+        if dissent:
+            decision_factors.append(f"Dissenting Opinion: {dissent[:200]}...")
         
         # Role-switch factor
         if self._check_role_switch_consistency():

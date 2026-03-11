@@ -271,7 +271,9 @@ Respond ONLY in valid JSON format:
             mock_judge_result = {
                 "final_verdict": verdict_data['verdict'],
                 "judge_verdicts": [verdict_data],
-                "vote_breakdown": {verdict_data['verdict']: 1}
+                "vote_breakdown": {verdict_data['verdict']: 1},
+                "majority_opinion": f"Single Judge ({judge_llm.model_name}) - {verdict_data['verdict']}: {verdict_data['reasoning']}",
+                "dissenting_opinion": None
             }
             
             winner_side = 'proponent' if mock_judge_result['final_verdict'] == 'SUPPORTED' else 'opponent'
