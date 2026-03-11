@@ -71,6 +71,17 @@ def main():
     if not all_claims:
         print(f"No claims to process in range [{start_idx}:{end_idx}]")
         return
+    
+    # Initialize shared PubMed retriever once per run (avoids repeated heavy loads)
+    index_path = os.path.join(script_dir, 'pubmed_faiss.index')
+    meta_path = os.path.join(script_dir, 'pubmed_meta.jsonl')
+    offsets_path = os.path.join(script_dir, 'pubmed_meta_offsets.npy')
+    retriever = PubMedRetriever(
+        index_path=index_path,
+        meta_path=meta_path,
+        offsets_path=offsets_path
+    )
+
 
     for input_claim in all_claims:
 
@@ -129,20 +140,13 @@ def main():
                 log(f"   - {i+1}. {prem}")
             
             log("\n4. Initial RAG Retrieval...")
-            index_path = os.path.join(script_dir, 'pubmed_faiss.index')
-            meta_path = os.path.join(script_dir, 'pubmed_meta.jsonl')
-            offsets_path = os.path.join(script_dir, 'pubmed_meta_offsets.npy')
+
             
             log(f"   [DEBUG] Checking paths:")
             log(f"   Index: {index_path} (Exists: {os.path.exists(index_path)})")
             log(f"   Meta: {meta_path} (Exists: {os.path.exists(meta_path)})")
             log(f"   Offsets: {offsets_path} (Exists: {os.path.exists(offsets_path)})")
 
-            retriever = PubMedRetriever(
-                index_path=index_path,
-                meta_path=meta_path,
-                offsets_path=offsets_path
-            )
             retrieved_evidence = retriever.retrieve(extracted_claim.text, top_k=5)
             
             # Log Initial RAG Evidence

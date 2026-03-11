@@ -27,6 +27,7 @@ Window 6: python run_eval_extended.py --offset 110 --limit 10 --runs 3
 
 
 python calculate_token_averages.py
+python calculate_token_averages.py --all
 
 
 If you want to use the new Threshold Policy (T) that compares confidence scores automatically, here are your updated commands:
