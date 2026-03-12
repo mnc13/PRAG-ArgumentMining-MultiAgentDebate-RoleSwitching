@@ -62,7 +62,7 @@ class ExtensionState:
 # ---------------------------------------------------------------------------
 # File I/O
 # ---------------------------------------------------------------------------
-ARTIFACTS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "metrics")
+ARTIFACTS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts_feverous", "metrics")
 os.makedirs(ARTIFACTS_DIR, exist_ok=True)
 
 CLAIMS_FILE = os.path.join(ARTIFACTS_DIR, "claims_added.jsonl")
@@ -153,7 +153,7 @@ def log_run_summary(metrics: dict, efficiency: dict, ks_stability: dict, config_
     }
     append_jsonl(RUNS_FILE, record)
 
-ALL_OUTPUT_JSONS_DIR = os.path.join(ARTIFACTS_DIR, "..", "outcome", "all_output_jsons")
+ALL_OUTPUT_JSONS_DIR = os.path.join(ARTIFACTS_DIR, "..", "outcome_feverous", "all_output_jsons")
 os.makedirs(ALL_OUTPUT_JSONS_DIR, exist_ok=True)
 
 def append_framework_json(filename: str, claim_id: str, data: dict):

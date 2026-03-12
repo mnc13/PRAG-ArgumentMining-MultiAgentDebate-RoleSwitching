@@ -18,11 +18,11 @@ except ImportError:
 
 # Paths
 BASE_DIR = r"d:\thesis\PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID"
-REPORT_FILE = os.path.join(BASE_DIR, "artifacts", "metrics", "run_reports_added.md")
+REPORT_FILE = os.path.join(BASE_DIR, "artifacts_feverous", "metrics", "run_reports_added.md")
 
 SOURCES = [
-    os.path.join(BASE_DIR, "artifacts", "metrics", "claims_added.jsonl"),
-    os.path.join(BASE_DIR, "artifacts", "device 2", "metrics", "claims_added.jsonl")
+    os.path.join(BASE_DIR, "artifacts_feverous", "metrics", "claims_added.jsonl"),
+    os.path.join(BASE_DIR, "artifacts_feverous", "device 2", "metrics", "claims_added.jsonl")
 ]
 
 def normalize_label(label):

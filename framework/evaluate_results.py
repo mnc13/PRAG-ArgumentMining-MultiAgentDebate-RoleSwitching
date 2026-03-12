@@ -157,7 +157,7 @@ def print_report(metrics: dict):
 
 def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    verdicts_path = os.path.join(script_dir, "outcome", "all_verdicts.jsonl")
+    verdicts_path = os.path.join(script_dir, "outcome_feverous", "all_verdicts.jsonl")
 
     if not os.path.exists(verdicts_path):
         print(f"[ERROR] Verdicts file not found at: {verdicts_path}")
@@ -172,7 +172,7 @@ def main():
     print_report(metrics)
 
     # Save metrics as JSON
-    output_path = os.path.join(script_dir, "outcome", "aggregate_metrics.json")
+    output_path = os.path.join(script_dir, "outcome_feverous", "aggregate_metrics.json")
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(metrics, f, indent=2)
     print(f"\n[SAVED] Aggregate metrics saved to: {output_path}")

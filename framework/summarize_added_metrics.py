@@ -9,7 +9,7 @@ import os
 import json
 import numpy as np
 
-ARTIFACTS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "metrics")
+ARTIFACTS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts_feverous", "metrics")
 RUNS_FILE = os.path.join(ARTIFACTS_DIR, "runs_added.jsonl")
 
 def main():

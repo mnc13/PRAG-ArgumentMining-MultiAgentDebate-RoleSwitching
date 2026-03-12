@@ -5,10 +5,10 @@ from datetime import datetime
 
 # Paths
 BASE_DIR = r"d:\thesis\PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID"
-LOGS_DIR = os.path.join(BASE_DIR, "framework", "outcome", "logs")
-PROCESSED_CLAIMS_FILE = os.path.join(BASE_DIR, "framework", "outcome", "processed_claims.txt")
-CLAIMS_ADDED_FILE = os.path.join(BASE_DIR, "artifacts", "metrics", "claims_added.jsonl")
-ALL_VERDICTS_FILE = os.path.join(BASE_DIR, "framework", "outcome", "all_verdicts.jsonl")
+LOGS_DIR = os.path.join(BASE_DIR, "framework", "outcome_feverous", "logs_feverous")
+PROCESSED_CLAIMS_FILE = os.path.join(BASE_DIR, "framework", "outcome_feverous", "processed_claims.txt")
+CLAIMS_ADDED_FILE = os.path.join(BASE_DIR, "artifacts_feverous", "metrics", "claims_added.jsonl")
+ALL_VERDICTS_FILE = os.path.join(BASE_DIR, "framework", "outcome_feverous", "all_verdicts.jsonl")
 
 def get_run_index(log_filename):
     # Log files are named: execution_log_<claim_id>_run_<timestamp>_<hex>.txt

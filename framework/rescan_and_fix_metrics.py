@@ -32,12 +32,12 @@ import numpy as np
 # ---------------------------------------------------------------------------
 FRAMEWORK_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR       = os.path.dirname(FRAMEWORK_DIR)
-ARTIFACTS_DIR  = os.path.join(BASE_DIR, "artifacts", "metrics")
+ARTIFACTS_DIR  = os.path.join(BASE_DIR, "artifacts_feverous", "metrics")
 CLAIMS_FILE    = os.path.join(ARTIFACTS_DIR, "claims_added.jsonl")
 RUNS_FILE      = os.path.join(ARTIFACTS_DIR, "runs_added.jsonl")
 REPORT_FILE    = os.path.join(ARTIFACTS_DIR, "run_reports_added.md")
-PROCESSED_FILE = os.path.join(FRAMEWORK_DIR, "outcome", "processed_claims.txt")
-LOGS_DIR       = os.path.join(FRAMEWORK_DIR, "outcome", "logs")
+PROCESSED_FILE = os.path.join(FRAMEWORK_DIR, "outcome_feverous", "processed_claims.txt")
+LOGS_DIR       = os.path.join(FRAMEWORK_DIR, "outcome_feverous", "logs_feverous")
 
 # ---------------------------------------------------------------------------
 # Import the same metric helpers as the main framework

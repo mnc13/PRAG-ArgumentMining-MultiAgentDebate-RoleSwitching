@@ -176,6 +176,7 @@ framework/baseline/outcome_deepseek/
 framework/baseline/outcome_gpt/
 framework/outcome_healthver/
 artifacts_healthver/
-
+artifacts_feverous/
+framework/outcome_feverous/
 
 framework/ablation/

@@ -7,6 +7,7 @@ from data_loader import DataLoader
 from preprocessing import ClaimExtractor
 from llm_client import MockLLMClient, GeminiLLMClient
 from rag_engine import SimpleRetriever, VectorRetriever, PubMedRetriever
+from kilt_retriever import KILTWikipediaRetriever
 from agent_workflow import ArgumentMiner, EvidenceFirstDebateAgent
 from dotenv import load_dotenv
 
@@ -26,16 +27,17 @@ def main():
     # Use script directory as base for resources (reliable even if cwd changes)
     script_dir = os.path.dirname(os.path.abspath(__file__))
     # Keep data dir as is (assuming external data location)
-    data_dir = os.path.join(script_dir, "..", "Check-COVID")
+    #data_dir = os.path.join(script_dir, "..", "Check-COVID")
+    data_dir = os.path.join(script_dir, "..", "Other-datasets", "feverous_sample_100.jsonl")
     
     # Create a custom logger
     from datetime import datetime
-    logs_dir = os.path.join(script_dir, "outcome", "logs")
+    logs_dir = os.path.join(script_dir, "outcome_feverous", "logs_feverous")
     os.makedirs(logs_dir, exist_ok=True)
 
     # 1. Determine which claim to process (Serial Processing)
     # Track progress by reading processed_claims.txt
-    outcome_dir = os.path.join(script_dir, "outcome")
+    outcome_dir = os.path.join(script_dir, "outcome_feverous")
     os.makedirs(outcome_dir, exist_ok=True)
     
     processed_claims_path = os.path.join(outcome_dir, "processed_claims.txt")
@@ -53,7 +55,7 @@ def main():
     print("1. Loading Data...")
     loader = DataLoader(data_dir)
     # Load specific test file
-    test_file_path = os.path.join(data_dir, "test", "covidCheck_test_no_NEI.json")
+    test_file_path = r"E:\thesis(feverous)\PRAG-ArgumentMining-MultiAgentDebate-RoleSwitching\Other-datasets\feverous_sample_100.jsonl"
     all_claims = loader.load_specific_file(test_file_path)
     
     if not all_claims:
@@ -69,15 +71,8 @@ def main():
         print(f"No claims to process in range [{start_idx}:{end_idx}]")
         return
 
-    # Initialize shared PubMed retriever once per run (avoids repeated heavy loads)
-    index_path = os.path.join(script_dir, 'pubmed_faiss.index')
-    meta_path = os.path.join(script_dir, 'pubmed_meta.jsonl')
-    offsets_path = os.path.join(script_dir, 'pubmed_meta_offsets.npy')
-    retriever = PubMedRetriever(
-        index_path=index_path,
-        meta_path=meta_path,
-        offsets_path=offsets_path
-    )
+    # Initialize shared KILT Wikipedia retriever once per run (avoids repeated heavy loads)
+    retriever = KILTWikipediaRetriever()
 
     for input_claim in all_claims:
 
@@ -136,10 +131,7 @@ def main():
                 log(f"   - {i+1}. {prem}")
             
             log("\n4. Initial RAG Retrieval...")
-            log(f"   [DEBUG] Checking paths:")
-            log(f"   Index: {index_path} (Exists: {os.path.exists(index_path)})")
-            log(f"   Meta: {meta_path} (Exists: {os.path.exists(meta_path)})")
-            log(f"   Offsets: {offsets_path} (Exists: {os.path.exists(offsets_path)})")
+            log(f"   [DEBUG] Fetching evidence...")
             retrieved_evidence = retriever.retrieve(extracted_claim.text, top_k=5)
             
             # Log Initial RAG Evidence
