@@ -28,7 +28,7 @@ def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     # Keep data dir as is (assuming external data location)
     #data_dir = os.path.join(script_dir, "..", "Check-COVID")
-    data_dir = os.path.join(script_dir, "..", "Other-datasets", "feverous_sample_100.jsonl")
+    data_dir = os.path.join(script_dir, "..", "Other-datasets")
     
     # Create a custom logger
     from datetime import datetime
@@ -55,7 +55,7 @@ def main():
     print("1. Loading Data...")
     loader = DataLoader(data_dir)
     # Load specific test file
-    test_file_path = r"E:\thesis(feverous)\PRAG-ArgumentMining-MultiAgentDebate-RoleSwitching\Other-datasets\feverous_sample_100.jsonl"
+    test_file_path = "feverous_sample_100.jsonl"
     all_claims = loader.load_specific_file(test_file_path)
     
     if not all_claims:
