@@ -1,19 +1,3 @@
-"""
-Negotiation Engine for Evidence Preparation  (v3 – page-aware judge)
-
-Key fixes vs v2:
-  - _calculate_weight  : judge prompt now distinguishes between
-      (a) page-level relevance  – is this the right Wikipedia article?
-      (b) chunk-level specificity – does THIS chunk contain the exact fact?
-      A chunk from the correct page gets credit even if the specific date/
-      result isn't in that 100-word window, because it BELONGS to the right
-      source.  The old prompt gave 0 relevance to correct-page chunks that
-      lacked the exact date string.
-
-  - admissibility threshold kept at 0.35 for Wikipedia sources.
-  - dispute threshold at 0.05.
-"""
-
 import json
 import re
 from typing import List, Dict
@@ -23,8 +7,23 @@ from llm_client import LLMClient
 
 class EvidenceNegotiator:
     def __init__(self, retriever, miner_llm: LLMClient,
-                 admissibility_threshold: float = 0.35,
+                 admissibility_threshold: float = 0.20,   # LOWERED from 0.35
                  dispute_threshold: float = 0.05):
+        """
+        admissibility_threshold lowered from 0.35 → 0.20.
+
+        Rationale: FEVEROUS claims are verified against Wikipedia. Evidence
+        chunks are 100-word windows; even a directly relevant chunk on the
+        correct Wikipedia page may only score 0.25–0.35 because it talks
+        about the broader article topic, not the specific infobox fact.
+        The old 0.35 threshold was silently dropping good evidence, causing
+        0-item admitted sets and pipeline collapse for obscure claims.
+
+        The page-aware arbitration prompt (below) also scores page_relevance
+        separately, so the new combined weight formula naturally distinguishes
+        "right article, wrong chunk" (score ~0.25–0.35) from "wrong article
+        entirely" (score < 0.10).
+        """
         self.retriever = retriever
         self.llm = miner_llm
         self.admissibility_threshold = admissibility_threshold
@@ -169,55 +168,57 @@ class EvidenceNegotiator:
     def _calculate_weight(self, claim: str, evidence_text: str,
                            source_id: str = "") -> Dict:
         """
-        PAGE-AWARE admissibility scoring.
+        PAGE-AWARE admissibility scoring for Wikipedia-sourced evidence.
 
-        The key insight: evidence is a 100-word CHUNK from a Wikipedia page.
+        FEVEROUS context: evidence is a ~100-word chunk from a Wikipedia page.
         The chunk may not contain the specific date/result but still belongs
-        to exactly the right article.  We therefore score TWO things:
+        to exactly the right article.  We score TWO things separately:
 
-          page_relevance  : does this chunk come from a page whose TITLE and
-                            general topic match the claim?  (inferred from the
-                            [Wikipedia: Title] prefix and overall topic)
+          page_relevance    : does this chunk come from the right Wikipedia
+                              article for this claim?
+          chunk_specificity : does this specific excerpt contain the key facts?
 
-          chunk_specificity : does this specific 100-word window contain the
-                              exact entities, dates, or facts in the claim?
+        final weight = (page_relevance * 0.6 + chunk_specificity * 0.4) * credibility
 
-        final weight = page_relevance * 0.5  +  chunk_specificity * 0.5
-        This way a correct-page chunk that lacks the date still scores ~0.35-0.45
-        instead of 0.0.
+        NOTE: Wikipedia is the authoritative source for FEVEROUS claims.
+        Chunks from named, specific Wikipedia articles should receive
+        credibility scores of 0.65–0.80, not penalised for being Wikipedia.
         """
-        prompt = f"""You are evaluating a Wikipedia evidence chunk for a fact-checking claim.
+        prompt = f"""You are evaluating a Wikipedia evidence chunk for a FEVEROUS fact-checking claim.
 
 CLAIM: {claim}
 
-EVIDENCE CHUNK (100-word excerpt from a Wikipedia article):
+EVIDENCE CHUNK (~100 words from a Wikipedia article):
 {evidence_text[:1200]}
 
-IMPORTANT: This is a SHORT EXCERPT from a larger Wikipedia article.
-The chunk may not contain every specific detail of the claim even if it
-comes from exactly the right article.
+CONTEXT: This is a SHORT EXCERPT from a larger Wikipedia article.
+Wikipedia IS the authoritative reference for this fact-checking task.
+The chunk may not contain every specific detail even if it comes from the
+correct article — that is normal and expected.
 
 Evaluate TWO separate dimensions:
 
-1. PAGE RELEVANCE (0.0–1.0): Does this chunk appear to come from a Wikipedia
-   article that is about the right topic, team, person, event, or time period
-   mentioned in the claim?
-   - 0.8–1.0: Chunk is clearly from the specific article about this exact event/entity
-   - 0.5–0.7: Chunk is from a closely related article (same team, nearby year, etc.)
-   - 0.2–0.4: Chunk is from a tangentially related article
-   - 0.0–0.1: Chunk is from a completely unrelated article
+1. PAGE RELEVANCE (0.0–1.0)
+   Does this chunk appear to come from a Wikipedia article about the right
+   topic, entity, event, or time period mentioned in the claim?
+   - 0.8–1.0 : Clearly from the specific article about this exact entity/event
+   - 0.5–0.7 : From a closely related article (same person/team/nearby year)
+   - 0.2–0.4 : From a tangentially related article
+   - 0.0–0.1 : From a completely unrelated article
 
-2. CHUNK SPECIFICITY (0.0–1.0): Does this specific excerpt contain the key
-   facts, dates, names, or results needed to directly verify the claim?
-   - 0.8–1.0: Excerpt directly mentions the specific fact, date, or result
-   - 0.5–0.7: Excerpt mentions related facts that partially verify the claim
-   - 0.2–0.4: Excerpt is on-topic but lacks specific verifying details
-   - 0.0–0.1: Excerpt contains no claim-relevant details
+2. CHUNK SPECIFICITY (0.0–1.0)
+   Does this specific excerpt contain the key facts, dates, names, or results
+   needed to directly verify the claim?
+   - 0.8–1.0 : Excerpt directly states the specific fact, date, or result
+   - 0.5–0.7 : Mentions related facts that partially verify the claim
+   - 0.2–0.4 : On-topic but lacks specific verifying details
+   - 0.0–0.1 : No claim-relevant details
 
-CREDIBILITY (0.0–1.0): How reliable is this Wikipedia source?
-   - Wikipedia with specific named facts/dates/statistics: 0.65–0.80
-   - Wikipedia general background: 0.50–0.65
-   - Vague or unsourced: 0.20–0.40
+3. CREDIBILITY (0.0–1.0)
+   How reliable is this Wikipedia source?
+   - Named Wikipedia article with specific facts/dates/statistics : 0.70–0.85
+   - Wikipedia general background article : 0.55–0.70
+   - Vague, unsourced, or clearly off-topic : 0.20–0.40
 
 Respond ONLY in valid JSON with no extra text:
 {{
@@ -236,8 +237,9 @@ Respond ONLY in valid JSON with no extra text:
             chunk_spec = min(1.0, max(0.0, float(data.get("chunk_specificity", 0.3))))
             credib     = min(1.0, max(0.0, float(data.get("credibility",       0.6))))
 
-            # Combined relevance = weighted average of page and chunk scores
-            relevance = round(0.5 * page_rel + 0.5 * chunk_spec, 3)
+            # Page relevance weighted more than chunk specificity — a chunk
+            # from the right article is valuable even if it lacks the exact fact.
+            relevance = round(0.6 * page_rel + 0.4 * chunk_spec, 3)
             weight    = round(relevance * credib, 3)
 
             return {

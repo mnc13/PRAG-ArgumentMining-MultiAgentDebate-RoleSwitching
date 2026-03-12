@@ -1,19 +1,28 @@
 """
-Persona Registry for Multi-Agent Debate System  v2
+Persona Registry for Multi-Agent Debate System  v3
 
-Key fix:
-  - System prompts no longer hardcode "legal proceeding" with no domain context.
-    gpt-5-mini was defaulting to personal-injury medical cases because its most
-    common legal training data is personal injury law.
+Changes from v2:
+  - Expert witness system prompt and factory function overhauled.
+    The old prompt produced identical boilerplate testimony regardless of
+    round, requesting side, or current arguments (confirmed by logs: 4 of 7
+    expert calls in a single run returned word-for-word identical text).
 
-  - get_agent_slots(claim_text) is a new factory function that injects a
-    one-line domain hint derived from the claim into every system prompt.
-    Example: "NOTE: This proceeding concerns a factual claim about sports/
-    history. All discovery and arguments must focus on that domain — NOT on
-    medical records, injuries, or clinical data."
+    Root cause: the expert was called with only a type description and the
+    full evidence list.  It had no information about (a) what arguments had
+    already been made, (b) what the requesting side needed answered, (c)
+    what round it was in, or (d) what the opposing counsel had argued.
 
-  - create_llm_client() unchanged except it now accepts the enriched config
-    produced by get_agent_slots().
+    Fix: create_expert_witness_prompt() is a new factory that takes the
+    current round number, the requesting side's latest argument, the
+    opposing side's latest argument, and the requesting side's specific
+    question.  It instructs the expert to DIRECTLY RESPOND to those
+    arguments rather than summarising the entire evidence set from scratch.
+
+  - Defense counsel persona system prompt made slightly more conservative
+    about attacking Wikipedia as a source, to avoid the "Wikipedia is
+    unreliable" loop that poisons every FEVEROUS claim.
+
+  - Domain notice injection unchanged from v2.
 """
 
 print("DEBUG: Loading personas.py from " + __file__)
@@ -56,7 +65,12 @@ _BASE_SLOTS = {
             "Maintain a professional legal defense tone. "
             "ALL discovery requests and arguments must be grounded in the specific "
             "domain of the claim — do NOT introduce unrelated topics such as medical "
-            "records, injuries, or clinical data unless the claim itself is about medicine."
+            "records, injuries, or clinical data unless the claim itself is about medicine.\n\n"
+            "IMPORTANT: For encyclopaedic fact-checking claims (sports, biography, "
+            "taxonomy, history, geography), Wikipedia articles are the accepted "
+            "primary reference. Do NOT argue that Wikipedia is inherently unreliable "
+            "as a blanket defence strategy. Instead, focus on whether the specific "
+            "cited passages actually support or contradict the specific claim."
         )
     },
     "judge": {
@@ -80,12 +94,18 @@ _BASE_SLOTS = {
         "role": "Expert Witness",
         "expertise": ["domain expert"],
         "system_prompt": (
-            "You are a domain expert witness. Provide technical analysis based on "
-            "your expertise relevant to the claim being adjudicated."
+            "You are a domain expert witness called to testify in a fact-checking "
+            "proceeding. Provide specific, targeted technical analysis based on the "
+            "evidence and the specific questions put to you. "
+            "Do NOT give a generic summary of all evidence — respond directly to the "
+            "specific question or issue raised by the calling counsel. "
+            "Each time you testify, focus on the argument or point that has NOT yet "
+            "been addressed, adding new analytical value rather than repeating what "
+            "counsels have already argued."
         ),
         "llm_provider": "openrouter",
         "llm_model": "nousresearch/hermes-3-llama-3.1-405b",
-        "temperature": 0.5
+        "temperature": 0.6   # Slightly higher to reduce repetition
     },
     "critic": {
         "name": "Critic Agent",
@@ -103,21 +123,90 @@ _BASE_SLOTS = {
 }
 
 # ─────────────────────────────────────────────────────────────────────
+# Expert witness prompt factory  (NEW in v3)
+# ─────────────────────────────────────────────────────────────────────
+
+def create_expert_witness_prompt(
+    expert_type: str,
+    claim: str,
+    evidence_list: list,
+    round_number: int,
+    requesting_side: str,          # "proponent" or "opponent"
+    requesting_side_argument: str, # the calling counsel's latest argument
+    opposing_argument: str,        # what the other side argued in this round
+    specific_question: str = "",   # optional targeted question from the counsel
+) -> str:
+    """
+    Build a context-rich expert witness prompt that forces the expert to:
+      1. Respond to the SPECIFIC DISPUTE in this round, not summarise everything.
+      2. Directly address the strongest point made by the opposing counsel.
+      3. Add new analytical value not already present in the counsel arguments.
+
+    This prevents the boilerplate "based on the preponderance of evidence…"
+    recycling that was observed when experts received only the evidence list
+    with no argument context.
+    """
+    counsel_label = "Plaintiff Counsel" if requesting_side == "proponent" else "Defense Counsel"
+    opposing_label = "Defense Counsel" if requesting_side == "proponent" else "Plaintiff Counsel"
+
+    # Format evidence concisely
+    ev_lines = []
+    for i, ev in enumerate(evidence_list[:8], 1):
+        if hasattr(ev, 'source_id'):
+            sid  = ev.source_id
+            text = ev.text[:200]
+        elif isinstance(ev, dict):
+            sid  = ev.get('source_id', ev.get('id', f'ev_{i}'))
+            text = ev.get('text', '')[:200]
+        else:
+            sid, text = f"ev_{i}", str(ev)[:200]
+        ev_lines.append(f"  [{i}] Source {sid}: {text}...")
+
+    evidence_block = "\n".join(ev_lines) if ev_lines else "  (No evidence admitted yet)"
+
+    specific_q_block = (
+        f"\nSPECIFIC QUESTION FROM {counsel_label.upper()}:\n{specific_question}\n"
+        if specific_question else ""
+    )
+
+    return f"""You are being called as an expert witness (type: {expert_type}) in Round {round_number} of a fact-checking proceeding.
+
+CLAIM UNDER ADJUDICATION:
+{claim}
+
+ADMITTED EVIDENCE (summary):
+{evidence_block}
+
+{counsel_label.upper()}'S ARGUMENT THIS ROUND (the side calling you):
+{requesting_side_argument[:600] if requesting_side_argument else "(Not yet available)"}
+
+{opposing_label.upper()}'S ARGUMENT THIS ROUND (what you are being asked to respond to):
+{opposing_argument[:600] if opposing_argument else "(Not yet available)"}
+{specific_q_block}
+YOUR TASK AS EXPERT WITNESS:
+1. Identify the single most important factual or technical dispute between the two sides.
+2. Provide your expert analysis of THAT SPECIFIC DISPUTE based on the evidence.
+3. Do NOT simply restate what the counsels have already argued.
+4. Do NOT give a broad overview of all evidence — be targeted and specific.
+5. If the evidence is sufficient to resolve the dispute, say so clearly and explain why.
+6. If the evidence is genuinely insufficient on a specific point, say exactly WHAT is missing.
+
+Address the Court directly. Be concise (3–5 paragraphs maximum)."""
+
+
+# ─────────────────────────────────────────────────────────────────────
 # Domain detection
 # ─────────────────────────────────────────────────────────────────────
 
 def _detect_domain(claim_text: str) -> str:
-    """
-    Infer a short domain label from the claim text for system-prompt injection.
-    Returns a plain-English phrase like "sports / college football history".
-    """
     cl = claim_text.lower()
 
     if any(w in cl for w in ["football", "basketball", "baseball", "soccer",
                                "hockey", "tennis", "rugby", "cricket",
                                "nfl", "nba", "mlb", "nhl", "ncaa", "fifa",
                                "olympic", "championship", "season", "game",
-                               "match", "score", "team", "player", "coach"]):
+                               "match", "score", "team", "player", "coach",
+                               "grand prix", "qualifying", "lap", "race"]):
         return "sports / athletics history"
 
     if any(w in cl for w in ["covid", "vaccine", "clinical trial", "drug",
@@ -130,6 +219,11 @@ def _detect_domain(claim_text: str) -> str:
                                "parliament", "prime minister", "vote", "policy",
                                "law", "government", "political"]):
         return "politics / government history"
+
+    if any(w in cl for w in ["kingdom", "order", "family", "genus", "species",
+                               "classification", "taxonomy", "native", "flora",
+                               "fauna", "plant", "animal", "organism"]):
+        return "biology / taxonomy / natural history"
 
     if any(w in cl for w in ["born", "died", "founded", "established",
                                "published", "invented", "discovered",
@@ -166,12 +260,6 @@ def get_agent_slots(claim_text: str = "") -> dict:
     """
     Return AGENT_SLOTS with system prompts enriched by a domain notice
     derived from claim_text.
-
-    Usage in mad_orchestrator.py:
-        from personas import get_agent_slots
-        AGENT_SLOTS = get_agent_slots(claim.text)
-
-    If claim_text is empty, returns base slots unchanged (safe fallback).
     """
     import copy
     slots = copy.deepcopy(_BASE_SLOTS)
@@ -184,8 +272,7 @@ def get_agent_slots(claim_text: str = "") -> dict:
     return slots
 
 
-# Backward-compatible alias — code that does `from personas import AGENT_SLOTS`
-# will get the base slots (no domain notice).  Prefer get_agent_slots(claim.text).
+# Backward-compatible alias
 AGENT_SLOTS = _BASE_SLOTS
 
 

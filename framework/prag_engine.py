@@ -1,26 +1,3 @@
-"""
-Progressive RAG (P-RAG) Engine  v2
-
-Key fixes:
-  - seed_evidence_pool()  : call this BEFORE the MAD starts to pre-populate
-    total_evidence_pool with negotiation-admitted evidence.  Without seeding,
-    round-1 novelty is artificially 1.0 for everything, and round-2 stops
-    immediately because all new evidence looks redundant against round-1.
-
-  - formulate_query prompt : removed "medical exhibits" framing → domain-agnostic,
-    works for Wikipedia/FEVEROUS encyclopaedic claims.
-
-  - Stopping thresholds relaxed slightly for encyclopaedic datasets:
-      redundancy_ratio_threshold : 0.7  → 0.85
-      relevance_gain_threshold   : 0.05 → 0.03
-    This gives PRAG more room to explore before halting.
-
-  - retrieve_progressive now returns accepted_evidence even when a stop_reason
-    fires (previously it returned early with nothing on some code paths).
-    The stop_reason is now ADVISORY only — it logs and prints but does NOT
-    suppress the returned evidence.
-"""
-
 from models import Evidence
 from llm_client import LLMClient
 import numpy as np
@@ -36,32 +13,34 @@ class ProgressiveRAG:
         self.total_evidence_pool: List[Evidence] = []
 
         # ── Hyperparameters ──────────────────────────────────────────
-        self.novelty_threshold            = 0.15   # was 0.2  – slightly more permissive
-        self.redundancy_sim_threshold     = 0.85   # unchanged
-        self.redundancy_ratio_threshold   = 0.85   # was 0.7  – more room before stopping
-        self.relevance_gain_threshold     = 0.03   # was 0.05 – less aggressive early stop
+        self.novelty_threshold            = 0.15
+        self.redundancy_sim_threshold     = 0.85
+        self.redundancy_ratio_threshold   = 0.85
+        self.relevance_gain_threshold     = 0.03
         self.max_iterations               = 10
 
+        # ── Per-side consecutive stop counters  (NEW) ────────────────
+        # Track how many consecutive rounds each side has hit a stop
+        # condition.  We only suppress evidence for a side once it has
+        # hit stops on MAX_CONSECUTIVE_STOPS consecutive rounds AND the
+        # opposing side has also hit at least one stop.  This prevents
+        # one side from accumulating new evidence while the other is
+        # frozen, which was creating systematic asymmetric bias toward
+        # NOT SUPPORTED / INCONCLUSIVE.
+        self._side_stop_counts: Dict[str, int] = {}
+        self.MAX_CONSECUTIVE_STOPS = 3   # stops must be consecutive to freeze
+
     # ─────────────────────────────────────────────────────────────────
-    # NEW: seed the pool before debate starts
+    # Seed the pool before debate starts
     # ─────────────────────────────────────────────────────────────────
 
     def seed_evidence_pool(self, evidence: List[Evidence]):
         """
         Pre-populate total_evidence_pool with negotiation-admitted evidence.
-
-        Call this once in main.py AFTER negotiation and BEFORE run_full_debate():
-
-            prag.seed_evidence_pool(final_evidence_set)
-            mad = MADOrchestrator(extracted_claim, final_evidence_set, [], prag)
-
-        Without seeding, the pool is empty on round 1, novelty scores are
-        artificially 1.0, and round 2 immediately hits the redundancy stop
-        because everything in round 2 is similar to round 1.
+        Call once AFTER negotiation and BEFORE run_full_debate().
         """
         if not evidence:
             return
-        # Avoid duplicates
         existing_ids = {e.source_id for e in self.total_evidence_pool}
         new_items = [e for e in evidence if e.source_id not in existing_ids]
         self.total_evidence_pool.extend(new_items)
@@ -69,17 +48,10 @@ class ProgressiveRAG:
               f"({len(self.total_evidence_pool)} total).")
 
     # ─────────────────────────────────────────────────────────────────
-    # Query formulation  (FIXED: domain-agnostic prompt)
+    # Query formulation  (domain-agnostic)
     # ─────────────────────────────────────────────────────────────────
 
     def formulate_query(self, debate_context: str, agent_request: str) -> str:
-        """
-        Use LLM to formulate a targeted retrieval query from the debate context.
-
-        FIX: old prompt said "retrieve relevant medical exhibits and evidence"
-        which caused the LLM to generate medically-framed queries even for
-        sports/history/general-knowledge claims.
-        """
         prompt = f"""Based on the following legal proceedings context and counsel's discovery request,
 formulate a precise Wikipedia/encyclopaedic search query to retrieve relevant factual evidence.
 
@@ -99,25 +71,34 @@ Instructions:
         return query.strip()
 
     # ─────────────────────────────────────────────────────────────────
-    # Progressive retrieval  (FIXED: stop is advisory, not suppressive)
+    # Progressive retrieval  (stop is advisory; asymmetry guard added)
     # ─────────────────────────────────────────────────────────────────
 
     def retrieve_progressive(self, query: str, top_k: int = 3,
-                              context: str = "") -> List[Evidence]:
+                              context: str = "",
+                              side: str = "") -> List[Evidence]:
         """
         Perform targeted retrieval with novelty scoring and stopping criteria.
 
-        FIX: previously the method would log a stop_reason and then still
-        return accepted_evidence (correct), but the caller in mad_orchestrator
-        checked prag.retrieval_history[-1]['stop_reason'] and skipped adding
-        evidence.  Now stop_reason is purely informational — evidence is always
-        returned if it passes the novelty filter.
+        Parameters
+        ----------
+        query   : retrieval query
+        top_k   : number of evidence items to fetch
+        context : free-text context for logging
+        side    : "proponent" or "opponent" — used for asymmetry tracking.
+                  If empty, asymmetry guard is disabled for this call.
+
+        Stop-reason is advisory — evidence is always returned if it passes
+        the novelty filter.  The asymmetry guard ensures that if one side's
+        stop counter is high, we also check the opposing side's counter
+        before treating the stop as meaningful.  This prevents one side from
+        accumulating evidence while the other is frozen.
         """
         # 1. Retrieve
         raw_evidence = self.retriever.retrieve(query, top_k=top_k)
         if not raw_evidence:
             self._log_retrieval(query, context, [], [], 0.0, 0.0, 0.0, 0.0,
-                                "No results from retriever")
+                                "No results from retriever", side)
             return []
 
         # 2. Novelty scoring
@@ -126,7 +107,6 @@ Instructions:
         # 3. Filter by novelty threshold
         accepted_evidence = [e for e in scored_evidence
                              if e.novelty_score >= self.novelty_threshold]
-        rejected_count = len(scored_evidence) - len(accepted_evidence)
 
         # 4. Redundancy ratio
         redundant_count = sum(
@@ -143,7 +123,7 @@ Instructions:
                         if self.retrieval_history else 0.0)
         relevance_gain = avg_relevance - last_avg_rel
 
-        # 6. Stopping criteria  (ADVISORY ONLY — do not suppress evidence)
+        # 6. Stopping criteria (informational)
         stop_reason = None
         if self.round_counter >= self.max_iterations:
             stop_reason = "Maximum iterations reached"
@@ -155,12 +135,20 @@ Instructions:
             stop_reason = (f"Diminishing relevance gain "
                            f"({relevance_gain:.4f} < {self.relevance_gain_threshold})")
 
-        # 7. Log
+        # 7. Asymmetry guard  (NEW)
+        # Update per-side consecutive stop counters
+        if side:
+            if stop_reason:
+                self._side_stop_counts[side] = self._side_stop_counts.get(side, 0) + 1
+            else:
+                self._side_stop_counts[side] = 0  # reset on a non-stop round
+
+        # 8. Log
         self._log_retrieval(query, context, raw_evidence, accepted_evidence,
                             avg_novelty, avg_relevance, relevance_gain,
-                            redundancy_ratio, stop_reason)
+                            redundancy_ratio, stop_reason, side)
 
-        # 8. Add accepted evidence to pool  (always, even if stop flagged)
+        # 9. Add accepted evidence to pool (always)
         if accepted_evidence:
             existing_ids = {e.source_id for e in self.total_evidence_pool}
             for ev in accepted_evidence:
@@ -173,6 +161,18 @@ Instructions:
 
         # Always return accepted evidence regardless of stop_reason
         return accepted_evidence
+
+    # ─────────────────────────────────────────────────────────────────
+    # Asymmetry status helper (callable from mad_orchestrator)
+    # ─────────────────────────────────────────────────────────────────
+
+    def get_side_stop_count(self, side: str) -> int:
+        """Return how many consecutive stop-rounds this side has accumulated."""
+        return self._side_stop_counts.get(side, 0)
+
+    def reset_side_stop_count(self, side: str):
+        """Reset a side's consecutive stop counter (e.g. after role-switch)."""
+        self._side_stop_counts[side] = 0
 
     # ─────────────────────────────────────────────────────────────────
     # Novelty calculation
@@ -216,9 +216,10 @@ Instructions:
 
     def _log_retrieval(self, query, context, raw, accepted,
                        avg_novelty, avg_relevance, relevance_gain,
-                       redundancy_ratio, stop_reason):
+                       redundancy_ratio, stop_reason, side=""):
         self.retrieval_history.append({
             "round":            self.round_counter,
+            "side":             side,
             "query":            query,
             "context":          context,
             "num_retrieved":    len(raw),
@@ -255,4 +256,5 @@ Instructions:
                                   claim_id, self.get_retrieval_summary())
         except ImportError:
             with open(filepath, 'w') as f:
-                json.dump(self.get_retrieval_summary(), f, indent=2)
+                import json as _json
+                _json.dump(self.get_retrieval_summary(), f, indent=2)

@@ -1,28 +1,3 @@
-"""
-Judicial Panel Evaluation System  v2
-
-Key fixes:
-  1. "Scientific Reliability" renamed to "Source Reliability" with domain-
-     agnostic scoring criteria.  The old metric made sense for Check-COVID
-     (is this peer-reviewed?) but gave nonsensical results for FEVEROUS:
-     - Qwen gave 10/10 because Wikipedia football pages aren't scientifically
-       unreliable — they're just not scientific at all.
-     - DeepSeek gave 3/10 because Wikipedia isn't peer-reviewed.
-     Both were technically correct but measuring different things.
-
-     New "Source Reliability" rubric:
-       7-10: Named, verifiable sources with specific facts (Wikipedia season
-             pages, official records, contemporary news)
-       4-6 : General reference sources, secondary summaries
-       0-3 : Unsourced claims, anonymous content, speculative assertions
-
-  2. Judge system prompt and evaluation prompt both updated to say
-     "fact-checking" instead of "medical fact-checking" so the domain
-     instruction doesn't conflict with non-medical claims.
-
-  3. The prompt's STAGE 4 wording updated to match the new metric name.
-"""
-
 from typing import List, Dict
 from openrouter_client import OpenRouterLLMClient
 import os
@@ -40,7 +15,21 @@ class JudicialPanel:
         "evaluation of the case, focusing on evidence admissibility, logical "
         "coherence of advocacy, and reliability of the sources and expert "
         "testimonies — regardless of whether the claim concerns medicine, "
-        "sports, history, politics, or any other domain."
+        "sports, history, politics, or any other domain.\n\n"
+        "CRITICAL VERDICT RULE — INCONCLUSIVE USAGE:\n"
+        "INCONCLUSIVE is only permitted when evidence is genuinely absent from "
+        "the record OR when the evidence is fundamentally contradictory with no "
+        "clear preponderance for either side.\n"
+        "If you can identify which side has presented the stronger case from "
+        "the evidence before you, you MUST return SUPPORTED or NOT SUPPORTED "
+        "even if you are not perfectly certain. Reserve INCONCLUSIVE for cases "
+        "where it is truly impossible to determine which argument is stronger.\n\n"
+        "WIKIPEDIA SOURCE RULE:\n"
+        "For encyclopaedic fact-checking proceedings (sports records, biographical "
+        "facts, taxonomic classification, historical events, geographical facts), "
+        "Wikipedia articles ARE the primary authoritative source. Do NOT penalise "
+        "evidence solely because it originates from Wikipedia. Evaluate whether the "
+        "Wikipedia article is specific, named, and provides relevant factual content."
     )
 
     def __init__(self):
@@ -194,28 +183,38 @@ Score: Argument Validity (0–10)
   0–3 : Multiple fallacies or unsupported inferences
 
 STAGE 4 – SOURCE RELIABILITY
-(NOTE: This replaces "Scientific Reliability" from previous versions.
- It applies to ALL claim domains, not just medical/scientific claims.)
+(Applies to ALL domains, not just medical/scientific claims.)
 
 Score: Source Reliability (0–10)
-  7–10: Named, verifiable sources with specific facts (e.g., official
-        season records, contemporary news articles, university archives,
-        peer-reviewed papers, government records)
-  4–6 : General reference sources such as Wikipedia overview articles,
-        secondary summaries, or sources lacking specific details
-  0–3 : Unsourced assertions, anonymous content, clearly speculative
-        claims, or evidence from unreliable platforms
+  7–10: Named, verifiable sources with specific facts (official records,
+        contemporary news, university archives, peer-reviewed papers,
+        government records, specific named Wikipedia articles with facts)
+  4–6 : General reference sources, secondary summaries, or sources lacking
+        specific details
+  0–3 : Unsourced assertions, anonymous content, or clearly speculative claims
+
+IMPORTANT SOURCE NOTE: For encyclopaedic fact-checking (sports records,
+biographical facts, taxonomy, historical events), Wikipedia IS the primary
+authoritative source. Do NOT score Wikipedia evidence as low-reliability
+solely because it is Wikipedia. Score based on whether the cited Wikipedia
+article is specific, named, and provides relevant factual content.
 
 STAGE 5 – DISCOVERY RIGOR & TRANSPARENCY
 Analyse P-RAG metrics:
-- Query evolution: Did counsels refine their requests effectively?
-- Evidence novelty: Did retrieval reach diminishing returns appropriately?
-- Court refinement impact: Did judicial query refinement improve evidence quality?
+- Query evolution and evidence novelty over rounds
+- Court query refinement impact on evidence quality
 
 STAGE 6 – JUDICIAL VERDICT
-SUPPORTED    : Claim is well-supported by evidence and arguments
-NOT SUPPORTED: Claim is not adequately supported or is refuted
-INCONCLUSIVE : Insufficient evidence or arguments are too balanced
+
+MANDATORY DECISION RULE:
+  SUPPORTED     : Claim is supported by the available evidence and arguments
+  NOT SUPPORTED : Claim is not adequately supported or is refuted
+  INCONCLUSIVE  : Use ONLY if evidence is genuinely absent OR if evidence is
+                  fundamentally contradictory with no clear preponderance.
+                  If one side has clearly presented stronger evidence or
+                  arguments, you MUST choose SUPPORTED or NOT SUPPORTED.
+                  Do NOT use INCONCLUSIVE as a hedge when the evidence
+                  points in one direction, even imperfectly.
 
 Respond ONLY in valid JSON — no markdown, no preamble:
 {{
@@ -224,7 +223,7 @@ Respond ONLY in valid JSON — no markdown, no preamble:
   "argument_validity": <integer 0-10>,
   "source_reliability": <integer 0-10>,
   "verdict": "SUPPORTED" or "NOT SUPPORTED" or "INCONCLUSIVE",
-  "reasoning": "2-3 sentence justification citing specific evidence where possible"
+  "reasoning": "2-3 sentence justification citing specific evidence and which side had the stronger case"
 }}"""
 
         response = judge['llm'].generate(prompt)
@@ -235,7 +234,7 @@ Respond ONLY in valid JSON — no markdown, no preamble:
                 raise ValueError("No JSON in response")
             vd = json.loads(json_match.group())
 
-            # Handle old "scientific_reliability" key for backward compat
+            # Backward compat: old key name
             if "scientific_reliability" in vd and "source_reliability" not in vd:
                 vd["source_reliability"] = vd.pop("scientific_reliability")
 

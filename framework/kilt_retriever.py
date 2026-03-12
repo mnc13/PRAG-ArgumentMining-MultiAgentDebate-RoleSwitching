@@ -14,13 +14,16 @@ HEADERS  = {"User-Agent": "PRAG_Argument_Debate (research_script)"}
 WIKI_API = "https://en.wikipedia.org/w/api.php"
 
 # Section titles that are almost always relevant for FEVEROUS fact-checking
-# These are forced into the candidate pool regardless of semantic score
 PRIORITY_SECTION_KEYWORDS = {
     "schedule", "results", "season results", "game results",
     "season", "record", "standings", "roster", "history",
     "career", "biography", "early life", "personal life",
     "discography", "filmography", "political positions",
     "elections", "awards", "honors", "statistics", "stats",
+    # FEVEROUS-specific additions
+    "classification", "taxonomy", "description", "founding",
+    "formation", "establishment", "overview", "background",
+    "profile", "members", "composition",
 }
 
 
@@ -28,32 +31,36 @@ class KILTWikipediaRetriever:
     """
     Wikipedia retriever for FEVEROUS / encyclopaedic fact-checking.
 
-    v4 key changes
-    ──────────────
-    1. HYBRID SCORING  :  final_score = α * semantic_score + (1-α) * keyword_score
-       keyword_score = fraction of query tokens found in the chunk text.
-       This ensures a chunk mentioning "September 19" + "Wake Forest" beats
-       a generic intro paragraph even when semantic similarity is lower.
+    v5 key changes over v4
+    ──────────────────────
+    1. ENTITY-FIRST DISAMBIGUATION
+       Before semantic search, attempt exact Wikipedia title lookups for all
+       multi-word proper noun phrases from the query.  Their passages get
+       EXACT_TITLE_BONUS added to hybrid scores.  Prevents "Unicorns"
+       (mythology) from beating "Melbourne HSOB" (the actual club).
 
-    2. PRIORITY SECTION PINNING  :  chunks from schedule/results/history
-       sections are always included in the top-k candidates alongside the
-       semantic top-k, so the scorer always sees the relevant section.
+    2. EXACT-TITLE BONUS (+0.15)
+       Passages from pages whose title directly matches a query entity are
+       boosted before ranking, surfacing the correct article even when its
+       100-word chunks score lower on pure semantic similarity.
 
-    3. SMART DEDUP  :  same page_id chunks are capped so one page can't
-       crowd out all top-k slots with near-identical intro paragraphs.
+    3. MULTI-PHRASE EXACT SEARCH
+       Multi-word entities are used for quoted full-text MediaWiki searches,
+       catching obscure articles that prefix-search misses.
 
-    4. Everything from v3 retained:
-       - Direct page probing (year + entity title synthesis)
-       - Prefix search
-       - Condensed query search
-       - Section-level chunking (correct list iteration)
+    4. EXPANDED PRIORITY SECTION KEYWORDS
+       Added: classification, taxonomy, description, founding, formation,
+       establishment, overview, background — common FEVEROUS infobox sections.
+
+    Everything from v4 retained (hybrid scoring, diversity cap, etc.).
     """
 
-    ALPHA = 0.6   # weight for semantic score; (1-ALPHA) for keyword score
+    ALPHA             = 0.6    # weight for semantic score
+    EXACT_TITLE_BONUS = 0.15   # bonus for on-topic pages
 
     def __init__(self, model_name: str = "sentence-transformers/all-MiniLM-L6-v2"):
         self.model = SentenceTransformer(model_name)
-        logger.info("Initializing KILT Wikipedia Retriever (v4)...")
+        logger.info("Initializing KILT Wikipedia Retriever (v5)...")
         self.wiki = wikipediaapi.Wikipedia(
             user_agent=HEADERS["User-Agent"],
             language="en",
@@ -103,10 +110,6 @@ class KILTWikipediaRetriever:
     # ─────────────────────────────────────────────────────────────────
 
     def _keyword_score(self, chunk_text: str, query_tokens: List[str]) -> float:
-        """
-        Fraction of meaningful query tokens present in the chunk (case-insensitive).
-        Tokens shorter than 3 chars or pure stop-words are skipped.
-        """
         if not query_tokens:
             return 0.0
         chunk_lower = chunk_text.lower()
@@ -114,10 +117,6 @@ class KILTWikipediaRetriever:
         return hits / len(query_tokens)
 
     def _tokenise_query(self, query: str) -> List[str]:
-        """
-        Break query into meaningful tokens for keyword matching.
-        Keeps years, proper-noun fragments, and content words ≥ 3 chars.
-        """
         stop = {
             "the","a","an","is","are","was","were","in","on","at","of","for",
             "with","by","to","that","this","it","its","does","did","do","have",
@@ -143,6 +142,26 @@ class KILTWikipediaRetriever:
                 seen.add(t)
                 out.append(t)
         return out
+
+    def _extract_multi_word_entities(self, text: str) -> List[str]:
+        """
+        Extract multi-word proper noun phrases (2+ words) for exact-phrase
+        search — the strongest disambiguation signals.
+
+        Examples:
+          "Melbourne HSOB"         → sports club article
+          "Abdul Bubakar"          → person article
+          "Imamate of Futa Jallon" → political entity article
+          "Michael Schumacher"     → person article
+        """
+        pattern = (r'[A-Z][a-zA-Z]+'
+                   r'(?:\s(?:of|the|in|and|for|de|la|le|al|von|van)\s'
+                   r'[A-Z][a-zA-Z]+|\s[A-Z][a-zA-Z]+)+')
+        found = re.findall(pattern, text)
+        # a.k.a. / parenthesised nicknames
+        aka = re.findall(
+            r'a\.?k\.?a\.?\s+([A-Z][a-zA-Z]+(?:\s[A-Z][a-zA-Z]+)*)', text)
+        return list(dict.fromkeys(found + aka))  # preserve order, dedup
 
     def _build_direct_probe_titles(self, query: str) -> List[str]:
         years  = self._extract_years(query)
@@ -213,21 +232,40 @@ class KILTWikipediaRetriever:
         words = [w for w in query.split() if w.lower() not in stop]
         return " ".join(words[:8])
 
-    def _get_all_candidate_titles(self, query: str) -> List[str]:
-        seen: set       = set()
-        all_titles: List[str] = []
+    def _get_all_candidate_titles(self, query: str) -> Tuple[List[str], List[str]]:
+        """
+        Returns (all_titles, priority_titles).
+        priority_titles receive EXACT_TITLE_BONUS on their passage scores.
+        """
+        seen: set                  = set()
+        all_titles: List[str]      = []
+        priority_titles: List[str] = []
 
-        def add(t: str):
+        def add(t: str, is_priority: bool = False):
             t = t.strip()
             if t and t not in seen:
                 seen.add(t)
                 all_titles.append(t)
+                if is_priority:
+                    priority_titles.append(t)
 
-        for t in self._build_direct_probe_titles(query):
-            add(t)
+        # ── 1. Entity-first: multi-word phrases as highest-priority probes ──
+        multi_entities = self._extract_multi_word_entities(query)
+        for phrase in multi_entities[:8]:
+            add(phrase, is_priority=True)
+            for t in self._search_api(f'"{phrase}"', srlimit=5):
+                add(t, is_priority=True)
+            for t in self._prefix_search(phrase, limit=3):
+                add(t, is_priority=True)
 
-        years = self._extract_years(query)
+        # ── 2. Standard direct probe titles ──────────────────────────────
         nouns = self._extract_proper_nouns(query)
+        for t in self._build_direct_probe_titles(query):
+            is_pri = any(t.startswith(n) or t.endswith(n) for n in nouns[:3])
+            add(t, is_priority=is_pri)
+
+        # ── 3. Year + noun prefix searches ───────────────────────────────
+        years = self._extract_years(query)
         for year in years:
             if nouns:
                 for t in self._prefix_search(f"{year} {nouns[0]}", limit=5):
@@ -236,14 +274,14 @@ class KILTWikipediaRetriever:
                     for t in self._prefix_search(f"{year} {nouns[1]}", limit=3):
                         add(t)
 
+        # ── 4. Condensed + full query fallback searches ───────────────────
         condensed = self._condense_query(query)
         for t in self._search_api(condensed, srlimit=10):
             add(t)
-
         for t in self._search_api(query, srlimit=5):
             add(t)
 
-        return all_titles
+        return all_titles, priority_titles
 
     # ─────────────────────────────────────────────────────────────────
     # Page fetching
@@ -262,7 +300,6 @@ class KILTWikipediaRetriever:
                 return []
             page_id = page.pageid
 
-            # Full-page text (not priority — let scoring decide)
             if page.text:
                 for chunk in self._chunk_text(page.text, page_id, title,
                                                is_priority=False):
@@ -271,7 +308,6 @@ class KILTWikipediaRetriever:
                     if current_count + len(passages) >= max_passages:
                         return passages
 
-            # Section-level chunks — mark priority sections
             sections = getattr(page, "sections", []) or []
             for section in sections:
                 if current_count + len(passages) >= max_passages:
@@ -294,13 +330,15 @@ class KILTWikipediaRetriever:
         return passages
 
     # ─────────────────────────────────────────────────────────────────
-    # Fetch & Score  (hybrid)
+    # Fetch & Score  (hybrid + entity-first bonus)
     # ─────────────────────────────────────────────────────────────────
 
     def _fetch_and_score(self, query: str, top_k: int) -> List[Evidence]:
-        candidate_titles = self._get_all_candidate_titles(query)
+        candidate_titles, priority_titles = self._get_all_candidate_titles(query)
         if not candidate_titles:
             return []
+
+        priority_set = {t.lower() for t in priority_titles}
 
         all_passages: List[dict] = []
         MAX_PASSAGES = 1000
@@ -308,9 +346,12 @@ class KILTWikipediaRetriever:
         for title in candidate_titles:
             if len(all_passages) >= MAX_PASSAGES:
                 break
-            all_passages.extend(
-                self._fetch_page_passages(title, MAX_PASSAGES, len(all_passages))
-            )
+            new_passages = self._fetch_page_passages(
+                title, MAX_PASSAGES, len(all_passages))
+            is_pri_page = title.lower() in priority_set
+            for p in new_passages:
+                p["from_priority_page"] = is_pri_page
+            all_passages.extend(new_passages)
 
         if not all_passages:
             logger.warning(f"No passages for: '{query}'")
@@ -326,7 +367,7 @@ class KILTWikipediaRetriever:
             batch_size=64,
             show_progress_bar=False,
         )
-        sem_scores = np.dot(passage_embs, query_emb)           # shape (N,)
+        sem_scores = np.dot(passage_embs, query_emb)
 
         # ── Keyword scores ───────────────────────────────────────────
         query_tokens = self._tokenise_query(query)
@@ -338,16 +379,20 @@ class KILTWikipediaRetriever:
         # ── Hybrid scores ────────────────────────────────────────────
         hybrid = self.ALPHA * sem_scores + (1 - self.ALPHA) * kw_scores
 
+        # ── Entity-first bonus ───────────────────────────────────────
+        for i, p in enumerate(all_passages):
+            if p.get("from_priority_page"):
+                hybrid[i] = min(1.0, float(hybrid[i]) + self.EXACT_TITLE_BONUS)
+
         # ── Select top-k with per-page diversity cap ─────────────────
-        # Sort by hybrid score descending
         sorted_indices = np.argsort(hybrid)[::-1]
 
-        selected: List[int]    = []
+        selected: List[int]         = []
         page_counts: Dict[str, int] = {}
-        MAX_PER_PAGE = max(2, top_k // 2)   # e.g. top_k=5 → max 2-3 per page
+        MAX_PER_PAGE = max(2, top_k // 2)
 
-        # First pass: priority sections always get a slot
-        priority_slots = min(top_k // 2, 3)   # up to half of top_k for priority
+        # Priority sections first
+        priority_slots = min(top_k // 2, 3)
         for idx in sorted_indices:
             if len([s for s in selected
                     if all_passages[s].get("is_priority")]) >= priority_slots:
@@ -355,7 +400,7 @@ class KILTWikipediaRetriever:
             if all_passages[idx].get("is_priority"):
                 selected.append(idx)
 
-        # Second pass: fill remaining slots with best hybrid scores (diversity)
+        # Fill by best hybrid score with diversity
         for idx in sorted_indices:
             if len(selected) >= top_k:
                 break
@@ -367,7 +412,7 @@ class KILTWikipediaRetriever:
             selected.append(idx)
             page_counts[page_root] = page_counts.get(page_root, 0) + 1
 
-        # If still short (e.g. all pages hit cap), fill from remaining
+        # Final fill ignoring diversity cap
         for idx in sorted_indices:
             if len(selected) >= top_k:
                 break
