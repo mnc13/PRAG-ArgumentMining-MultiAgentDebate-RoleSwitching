@@ -355,6 +355,30 @@ def compute_best_metrics(history: list, policy: str, threshold: float = 0.5) -> 
     return compute_run_metrics(oracle_history, policy, threshold)
 
 
+def save_results(run_id: str, metrics: dict, eff: dict, ks: dict, summary: str, dry_run: bool, args):
+    if dry_run:
+        return
+        
+    with open(REPORT_FILE, "a", encoding="utf-8") as f:
+        f.write(summary + "\n")
+        
+    jsonl_rec = {
+        "run_id": run_id,
+        "timestamp": time.time(),
+        "source": "rescan",
+        "metrics": metrics,
+        "efficiency": eff,
+        "ks_stability": ks,
+        "config": {
+            "policy": args.policy, 
+            "threshold": args.threshold,
+            "mode": args.mode
+        },
+    }
+    with open(RUNS_FILE, "a", encoding="utf-8") as f:
+        f.write(json.dumps(jsonl_rec) + "\n")
+
+
 def format_markdown_summary(run_id: str, metrics: dict, eff: dict, ks: dict,
                              policy: str, source: str = "RESCAN") -> str:
     lines = [f"\n=== RUN SUMMARY ({source}) ==="]
@@ -449,24 +473,25 @@ def main():
     print("\n=== RESCAN & FIX METRICS ===")
     print(f"Policy: {args.policy} | Mode: {args.mode} | DryRun: {args.dry_run}\n")
 
+    if args.force_rewrite and not args.dry_run:
+        print(f"[INFO] --force-rewrite requested. Truncating {RUNS_FILE} and {REPORT_FILE}")
+        open(RUNS_FILE, "w", encoding="utf-8").close()
+        open(REPORT_FILE, "w", encoding="utf-8").close()
+
     # 1. Load all data
     succeeded_pairs = load_processed_successes()   # set of (claim_id, run_index) tuples
     all_claims      = load_all_claims()             # list of claim records
-    existing_runs   = load_existing_run_ids()       # already-completed run IDs
-
+    
     # Build a flat set of succeeded claim_ids for quick fallback lookup
     succeeded_claim_ids = {cid for cid, _ in succeeded_pairs}
 
     # 2. Group claims by run_id and determine run_index per run_id.
-    runs_map: dict[str, list] = {}
     claim_id_run_counter: dict[str, int] = {}   # claim_id -> how many runs seen so far
     all_confirmed_history = []
     index_groups = defaultdict(list)
 
     for rec in all_claims:
-        rid = rec.get("run_id", "unknown")
         cid = rec.get("claim_id", "")
-        
         # Enrich from log
         rec = enrich_record_from_log(rec)
         
@@ -480,15 +505,16 @@ def main():
         rec["_inferred_run_index"] = ri
         
         # Collect confirmed history
+        is_confirmed = False
         if succeeded_pairs:
             if (cid, ri) in succeeded_pairs:
-                all_confirmed_history.append(rec)
-                index_groups[ri].append(rec)
+                is_confirmed = True
         elif cid in succeeded_claim_ids:
+            is_confirmed = True
+            
+        if is_confirmed:
             all_confirmed_history.append(rec)
             index_groups[ri].append(rec)
-            
-        runs_map.setdefault(rid, []).append(rec)
 
     # 3. Report Based on Mode
     if args.mode in ("all", "weighted"):
@@ -498,6 +524,7 @@ def main():
         m, e, k = compute_run_metrics(all_confirmed_history, args.policy, args.threshold)
         summary = format_markdown_summary("GRAND-TOTAL-WEIGHTED", m, e, k, args.policy, source="TOTAL")
         print(summary)
+        save_results("GRAND-TOTAL-WEIGHTED", m, e, k, summary, args.dry_run, args)
 
     if args.mode in ("all", "per-run"):
         print("\n" + "="*40)
@@ -507,6 +534,7 @@ def main():
             m, e, k = compute_run_metrics(index_groups[ri], args.policy, args.threshold)
             summary = format_markdown_summary(f"RUN-INDEX-{ri}", m, e, k, args.policy, source="PER-RUN")
             print(summary)
+            save_results(f"RUN-INDEX-{ri}", m, e, k, summary, args.dry_run, args)
 
     if args.mode in ("all", "majority"):
         print("\n" + "="*40)
@@ -515,6 +543,7 @@ def main():
         m, e, k = compute_majority_metrics(all_confirmed_history, args.policy, args.threshold)
         summary = format_markdown_summary("MAJORITY-VOTE-CONSENSUS", m, e, k, args.policy, source="MAJORITY")
         print(summary)
+        save_results("MAJORITY-VOTE-CONSENSUS", m, e, k, summary, args.dry_run, args)
 
     if args.mode in ("all", "best"):
         print("\n" + "="*40)
@@ -523,6 +552,7 @@ def main():
         m, e, k = compute_best_metrics(all_confirmed_history, args.policy, args.threshold)
         summary = format_markdown_summary("BEST-OF-3-ORACLE", m, e, k, args.policy, source="BEST")
         print(summary)
+        save_results("BEST-OF-3-ORACLE", m, e, k, summary, args.dry_run, args)
 
     print("=== DONE ===\n")
 
