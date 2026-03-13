@@ -22,6 +22,16 @@ import sys
 import os
 import json
 import argparse
+
+def safe_print(msg):
+    """Helper to print messages while avoiding UnicodeEncodeError on Windows terminal (CP1252)"""
+    try:
+        print(msg)
+    except UnicodeEncodeError:
+        # Fallback for Windows CP1252: replace non-ASCII characters (like Kappa) with '?'
+        print(msg.encode('ascii', errors='replace').decode('ascii'))
+
+# --- CONFIGURATION & PATHS ---
 import time
 import re
 import glob
@@ -567,7 +577,7 @@ def main():
             e["threshold"] = args.threshold
             header = f"EXPERIMENT-WIDE-RUN-INDEX-{idx}"
             summary = format_markdown_summary(header, m, e, k, args.policy, source="AGGREGATE-INDEX")
-            print(summary)
+            safe_print(summary)
             if not args.dry_run:
                 with open(REPORT_FILE, "a", encoding="utf-8") as f:
                     f.write(summary + "\n")
@@ -578,7 +588,7 @@ def main():
         header = "GRAND-TOTAL-EXPERIMENT-AGGREGATE"
         summary = format_markdown_summary(header, global_m, global_e, global_k, args.policy, source="GRAND-TOTAL")
         
-        print(summary)
+        safe_print(summary)
         
         if not args.dry_run:
             # We also record the grand total in the JSONL for tracking

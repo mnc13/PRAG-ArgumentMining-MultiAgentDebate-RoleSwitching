@@ -131,6 +131,11 @@ python aggregate_ablation_results.py --ablation ablation4_no_prag
 python aggregate_ablation_results.py --ablation ablation5_fixed_rounds
 
 
+python aggregate_ablation_results.py --ablation ablation1_standard_mad --policy T --threshold 0.5
+python aggregate_ablation_results.py --ablation ablation2_no_role_switch --policy A
+python aggregate_ablation_results.py --ablation ablation3_single_judge --policy B
+python aggregate_ablation_results.py --ablation ablation4_no_prag --policy C
+
 # RECALCULATION & AGGREGATION (ALL ABLATIONS)
 
 ## 1. Fast Aggregation (Rescans claims_added.jsonl and overwrites final_report.md)
@@ -149,13 +154,14 @@ python aggregate_ablation_results.py --ablation ablation6
 Use these to rebuild the full run history and cross-reference with logs (e.g., to fix Kappa or token tracking).
 
 ```powershell
+
 python rescan_and_fix_metrics.py --ablation ablation1_standard_mad --force-rewrite
 python rescan_and_fix_metrics.py --ablation ablation2_no_role_switch --force-rewrite
 python rescan_and_fix_metrics.py --ablation ablation3_single_judge --force-rewrite
 python rescan_and_fix_metrics.py --ablation ablation4_no_prag --force-rewrite
 python rescan_and_fix_metrics.py --ablation ablation5_fixed_rounds --force-rewrite
 python rescan_and_fix_metrics.py --ablation ablation6 --force-rewrite
-```
+
 
 ## 3. Using Flags (Works on both scripts)
 - **Dry Run**: See results without writing any files.
@@ -164,3 +170,9 @@ python rescan_and_fix_metrics.py --ablation ablation6 --force-rewrite
   `python aggregate_ablation_results.py --ablation ablation1 --policy T --threshold 0.7`
 - **Force Rewrite**: Ensure every report is freshly generated.
   `python rescan_and_fix_metrics.py --ablation ablation1 --force-rewrite`
+
+
+
+=========================================================================================
+python rescan_all.py
+=========================================================================================
