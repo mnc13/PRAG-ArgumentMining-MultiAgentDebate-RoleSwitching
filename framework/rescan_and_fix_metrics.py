@@ -26,6 +26,7 @@ import time
 import re
 import glob
 import numpy as np
+from collections import defaultdict, Counter
 
 # ---------------------------------------------------------------------------
 # Paths (same layout as logging_extension.py)
@@ -298,6 +299,62 @@ def compute_run_metrics(history: list, policy: str, threshold: float = 0.5) -> t
 
 
 
+
+def compute_majority_metrics(history: list, policy: str, threshold: float = 0.5) -> tuple:
+    """
+    Group by claim_id, determine majority pred_label, then compute metrics.
+    """
+    by_claim = defaultdict(list)
+    for h in history:
+        by_claim[h.get("claim_id")].append(h)
+    
+    consensus_history = []
+    for cid, runs in by_claim.items():
+        if not runs: continue
+        preds = [map_policy(r.get("pred_label", "INCONCLUSIVE"), r.get("confidence", 0.5), policy, threshold) for r in runs]
+        # Most common label
+        counts = Counter(preds)
+        maj_label = counts.most_common(1)[0][0]
+        
+        # Take metadata from the first run, but use majority label
+        consensus_rec = dict(runs[0])
+        consensus_rec["pred_label"] = maj_label
+        consensus_rec["confidence"] = np.mean([r.get("confidence", 0.5) for r in runs])
+        consensus_history.append(consensus_rec)
+        
+    return compute_run_metrics(consensus_history, policy, threshold)
+
+def compute_best_metrics(history: list, policy: str, threshold: float = 0.5) -> tuple:
+    """
+    Oracle selection: if any run for a claim is 'correct', pick a correct run.
+    """
+    by_claim = defaultdict(list)
+    for h in history:
+        by_claim[h.get("claim_id")].append(h)
+        
+    oracle_history = []
+    for cid, runs in by_claim.items():
+        # Check if any run is correct
+        valid_runs = [r for r in runs if r.get("gt_label") not in ("UNKNOWN", None, "", "N/A")]
+        if not valid_runs:
+            oracle_history.append(runs[0])
+            continue
+            
+        correct_runs = []
+        for r in valid_runs:
+            pred = map_policy(r.get("pred_label", "INCONCLUSIVE"), r.get("confidence", 0.5), policy, threshold)
+            gt = normalize_label(r.get("gt_label"))
+            if pred == gt:
+                correct_runs.append(r)
+        
+        if correct_runs:
+            oracle_history.append(correct_runs[0])
+        else:
+            oracle_history.append(valid_runs[0])
+            
+    return compute_run_metrics(oracle_history, policy, threshold)
+
+
 def format_markdown_summary(run_id: str, metrics: dict, eff: dict, ks: dict,
                              policy: str, source: str = "RESCAN") -> str:
     lines = [f"\n=== RUN SUMMARY ({source}) ==="]
@@ -385,10 +442,12 @@ def main():
                         help="Threshold for policy T (0.0 to 1.0). Default: 0.5")
     parser.add_argument("--force-rewrite", action="store_true",
                         help="Re-write run summaries even if already in runs_added.jsonl.")
+    parser.add_argument("--mode",          choices=["all", "majority", "best", "per-run", "weighted"], default="all",
+                        help="Performance reporting mode. 'all' shows everything.")
     args = parser.parse_args()
 
     print("\n=== RESCAN & FIX METRICS ===")
-    print(f"Policy: {args.policy} | DryRun: {args.dry_run} | ForceRewrite: {args.force_rewrite}\n")
+    print(f"Policy: {args.policy} | Mode: {args.mode} | DryRun: {args.dry_run}\n")
 
     # 1. Load all data
     succeeded_pairs = load_processed_successes()   # set of (claim_id, run_index) tuples
@@ -399,12 +458,11 @@ def main():
     succeeded_claim_ids = {cid for cid, _ in succeeded_pairs}
 
     # 2. Group claims by run_id and determine run_index per run_id.
-    #    run_index is the order in which a given claim_id was processed across
-    #    multiple batch runs.  We reconstruct it by tracking how many times
-    #    each claim_id has appeared so far as we iterate over all_claims in
-    #    file order (oldest → newest).
     runs_map: dict[str, list] = {}
     claim_id_run_counter: dict[str, int] = {}   # claim_id -> how many runs seen so far
+    all_confirmed_history = []
+    index_groups = defaultdict(list)
+
     for rec in all_claims:
         rid = rec.get("run_id", "unknown")
         cid = rec.get("claim_id", "")
@@ -413,141 +471,62 @@ def main():
         rec = enrich_record_from_log(rec)
         
         # Determine which run_index
-        # Prefer an explicit '_run_index' field if the record carries one.
         if "_run_index" in rec:
             ri = int(rec["_run_index"])
         else:
             ri = claim_id_run_counter.get(cid, 0)
             claim_id_run_counter[cid] = ri + 1
-        # Attach inferred run_index so the confirmation step can use it
+        
         rec["_inferred_run_index"] = ri
+        
+        # Collect confirmed history
+        if succeeded_pairs:
+            if (cid, ri) in succeeded_pairs:
+                all_confirmed_history.append(rec)
+                index_groups[ri].append(rec)
+        elif cid in succeeded_claim_ids:
+            all_confirmed_history.append(rec)
+            index_groups[ri].append(rec)
+            
         runs_map.setdefault(rid, []).append(rec)
 
-    print(f"[INFO] Distinct run IDs in claims_added.jsonl: {len(runs_map)}")
-    print(f"[INFO] Already summarised run IDs in runs_added.jsonl: {len(existing_runs)}")
-
-    # 3. Identify missing runs
-    missing_runs = []
-    for rid, claims in runs_map.items():
-        if args.force_rewrite or rid not in existing_runs:
-            missing_runs.append((rid, claims))
-
-    if not missing_runs:
-        print("\n[OK] All run IDs already have summaries. Nothing to do.")
-        print("     Use --force-rewrite to regenerate existing summaries.\n")
-        return
-
-    print(f"\n[INFO] {len(missing_runs)} individual run(s) need metric computation.\n")
-
-    if args.force_rewrite and not args.dry_run:
-        print("[INFO] --force-rewrite requested. Truncating output files for a clean start.")
-        open(RUNS_FILE, "w", encoding="utf-8").close()
-        open(REPORT_FILE, "w", encoding="utf-8").close()
-
-    # 4. Collection for Aggregates
-    all_confirmed_history = []
-    index_groups: dict[int, list] = {}
-
-    # 4. Standard Case: Process missing individual runs
-    for rid, claims in missing_runs:
-        # Cross-reference with processed_claims.txt using (claim_id, run_index) pairs.
-        confirmed = []
-        if succeeded_pairs:
-            confirmed = [
-                c for c in claims
-                if (c.get("claim_id", ""), c.get("_inferred_run_index", 0)) in succeeded_pairs
-            ]
-            if not confirmed:
-                confirmed = [c for c in claims if c.get("claim_id", "") in succeeded_claim_ids]
-        else:
-            confirmed = claims
-
-        if not confirmed:
-            continue
-
-        # Add to global collection for the final summary
-        all_confirmed_history.extend(confirmed)
-        for c in confirmed:
-            idx = c.get("_inferred_run_index", 0)
-            index_groups.setdefault(idx, []).append(c)
-
-        metrics, eff, ks = compute_run_metrics(confirmed, args.policy, args.threshold)
-        eff["threshold"] = args.threshold
-
-        md_text = format_markdown_summary(rid, metrics, eff, ks, args.policy, source="RESCAN-ADDED")
-        jsonl_rec = {
-            "run_id": rid,
-            "timestamp": time.time(),
-            "source": "rescan",
-            "metrics": metrics,
-            "efficiency": eff,
-            "ks_stability": ks,
-            "config": {"runs": 1, "inconclusive_policy": args.policy, "threshold": args.threshold},
-        }
-
-        if not args.dry_run:
-            with open(RUNS_FILE, "a", encoding="utf-8") as f:
-                f.write(json.dumps(jsonl_rec) + "\n")
-            with open(REPORT_FILE, "a", encoding="utf-8") as f:
-                f.write(md_text + "\n")
-
-    # 5. Global Aggregates (Always compute if we have data)
-    # If no missing runs were processed, we still need to collect all confirmed claims from the whole file
-    if not all_confirmed_history:
-        for rid, claims in runs_map.items():
-            confirmed = [
-                c for c in claims
-                if (c.get("claim_id", ""), c.get("_inferred_run_index", 0)) in succeeded_pairs
-            ]
-            all_confirmed_history.extend(confirmed)
-            for c in confirmed:
-                idx = c.get("_inferred_run_index", 0)
-                index_groups.setdefault(idx, []).append(c)
-
-    if all_confirmed_history:
+    # 3. Report Based on Mode
+    if args.mode in ("all", "weighted"):
         print("\n" + "="*40)
-        print("AGGREGATE EXPERIMENT SUMMARY")
+        print("WEIGHTED TOTAL (ALL RUNS)")
         print("="*40)
-
-        # 5a. Per Run-Index Summaries (Performance across attempts)
-        sorted_indices = sorted(index_groups.keys())
-        for idx in sorted_indices:
-            idx_claims = index_groups[idx]
-            m, e, k = compute_run_metrics(idx_claims, args.policy, args.threshold)
-            e["threshold"] = args.threshold
-            header = f"EXPERIMENT-WIDE-RUN-INDEX-{idx}"
-            summary = format_markdown_summary(header, m, e, k, args.policy, source="AGGREGATE-INDEX")
-            print(summary)
-            if not args.dry_run:
-                with open(REPORT_FILE, "a", encoding="utf-8") as f:
-                    f.write(summary + "\n")
-
-        # 5b. Grand Total Summary
-        global_m, global_e, global_k = compute_run_metrics(all_confirmed_history, args.policy, args.threshold)
-        global_e["threshold"] = args.threshold
-        header = "GRAND-TOTAL-EXPERIMENT-AGGREGATE"
-        summary = format_markdown_summary(header, global_m, global_e, global_k, args.policy, source="GRAND-TOTAL")
-        
+        m, e, k = compute_run_metrics(all_confirmed_history, args.policy, args.threshold)
+        summary = format_markdown_summary("GRAND-TOTAL-WEIGHTED", m, e, k, args.policy, source="TOTAL")
         print(summary)
-        
-        if not args.dry_run:
-            # We also record the grand total in the JSONL for tracking
-            jsonl_rec = {
-                "run_id": header,
-                "timestamp": time.time(),
-                "source": "aggregate",
-                "metrics": global_m,
-                "efficiency": global_e,
-                "ks_stability": global_k,
-                "config": {"total_claims": len(all_confirmed_history), "policy": args.policy, "threshold": args.threshold},
-            }
-            with open(RUNS_FILE, "a", encoding="utf-8") as f:
-                f.write(json.dumps(jsonl_rec) + "\n")
-            with open(REPORT_FILE, "a", encoding="utf-8") as f:
-                f.write(summary + "\n")
+
+    if args.mode in ("all", "per-run"):
+        print("\n" + "="*40)
+        print("PER RUN-INDEX BREAKDOWN")
+        print("="*40)
+        for ri in sorted(index_groups.keys()):
+            m, e, k = compute_run_metrics(index_groups[ri], args.policy, args.threshold)
+            summary = format_markdown_summary(f"RUN-INDEX-{ri}", m, e, k, args.policy, source="PER-RUN")
+            print(summary)
+
+    if args.mode in ("all", "majority"):
+        print("\n" + "="*40)
+        print("MAJORITY VOTE AGGREGATION (120 Claims)")
+        print("="*40)
+        m, e, k = compute_majority_metrics(all_confirmed_history, args.policy, args.threshold)
+        summary = format_markdown_summary("MAJORITY-VOTE-CONSENSUS", m, e, k, args.policy, source="MAJORITY")
+        print(summary)
+
+    if args.mode in ("all", "best"):
+        print("\n" + "="*40)
+        print("BEST-OF-3 (ORACLE) SELECTION (120 Claims)")
+        print("="*40)
+        m, e, k = compute_best_metrics(all_confirmed_history, args.policy, args.threshold)
+        summary = format_markdown_summary("BEST-OF-3-ORACLE", m, e, k, args.policy, source="BEST")
+        print(summary)
 
     print("=== DONE ===\n")
 
 
 if __name__ == "__main__":
     main()
+

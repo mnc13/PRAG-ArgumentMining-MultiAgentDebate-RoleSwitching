@@ -55,6 +55,15 @@ Policies A, B, and C still work exactly as they did before if you prefer fixed m
 
 
 
+====================================================
+Aggregation Commands
+1. Majority Vote-	python framework/rescan_and_fix_metrics.py --mode majority --policy A	
+2. Best Selection (Oracle)-	python framework/rescan_and_fix_metrics.py --mode best --policy A	
+3. Per-Run Basis-	python framework/rescan_and_fix_metrics.py --mode per-run --policy A	
+4. All Runs (Weighted)-	python framework/rescan_and_fix_metrics.py --mode weighted --policy A	
+
+
+
 ABLATION 1 -
 python run_ablation1_standard_mad.py --limit 20 --offset 0
 python run_ablation1_standard_mad.py --limit 20 --offset 20
