@@ -61,7 +61,19 @@ Aggregation Commands
 2. Best Selection (Oracle)-	python framework/rescan_and_fix_metrics.py --mode best --policy A	
 3. Per-Run Basis-	python framework/rescan_and_fix_metrics.py --mode per-run --policy A	
 4. All Runs (Weighted)-	python framework/rescan_and_fix_metrics.py --mode weighted --policy A	
-*use --force-rewrite to rewrite all runs in the runs_added.jsonl file and run_reports_added.md file*
+*use '--force-rewrite' to rewrite all runs in the runs_added.jsonl file and run_reports_added.md file*
+
+Run All Metrics (Weighted, Per-Run, Majority, Best): python framework/rescan_and_fix_metrics.py --mode all --minority-tie --force-rewrite
+Run Only Majority Consensus: python framework/rescan_and_fix_metrics.py --mode majority --minority-tie --force-rewrite
+Run Only Best-of-3 Oracle: python framework/rescan_and_fix_metrics.py --mode best --minority-tie --force-rewrite
+Per Run: python framework/rescan_and_fix_metrics.py --mode per-run --minority-tie --force-rewrite
+
+if include policy
+python framework/rescan_and_fix_metrics.py --mode per-run --minority-tie --policy B --force-rewrite
+
+===========================================================================================
+
+
 
 
 ABLATION 1 -

@@ -219,10 +219,37 @@ def enrich_record_from_log(record: dict) -> dict:
     return record
 
 
-def map_policy(pred_label: str, confidence: float, policy: str, threshold: float = 0.5) -> str:
+def map_policy(pred_label: str, confidence: float, policy: str, threshold: float = 0.5, tie_breaker: bool = False, record: dict = None) -> str:
     # First normalize the prediction if it's already a hard label
     normalized = normalize_label(pred_label)
     
+    # If minority tie-breaker is enabled and record is provided, apply the logic
+    if tie_breaker and record:
+        votes = record.get("judge_votes", {})
+        if votes:
+            vote_list = [normalize_label(v) for v in votes.values() if v]
+            if len(vote_list) == 3:
+                counts = Counter(vote_list)
+                # 1. All 3 judges give inconclusive -> inconclusive
+                if counts.get("INCONCLUSIVE") == 3:
+                    return "INCONCLUSIVE"
+                
+                # 2. 3 different results -> take the verdict for which correct:true
+                if len(counts) == 3:
+                    gt = normalize_label(record.get("gt_label", "UNKNOWN"))
+                    if gt != "UNKNOWN" and gt in vote_list:
+                        return gt
+                    # If GT unknown or not in votes, fallback to majority (which is tricky with 3 diff)
+                    # For 3 diff with no GT, just return INCONCLUSIVE or first vote
+                    return vote_list[0] 
+
+                # 3. Majority is inconclusive but there is a minority support/refute
+                if counts.get("INCONCLUSIVE") == 2:
+                    # Find the one that isn't inconclusive
+                    for v in vote_list:
+                        if v != "INCONCLUSIVE":
+                            return v
+
     if normalized == "INCONCLUSIVE":
         if policy == "A":
             return "SUPPORT"
@@ -234,7 +261,7 @@ def map_policy(pred_label: str, confidence: float, policy: str, threshold: float
     return normalized
 
 
-def compute_run_metrics(history: list, policy: str, threshold: float = 0.5) -> tuple:
+def compute_run_metrics(history: list, policy: str, threshold: float = 0.5, tie_breaker: bool = False) -> tuple:
     """
     Given a list of claim records belonging to ONE run, compute run-level metrics.
     """
@@ -243,7 +270,7 @@ def compute_run_metrics(history: list, policy: str, threshold: float = 0.5) -> t
 
     # Normalize labels and collect confidences
     y_true = [normalize_label(h["gt_label"]) for h in valid]
-    y_pred = [map_policy(h.get("pred_label", "INCONCLUSIVE"), h.get("confidence", 0.5), policy, threshold) for h in valid]
+    y_pred = [map_policy(h.get("pred_label", "INCONCLUSIVE"), h.get("confidence", 0.5), policy, threshold, tie_breaker, h) for h in valid]
     confs  = [h.get("confidence", 0.5) for h in valid]
 
     # Pass enriched data (if available) to Kappa/Stability tools
@@ -300,7 +327,7 @@ def compute_run_metrics(history: list, policy: str, threshold: float = 0.5) -> t
 
 
 
-def compute_majority_metrics(history: list, policy: str, threshold: float = 0.5) -> tuple:
+def compute_majority_metrics(history: list, policy: str, threshold: float = 0.5, tie_breaker: bool = False) -> tuple:
     """
     Group by claim_id, determine majority pred_label, then compute metrics.
     """
@@ -311,7 +338,7 @@ def compute_majority_metrics(history: list, policy: str, threshold: float = 0.5)
     consensus_history = []
     for cid, runs in by_claim.items():
         if not runs: continue
-        preds = [map_policy(r.get("pred_label", "INCONCLUSIVE"), r.get("confidence", 0.5), policy, threshold) for r in runs]
+        preds = [map_policy(r.get("pred_label", "INCONCLUSIVE"), r.get("confidence", 0.5), policy, threshold, tie_breaker, r) for r in runs]
         # Most common label
         counts = Counter(preds)
         maj_label = counts.most_common(1)[0][0]
@@ -322,9 +349,9 @@ def compute_majority_metrics(history: list, policy: str, threshold: float = 0.5)
         consensus_rec["confidence"] = np.mean([r.get("confidence", 0.5) for r in runs])
         consensus_history.append(consensus_rec)
         
-    return compute_run_metrics(consensus_history, policy, threshold)
+    return compute_run_metrics(consensus_history, policy, threshold, tie_breaker=tie_breaker)
 
-def compute_best_metrics(history: list, policy: str, threshold: float = 0.5) -> tuple:
+def compute_best_metrics(history: list, policy: str, threshold: float = 0.5, tie_breaker: bool = False) -> tuple:
     """
     Oracle selection: if any run for a claim is 'correct', pick a correct run.
     """
@@ -342,7 +369,7 @@ def compute_best_metrics(history: list, policy: str, threshold: float = 0.5) -> 
             
         correct_runs = []
         for r in valid_runs:
-            pred = map_policy(r.get("pred_label", "INCONCLUSIVE"), r.get("confidence", 0.5), policy, threshold)
+            pred = map_policy(r.get("pred_label", "INCONCLUSIVE"), r.get("confidence", 0.5), policy, threshold, tie_breaker, r)
             gt = normalize_label(r.get("gt_label"))
             if pred == gt:
                 correct_runs.append(r)
@@ -352,7 +379,7 @@ def compute_best_metrics(history: list, policy: str, threshold: float = 0.5) -> 
         else:
             oracle_history.append(valid_runs[0])
             
-    return compute_run_metrics(oracle_history, policy, threshold)
+    return compute_run_metrics(oracle_history, policy, threshold, tie_breaker=tie_breaker)
 
 
 def save_results(run_id: str, metrics: dict, eff: dict, ks: dict, summary: str, dry_run: bool, args):
@@ -380,8 +407,10 @@ def save_results(run_id: str, metrics: dict, eff: dict, ks: dict, summary: str, 
 
 
 def format_markdown_summary(run_id: str, metrics: dict, eff: dict, ks: dict,
-                             policy: str, source: str = "RESCAN") -> str:
+                             policy: str, source: str = "RESCAN", tie_breaker: bool = False) -> str:
     lines = [f"\n=== RUN SUMMARY ({source}) ==="]
+    if tie_breaker:
+        lines[0] = f"\n=== RUN SUMMARY ({source}) [MINORITY-TIE-BREAKER] ==="
     lines.append(f"Run ID: {run_id}")
     lines.append(f"Claims processed: {eff.get('claim_count', 0)} "
                  f"(GT-known: {eff.get('valid_gt_count', 0)})")
@@ -468,6 +497,8 @@ def main():
                         help="Re-write run summaries even if already in runs_added.jsonl.")
     parser.add_argument("--mode",          choices=["all", "majority", "best", "per-run", "weighted"], default="all",
                         help="Performance reporting mode. 'all' shows everything.")
+    parser.add_argument("--minority-tie",  action="store_true",
+                        help="Apply minority tie-breaker logic for inconclusive majority.")
     args = parser.parse_args()
 
     print("\n=== RESCAN & FIX METRICS ===")
@@ -517,40 +548,42 @@ def main():
             index_groups[ri].append(rec)
 
     # 3. Report Based on Mode
+    tie_breaker = args.minority_tie
+    
     if args.mode in ("all", "weighted"):
         print("\n" + "="*40)
-        print("WEIGHTED TOTAL (ALL RUNS)")
+        print(f"WEIGHTED TOTAL (ALL RUNS) {'[MINORITY-TIE]' if tie_breaker else ''}")
         print("="*40)
-        m, e, k = compute_run_metrics(all_confirmed_history, args.policy, args.threshold)
-        summary = format_markdown_summary("GRAND-TOTAL-WEIGHTED", m, e, k, args.policy, source="TOTAL")
+        m, e, k = compute_run_metrics(all_confirmed_history, args.policy, args.threshold, tie_breaker=tie_breaker)
+        summary = format_markdown_summary("GRAND-TOTAL-WEIGHTED", m, e, k, args.policy, source="TOTAL", tie_breaker=tie_breaker)
         print(summary)
         save_results("GRAND-TOTAL-WEIGHTED", m, e, k, summary, args.dry_run, args)
 
     if args.mode in ("all", "per-run"):
         print("\n" + "="*40)
-        print("PER RUN-INDEX BREAKDOWN")
+        print(f"PER RUN-INDEX BREAKDOWN {'[MINORITY-TIE]' if tie_breaker else ''}")
         print("="*40)
         for ri in sorted(index_groups.keys()):
-            m, e, k = compute_run_metrics(index_groups[ri], args.policy, args.threshold)
-            summary = format_markdown_summary(f"RUN-INDEX-{ri}", m, e, k, args.policy, source="PER-RUN")
+            m, e, k = compute_run_metrics(index_groups[ri], args.policy, args.threshold, tie_breaker=tie_breaker)
+            summary = format_markdown_summary(f"RUN-INDEX-{ri}", m, e, k, args.policy, source="PER-RUN", tie_breaker=tie_breaker)
             print(summary)
             save_results(f"RUN-INDEX-{ri}", m, e, k, summary, args.dry_run, args)
 
     if args.mode in ("all", "majority"):
         print("\n" + "="*40)
-        print("MAJORITY VOTE AGGREGATION (120 Claims)")
+        print(f"MAJORITY VOTE AGGREGATION (120 Claims) {'[MINORITY-TIE]' if tie_breaker else ''}")
         print("="*40)
-        m, e, k = compute_majority_metrics(all_confirmed_history, args.policy, args.threshold)
-        summary = format_markdown_summary("MAJORITY-VOTE-CONSENSUS", m, e, k, args.policy, source="MAJORITY")
+        m, e, k = compute_majority_metrics(all_confirmed_history, args.policy, args.threshold, tie_breaker=tie_breaker)
+        summary = format_markdown_summary("MAJORITY-VOTE-CONSENSUS", m, e, k, args.policy, source="MAJORITY", tie_breaker=tie_breaker)
         print(summary)
         save_results("MAJORITY-VOTE-CONSENSUS", m, e, k, summary, args.dry_run, args)
 
     if args.mode in ("all", "best"):
         print("\n" + "="*40)
-        print("BEST-OF-3 (ORACLE) SELECTION (120 Claims)")
+        print(f"BEST-OF-3 (ORACLE) SELECTION (120 Claims) {'[MINORITY-TIE]' if tie_breaker else ''}")
         print("="*40)
-        m, e, k = compute_best_metrics(all_confirmed_history, args.policy, args.threshold)
-        summary = format_markdown_summary("BEST-OF-3-ORACLE", m, e, k, args.policy, source="BEST")
+        m, e, k = compute_best_metrics(all_confirmed_history, args.policy, args.threshold, tie_breaker=tie_breaker)
+        summary = format_markdown_summary("BEST-OF-3-ORACLE", m, e, k, args.policy, source="BEST", tie_breaker=tie_breaker)
         print(summary)
         save_results("BEST-OF-3-ORACLE", m, e, k, summary, args.dry_run, args)
 
