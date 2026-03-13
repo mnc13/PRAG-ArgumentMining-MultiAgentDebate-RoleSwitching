@@ -2,8 +2,16 @@
     "total_debates_analyzed": 148,
     "total_sycophantic_flips": 37,
     "total_evidence_driven_flips": 25,
+    "debates_with_sycophantic_flips": 25,
+    "debates_with_evidence_driven_flips": 18,
     "progressive_sycophancy_count": 12,
     "regressive_sycophancy_count": 10,
+    "overall_percentages": {
+        "sycophantic_flip_rate_per_debate": 16.89,
+        "evidence_driven_flip_rate_per_debate": 12.16,
+        "progressive_sycophancy_rate_global": 8.11,
+        "regressive_sycophancy_rate_global": 6.76
+    },
     "agents": {
         "deepseek/deepseek-v3.2": {
             "total_turns": 230,
