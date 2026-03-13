@@ -164,6 +164,8 @@ def main():
                         help="Policy for handling INCONCLUSIVE: A (SUPPORT), B (REFUTE), C (Ignore), T (Threshold)")
     parser.add_argument("--threshold", type=float, default=0.5,
                         help="Confidence threshold for Policy T (e.g., 0.5)")
+    parser.add_argument("--dry-run", action="store_true", help="Print summary without saving files")
+    parser.add_argument("--force-rewrite", action="store_true", help="Force rewrite of summary files (default behavior)")
     args = parser.parse_args()
     
     # Mapping for user convenience: maps long names to their folder names in d:\thesis\PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID\framework\ablation\
@@ -172,7 +174,8 @@ def main():
         "ablation2_no_role_switch": "ablation2",
         "ablation3_single_judge": "ablation3",
         "ablation4_no_prag": "ablation4",
-        "ablation5_fixed_rounds": "ablation5"
+        "ablation5_fixed_rounds": "ablation5",
+        "ablation6": "ablation6"
     }
     
     folder_name = name_map.get(args.ablation, args.ablation)
@@ -180,6 +183,9 @@ def main():
     # New hierarchy: framework/ablation/ablationX/outcomes/metrics/
     ablation_dir = os.path.join(script_dir, "ablation", folder_name)
     metrics_dir = os.path.join(ablation_dir, "outcomes", "metrics")
+    if not os.path.exists(metrics_dir):
+        metrics_dir = os.path.join(ablation_dir, "outcome", "metrics")
+    
     claims_file = os.path.join(metrics_dir, "claims_added.jsonl")
     
     if not os.path.exists(claims_file):
@@ -252,7 +258,10 @@ def main():
     lines.append(f"AUC: {m['auc']:.4f}")
     
     out_str = "\n".join(lines)
-    print(out_str)
+    try:
+        print(out_str)
+    except UnicodeEncodeError:
+        print(out_str.encode('ascii', 'replace').decode('ascii'))
     
     # Save Files
     final_json = {
@@ -271,11 +280,14 @@ def main():
     json_path = os.path.join(metrics_dir, "final_aggregated_results.json")
     md_path = os.path.join(metrics_dir, "final_report.md")
     
-    with open(json_path, "w") as f:
-        json.dump(final_json, f, indent=2, cls=NumpyEncoder)
-        
-    with open(md_path, "w") as f:
-        f.write("# Final Report\n```\n" + out_str + "\n```\n")
+    if not args.dry_run:
+        with open(json_path, "w", encoding="utf-8") as f:
+            json.dump(final_json, f, indent=2, cls=NumpyEncoder)
+            
+        with open(md_path, "w", encoding="utf-8") as f:
+            f.write("# Final Report\n```\n" + out_str + "\n```\n")
+    else:
+        print("\n[DRY RUN] Skipping file writes.")
 
 if __name__ == "__main__":
     main()

@@ -28,21 +28,59 @@ import glob
 import numpy as np
 
 # ---------------------------------------------------------------------------
-# Paths (same layout as logging_extension.py)
+# Path & Argument Setup
 # ---------------------------------------------------------------------------
-FRAMEWORK_DIR = os.path.dirname(os.path.abspath(__file__))
-BASE_DIR       = os.path.dirname(FRAMEWORK_DIR)
-ARTIFACTS_DIR  = os.path.join(BASE_DIR, "artifacts", "metrics")
-CLAIMS_FILE    = os.path.join(ARTIFACTS_DIR, "claims_added.jsonl")
-RUNS_FILE      = os.path.join(ARTIFACTS_DIR, "runs_added.jsonl")
-REPORT_FILE    = os.path.join(ARTIFACTS_DIR, "run_reports_added.md")
-PROCESSED_FILE = os.path.join(FRAMEWORK_DIR, "outcome", "processed_claims.txt")
-LOGS_DIR       = os.path.join(FRAMEWORK_DIR, "outcome", "logs")
+script_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(script_dir)
 
+def resolve_paths(ablation_name=None):
+    """Returns a dict of paths based on whether we are targeting an ablation or main."""
+    if not ablation_name:
+        # Main Framework paths
+        artifacts_dir = os.path.join(parent_dir, "artifacts", "metrics")
+        outcome_dir = os.path.join(script_dir, "outcome")
+    else:
+        # Mapping for user convenience (mirroring aggregate_ablation_results.py)
+        name_map = {
+            "ablation1_standard_mad": "ablation1",
+            "ablation2_no_role_switch": "ablation2",
+            "ablation3_single_judge": "ablation3",
+            "ablation4_no_prag": "ablation4",
+            "ablation5_fixed_rounds": "ablation5",
+            "ablation6": "ablation6"
+        }
+        folder_name = name_map.get(ablation_name, ablation_name)
+        ablation_dir = os.path.join(script_dir, "ablation", folder_name)
+        
+        # Determine if it's 'outcome' or 'outcomes'
+        out_base = os.path.join(ablation_dir, "outcomes")
+        if not os.path.exists(out_base):
+            out_base = os.path.join(ablation_dir, "outcome")
+        
+        artifacts_dir = os.path.join(out_base, "metrics")
+        outcome_dir = out_base
+
+    return {
+        "artifacts_dir":  artifacts_dir,
+        "claims_file":    os.path.join(artifacts_dir, "claims_added.jsonl"),
+        "runs_file":      os.path.join(artifacts_dir, "runs_added.jsonl"),
+        "report_file":    os.path.join(artifacts_dir, "run_reports_added.md"),
+        "processed_file": os.path.join(outcome_dir, "processed_claims.txt"),
+        "logs_dir":       os.path.join(outcome_dir, "logs")
+    }
+
+# Dummy initialization for global scope (will be updated in main)
+PATHS = resolve_paths()
+CLAIMS_FILE = PATHS["claims_file"]
+RUNS_FILE = PATHS["runs_file"]
+REPORT_FILE = PATHS["report_file"]
+PROCESSED_FILE = PATHS["processed_file"]
+LOGS_DIR = PATHS["logs_dir"]
+FRAMEWORK_DIR = script_dir
 # ---------------------------------------------------------------------------
 # Import the same metric helpers as the main framework
 # ---------------------------------------------------------------------------
-sys.path.insert(0, FRAMEWORK_DIR)
+sys.path.insert(0, script_dir)
 from metrics_extension import (
     compute_classification_metrics,
     compute_auc_and_sweep,
@@ -379,6 +417,8 @@ def main():
     parser = argparse.ArgumentParser(description="Rescan and fix missing run-level metrics.")
     parser.add_argument("--dry-run",       action="store_true",
                         help="Print what would be done without writing files.")
+    parser.add_argument("--ablation",      type=str, default=None,
+                        help="Target a specific ablation folder (e.g., ablation1_standard_mad)")
     parser.add_argument("--policy",        choices=["A", "B", "C", "T"], default="A",
                         help="Inconclusive-label policy (A=SUPPORT, B=REFUTE, C=Exclude, T=Threshold). Default: A")
     parser.add_argument("--threshold",     type=float, default=0.5,
@@ -387,8 +427,18 @@ def main():
                         help="Re-write run summaries even if already in runs_added.jsonl.")
     args = parser.parse_args()
 
+    # Update global paths based on ablation target if provided
+    global PATHS, CLAIMS_FILE, RUNS_FILE, REPORT_FILE, PROCESSED_FILE, LOGS_DIR
+    PATHS = resolve_paths(args.ablation)
+    CLAIMS_FILE = PATHS["claims_file"]
+    RUNS_FILE = PATHS["runs_file"]
+    REPORT_FILE = PATHS["report_file"]
+    PROCESSED_FILE = PATHS["processed_file"]
+    LOGS_DIR = PATHS["logs_dir"]
+
     print("\n=== RESCAN & FIX METRICS ===")
-    print(f"Policy: {args.policy} | DryRun: {args.dry_run} | ForceRewrite: {args.force_rewrite}\n")
+    target_name = args.ablation if args.ablation else "Main Framework"
+    print(f"Target: {target_name} | Policy: {args.policy} | DryRun: {args.dry_run} | ForceRewrite: {args.force_rewrite}\n")
 
     # 1. Load all data
     succeeded_pairs = load_processed_successes()   # set of (claim_id, run_index) tuples
