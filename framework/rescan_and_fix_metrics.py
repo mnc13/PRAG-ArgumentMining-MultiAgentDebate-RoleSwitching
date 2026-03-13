@@ -450,7 +450,7 @@ def format_markdown_summary(run_id: str, metrics: dict, eff: dict, ks: dict,
     jr = metrics.get("judge_reliability", {})
     if jr:
         k = jr
-        k_str = f"Kappa: κ12={k.get('k_12', 0.0):.3f} κ13={k.get('k_13', 0.0):.3f} κ23={k.get('k_23', 0.0):.3f} mean={k.get('mean_kappa', 0.0):.3f}"
+        k_str = f"Kappa: k12={k.get('k_12', 0.0):.3f} k13={k.get('k_13', 0.0):.3f} k23={k.get('k_23', 0.0):.3f} mean={k.get('mean_kappa', 0.0):.3f}"
         lines.append(k_str)
         gt_str = f"Judge-vs-GT: k_gt1={k.get('k_gt1', 0.0):.3f} k_gt2={k.get('k_gt2', 0.0):.3f} k_gt3={k.get('k_gt3', 0.0):.3f}"
         lines.append(gt_str)

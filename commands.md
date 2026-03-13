@@ -63,6 +63,9 @@ Aggregation Commands
 4. All Runs (Weighted)-	python framework/rescan_and_fix_metrics.py --mode weighted --policy A	
 *use '--force-rewrite' to rewrite all runs in the runs_added.jsonl file and run_reports_added.md file*
 
+### THE MOTHER COMMAND (Full Metric Sweep: All Modes, All Policies, Minority Tie-Breaker)
+python framework/run_full_metrics_sweep.py
+
 Run All Metrics (Weighted, Per-Run, Majority, Best): python framework/rescan_and_fix_metrics.py --mode all --minority-tie --force-rewrite
 Run Only Majority Consensus: python framework/rescan_and_fix_metrics.py --mode majority --minority-tie --force-rewrite
 Run Only Best-of-3 Oracle: python framework/rescan_and_fix_metrics.py --mode best --minority-tie --force-rewrite
