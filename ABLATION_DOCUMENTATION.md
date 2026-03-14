@@ -1,0 +1,614 @@
+# Ablation Branch Technical Documentation
+
+> **PRAG–ArgumentMining · Multi-Agent Debate · Role-Switching · Check-COVID**  
+> Full technical documentation for the six ablation experiments.  
+> Intended for inclusion in a COLM-level research paper.
+
+---
+
+## 1. Repository Structure
+
+```
+PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID/
+├── Check-COVID/
+│   └── test/
+│       └── covidCheck_test_no_NEI.json       # 120-claim evaluation dataset (binary: SUPPORT/REFUTE)
+├── framework/
+│   ├── ablation/
+│   │   ├── ablation1/                        # Ablation 1 outputs
+│   │   │   ├── logs/                         # Per-claim execution logs
+│   │   │   └── outcomes/                     # JSON verdicts, metrics
+│   │   │       └── metrics/                  # claims_added.jsonl, runs_added.jsonl, etc.
+│   │   ├── ablation2/                        # Ablation 2 outputs (same structure)
+│   │   ├── ablation3/                        # Ablation 3 outputs
+│   │   ├── ablation4/                        # Ablation 4 outputs
+│   │   ├── ablation5/                        # Ablation 5 outputs
+│   │   └── ablation6/                        # Ablation 6 outputs (note: uses "outcome/" not "outcomes/")
+│   │       └── outcome/                      # Irregular naming: singular form
+│   ├── run_ablation1_standard_mad.py         # Ablation 1 entrypoint
+│   ├── run_ablation2_no_role_switch.py       # Ablation 2 entrypoint
+│   ├── run_ablation3_single_judge.py         # Ablation 3 entrypoint
+│   ├── run_ablation4_no_prag.py              # Ablation 4 entrypoint
+│   ├── run_ablation5_fixed_rounds.py         # Ablation 5 entrypoint
+│   ├── run_ablation6_no_self_reflection.py   # Ablation 6 entrypoint
+│   ├── mad_orchestrator.py                   # Core MAD loop with adaptive convergence
+│   ├── mad_system.py                         # DebateAgent, CriticAgent classes
+│   ├── prag_engine.py                        # Progressive RAG retrieval
+│   ├── rag_engine.py                         # Initial FAISS/PubMed retrieval
+│   ├── negotiation_engine.py                 # Evidence negotiation & arbitration
+│   ├── role_switcher.py                      # Role-switching consistency check
+│   ├── judge_evaluator.py                    # 3-judge panel orchestration
+│   ├── final_verdict.py                      # Confidence-weighted verdict generation
+│   ├── self_reflection.py                    # Multi-round self-reflection module
+│   ├── agent_workflow.py                     # ArgumentMiner wrapper
+│   ├── data_loader.py                        # Dataset loader (Check-COVID)
+│   ├── preprocessing.py                      # ClaimExtractor
+│   ├── logging_extension.py                  # Metrics logging infrastructure
+│   ├── run_eval_extended.py                  # Main pipeline (reference); provides apply_monkey_patches()
+│   ├── rescan_and_fix_metrics.py             # Metric aggregation & policy-based evaluation
+│   ├── rescan_all.py                         # Master rescan driver (all 6 ablations × 4 policies)
+│   ├── master_ablation_report.txt            # Full output of rescan_all.py (1274 lines)
+│   ├── evaluate_results.py                   # Stand-alone classifier evaluation
+│   ├── aggregate_ablation_results.py         # (Legacy) aggregation helper
+│   ├── personas.py                           # Agent persona configurations (AGENT_SLOTS)
+│   ├── expertise_extractor.py                # Dynamic expert witness generation
+│   ├── openai_client.py                      # OpenAI API client
+│   ├── openrouter_client.py                  # OpenRouter API client
+│   ├── groq_client.py                        # Groq API client (for specific models)
+│   ├── models.py                             # Claim, Evidence data models
+│   ├── pubmed_faiss.index                    # FAISS vector index (1.4 GB)
+│   ├── pubmed_meta.jsonl                     # PubMed metadata (1.0 GB)
+│   └── pubmed_meta_offsets.npy               # Byte offsets for fast random access
+├── artifacts/
+│   ├── metrics/                              # Aggregate metric files (main pipeline)
+│   └── outcome/                             # Main pipeline verdict outputs
+├── commands.md                               # Execution commands for all experiments
+└── requirements.txt                          # Python dependencies
+```
+
+### Key File Descriptions
+
+| File | Role |
+|---|---|
+| `covidCheck_test_no_NEI.json` | Primary evaluation dataset; 120 claims, labels: SUPPORT/REFUTE |
+| `pubmed_faiss.index` | FAISS index over PubMed COVID-19 abstracts (2020–2024); used for dense retrieval |
+| `pubmed_meta.jsonl` | Parallel metadata file; indexed via `pubmed_meta_offsets.npy` for O(1) lookup |
+| `logging_extension.py` | Global telemetry layer; tracks tokens, retrieval calls, evidence counts per claim |
+| `rescan_and_fix_metrics.py` | Post-hoc metric computation with configurable Inconclusive policies (A/B/C/T) |
+| `master_ablation_report.txt` | Autogenerated output of `rescan_all.py`; contains all metrics for all ablations |
+
+---
+
+## 2. Ablation Implementations
+
+### Ablation 1 Implementation
+
+**Script:** `run_ablation1_standard_mad.py`
+
+#### Files Involved
+- `run_ablation1_standard_mad.py` (entrypoint)
+- `data_loader.py`, `preprocessing.py` (shared standard modules)
+- `rag_engine.py::PubMedRetriever` (initial retrieval only)
+- `agent_workflow.py::ArgumentMiner`
+- `mad_system.py::DebateAgent`
+- `prag_engine.py::ProgressiveRAG` (dummy, not called)
+- `openai_client.py::OpenAILLMClient` (proponent: GPT-5-mini)
+- `openrouter_client.py::OpenRouterLLMClient` (opponent: DeepSeek-V3.2; judge: Qwen3-235B)
+- `logging_extension.py::ExtensionState`
+- `run_eval_extended.py::apply_monkey_patches`
+
+#### Classes Used
+- `DataLoader` — loads test claims
+- `ClaimExtractor` — preprocessing/normalization
+- `PubMedRetriever` — retrieves top-k evidence from FAISS index
+- `ArgumentMiner` — mines structured argument premises
+- `DebateAgent` — generates legal arguments (proponent/opponent)
+- `ProgressiveRAG` — instantiated as dummy, never retrieves
+- `OpenAILLMClient` / `OpenRouterLLMClient` — LLM wrappers
+- `ExtensionState` — global telemetry state class
+
+#### Functions Used
+- `retriever.retrieve(claim_text, top_k=5)` — initial evidence only
+- `proponent.generate_argument(claim, evidence_pool, transcript)` — repeated 3×
+- `opponent.generate_argument(claim, evidence_pool, transcript)` — repeated 3×
+- `judge_llm.generate(prompt)` — direct LLM call (no JudicialPanel)
+- `logging_extension.append_framework_json(...)` — saves outputs
+
+#### Config Changes vs. Main Pipeline
+```python
+# Agents
+proponent: gpt-5-mini (OpenAI)
+opponent: deepseek/deepseek-v3.2 (OpenRouter)
+judge: qwen/qwen3-235b-a22b-2507, temperature=0.3 (single judge, not panel)
+
+# Debate
+max_rounds = 3  # hard-coded
+adaptive_convergence = False
+role_switching = False
+evidence_negotiation = False
+prag = ProgressiveRAG(dummy, never called)
+expert_witnesses = False
+self_reflection = False
+critic = False
+
+# Confidence
+margin_score = 0.8  # constant (single judge fixed weight)
+quality_score = ((ev + arg + sci) / 30) * 0.3
+# No rs_adj, no reflection_adj
+```
+
+#### Training/Inference Pipeline Changes
+There is no training. Inference changes: the entire pipeline is condensed into a single `run_ablation()` function with an inline 3-round for loop. The `JudicialPanel` and `FinalVerdict` classes are bypassed. Metrics are computed inline after the single judge response is parsed.
+
+---
+
+### Ablation 2 Implementation
+
+**Script:** `run_ablation2_no_role_switch.py`
+
+#### Files Involved
+All main pipeline modules except `role_switcher.py` (which is not imported):
+- `negotiation_engine.py::EvidenceNegotiator`
+- `prag_engine.py::ProgressiveRAG`
+- `mad_orchestrator.py::MADOrchestrator`
+- `judge_evaluator.py::JudicialPanel`
+- `final_verdict.py::FinalVerdict`
+- `logging_extension.py::ExtensionState`
+- `run_eval_extended.py::apply_monkey_patches`
+
+#### Key Implementation Detail
+```python
+# After debate, inject synthetic consistency report (no RoleSwitcher call)
+consistency_report = {
+    "is_consistent": True,
+    "consistency_score": 5,
+    "analysis": "Ablation 2: Role-Switching Disabled"
+}
+
+# FinalVerdict._calculate_confidence() detects this:
+is_disabled = self.role_switch_result.get("analysis") == "Ablation 2: Role-Switching Disabled"
+if is_disabled:
+    rs_adj = 0.0  # neutral, no role-switch bonus or penalty
+```
+
+The `rescan_and_fix_metrics.py` handles this via the `rounds_switched=0` field in each claim record.
+
+#### Config Changes vs. Main Pipeline
+```python
+role_switching = False  # Stage 8 bypassed entirely
+consistency_report = STUB  # fixed {score: 5, adj: 0.0}
+rs_adj = 0.0  # no adjustment in FinalVerdict confidence
+rounds_switched = 0  # recorded in claims_added.jsonl
+```
+
+#### Monkey Patch Strategy
+```python
+import final_verdict as _fv
+orig_gen_verdict = _fv.FinalVerdict.generate_verdict
+apply_monkey_patches()  # hot-patches telemetry into FinalVerdict
+_fv.FinalVerdict.generate_verdict = orig_gen_verdict  # restore to prevent double-logging
+```
+The `orig_gen_verdict` restoration is required because `apply_monkey_patches()` wraps `generate_verdict` to auto-log metrics, but ablation 2 logs metrics manually in `run_ablation()` to avoid double-recording.
+
+---
+
+### Ablation 3 Implementation
+
+**Script:** `run_ablation3_single_judge.py`
+
+#### Files Involved
+All main pipeline modules plus custom single-judge call:
+- `role_switcher.py::RoleSwitcher` (retained)
+- `openrouter_client.py::OpenRouterLLMClient` (direct judge LLM, not via JudicialPanel)
+- `final_verdict.py::FinalVerdict` (standard)
+
+#### Classes Used
+- All standard + `RoleSwitcher`
+- **Not used**: `JudicialPanel`
+
+#### Key Implementation Detail
+```python
+# Direct single-judge call with 5-stage prompt
+response = judge_llm.generate(prompt)
+verdict_data = json.loads(re.search(r'\{[\s\S]*\}', response).group())
+
+# Wrap into mock JudicialPanel output schema
+mock_judge_result = {
+    "final_verdict": verdict_data['verdict'],
+    "judge_verdicts": [verdict_data],
+    "vote_breakdown": {verdict_data['verdict']: 1},
+    "majority_opinion": f"Single Judge ({judge_llm.model_name}) - {verdict_data['verdict']}: {verdict_data['reasoning']}",
+    "dissenting_opinion": None
+}
+
+# Pass to standard FinalVerdict
+verdict_generator = FinalVerdict(claim, debate_result, mock_judge_result, consistency_report, reflection_result)
+```
+
+#### Config Changes vs. Main Pipeline
+```python
+judge_panel = None  # JudicialPanel not instantiated
+judge = OpenRouterLLMClient("qwen/qwen3-235b-a22b-2507", temperature=0.3)
+num_judges = 1  # single judge, no deliberation
+kappa_pair_mean = "N/A"  # undefined for single rater
+vote_breakdown = {"SUPPORTED": 1}  # always unanimous (trivially)
+```
+
+---
+
+### Ablation 4 Implementation
+
+**Script:** `run_ablation4_no_prag.py`
+
+#### Files Involved
+All main pipeline modules plus two custom classes defined inline:
+- `DummyPRAG(ProgressiveRAG)` — stub PRAG
+- `FixedRoundsOrchestrator(MADOrchestrator)` — no PRAG, fixed rounds
+- `FixedRoundsRoleSwitcher(RoleSwitcher)` — fixed 3 switched rounds
+
+#### Key Classes
+
+**`DummyPRAG`**:
+```python
+class DummyPRAG(ProgressiveRAG):
+    disabled = True  # flag checked by FixedRoundsOrchestrator
+    def retrieve_progressive(self, query, top_k=3, context=""):
+        return []  # always returns empty list
+    def formulate_query(self, debate_context, specific_need):
+        return specific_need  # passthrough
+```
+
+**`FixedRoundsOrchestrator.run_debate_round()`**:
+- Checks `getattr(self.prag, 'disabled', False)`
+- If True: skips Step 1 (evidence discovery), runs Steps 2–5 normally
+- If False: delegates to `super().run_debate_round()` (standard behavior)
+
+**`FixedRoundsOrchestrator.run_full_debate()`**:
+- Removes convergence checks entirely
+- Iterates exactly `max_rounds=3` times
+- Calls standard transcript saving
+
+#### Config Changes vs. Main Pipeline
+```python
+prag = DummyPRAG(retriever, miner_llm)  # evidence frozen at initial set
+max_rounds = 3  # fixed (both normal and switched debate)
+adaptive_convergence = False
+retrieval_calls = 0  # during debate (negotiation calls still counted)
+avg_ev = negotiated_evidence_count  # fixed throughout
+```
+
+---
+
+### Ablation 5 Implementation
+
+**Script:** `run_ablation5_fixed_rounds.py`
+
+#### Files Involved
+All main pipeline modules plus two custom classes:
+- `FixedRoundsOrchestrator(MADOrchestrator)` — disables convergence
+- `FixedRoundsRoleSwitcher(RoleSwitcher)` — fixed rounds
+
+#### Key Classes
+
+**`FixedRoundsOrchestrator.run_full_debate()`**: Only overrides the outer loop; all other MADOrchestrator behavior (including P-RAG, self-reflection, critic) is inherited via `self.run_debate_round()`.
+```python
+def run_full_debate(self, max_rounds=3, ...):
+    for round_num in range(1, max_rounds + 1):
+        round_data = self.run_debate_round(round_num)  # INHERITED, unmodified
+        debate_result["rounds"].append(round_data)
+        # NO convergence checks here
+```
+
+**`FixedRoundsRoleSwitcher.switch_roles()`**: Identical to Ablation 4's version.
+
+#### Config Changes vs. Main Pipeline
+```python
+prag = ProgressiveRAG(retriever, miner_llm)  # ACTIVE (unlike Ablation 4)
+self_reflection = True  # ACTIVE (unlike Ablation 6)
+max_rounds = 3  # fixed
+adaptive_convergence = False  # convergence checks removed from run_full_debate()
+```
+
+This is the most minimal modification: only the outer loop controller changes.
+
+---
+
+### Ablation 6 Implementation
+
+**Script:** `run_ablation6_no_self_reflection.py`
+
+#### Files Involved
+All main pipeline modules plus three custom classes:
+- `NoReflectionOrchestrator(MADOrchestrator)`
+- `NoReflectionRoleSwitcher(RoleSwitcher)`
+- `AblationFinalVerdict(FinalVerdict)`
+
+#### Key Classes
+
+**`NoReflectionOrchestrator.run_debate_round()`**: Full override of the standard round structure.
+- Step 1 (P-RAG discovery): Uses `gap_proposal` only, **does not** concatenate `reflection_gap`:
+  ```python
+  discovery_prompt = gap_proposal  # NOT: f"{gap_proposal} Focus also on: {reflection_gap}"
+  ```
+- Step 4 (Self-Reflection): **Skipped** entirely, prints skip message, `round_data["reflection_scores"]` remains `{}`
+
+**`NoReflectionOrchestrator.run_full_debate()`**: Overrides to remove reflection plateau stopping:
+```python
+# 2. Reflection Delta Check (Convergence) -> REMOVED IN THIS ABLATION
+# We still keep novelty and critic signals
+if round_num >= 2:
+    if round_data["critic_evaluation"].get("debate_resolved", False): break
+    if avg_novelty < 0.1 and last_novelty < 0.1: break
+    if self.agents['judge'].check_debate_completion(self.debate_transcript): break
+# Note: delta_score < 0.05 check is absent
+```
+
+**`AblationFinalVerdict._calculate_confidence()`**: Mirrors `FinalVerdict._calculate_confidence()` but with `reflection_adj = 0.0` hard-coded and not added to adjustments:
+```python
+reflection_adj = 0.0
+# No adjustments += reflection_adj line
+```
+
+**`AblationFinalVerdict.generate_verdict()`**: Calls `super().generate_verdict()` then overwrites:
+```python
+result['metadata']['self_reflection_adjustment'] = 0.0
+```
+
+#### Output Path Discrepancy
+Note: Ablation 6 uses `ABLATION_OUTCOME_DIR` (singular `outcome`) while all other ablations use `ABLATION_OUTCOMES_DIR` (plural `outcomes`). This is an implementation inconsistency that has no functional impact but must be accounted for in any path-based tooling.
+
+---
+
+## 3. Configuration System
+
+All six ablations share a **runtime configuration** approach: there are no external configuration files. Configuration is controlled by:
+
+1. **Command-line arguments** parsed in `__main__`:
+   ```
+   --limit INT    Number of claims to process (default: 20)
+   --offset INT   Starting index in claim list (default: 0)
+   --force        Reprocess claims even if already in processed_claims.txt
+   ```
+
+2. **Module-level directory overrides** set before any imports:
+   ```python
+   ABLATION_BASE_DIR = os.path.join(script_dir, "ablation", "ablation<N>")
+   ABLATION_LOGS_DIR = ...
+   ABLATION_OUTCOMES_DIR = ...
+   logging_extension.ARTIFACTS_DIR = ...
+   logging_extension.CLAIMS_FILE = ...
+   logging_extension.RUNS_FILE = ...
+   logging_extension.STABILITY_FILE = ...
+   logging_extension.REPORT_FILE = ...
+   logging_extension.ALL_OUTPUT_JSONS_DIR = ...
+   ```
+   This pattern ensures all telemetry is isolated per ablation without modifying `logging_extension.py`.
+
+3. **Concurrency via FileLock**: All file writes are protected by `.lock` files (using the `filelock` library) to allow parallel execution of multiple workers across the same ablation.
+
+4. **Inconclusive Policies** (A/B/C/T) are configured at **evaluation time** (not during inference), via `rescan_and_fix_metrics.py --policy`:
+   - **A**: INCONCLUSIVE → follow majority judge
+   - **B**: INCONCLUSIVE → REFUTE
+   - **C**: Preserve INCONCLUSIVE as third class
+   - **T**: threshold-based (conf < 0.5 → INCONCLUSIVE)
+
+---
+
+## 4. Execution Pipeline
+
+The following describes the step-by-step execution flow for a typical ablation (Ablations 2–6 follow this pattern; Ablation 1 is a simplified variant):
+
+### Step 1: Data Loading
+```python
+loader = DataLoader(data_dir)  # reads Check-COVID directory
+test_file_path = os.path.join(data_dir, "test", "covidCheck_test_no_NEI.json")
+all_claims = loader.load_specific_file(test_file_path)  # returns List[Claim]
+# Slicing:
+all_claims = all_claims[args.offset : args.offset + args.limit]
+```
+The `DataLoader` returns `Claim` objects with `.id`, `.text`, and `.metadata` (containing `"label"`).
+
+### Step 2: Preprocessing
+```python
+extractor = ClaimExtractor()
+extracted_claim = extractor.extract_claim(input_claim.text)
+extracted_claim.id = input_claim.id
+extracted_claim.metadata = input_claim.metadata
+```
+
+### Step 3: Argument Mining
+```python
+miner_llm = OpenRouterLLMClient(model_name="deepseek/deepseek-r1")
+miner = ArgumentMiner(miner_llm)
+argument = miner.mine_arguments(extracted_claim)
+# Returns: argument.premises → List[str]
+```
+
+### Step 4: Initial RAG Retrieval
+```python
+retriever = PubMedRetriever(index_path, meta_path, offsets_path)
+retrieved_evidence = retriever.retrieve(extracted_claim.text, top_k=5)
+evidence_pool = retrieved_evidence  # List[Evidence]
+```
+The FAISS index is pre-built over ~90K PubMed abstracts (COVID-19, 2020–2024).
+
+### Step 5: Evidence Negotiation
+```python
+negotiator = EvidenceNegotiator(retriever, miner_llm)
+negotiator.prepare_pools(extracted_claim, argument.premises)
+negotiator.negotiate_phase(extracted_claim)       # adversarial evidence gathering
+negotiator.judge_arbitration(extracted_claim)     # judicial admission filtering
+neg_result = negotiator.get_negotiation_json()
+# Extract admissible evidence:
+admissible_ids = [item['id'] for item in neg_result['judge_state']['admissible_evidence']]
+final_evidence_set = [ev for ev in negotiator._deduplicate(...) if ev.source_id in admissible_ids]
+```
+
+### Step 6: MAD Initialization
+```python
+prag = ProgressiveRAG(retriever, miner_llm)  # or DummyPRAG for Ablation 4
+mad = MADOrchestrator(extracted_claim, final_evidence_set, [], prag)
+# Initializes: proponent, opponent, judge agents (from AGENT_SLOTS in personas.py)
+# Initializes: SelfReflection, CriticAgent, reflection_discovery_needs dict
+```
+
+### Step 7: Debate Execution
+```python
+debate_result = mad.run_full_debate(max_rounds=10)  # or 3 for Ablations 4/5
+# Per round (in run_debate_round):
+#   Step 1: PRAG evidence discovery (gap + reflection needs)
+#   Step 2: generate_argument() for proponent and opponent
+#   Step 3: Expert witness request/evaluation
+#   Step 4: SelfReflection.perform_round_reflection()
+#   Step 5: CriticAgent.evaluate_round()
+# Adaptive stopping after round >= 2.
+```
+
+### Step 8: Role-Switching
+```python
+switcher = RoleSwitcher(mad)
+switched_result = switcher.switch_roles(max_rounds=10)
+consistency_report = switcher.check_consistency(debate_result, switched_result)
+```
+
+### Step 9: Judicial Panel Evaluation
+```python
+panel = JudicialPanel()
+judge_result = panel.evaluate_debate(
+    debate_result,
+    admitted_evidence=final_evidence_set,
+    role_switch_history=consistency_report,
+    prag_metrics=mad.prag.get_retrieval_summary(),
+    critic_evaluations=critic_evals,
+    reflection_history=ref_history
+)
+```
+
+### Step 10: Final Verdict
+```python
+verdict_generator = FinalVerdict(claim, debate_result, judge_result, consistency_report, reflection_result)
+final_result = verdict_generator.generate_verdict()
+# confidence = margin_score + quality_score + rs_adj + reflection_adj
+```
+
+### Step 11: Metrics Recording
+```python
+record = {
+    "run_id": ExtensionState.run_id,
+    "claim_id": ..., "gt_label": ..., "pred_label": ...,
+    "correct": ..., "confidence": ...,
+    "rounds_normal": ..., "rounds_switched": ..., "total_rounds": ...,
+    "judge_votes": {...},
+    "token_total": ..., "token_input": ..., "token_output": ...,
+    "token_openai": ..., "token_openrouter": ..., "token_groq": ...,
+    "token_models": {...},
+    "retrieval_calls": ..., "evidence_count": ...
+}
+# Written to: logging_extension.CLAIMS_FILE (claims_added.jsonl)
+```
+
+---
+
+## 5. Reproducibility Guide
+
+### Environment Setup
+
+```bash
+cd framework/
+pip install -r requirements.txt
+# Requires: openai, openrouter (HTTP client), faiss-cpu, numpy, filelock
+# Set API keys in .env:
+OPENAI_API_KEY=...
+OPENROUTER_API_KEY=...
+GROQ_API_KEY=...
+```
+
+### Running Individual Ablations
+
+Each ablation script accepts `--limit`, `--offset`, and `--force` arguments.
+
+```powershell
+# Ablation 1: Standard MAD Baseline (120 claims, batch of 20)
+cd framework
+python run_ablation1_standard_mad.py --limit 20 --offset 0
+
+# Ablation 2: No Role-Switching
+python run_ablation2_no_role_switch.py --limit 20 --offset 0
+
+# Ablation 3: Single Judge
+python run_ablation3_single_judge.py --limit 20 --offset 0
+
+# Ablation 4: No P-RAG
+python run_ablation4_no_prag.py --limit 20 --offset 0
+
+# Ablation 5: Fixed Rounds
+python run_ablation5_fixed_rounds.py --limit 20 --offset 0
+
+# Ablation 6: No Self-Reflection
+python run_ablation6_no_self_reflection.py --limit 20 --offset 0
+```
+
+### Parallel Execution (Processing Full Dataset)
+
+To process all 120 claims in 6 parallel batches of 20:
+```powershell
+# Example for Ablation 2 (run in separate terminals or with job scheduler)
+python run_ablation2_no_role_switch.py --limit 20 --offset 0
+python run_ablation2_no_role_switch.py --limit 20 --offset 20
+python run_ablation2_no_role_switch.py --limit 20 --offset 40
+python run_ablation2_no_role_switch.py --limit 20 --offset 60
+python run_ablation2_no_role_switch.py --limit 20 --offset 80
+python run_ablation2_no_role_switch.py --limit 20 --offset 100
+```
+FileLock ensures safe concurrent writes to shared metric files.
+
+### Computing Metrics
+
+After inference, compute metrics with `rescan_and_fix_metrics.py`:
+
+```powershell
+# Single ablation, single policy
+python rescan_and_fix_metrics.py --ablation ablation2_no_role_switch --policy A
+
+# All ablations and all policies (master report)
+python rescan_all.py
+# Output: master_ablation_report.txt
+```
+
+Available policies: `A`, `B`, `C`, `T`  
+Available ablation identifiers:
+- `ablation1_standard_mad`
+- `ablation2_no_role_switch`
+- `ablation3_single_judge`
+- `ablation4_no_prag`
+- `ablation5_fixed_rounds`
+- `ablation6` (note: no suffix)
+
+### Re-Running with Force Flag
+
+To reprocess all claims (overwrite existing results):
+```powershell
+python run_ablation2_no_role_switch.py --limit 120 --offset 0 --force
+python rescan_and_fix_metrics.py --ablation ablation2_no_role_switch --policy A --force-rewrite
+```
+
+### Checking Execution Logs
+
+Per-claim execution logs are stored as:
+```
+framework/ablation/ablation<N>/logs/execution_log_<claim_id>_0.txt
+```
+
+Each log captures the full `stdout` of the claim processing, including all agent arguments, judge deliberation, and final verdict output.
+
+### Output Files
+
+| File | Contents |
+|---|---|
+| `outcomes/processed_claims.txt` | List of processed claim IDs (idempotency guard) |
+| `outcomes/all_verdicts.jsonl` | Per-claim: claim_id, verdict, confidence, ground_truth, correct |
+| `outcomes/metrics/claims_added.jsonl` | Full per-claim record with token counts, rounds, retrieved evidence |
+| `outcomes/metrics/runs_added.jsonl` | Per-run aggregated metrics |
+| `outcomes/metrics/stability_added.jsonl` | Stability metrics across runs |
+| `outcomes/metrics/run_reports_added.md` | Human-readable run reports |
+| `logs/negotiation_state/` | Per-claim negotiation JSON records |
