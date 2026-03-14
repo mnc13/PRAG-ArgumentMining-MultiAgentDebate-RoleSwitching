@@ -130,13 +130,6 @@ def create_llm_client(persona_config: dict):
             temperature=temperature,
             reasoning_effort=reasoning_effort
         )
-    elif provider == "ollama":
-        from ollama_client import OllamaLLMClient
-        return OllamaLLMClient(
-            model_name=model,
-            system_prompt=system_prompt,
-            temperature=temperature
-        )
     elif provider == "openrouter":
         from openrouter_client import OpenRouterLLMClient
         return OpenRouterLLMClient(

@@ -55,6 +55,30 @@ Policies A, B, and C still work exactly as they did before if you prefer fixed m
 
 
 
+====================================================
+Aggregation Commands
+1. Majority Vote-	python framework/rescan_and_fix_metrics.py --mode majority --policy A	
+2. Best Selection (Oracle)-	python framework/rescan_and_fix_metrics.py --mode best --policy A	
+3. Per-Run Basis-	python framework/rescan_and_fix_metrics.py --mode per-run --policy A	
+4. All Runs (Weighted)-	python framework/rescan_and_fix_metrics.py --mode weighted --policy A	
+*use '--force-rewrite' to rewrite all runs in the runs_added.jsonl file and run_reports_added.md file*
+
+### THE MOTHER COMMAND (Full Metric Sweep: All Modes, All Policies, Minority Tie-Breaker)
+python framework/run_full_metrics_sweep.py
+
+Run All Metrics (Weighted, Per-Run, Majority, Best): python framework/rescan_and_fix_metrics.py --mode all --minority-tie --force-rewrite
+Run Only Majority Consensus: python framework/rescan_and_fix_metrics.py --mode majority --minority-tie --force-rewrite
+Run Only Best-of-3 Oracle: python framework/rescan_and_fix_metrics.py --mode best --minority-tie --force-rewrite
+Per Run: python framework/rescan_and_fix_metrics.py --mode per-run --minority-tie --force-rewrite
+
+if include policy
+python framework/rescan_and_fix_metrics.py --mode per-run --minority-tie --policy B --force-rewrite
+
+===========================================================================================
+
+
+
+
 ABLATION 1 -
 python run_ablation1_standard_mad.py --limit 20 --offset 0
 python run_ablation1_standard_mad.py --limit 20 --offset 20
