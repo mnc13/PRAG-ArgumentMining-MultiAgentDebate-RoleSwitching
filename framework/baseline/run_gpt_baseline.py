@@ -44,7 +44,7 @@ def main():
     # ── Dataset ────────────────────────────────────────────────────────
     print("Loading dataset...")
     root_dir    = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-    target_json = os.path.join("Check-COVID", "test", "covidCheck_test_no_NEI.json")
+    target_json = os.path.join("Check-COVID", "test", "covidCheck_test_data.json")
 
     loader     = DataLoader(root_dir)
     all_claims = loader.load_specific_file(target_json)

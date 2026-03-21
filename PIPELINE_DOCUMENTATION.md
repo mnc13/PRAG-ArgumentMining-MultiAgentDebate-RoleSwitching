@@ -89,7 +89,7 @@ Output: SUPPORT / REFUTE / INCONCLUSIVE + confidence score
 
 ### 2.1 Primary Fact-Checking Dataset: Check-COVID
 
-- **Source file loaded:** `Check-COVID/test/covidCheck_test_no_NEI.json`
+- **Source file loaded:** `Check-COVID/test/covidCheck_test_data.json`
 - **Format:** JSON array containing claim objects
 - **Fields per claim:**
   - `id` — unique integer identifier
@@ -127,7 +127,7 @@ The claim ID and metadata label are preserved and carried forward through all pi
 
 ### 2.4 Train / Test Splits
 
-All experiments are run on the **test split only** (`covidCheck_test_no_NEI.json`). The pipeline does not perform any training (it is a zero-shot, inference-only system). There is no train/dev/test split in the traditional ML sense — the pipeline processes each test claim independently using pre-trained LLMs and the pre-built PubMed index.
+All experiments are run on the **test split only** (`covidCheck_test_data.json`). The pipeline does not perform any training (it is a zero-shot, inference-only system). There is no train/dev/test split in the traditional ML sense — the pipeline processes each test claim independently using pre-trained LLMs and the pre-built PubMed index.
 
 ---
 
@@ -570,7 +570,7 @@ Logged per run:
 PRAG-ArgumentMining-MultiAgentDebate-RoleSwitching/
 ├── Check-COVID/                         # Dataset directory
 │   └── test/
-│       └── covidCheck_test_no_NEI.json  # Primary evaluation dataset
+│       └── covidCheck_test_data.json   # Primary evaluation dataset
 │
 ├── framework/                           # All pipeline source code
 │   ├── run_eval_extended.py             # [ENTRY POINT] Extended eval wrapper + monkey patches
@@ -643,7 +643,7 @@ PRAG-ArgumentMining-MultiAgentDebate-RoleSwitching/
 
 ### 7.1 Assumptions
 
-- The pipeline assumes **binary-labeled claims** (SUPPORT / REFUTE). The NEI class is excluded from evaluation, and the dataset is filtered accordingly (`covidCheck_test_no_NEI.json`).
+- The pipeline assumes **binary-labeled claims** (SUPPORT / REFUTE). The NEI class is excluded from evaluation, and the dataset is filtered accordingly (`covidCheck_test_data.json`).
 - The retrieval system assumes the PubMed FAISS index has been pre-built and all three index files (`pubmed_faiss.index`, `pubmed_meta.jsonl`, `pubmed_meta_offsets.npy`) are present in the `framework/` directory.
 - All LLMs are accessed as **external API services**. Output variability is inherent to these models and temperature settings.
 

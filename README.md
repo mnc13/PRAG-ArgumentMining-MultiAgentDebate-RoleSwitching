@@ -339,7 +339,7 @@ PRAG-ArgumentMining-MultiAgentDebate-RoleSwitching/
 │
 ├── Check-COVID/                        # Fact-checking dataset
 │   └── test/
-│       └── covidCheck_test_no_NEI.json # Test claims (SUPPORT/REFUTE, no NEI)
+│       └── covidCheck_test_data.json   # Test claims (SUPPORT/REFUTE, no NEI)
 │
 ├── framework/                          # All pipeline source code
 │   │
