@@ -10,7 +10,7 @@
 
 The ablation branch of this repository constitutes a systematic empirical investigation into the causal contribution of each architectural component of the full **PRAG-ArgumentMining Multi-Agent Debate (MAD)** fact-checking pipeline. The purpose of ablation studies in machine learning research is to isolate the individual contribution of each sub-module to the overall system performance, thereby establishing which design choices are necessary, which are redundant, and which introduce trade-offs between accuracy, efficiency, and robustness.
 
-This repository implements **six distinct ablation experiments**, each of which removes or modifies exactly one functional subsystem of the main pipeline while keeping all other components intact. The experiments are evaluated on the **Check-COVID** benchmark dataset (`covidCheck_test_no_NEI.json`, 120 claims with binary SUPPORT/REFUTE labels), using the same evaluation infrastructure as the main pipeline.
+This repository implements **six distinct ablation experiments**, each of which removes or modifies exactly one functional subsystem of the main pipeline while keeping all other components intact. The experiments are evaluated on the **Check-COVID** benchmark dataset (`covidCheck_test_data.json`, 120 claims with binary SUPPORT/REFUTE labels), using the same evaluation infrastructure as the main pipeline.
 
 Each ablation is designed to answer a precise research question:
 

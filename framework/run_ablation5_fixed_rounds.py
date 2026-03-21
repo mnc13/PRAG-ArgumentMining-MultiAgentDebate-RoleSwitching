@@ -143,7 +143,7 @@ def run_ablation(args):
                 if line.strip(): processed_ids.add(line.strip())
 
     loader = DataLoader(data_dir)
-    test_file_path = os.path.join(data_dir, "test", "covidCheck_test_no_NEI.json")
+    test_file_path = os.path.join(data_dir, "test", "covidCheck_test_data.json")
     all_claims = loader.load_specific_file(test_file_path)
     if not all_claims: return
     

@@ -12,7 +12,7 @@
 PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID/
 ├── Check-COVID/
 │   └── test/
-│       └── covidCheck_test_no_NEI.json       # 120-claim evaluation dataset (binary: SUPPORT/REFUTE)
+│       └── covidCheck_test_data.json         # 120-claim evaluation dataset (binary: SUPPORT/REFUTE)
 ├── framework/
 │   ├── ablation/
 │   │   ├── ablation1/                        # Ablation 1 outputs
@@ -70,7 +70,7 @@ PRAG--ArgumentMining-MultiAgentDebate-RoleSwitching-CheckCOVID/
 
 | File | Role |
 |---|---|
-| `covidCheck_test_no_NEI.json` | Primary evaluation dataset; 120 claims, labels: SUPPORT/REFUTE |
+| `covidCheck_test_data.json` | Primary evaluation dataset; 120 claims, labels: SUPPORT/REFUTE |
 | `pubmed_faiss.index` | FAISS index over PubMed COVID-19 abstracts (2020–2024); used for dense retrieval |
 | `pubmed_meta.jsonl` | Parallel metadata file; indexed via `pubmed_meta_offsets.npy` for O(1) lookup |
 | `logging_extension.py` | Global telemetry layer; tracks tokens, retrieval calls, evidence counts per claim |
@@ -401,7 +401,7 @@ The following describes the step-by-step execution flow for a typical ablation (
 ### Step 1: Data Loading
 ```python
 loader = DataLoader(data_dir)  # reads Check-COVID directory
-test_file_path = os.path.join(data_dir, "test", "covidCheck_test_no_NEI.json")
+test_file_path = os.path.join(data_dir, "test", "covidCheck_test_data.json")
 all_claims = loader.load_specific_file(test_file_path)  # returns List[Claim]
 # Slicing:
 all_claims = all_claims[args.offset : args.offset + args.limit]

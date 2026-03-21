@@ -41,7 +41,7 @@ def main():
     # Init components
     print("Loading data...")
     # Base framework path
-    dataset_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "Check-COVID", "test", "covidCheck_test_no_NEI.json")
+    dataset_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "Check-COVID", "test", "covidCheck_test_data.json")
     
     # Actually, the user's framework specifies path directly or relatively.
     # The DataLoader typically expects a path relative to the root PRAG directory
@@ -49,7 +49,7 @@ def main():
     # I'll just let data_loader manage it, but to be robust, let's pass the absolute path 
     # to the dataset since PRAG-ArgumentMining-MultiAgentDebate-RoleSwitching is the root.
     root_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-    target_json = os.path.join("Check-COVID", "test", "covidCheck_test_no_NEI.json")
+    target_json = os.path.join("Check-COVID", "test", "covidCheck_test_data.json")
     
     loader = DataLoader(root_dir)
     all_claims = loader.load_specific_file(target_json)

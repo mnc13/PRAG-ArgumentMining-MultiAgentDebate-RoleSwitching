@@ -8,7 +8,7 @@
 
 ## 1. Evaluation Methodology
 
-All ablation experiments are evaluated on the **Check-COVID** benchmark test set (`covidCheck_test_no_NEI.json`), which contains **120 claims** with binary ground-truth labels (`SUPPORT` / `REFUTE`). The "No-NEI" variant excludes claims labeled as "Not Enough Information", enforcing a binary decision setting.
+All ablation experiments are evaluated on the **Check-COVID** benchmark test set (`covidCheck_test_data.json`), which contains **120 claims** with binary ground-truth labels (`SUPPORT` / `REFUTE`). The "No-NEI" variant excludes claims labeled as "Not Enough Information", enforcing a binary decision setting.
 
 The evaluation pipeline is implemented in `rescan_and_fix_metrics.py`, executed via `rescan_all.py` which produces `master_ablation_report.txt`. The methodology proceeds as follows:
 
