@@ -1,6 +1,6 @@
-# PRAG-ArgumentMining-MultiAgentDebate-RoleSwitching
+# PROClaim : Courtroom-Style Multi-Agent Debate with Role-Switching and Progressive RAG for Controversial Claim Verification
 
-> **A courtroom-style multi-agent debate framework for automated medical fact-checking, combining Progressive Retrieval-Augmented Generation (P-RAG), adversarial argument mining, and judicial panel evaluation.**
+> **A courtroom-style multi-agent debate framework for automated fact-checking, combining Progressive Retrieval-Augmented Generation (P-RAG), adversarial argument mining, and judicial panel evaluation.**
 
 <div align="center">
 
@@ -29,7 +29,7 @@
 
 ## Overview
 
-**PRAG-ArgumentMining-MultiAgentDebate-RoleSwitching** is a research-grade fact-checking pipeline for medical and COVID-19 claims. It models the fact-checking process as a **structured legal proceeding**, where:
+**PROClaim : Courtroom-Style Multi-Agent Debate with Role-Switching and Progressive RAG for Controversial Claim Verification** is a fact-checking pipeline for claim verification. It models the fact-checking process as a **structured legal proceeding**, where:
 
 - A **Plaintiff Counsel** (proponent LLM agent) argues *for* the claim
 - A **Defense Counsel** (opponent LLM agent) argues *against* the claim
@@ -38,7 +38,7 @@
 
 The system grounds all argumentation in a large-scale **PubMed FAISS index** (~1.4 GB, 2020–2024 COVID literature), retrieved progressively through an adaptive retrieval mechanism (**P-RAG**) that filters for novelty and terminates when the evidence well runs dry.
 
-**Primary application:** Verification of biomedical claims with binary labels (`SUPPORT` / `REFUTE`), evaluated on the **Check-COVID** dataset.
+**Primary application:** Verification of controversial claims, evaluated on the **Check-COVID** dataset.
 
 ---
 
@@ -49,13 +49,13 @@ The system grounds all argumentation in a large-scale **PubMed FAISS index** (~1
 | 🔍 **Argument Mining** | Decomposes claims into atomic, testable premises via DeepSeek-R1 |
 | ⚖️ **Evidence Negotiation** | Stance-conditioned discovery + LLM-scored admissibility (Relevance × Credibility) |
 | 🔄 **Progressive RAG (P-RAG)** | Round-by-round adaptive retrieval with novelty scoring and automatic stopping criteria |
-| 🤖 **Multi-Agent Debate** | Heterogeneous LLM agents (OpenAI, OpenRouter, Groq) debate in structured proceedings |
+| 🤖 **Multi-Agent Debate** | Heterogeneous LLM agents (OpenAI, OpenRouter) debate in structured proceedings |
 | 🧑‍⚖️ **Expert Witness System** | Dynamically generated expert personas called on demand during proceedings |
 | 🪞 **Role-Switching** | Agents swap sides to test argument robustness and logical consistency |
 | 👩‍⚖️ **Judicial Panel** | 3 independent appellate judges vote via majority ruling |
 | 📊 **Extended Metrics** | Accuracy, Macro-F1, AUC-ROC, Cohen's Kappa (inter-judge reliability), KS Stability |
 | 💾 **Resumable Runs** | Progress tracked via `processed_claims.txt`; supports offset/limit batching |
-| 🔌 **LLM-Agnostic Design** | Pluggable LLM clients for OpenAI, OpenRouter, Groq, Gemini |
+| 🔌 **LLM-Agnostic Design** | Pluggable LLM clients for OpenAI, OpenRouter |
 
 ---
 
@@ -131,7 +131,7 @@ The system grounds all argumentation in a large-scale **PubMed FAISS index** (~1
 ### Prerequisites
 
 - Python 3.8+
-- Access to **OpenAI**, **OpenRouter**, and (optionally) **Groq** APIs
+- Access to **OpenAI**, **OpenRouter**
 - ~2 GB disk space for the PubMed FAISS index files (pre-built; not included in repo due to size)
 
 ### 1. Clone the Repository
@@ -167,7 +167,7 @@ The key runtime dependencies are:
 | `faiss-cpu` | Vector similarity search over PubMed index |
 | `sentence-transformers` | Sentence embedding (`all-MiniLM-L6-v2`) |
 | `openai` | OpenAI API client (GPT models) |
-| `requests` | HTTP client for OpenRouter & Groq APIs |
+| `requests` | HTTP client for OpenRouter API |
 | `numpy` | Numerical operations, offset arrays |
 | `python-dotenv` | API key management via `.env` |
 | `torch` | PyTorch backend for transformer models |
@@ -240,10 +240,6 @@ Options:
   --offset M                 Skip first M claims in the dataset (default: 0)
   --force                    Re-process claims already in processed_claims.txt
   --runs R                   Number of repeated runs per claim set (default: 1)
-  --inconclusive-policy {A,B,C}
-                             A: map INCONCLUSIVE → SUPPORT
-                             B: map INCONCLUSIVE → REFUTE
-                             C: exclude INCONCLUSIVE from metrics
 ```
 
 ### Batch Processing
@@ -283,37 +279,49 @@ A claim from the Check-COVID test set:
 
 ### Pipeline Output (console summary)
 
-```
+```text
 === PRAG EVALUATION EXTENSION LAYER ===
-Executing 1 runs. Output safely appending to ./outcome/artifacts
+Executing 1 runs. Output safely appending to ../artifacts/metrics
 
 1. Loading Data...
 2. Preprocessing & Extraction...
-   Extracted: COVID-19 vaccines are effective at preventing severe disease and hospitalization.
+   Extracted: Increase health care capacity would have no effect on the duration of the COVID-19 pandemic.
 
 3. Argument Mining...
+   [Token Usage] Model: deepseek-r1 | Total: 876
    [DECOMPOSED PREMISES/ARGUMENTS]:
-   - COVID-19 vaccines reduce the risk of severe disease
-   - COVID-19 vaccines reduce hospitalization rates
+   - 1. Healthcare capacity increase does not reduce COVID-19 transmission rates.
+   - 2. Case fatality ratio of COVID-19 is independent of healthcare capacity.
+   - 3. Pandemic duration is primarily determined by factor-unrelated to healthcare capacity (e.g., NPIs).
 
 4. Initial RAG Retrieval...
-   [INITIAL RETRIEVED EVIDENCE]: 5 PubMed articles
+   [INITIAL RETRIEVED EVIDENCE]:
+   - Evidence 1 (ID: 33937565): Hospital capacity during the COVID-19 pandemic.
+   - Evidence 2 (ID: 33781225): Effects of medical resource capacities on outcomes.
 
 5. Evidence Negotiation & Arbitration...
-   > Admitted 7 high-weight items. Flagged 2 for dispute.
+   --- [Negotiator] Perspectives: Plaintiff & Defense gathered 6 specific items.
+   [JUDICIAL ADMISSION] Admitted 2 exhibits for global discovery (IDs: 33793611, 33781225).
 
-6-7. Courtroom Proceedings (MAD + Role-Switching)...
-   [2 debate rounds, convergence reached]
+6. Courtroom Proceedings (MAD + Role-Switching)...
+   [Phase 1-5] Multi-round debate with expert witnesses.
+   [EXPERT TESTIMONY]: "...healthcare capacity directly impacts key pandemic outcomes... shortening the acute crisis phase."
+   [CONSISTENCY ANALYSIS]: Agent A: 9/10 | Agent B: 7/10
 
 8. Judicial Panel Evaluation...
-   Judge 1 (deepseek-r1):         SUPPORTED — Evidence Strength: 8/10
-   Judge 2 (hermes-3-llama-405b): SUPPORTED — Evidence Strength: 9/10
-   Judge 3 (qwen3-235b):          SUPPORTED — Evidence Strength: 8/10
-   Final Verdict: SUPPORTED | Vote: {'SUPPORTED': 3}
+   Judge 1 (deepseek-r1):         NOT SUPPORTED — Evidence Strength: 6/10
+   Judge 2 (hermes-3-llama-405b): NOT SUPPORTED — Evidence Strength: 8/10
+   Judge 3 (qwen3-235b):          NOT SUPPORTED — Evidence Strength: 8/10
+
+=============================
+[CLAIM 5f8a0530e95347460249fc61_0] rounds_norm=3 rounds_switch=2 tok=271,359 retr=25 ev=77 conf=1.000
+[CLAIM 5f8a0530e95347460249fc61_0] judges: NOT SUPPORTED, NOT SUPPORTED, NOT SUPPORTED
+=============================
 
 11. Generating Final Verdict...
-   Verdict: SUPPORT
-   Confidence: 0.847
+    Verdict: REFUTE
+    Confidence: 1.000
+    Correct: True (GT: REFUTE)
 ```
 
 ### Saved Artifacts
@@ -329,6 +337,7 @@ All structured outputs are written to `framework/outcome/`:
 | `all_output_jsons/debate_transcript_switched.jsonl` | Role-switched debate record |
 | `all_output_jsons/negotiation_state_{id}.json` | Evidence pools and admissibility scores |
 | `logs/execution_log_{id}_{run_id}.txt` | Full dual-stream execution log |
+| `../artifacts/metrics/claims_added.jsonl` | Extended metrics for the evaluation layer |
 
 ---
 
@@ -372,10 +381,9 @@ PRAG-ArgumentMining-MultiAgentDebate-RoleSwitching/
 │   ├── metrics_extension.py            # Accuracy, F1, AUC, Cohen's Kappa, KS Stability
 │   │
 │   │   ── LLM Client Layer ──
-│   ├── llm_client.py                   # LLMClient base class, GeminiLLMClient
+│   ├── llm_client.py                   # LLMClient base class, 
 │   ├── openai_client.py                # OpenAILLMClient (Chat + Responses API)
 │   ├── openrouter_client.py            # OpenRouterLLMClient (requests-based)
-│   ├── groq_client.py                  # GroqLLMClient
 │   │
 │   │   ── Corpus Files (not in repo) ──
 │   ├── pubmed_faiss.index              # FAISS binary index (~1.4 GB)
@@ -471,7 +479,7 @@ Add a function to [`framework/metrics_extension.py`](framework/metrics_extension
 
 ### Dataset
 
-- **Check-COVID:** A COVID-19 fact-checking benchmark with binary (`SUPPORT` / `REFUTE`) claim labels from scientific literature. All claims in this project are evaluated on the no-NEI test split.
+- **Check-COVID:** A COVID-19 fact-checking benchmark derived from scientific literature. All claims in this project are evaluated on the test split.
 
 ### Retrieval Corpus
 
