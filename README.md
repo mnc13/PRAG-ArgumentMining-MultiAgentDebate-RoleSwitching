@@ -1,16 +1,8 @@
 # Ablation Framework Analysis
 
-> **PRAG–ArgumentMining · Multi-Agent Debate · Role-Switching · Check-COVID**  
-> Companion document to the main pipeline README. Applicable to the ablation branch.  
-> Intended for inclusion in a COLM-level research paper.
-
----
-
 ## 1. Overview
 
-The ablation branch of this repository constitutes a systematic empirical investigation into the causal contribution of each architectural component of the full **PRAG-ArgumentMining Multi-Agent Debate (MAD)** fact-checking pipeline. The purpose of ablation studies in machine learning research is to isolate the individual contribution of each sub-module to the overall system performance, thereby establishing which design choices are necessary, which are redundant, and which introduce trade-offs between accuracy, efficiency, and robustness.
-
-This repository implements **six distinct ablation experiments**, each of which removes or modifies exactly one functional subsystem of the main pipeline while keeping all other components intact. The experiments are evaluated on the **Check-COVID** benchmark dataset (`covidCheck_test_data.json`, 120 claims with binary SUPPORT/REFUTE labels), using the same evaluation infrastructure as the main pipeline.
+This ablation analysis implements **six distinct ablation experiments**, each of which removes or modifies exactly one functional subsystem of the main pipeline while keeping all other components intact. The experiments are evaluated on the **Check-COVID** benchmark dataset (`covidCheck_test_data.json`), using the same evaluation infrastructure as the main pipeline.
 
 Each ablation is designed to answer a precise research question:
 
@@ -488,10 +480,4 @@ The choice of ablations reflects the three core theoretical claims of the paper:
 
 3. **Component Interaction Hypothesis**: Some components are hypothesized to interact (e.g., P-RAG and self-reflection share a feedback channel). The ablations reveal these interactions through unexpected performance patterns.
 
-The use of four **Inconclusive Policies** (A, B, C, T) in evaluation is particularly important:
-- **Policy A**: INCONCLUSIVE → follow majority (best for systems with low inconclusive rates)
-- **Policy B**: INCONCLUSIVE → REFUTE (conservative; penalizes false support)
-- **Policy C**: INCONCLUSIVE → keep as third class (measures true multi-class performance)
-- **Policy T**: INCONCLUSIVE → depends on confidence threshold (threshold = 0.5)
 
-This multi-policy evaluation reveals how much each ablation affects the system's **decisiveness** and **conservative bias**, beyond simple accuracy.
