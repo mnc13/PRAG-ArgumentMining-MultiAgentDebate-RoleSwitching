@@ -113,7 +113,7 @@ class JudicialPanel:
             print(f"  Scientific Reliability: {verdict['scientific_reliability']}/10\n")
         
         # Aggregate verdicts using majority voting
-        # NOTE: A 1-1-1 split defaults to Judge 1 (DeepSeek-R1) as presiding tie-breaker
+        # NOTE: A 1-1-1 split defaults to Judge 1 (DeepSeek-R1) as Chief Justice
         aggregation = self._aggregate_verdicts(judge_verdicts)
         
         result = {
