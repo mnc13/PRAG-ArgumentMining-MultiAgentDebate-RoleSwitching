@@ -178,6 +178,7 @@ framework/outcome_healthver/
 artifacts_healthver/
 artifacts_feverous/
 framework/outcome_feverous/
-
+framework/baseline/feverous_baselines/outcome_deepseek/
+framework/baseline/feverous_baselines/outcome_gpt/
 framework/ablation/
 PIPELINE_OVERVIEW_FEVEROUS.md
