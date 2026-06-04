@@ -1,0 +1,1635 @@
+{
+  "total_claims_evaluated": 60,
+  "hits": 11,
+  "adjusted_hits": 11,
+  "dicom_ruined": 0,
+  "misses": 49,
+  "no_gold_found": 0,
+  "page_level_recall": 0.18333333333333332,
+  "adjusted_page_level_recall": 0.18333333333333332,
+  "per_claim": [
+    {
+      "claim_id": "9589",
+      "gold_title": "Aifric",
+      "retrieved_pageids": [
+        "14847934",
+        "25241453",
+        "29839763",
+        "63864"
+      ],
+      "retrieved_titles": [
+        "aifric campbell",
+        "aifric (name)",
+        "sophie",
+        "dicom"
+      ],
+      "clean_titles": [
+        "aifric campbell",
+        "aifric (name)",
+        "sophie"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "69702",
+      "gold_title": "Duane Laflin",
+      "retrieved_pageids": [
+        "6014851",
+        "8808028",
+        "551666"
+      ],
+      "retrieved_titles": [
+        "the linking ring",
+        "reliability of wikipedia",
+        "ibm research"
+      ],
+      "clean_titles": [
+        "the linking ring",
+        "reliability of wikipedia",
+        "ibm research"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "48413",
+      "gold_title": "2001 Malaysian Grand Prix",
+      "retrieved_pageids": [
+        "53255244",
+        "1126627",
+        "20396",
+        "152190"
+      ],
+      "retrieved_titles": [
+        "2004 formula one world championship",
+        "acl",
+        "breezy johnson",
+        "michael schumacher"
+      ],
+      "clean_titles": [
+        "2004 formula one world championship",
+        "acl",
+        "breezy johnson",
+        "michael schumacher"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "46230",
+      "gold_title": "Madura State Polytechnic",
+      "retrieved_pageids": [
+        "31874",
+        "27959766",
+        "640502"
+      ],
+      "retrieved_titles": [
+        "list of universities in indonesia",
+        "physical history of the united states declaration of independence",
+        "united states declaration of independence"
+      ],
+      "clean_titles": [
+        "list of universities in indonesia",
+        "physical history of the united states declaration of independence",
+        "united states declaration of independence"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "69329",
+      "gold_title": "2005 Montana Grizzlies football team",
+      "retrieved_pageids": [
+        "15100051",
+        "20754811",
+        "619230",
+        "5001420",
+        "10970350",
+        "19446"
+      ],
+      "retrieved_titles": [
+        "jordan kent",
+        "montana grizzlies and lady griz",
+        "femoroacetabular impingement",
+        "university of montana",
+        "magnetic resonance imaging",
+        "ncaa division i football bowl subdivision"
+      ],
+      "clean_titles": [
+        "jordan kent",
+        "montana grizzlies and lady griz",
+        "femoroacetabular impingement",
+        "university of montana",
+        "magnetic resonance imaging",
+        "ncaa division i football bowl subdivision"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "36962",
+      "gold_title": "Māris Poikāns",
+      "retrieved_pageids": [
+        "36131822",
+        "10852038",
+        "14373905",
+        "19446",
+        "26779"
+      ],
+      "retrieved_titles": [
+        "international bobsleigh and skeleton federation",
+        "2007–08 bobsleigh world cup",
+        "magnetic resonance imaging",
+        "medial knee injuries",
+        "soviet union"
+      ],
+      "clean_titles": [
+        "international bobsleigh and skeleton federation",
+        "2007–08 bobsleigh world cup",
+        "magnetic resonance imaging",
+        "medial knee injuries",
+        "soviet union"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "91237",
+      "gold_title": "Pat Bunch",
+      "retrieved_pageids": [
+        "19344418",
+        "34910121",
+        "57858135",
+        "34142356"
+      ],
+      "retrieved_titles": [
+        "connie smith singles discography",
+        "lucy letby",
+        "bovine spongiform encephalopathy",
+        "pat bunch"
+      ],
+      "clean_titles": [
+        "connie smith singles discography",
+        "lucy letby",
+        "bovine spongiform encephalopathy",
+        "pat bunch"
+      ],
+      "hit": true,
+      "clean_hit": true,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "85282",
+      "gold_title": "1963 Five Nations Championship",
+      "retrieved_pageids": [
+        "881384",
+        "801647",
+        "7633197",
+        "26547"
+      ],
+      "retrieved_titles": [
+        "world anti-doping agency",
+        "united states anti-doping agency",
+        "women's six nations championship",
+        "six nations championship"
+      ],
+      "clean_titles": [
+        "world anti-doping agency",
+        "united states anti-doping agency",
+        "women's six nations championship",
+        "six nations championship"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "58974",
+      "gold_title": "Eleutheranthera",
+      "retrieved_pageids": [
+        "41460828",
+        "10593560"
+      ],
+      "retrieved_titles": [
+        "catalogue of life",
+        "barcode of life data system"
+      ],
+      "clean_titles": [
+        "catalogue of life",
+        "barcode of life data system"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "93154",
+      "gold_title": "Joe Morrell",
+      "retrieved_pageids": [
+        "775067",
+        "64535350",
+        "4392",
+        "14419588",
+        "7182893",
+        "715008",
+        "12944783",
+        "1360083",
+        "50336043",
+        "4947265"
+      ],
+      "retrieved_titles": [
+        "phil parkinson",
+        "2016–17 bristol city f.c. season",
+        "english football league",
+        "sports agent",
+        "efl championship",
+        "los angeles angels",
+        "bristol city f.c.",
+        "2020–21 bristol city f.c. season",
+        "bristol city w.f.c.",
+        "efl league two play-offs"
+      ],
+      "clean_titles": [
+        "phil parkinson",
+        "2016–17 bristol city f.c. season",
+        "sports agent",
+        "english football league",
+        "efl championship",
+        "los angeles angels",
+        "bristol city f.c.",
+        "2020–21 bristol city f.c. season",
+        "bristol city w.f.c.",
+        "efl league two play-offs"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "41293",
+      "gold_title": "1928 Nicaraguan general election",
+      "retrieved_pageids": [
+        "44026",
+        "21362",
+        "53012768",
+        "10416624",
+        "24875737",
+        "40538",
+        "7579923"
+      ],
+      "retrieved_titles": [
+        "executive order 13769",
+        "1928 united states presidential election",
+        "united states national security council",
+        "supreme electoral council (nicaragua)",
+        "1990 nicaraguan general election",
+        "la prensa gráfica",
+        "nicaragua"
+      ],
+      "clean_titles": [
+        "executive order 13769",
+        "1928 united states presidential election",
+        "united states national security council",
+        "supreme electoral council (nicaragua)",
+        "la prensa gráfica",
+        "1990 nicaraguan general election",
+        "nicaragua"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "54027",
+      "gold_title": "1959 Western Michigan Broncos football team",
+      "retrieved_pageids": [
+        "626920",
+        "5611016",
+        "8875562",
+        "72852"
+      ],
+      "retrieved_titles": [
+        "ust growling tigers, tigresses, tiger cubs and tigress cubs",
+        "western michigan broncos",
+        "brooklyn nets",
+        "amsterdam admirals"
+      ],
+      "clean_titles": [
+        "ust growling tigers, tigresses, tiger cubs and tigress cubs",
+        "brooklyn nets",
+        "amsterdam admirals",
+        "western michigan broncos"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "93215",
+      "gold_title": "Calum French",
+      "retrieved_pageids": [
+        "1281659",
+        "6825610",
+        "154164",
+        "59323746",
+        "5611016",
+        "40626141"
+      ],
+      "retrieved_titles": [
+        "european amateur boxing championships",
+        "athlete",
+        "football association of serbia",
+        "ust growling tigers, tigresses, tiger cubs and tigress cubs",
+        "2013 aiba world boxing championships",
+        "2019 aiba world boxing championships"
+      ],
+      "clean_titles": [
+        "european amateur boxing championships",
+        "athlete",
+        "football association of serbia",
+        "ust growling tigers, tigresses, tiger cubs and tigress cubs",
+        "2013 aiba world boxing championships",
+        "2019 aiba world boxing championships"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "45627",
+      "gold_title": "Gollapudi Maruti Rao",
+      "retrieved_pageids": [
+        "42389902",
+        "1281659",
+        "45523219",
+        "72852"
+      ],
+      "retrieved_titles": [
+        "uci worldteam",
+        "football association of serbia",
+        "brooklyn nets",
+        "trisulam (film)"
+      ],
+      "clean_titles": [
+        "uci worldteam",
+        "football association of serbia",
+        "brooklyn nets",
+        "trisulam (film)"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "16571",
+      "gold_title": "Metropolitan Borough of Stockport",
+      "retrieved_pageids": [
+        "300827",
+        "3241218",
+        "9204602",
+        "852203",
+        "1105391",
+        "3339324",
+        "51986180",
+        "47851696",
+        "486492",
+        "12128998"
+      ],
+      "retrieved_titles": [
+        "local government act 1972",
+        "local government act 1894",
+        "euan ashley",
+        "local government board for ireland",
+        "cheadle (uk parliament constituency)",
+        "hazel grove and bramhall urban district",
+        "the american journal of the medical sciences",
+        "stockport south (uk parliament constituency)",
+        "stockport",
+        "the new england journal of medicine"
+      ],
+      "clean_titles": [
+        "local government act 1972",
+        "euan ashley",
+        "local government act 1894",
+        "the new england journal of medicine",
+        "local government board for ireland",
+        "cheadle (uk parliament constituency)",
+        "hazel grove and bramhall urban district",
+        "stockport south (uk parliament constituency)",
+        "stockport",
+        "the american journal of the medical sciences"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "68225",
+      "gold_title": "Charles Veale",
+      "retrieved_pageids": [
+        "23920495",
+        "1470346",
+        "63864"
+      ],
+      "retrieved_titles": [
+        "dicom",
+        "battle of chaffin's farm order of battle: union",
+        "battle of chaffin's farm"
+      ],
+      "clean_titles": [
+        "battle of chaffin's farm order of battle: union",
+        "battle of chaffin's farm"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "27585",
+      "gold_title": "The American Boy",
+      "retrieved_pageids": [
+        "2345078",
+        "62193718",
+        "11089347",
+        "1060308",
+        "32086549",
+        "1962396",
+        "61088",
+        "65078233"
+      ],
+      "retrieved_titles": [
+        "carolyn f. ulrich",
+        "smallpox vaccine",
+        "ulrich's periodicals directory",
+        "frank fenner",
+        "justice traps the guilty",
+        "american boychoir school",
+        "global certification commission",
+        "american boy scouts"
+      ],
+      "clean_titles": [
+        "carolyn f. ulrich",
+        "smallpox vaccine",
+        "ulrich's periodicals directory",
+        "frank fenner",
+        "justice traps the guilty",
+        "american boychoir school",
+        "global certification commission",
+        "american boy scouts"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "74729",
+      "gold_title": "Emma Eames",
+      "retrieved_pageids": [
+        "18781548",
+        "160869"
+      ],
+      "retrieved_titles": [
+        "korean name",
+        "turkish name"
+      ],
+      "clean_titles": [
+        "turkish name",
+        "korean name"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "25804",
+      "gold_title": "Potosí Municipality",
+      "retrieved_pageids": [
+        "69012",
+        "21293896",
+        "32449649",
+        "2946704",
+        "2509116",
+        "12650075",
+        "21478588",
+        "81282075",
+        "27391",
+        "670485",
+        "24862777",
+        "22394291",
+        "3462"
+      ],
+      "retrieved_titles": [
+        "sipe sipe",
+        "international boundary commission",
+        "entre ríos, cochabamba",
+        "demographics of spain",
+        "copacabana municipality, la paz",
+        "departments of bolivia",
+        "bolivia",
+        "mérida, mérida",
+        "vantor (company)",
+        "bolivians",
+        "bolivian literature",
+        "bolívar province, cochabamba",
+        "demographics of bolivia"
+      ],
+      "clean_titles": [
+        "sipe sipe",
+        "international boundary commission",
+        "entre ríos, cochabamba",
+        "demographics of spain",
+        "copacabana municipality, la paz",
+        "departments of bolivia",
+        "bolivia",
+        "mérida, mérida",
+        "vantor (company)",
+        "bolivians",
+        "bolivian literature",
+        "bolívar province, cochabamba",
+        "demographics of bolivia"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "87874",
+      "gold_title": "Lamberto Ceserani",
+      "retrieved_pageids": [
+        "6802329",
+        "33038936",
+        "1625178",
+        "34069",
+        "11845312",
+        "38256723",
+        "62430021"
+      ],
+      "retrieved_titles": [
+        "isu figure skating championships",
+        "catastrophic injury",
+        "international skating union",
+        "world junior figure skating championships",
+        "winter olympic games",
+        "italian athletics championships",
+        "ohio state university abuse scandal"
+      ],
+      "clean_titles": [
+        "isu figure skating championships",
+        "catastrophic injury",
+        "international skating union",
+        "world junior figure skating championships",
+        "winter olympic games",
+        "italian athletics championships",
+        "ohio state university abuse scandal"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "13229",
+      "gold_title": "August Willich",
+      "retrieved_pageids": [
+        "4599312"
+      ],
+      "retrieved_titles": [
+        "immigration"
+      ],
+      "clean_titles": [
+        "immigration"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "37323",
+      "gold_title": "Charles Chvala",
+      "retrieved_pageids": [
+        "74106301",
+        "513731",
+        "59280690",
+        "1281659"
+      ],
+      "retrieved_titles": [
+        "2018 wisconsin senate election",
+        "football association of serbia",
+        "wisconsin state senate",
+        "wisconsin legislative reference bureau"
+      ],
+      "clean_titles": [
+        "2018 wisconsin senate election",
+        "football association of serbia",
+        "wisconsin state senate",
+        "wisconsin legislative reference bureau"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "60927",
+      "gold_title": "Belarus in the Eurovision Song Contest 2009",
+      "retrieved_pageids": [
+        "21555729",
+        "16535"
+      ],
+      "retrieved_titles": [
+        "joseph lister",
+        "film"
+      ],
+      "clean_titles": [
+        "joseph lister",
+        "film"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "34479",
+      "gold_title": "Tramore",
+      "retrieved_pageids": [
+        "6014851",
+        "442328"
+      ],
+      "retrieved_titles": [
+        "tramore",
+        "reliability of wikipedia"
+      ],
+      "clean_titles": [
+        "tramore",
+        "reliability of wikipedia"
+      ],
+      "hit": true,
+      "clean_hit": true,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "30366",
+      "gold_title": "Frank Tremar Sibly Menendez",
+      "retrieved_pageids": [
+        "55251966",
+        "80986608",
+        "48713"
+      ],
+      "retrieved_titles": [
+        "dna encryption",
+        "human intervention motivation study",
+        "st john's college, cambridge"
+      ],
+      "clean_titles": [
+        "dna encryption",
+        "human intervention motivation study",
+        "st john's college, cambridge"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "12757",
+      "gold_title": "Pixies (band)",
+      "retrieved_pageids": [
+        "23726",
+        "316084",
+        "63864"
+      ],
+      "retrieved_titles": [
+        "come on pilgrim",
+        "pixies (band)",
+        "dicom"
+      ],
+      "clean_titles": [
+        "come on pilgrim",
+        "pixies (band)"
+      ],
+      "hit": true,
+      "clean_hit": true,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "45738",
+      "gold_title": "José Taira",
+      "retrieved_pageids": [
+        "1127541",
+        "27222956",
+        "17507359",
+        "243500"
+      ],
+      "retrieved_titles": [
+        "originality",
+        "sevilla fc",
+        "josé taira",
+        "sevilla fc puerto rico"
+      ],
+      "clean_titles": [
+        "originality",
+        "sevilla fc",
+        "josé taira",
+        "sevilla fc puerto rico"
+      ],
+      "hit": true,
+      "clean_hit": true,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "5738",
+      "gold_title": "Trent Reznor discography",
+      "retrieved_pageids": [
+        "22687958",
+        "14096078",
+        "63864"
+      ],
+      "retrieved_titles": [
+        "trent reznor discography",
+        "dicom",
+        "mariqueen maandig"
+      ],
+      "clean_titles": [
+        "trent reznor discography",
+        "mariqueen maandig"
+      ],
+      "hit": true,
+      "clean_hit": true,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "78938",
+      "gold_title": "2002 Arizona Cardinals season",
+      "retrieved_pageids": [
+        "881384",
+        "2102",
+        "23416255",
+        "34846159",
+        "801647"
+      ],
+      "retrieved_titles": [
+        "arizona cardinals",
+        "united states anti-doping agency",
+        "world anti-doping agency",
+        "2006 chicago bears–arizona cardinals game",
+        "list of drugs banned by the world anti-doping agency"
+      ],
+      "clean_titles": [
+        "arizona cardinals",
+        "united states anti-doping agency",
+        "world anti-doping agency",
+        "2006 chicago bears–arizona cardinals game",
+        "list of drugs banned by the world anti-doping agency"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "23376",
+      "gold_title": "Rammstein discography",
+      "retrieved_pageids": [
+        "79503",
+        "29831",
+        "6034557",
+        "888636",
+        "361020",
+        "13892678"
+      ],
+      "retrieved_titles": [
+        "television",
+        "scorpions (band)",
+        "rock you like a hurricane",
+        "love at first sting",
+        "sofia coppola",
+        "big city nights (song)"
+      ],
+      "clean_titles": [
+        "television",
+        "scorpions (band)",
+        "rock you like a hurricane",
+        "love at first sting",
+        "sofia coppola",
+        "big city nights (song)"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "56788",
+      "gold_title": "Special 1 TV",
+      "retrieved_pageids": [
+        "3558687",
+        "2365070",
+        "63864"
+      ],
+      "retrieved_titles": [
+        "dicom",
+        "setanta sports",
+        "mario rosenstock"
+      ],
+      "clean_titles": [
+        "setanta sports",
+        "mario rosenstock"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "5208",
+      "gold_title": "Don Pickwick",
+      "retrieved_pageids": [
+        "237504",
+        "16027810",
+        "45523219",
+        "72852"
+      ],
+      "retrieved_titles": [
+        "uci worldteam",
+        "brooklyn nets",
+        "history of coventry city f.c.",
+        "personal name"
+      ],
+      "clean_titles": [
+        "uci worldteam",
+        "brooklyn nets",
+        "history of coventry city f.c.",
+        "personal name"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "87074",
+      "gold_title": "Zaragoza en Común",
+      "retrieved_pageids": [
+        "75358",
+        "34087200",
+        "62841408",
+        "64203",
+        "68488993"
+      ],
+      "retrieved_titles": [
+        "2018 singhealth data breach",
+        "court",
+        "zaragoza",
+        "list of lgbtq politicians in spain",
+        "2015 spanish general election"
+      ],
+      "clean_titles": [
+        "2018 singhealth data breach",
+        "court",
+        "zaragoza",
+        "list of lgbtq politicians in spain",
+        "2015 spanish general election"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "73457",
+      "gold_title": "Monroeville Mall",
+      "retrieved_pageids": [
+        "475016",
+        "1422452",
+        "48495622",
+        "30034259"
+      ],
+      "retrieved_titles": [
+        "muhteşem yüzyıl: kösem",
+        "monroeville mall",
+        "muhteşem yüzyıl",
+        "cantonese opera"
+      ],
+      "clean_titles": [
+        "muhteşem yüzyıl: kösem",
+        "monroeville mall",
+        "muhteşem yüzyıl",
+        "cantonese opera"
+      ],
+      "hit": true,
+      "clean_hit": true,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "25417",
+      "gold_title": "Amanda Barrie",
+      "retrieved_pageids": [
+        "31270422",
+        "2855554",
+        "704149",
+        "308774"
+      ],
+      "retrieved_titles": [
+        "exif",
+        "gilbert gunn",
+        "amanda barrie",
+        "imdb"
+      ],
+      "clean_titles": [
+        "exif",
+        "gilbert gunn",
+        "amanda barrie",
+        "imdb"
+      ],
+      "hit": true,
+      "clean_hit": true,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "85931",
+      "gold_title": "Emerson McMillin",
+      "retrieved_pageids": [
+        "26208023",
+        "46474403"
+      ],
+      "retrieved_titles": [
+        "author name disambiguation",
+        "devil's brood"
+      ],
+      "clean_titles": [
+        "author name disambiguation",
+        "devil's brood"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "89873",
+      "gold_title": "List of Best Choreography awards",
+      "retrieved_pageids": [
+        "45651001",
+        "113604",
+        "477228",
+        "476903",
+        "10379609",
+        "12803469"
+      ],
+      "retrieved_titles": [
+        "barry lather",
+        "never catch me",
+        "mtv video music award for video of the year",
+        "broadcasting",
+        "1984 mtv video music awards",
+        "mtv video music award for best choreography"
+      ],
+      "clean_titles": [
+        "barry lather",
+        "never catch me",
+        "mtv video music award for video of the year",
+        "broadcasting",
+        "1984 mtv video music awards",
+        "mtv video music award for best choreography"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "94114",
+      "gold_title": "Diuris callitrophila",
+      "retrieved_pageids": [
+        "11632",
+        "18957",
+        "2774526"
+      ],
+      "retrieved_titles": [
+        "diuris",
+        "food and drug administration",
+        "medicine"
+      ],
+      "clean_titles": [
+        "food and drug administration",
+        "diuris"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "58066",
+      "gold_title": "Marguerite Jacquelin",
+      "retrieved_pageids": [
+        "57927121",
+        "840031"
+      ],
+      "retrieved_titles": [
+        "pierre-charles comte",
+        "françois-louis français"
+      ],
+      "clean_titles": [
+        "pierre-charles comte",
+        "françois-louis français"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "1450",
+      "gold_title": "Melbourne High School Old Boys Association",
+      "retrieved_pageids": [
+        "25922696",
+        "63565",
+        "1912837"
+      ],
+      "retrieved_titles": [
+        "forensic pathology",
+        "melbourne high school old boys football club",
+        "melbourne high school"
+      ],
+      "clean_titles": [
+        "forensic pathology",
+        "melbourne high school old boys football club",
+        "melbourne high school"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "40398",
+      "gold_title": "Marcel Azzola",
+      "retrieved_pageids": [
+        "27120410",
+        "370499",
+        "48607",
+        "15642"
+      ],
+      "retrieved_titles": [
+        "memphis, tennessee",
+        "sima yi",
+        "january",
+        "january 1927"
+      ],
+      "clean_titles": [
+        "memphis, tennessee",
+        "january",
+        "sima yi",
+        "january 1927"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "94579",
+      "gold_title": "Rohit Kanaiya",
+      "retrieved_pageids": [
+        "58838313",
+        "45676459",
+        "342334",
+        "43048757"
+      ],
+      "retrieved_titles": [
+        "2023 cricket world cup qualifier play-off",
+        "2018 cricket world cup qualifier",
+        "autopsy",
+        "list of afghanistan national cricket captains"
+      ],
+      "clean_titles": [
+        "2023 cricket world cup qualifier play-off",
+        "2018 cricket world cup qualifier",
+        "autopsy",
+        "list of afghanistan national cricket captains"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "64207",
+      "gold_title": "2018 IFAF U-19 World Championship",
+      "retrieved_pageids": [
+        "13327177",
+        "36098363",
+        "19182802",
+        "140801",
+        "1806428",
+        "154164",
+        "67883",
+        "51390",
+        "47258481",
+        "2916952",
+        "11383852",
+        "7239"
+      ],
+      "retrieved_titles": [
+        "athlete",
+        "fiba under-17 basketball world cup",
+        "belgrade trophy",
+        "sports injury",
+        "cricket world cup",
+        "fiba basketball world cup",
+        "2018",
+        "torbjørn sindballe",
+        "2019 fiba basketball world cup",
+        "fiba under-19 basketball world cup",
+        "2018 fifa world cup",
+        "team"
+      ],
+      "clean_titles": [
+        "athlete",
+        "fiba under-17 basketball world cup",
+        "belgrade trophy",
+        "sports injury",
+        "2018 fifa world cup",
+        "2019 fiba basketball world cup",
+        "2018",
+        "torbjørn sindballe",
+        "fiba basketball world cup",
+        "fiba under-19 basketball world cup",
+        "cricket world cup",
+        "team"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "26097",
+      "gold_title": "Idaho High School Activities Association",
+      "retrieved_pageids": [
+        "3766883",
+        "4079808",
+        "3780175",
+        "3766599",
+        "54337845"
+      ],
+      "retrieved_titles": [
+        "idaho high school activities association",
+        "1995 pan american games",
+        "play date (song)",
+        "highland high school (craigmont, idaho)",
+        "skyview high school (idaho)"
+      ],
+      "clean_titles": [
+        "idaho high school activities association",
+        "1995 pan american games",
+        "highland high school (craigmont, idaho)",
+        "play date (song)",
+        "skyview high school (idaho)"
+      ],
+      "hit": true,
+      "clean_hit": true,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "49335",
+      "gold_title": "Richie Burnett",
+      "retrieved_pageids": [
+        "27608285",
+        "8234184",
+        "6928256",
+        "63864",
+        "2158619"
+      ],
+      "retrieved_titles": [
+        "dicom",
+        "ronnie baxter",
+        "world darts trophy",
+        "richie burnett",
+        "british darts organisation"
+      ],
+      "clean_titles": [
+        "richie burnett",
+        "ronnie baxter",
+        "british darts organisation",
+        "world darts trophy"
+      ],
+      "hit": true,
+      "clean_hit": true,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "31224",
+      "gold_title": "Germany in the Eurovision Song Contest 2007",
+      "retrieved_pageids": [
+        "17766232",
+        "8287185",
+        "23566825",
+        "13641227",
+        "27478698",
+        "381243"
+      ],
+      "retrieved_titles": [
+        "stefan raab",
+        "germany in the eurovision song contest 2007",
+        "intelligence community whistleblower protection act",
+        "heinz rudolf kunze",
+        "naked official",
+        "united kingdom in the eurovision song contest"
+      ],
+      "clean_titles": [
+        "stefan raab",
+        "germany in the eurovision song contest 2007",
+        "intelligence community whistleblower protection act",
+        "heinz rudolf kunze",
+        "naked official",
+        "united kingdom in the eurovision song contest"
+      ],
+      "hit": true,
+      "clean_hit": true,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "22232",
+      "gold_title": "Artjoms Rudņevs",
+      "retrieved_pageids": [
+        "154164",
+        "49340",
+        "19818064"
+      ],
+      "retrieved_titles": [
+        "athlete",
+        "artjoms rudņevs",
+        "doping"
+      ],
+      "clean_titles": [
+        "athlete",
+        "artjoms rudņevs",
+        "doping"
+      ],
+      "hit": true,
+      "clean_hit": true,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "33320",
+      "gold_title": "1950 Ulster Trophy",
+      "retrieved_pageids": [
+        "1122041",
+        "70932779",
+        "3573208",
+        "72852"
+      ],
+      "retrieved_titles": [
+        "1952 ulster trophy",
+        "sidley austin",
+        "brooklyn nets",
+        "1950 french grand prix"
+      ],
+      "clean_titles": [
+        "1952 ulster trophy",
+        "sidley austin",
+        "brooklyn nets",
+        "1950 french grand prix"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "55737",
+      "gold_title": "Channel catfish",
+      "retrieved_pageids": [
+        "21139",
+        "77959349",
+        "63864",
+        "12467990",
+        "22782655",
+        "40860"
+      ],
+      "retrieved_titles": [
+        "ictalurus",
+        "commercial fisheries in the philippines",
+        "shoaling and schooling",
+        "channel",
+        "north america",
+        "dicom"
+      ],
+      "clean_titles": [
+        "ictalurus",
+        "commercial fisheries in the philippines",
+        "shoaling and schooling",
+        "channel",
+        "north america"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "33816",
+      "gold_title": "Loch Line",
+      "retrieved_pageids": [
+        "23546762",
+        "1531632"
+      ],
+      "retrieved_titles": [
+        "devlin v. smith",
+        "new york court of appeals"
+      ],
+      "clean_titles": [
+        "devlin v. smith",
+        "new york court of appeals"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "10832",
+      "gold_title": "Teresa Giudice",
+      "retrieved_pageids": [
+        "18994221",
+        "3003938",
+        "125676"
+      ],
+      "retrieved_titles": [
+        "woodland park, new jersey",
+        "hospital",
+        "sijil pelajaran malaysia"
+      ],
+      "clean_titles": [
+        "woodland park, new jersey",
+        "hospital",
+        "sijil pelajaran malaysia"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "93071",
+      "gold_title": "Luba Marks",
+      "retrieved_pageids": [
+        "621524",
+        "16746980",
+        "47749242",
+        "47967"
+      ],
+      "retrieved_titles": [
+        "raven wilkinson",
+        "authentication",
+        "original ballet russe",
+        "apostille convention"
+      ],
+      "clean_titles": [
+        "raven wilkinson",
+        "authentication",
+        "original ballet russe",
+        "apostille convention"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "48511",
+      "gold_title": "Pramila Bhatt",
+      "retrieved_pageids": [
+        "8258172",
+        "1281659",
+        "564006",
+        "19043821",
+        "1147947",
+        "36082813",
+        "381449",
+        "34870592",
+        "7239"
+      ],
+      "retrieved_titles": [
+        "1993 michael jackson sexual abuse allegations",
+        "concussions in american football",
+        "odi",
+        "board of control for cricket in india",
+        "football association of serbia",
+        "cricket world cup",
+        "men's t20 world cup",
+        "list of presidents of the board of control for cricket in india",
+        "espncricinfo"
+      ],
+      "clean_titles": [
+        "1993 michael jackson sexual abuse allegations",
+        "concussions in american football",
+        "espncricinfo",
+        "list of presidents of the board of control for cricket in india",
+        "board of control for cricket in india",
+        "football association of serbia",
+        "men's t20 world cup",
+        "cricket world cup",
+        "odi"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "43495",
+      "gold_title": "Lautaro Acosta",
+      "retrieved_pageids": [
+        "17507359",
+        "1230308",
+        "7614075",
+        "39242718",
+        "3714239",
+        "54929229",
+        "33399611",
+        "65074071",
+        "63864",
+        "243500",
+        "1024181"
+      ],
+      "retrieved_titles": [
+        "2013–14 copa del rey",
+        "juan román riquelme",
+        "racing de santander",
+        "sevilla fc puerto rico",
+        "víctor espárrago",
+        "sevilla fc in european football",
+        "sevilla fc (women)",
+        "dicom",
+        "boca juniors in international football",
+        "carlos tevez",
+        "sevilla fc"
+      ],
+      "clean_titles": [
+        "2013–14 copa del rey",
+        "juan román riquelme",
+        "racing de santander",
+        "sevilla fc puerto rico",
+        "víctor espárrago",
+        "sevilla fc in european football",
+        "sevilla fc (women)",
+        "boca juniors in international football",
+        "carlos tevez",
+        "sevilla fc"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "20258",
+      "gold_title": "Jan Długosz University",
+      "retrieved_pageids": [
+        "31797",
+        "1047629",
+        "95356",
+        "899111"
+      ],
+      "retrieved_titles": [
+        "university of zagreb",
+        "university of oxford",
+        "coroner",
+        "university of białystok"
+      ],
+      "clean_titles": [
+        "university of zagreb",
+        "university of oxford",
+        "coroner",
+        "university of białystok"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "81036",
+      "gold_title": "Jörg Sobiech",
+      "retrieved_pageids": [
+        "860860",
+        "3322576",
+        "55980489",
+        "410348",
+        "16930675",
+        "684915",
+        "31132723",
+        "19740790",
+        "8003479",
+        "690078",
+        "2110610",
+        "56095584"
+      ],
+      "retrieved_titles": [
+        "doping in sport",
+        "friedel rausch",
+        "german football association",
+        "deutscher fussball klub",
+        "mike büskens",
+        "2003 dfb-pokal final",
+        "football in germany",
+        "wada",
+        "doping in russia",
+        "dfb",
+        "fc schalke 04",
+        "2003 dfb-ligapokal"
+      ],
+      "clean_titles": [
+        "doping in sport",
+        "friedel rausch",
+        "deutscher fussball klub",
+        "german football association",
+        "mike büskens",
+        "2003 dfb-pokal final",
+        "football in germany",
+        "wada",
+        "doping in russia",
+        "dfb",
+        "fc schalke 04",
+        "2003 dfb-ligapokal"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "52172",
+      "gold_title": "Goddard Oxenbridge",
+      "retrieved_pageids": [
+        "26450590",
+        "39608638"
+      ],
+      "retrieved_titles": [
+        "robert oxenbridge (died 1574)",
+        "imaging biomarker"
+      ],
+      "clean_titles": [
+        "robert oxenbridge (died 1574)",
+        "imaging biomarker"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "57532",
+      "gold_title": "Abdul Bubakar",
+      "retrieved_pageids": [
+        "53523",
+        "11968",
+        "7214630"
+      ],
+      "retrieved_titles": [
+        "subject",
+        "imamate of futa toro",
+        "george washington"
+      ],
+      "clean_titles": [
+        "subject",
+        "imamate of futa toro",
+        "george washington"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "48150",
+      "gold_title": "Cook County Clerk",
+      "retrieved_pageids": [
+        "62329",
+        "2994579"
+      ],
+      "retrieved_titles": [
+        "systematic review",
+        "meta-analysis"
+      ],
+      "clean_titles": [
+        "systematic review",
+        "meta-analysis"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    },
+    {
+      "claim_id": "52957",
+      "gold_title": "Myripnois",
+      "retrieved_pageids": [
+        "65667453",
+        "62261660",
+        "56735680",
+        "30872162",
+        "956"
+      ],
+      "retrieved_titles": [
+        "dna barcoding",
+        "asteraceae",
+        "list of plant genus names with etymologies (a–c)",
+        "macrobiotus shonaicus",
+        "world flora online"
+      ],
+      "clean_titles": [
+        "dna barcoding",
+        "asteraceae",
+        "list of plant genus names with etymologies (a–c)",
+        "macrobiotus shonaicus",
+        "world flora online"
+      ],
+      "hit": false,
+      "clean_hit": false,
+      "dicom_ruined": false
+    }
+  ]
+}

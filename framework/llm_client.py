@@ -1,54 +1,90 @@
+"""
+LLM Client Base Classes
+
+Defines the abstract LLMClient interface that all provider-specific clients
+(OpenAI, OpenRouter, Groq, Gemini) must implement.
+"""
+
 import os
-import google.generativeai as genai
-from dotenv import load_dotenv
 from abc import ABC, abstractmethod
 
-# Load environment variables from .env file if present
-load_dotenv()
 
 class LLMClient(ABC):
+    """Abstract base class for all LLM provider clients."""
+
     @abstractmethod
     def generate(self, prompt: str, **kwargs) -> str:
-        pass
+        """
+        Generate a response from the LLM.
 
-class MockLLMClient(LLMClient):
-    def generate(self, prompt: str, **kwargs) -> str:
-        if "decompose" in prompt.lower():
-            return "1. First premise of the claim.\n2. Second premise of the claim."
-        elif "negotiate" in prompt.lower() or "select" in prompt.lower():
-            return "Based on relevance, I select Evidence 1 and Evidence 2."
-        else:
-            return "Mock response from LLM."
+        Args:
+            prompt: The user prompt to send.
+            **kwargs: Optional parameters (max_tokens, temperature overrides, etc.)
+
+        Returns:
+            The model's text response as a string.
+        """
+        raise NotImplementedError
+
+    @property
+    def provider_name(self) -> str:
+        """Return a short identifier for the provider (e.g. 'openai', 'openrouter')."""
+        return "unknown"
+
 
 class GeminiLLMClient(LLMClient):
-    def __init__(self, api_key: str = None, model_name: str = 'gemini-2.0-flash', system_prompt: str = None, temperature: float = 0.7):
+    """
+    Google Gemini LLM client via the google-generativeai SDK.
+    """
+
+    def __init__(self, api_key: str = None, model_name: str = "gemini-1.5-flash",
+                 system_prompt: str = None, temperature: float = 0.7):
         self.api_key = api_key or os.getenv("GEMINI_API_KEY")
         if not self.api_key:
             raise ValueError("GEMINI_API_KEY not found in environment variables.")
+
+        import google.generativeai as genai
         genai.configure(api_key=self.api_key)
+
+        generation_config = {"temperature": temperature}
+
         self.model_name = model_name
-        self.model = genai.GenerativeModel(model_name)
         self.system_prompt = system_prompt
         self.temperature = temperature
 
-    def generate(self, prompt: str, **kwargs) -> str:
-        # Extract max_tokens if provided
-        max_tokens = kwargs.get('max_tokens', None)
-        try:
-            # Prepend system prompt if provided
-            full_prompt = f"{self.system_prompt}\n\n{prompt}" if self.system_prompt else prompt
-            
-            config_params = {"temperature": self.temperature}
-            if max_tokens:
-                config_params["max_output_tokens"] = max_tokens
-
-            response = self.model.generate_content(
-                full_prompt,
-                generation_config=genai.types.GenerationConfig(
-                    **config_params
-                )
+        if system_prompt:
+            self._model = genai.GenerativeModel(
+                model_name=model_name,
+                generation_config=generation_config,
+                system_instruction=system_prompt
             )
-            return response.text
-        except Exception as e:
-            print(f"Error calling Gemini ({self.model_name}): {e}")
-            return f"Error generating response: {e}"
+        else:
+            self._model = genai.GenerativeModel(
+                model_name=model_name,
+                generation_config=generation_config
+            )
+
+    def generate(self, prompt: str, **kwargs) -> str:
+        max_retries = 10
+        base_delay = 2
+
+        last_exception = None
+        for attempt in range(max_retries):
+            try:
+                response = self._model.generate_content(prompt)
+                return response.text
+            except Exception as e:
+                last_exception = e
+                print(f"Error calling Gemini ({self.model_name}) - Attempt {attempt + 1}/{max_retries}: {e}")
+                if attempt < max_retries - 1:
+                    import time
+                    sleep_time = min(base_delay * (2 ** attempt), 60)
+                    time.sleep(sleep_time)
+                else:
+                    return f"Error generating response after {max_retries} attempts: {last_exception}"
+
+        return f"Error generating response: {last_exception}"
+
+    @property
+    def provider_name(self) -> str:
+        return "google"

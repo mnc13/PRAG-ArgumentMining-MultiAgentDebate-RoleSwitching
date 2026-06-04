@@ -1,28 +1,30 @@
 """
-Persona Registry for Multi-Agent Debate System  v3
+Persona Registry for Multi-Agent Debate System  v4
 
-Changes from v2:
-  - Expert witness system prompt and factory function overhauled.
-    The old prompt produced identical boilerplate testimony regardless of
-    round, requesting side, or current arguments (confirmed by logs: 4 of 7
-    expert calls in a single run returned word-for-word identical text).
+Changes from v3:
+  - Defense counsel prompt further tightened against the "over-strict
+    evidentiary bar" failure mode observed in FEVEROUS runs.  The old v3
+    prompt told Defense not to dismiss Wikipedia "as a blanket defence
+    strategy", but Defense kept finding a workaround: demanding primary
+    archival documents (registry entries, FIA timing sheets, branding
+    manuals) that are structurally unavailable in a Wikipedia-grounded
+    retrieval corpus.  The new prompt names this pattern explicitly and
+    instructs Defense to instead challenge whether the cited Wikipedia
+    passage *actually says what Plaintiff claims* — a legitimate and
+    correct evidentiary challenge.
 
-    Root cause: the expert was called with only a type description and the
-    full evidence list.  It had no information about (a) what arguments had
-    already been made, (b) what the requesting side needed answered, (c)
-    what round it was in, or (d) what the opposing counsel had argued.
+  - Expert witness factory (create_expert_witness_prompt) updated to include
+    an explicit instruction: if 2+ sub-claims are directly confirmed by
+    evidence, the expert must acknowledge this before discussing gaps,
+    rather than leading with the gap and burying the confirmations.
 
-    Fix: create_expert_witness_prompt() is a new factory that takes the
-    current round number, the requesting side's latest argument, the
-    opposing side's latest argument, and the requesting side's specific
-    question.  It instructs the expert to DIRECTLY RESPOND to those
-    arguments rather than summarising the entire evidence set from scratch.
+  - Inference-error guard: expert witness prompt now includes a "derived
+    statistics caution" block instructing the expert NOT to present
+    calculated reconstructions from match data as if they were
+    directly confirmed facts, and to label any such calculation as
+    "reconstructed estimate — not directly stated in evidence".
 
-  - Defense counsel persona system prompt made slightly more conservative
-    about attacking Wikipedia as a source, to avoid the "Wikipedia is
-    unreliable" loop that poisons every FEVEROUS claim.
-
-  - Domain notice injection unchanged from v2.
+  - Domain detection and domain notice injection unchanged from v3.
 """
 
 print("DEBUG: Loading personas.py from " + __file__)
@@ -66,11 +68,31 @@ _BASE_SLOTS = {
             "ALL discovery requests and arguments must be grounded in the specific "
             "domain of the claim — do NOT introduce unrelated topics such as medical "
             "records, injuries, or clinical data unless the claim itself is about medicine.\n\n"
-            "IMPORTANT: For encyclopaedic fact-checking claims (sports, biography, "
-            "taxonomy, history, geography), Wikipedia articles are the accepted "
-            "primary reference. Do NOT argue that Wikipedia is inherently unreliable "
-            "as a blanket defence strategy. Instead, focus on whether the specific "
-            "cited passages actually support or contradict the specific claim."
+
+            "EVIDENTIARY STANDARD — THIS IS CRITICAL:\n"
+            "This proceeding operates over a Wikipedia-grounded retrieval corpus. "
+            "The admitted evidence IS Wikipedia articles. Your job is to challenge "
+            "whether the specific cited Wikipedia PASSAGE actually supports the "
+            "specific claim — not to demand external primary sources that are "
+            "structurally unavailable.\n\n"
+            "The following are PROHIBITED as standalone arguments:\n"
+            "  - Demanding birth registry documents, archival records, or institutional "
+            "    branding manuals when the claim is an encyclopaedic fact.\n"
+            "  - Arguing Wikipedia is inherently unreliable as a blanket strategy.\n"
+            "  - Demanding primary source corroboration when a named Wikipedia article "
+            "    directly and specifically states the claimed fact.\n\n"
+            "Legitimate challenges you SHOULD make instead:\n"
+            "  - The cited passage does not actually say what Plaintiff claims it says.\n"
+            "  - The cited passage is ambiguous and could be read differently.\n"
+            "  - The passage covers a different time period, entity, or event than "
+            "    the claim specifies.\n"
+            "  - Multiple admitted passages contradict each other.\n"
+            "  - The specific numerical datum in the claim does not appear anywhere "
+            "    in the admitted evidence (distinct from demanding unavailable archives).\n\n"
+            "PARTIAL CLAIM RULE: If 2 out of 3 sub-claims are directly confirmed by "
+            "Wikipedia evidence, do not argue the claim is entirely unsupported. "
+            "Instead, acknowledge the confirmed sub-claims and focus your challenge "
+            "specifically on the unverified or contradicted sub-claim."
         )
     },
     "judge": {
@@ -105,7 +127,7 @@ _BASE_SLOTS = {
         ),
         "llm_provider": "openrouter",
         "llm_model": "nousresearch/hermes-3-llama-3.1-405b",
-        "temperature": 0.6   # Slightly higher to reduce repetition
+        "temperature": 0.6
     },
     "critic": {
         "name": "Critic Agent",
@@ -123,7 +145,7 @@ _BASE_SLOTS = {
 }
 
 # ─────────────────────────────────────────────────────────────────────
-# Expert witness prompt factory  (NEW in v3)
+# Expert witness prompt factory  (v4 — inference-error guard added)
 # ─────────────────────────────────────────────────────────────────────
 
 def create_expert_witness_prompt(
@@ -131,30 +153,31 @@ def create_expert_witness_prompt(
     claim: str,
     evidence_list: list,
     round_number: int,
-    requesting_side: str,          # "proponent" or "opponent"
-    requesting_side_argument: str, # the calling counsel's latest argument
-    opposing_argument: str,        # what the other side argued in this round
-    specific_question: str = "",   # optional targeted question from the counsel
+    requesting_side: str,
+    requesting_side_argument: str,
+    opposing_argument: str,
+    specific_question: str = "",
 ) -> str:
     """
-    Build a context-rich expert witness prompt that forces the expert to:
-      1. Respond to the SPECIFIC DISPUTE in this round, not summarise everything.
-      2. Directly address the strongest point made by the opposing counsel.
-      3. Add new analytical value not already present in the counsel arguments.
+    Build a context-rich expert witness prompt.
 
-    This prevents the boilerplate "based on the preponderance of evidence…"
-    recycling that was observed when experts received only the evidence list
-    with no argument context.
+    v4 additions over v3:
+      1. Confirmed-sub-claim-first rule: expert must enumerate confirmed
+         sub-claims BEFORE discussing gaps, preventing the "bury the
+         confirmations" pattern observed in 87874 (Ceserani).
+      2. Derived-statistics caution: expert must label any calculated
+         reconstruction as an estimate, not a directly confirmed fact.
+         Prevents the inference-error cascade observed in 85282 (Five Nations).
+      3. Wikipedia-standard reminder: expert must not demand primary archival
+         sources unavailable in the corpus.
     """
-    counsel_label = "Plaintiff Counsel" if requesting_side == "proponent" else "Defense Counsel"
-    opposing_label = "Defense Counsel" if requesting_side == "proponent" else "Plaintiff Counsel"
+    counsel_label  = "Plaintiff Counsel" if requesting_side == "proponent" else "Defense Counsel"
+    opposing_label = "Defense Counsel"   if requesting_side == "proponent" else "Plaintiff Counsel"
 
-    # Format evidence concisely
     ev_lines = []
     for i, ev in enumerate(evidence_list[:8], 1):
         if hasattr(ev, 'source_id'):
-            sid  = ev.source_id
-            text = ev.text[:200]
+            sid, text = ev.source_id, ev.text[:200]
         elif isinstance(ev, dict):
             sid  = ev.get('source_id', ev.get('id', f'ev_{i}'))
             text = ev.get('text', '')[:200]
@@ -183,13 +206,37 @@ ADMITTED EVIDENCE (summary):
 {opposing_label.upper()}'S ARGUMENT THIS ROUND (what you are being asked to respond to):
 {opposing_argument[:600] if opposing_argument else "(Not yet available)"}
 {specific_q_block}
-YOUR TASK AS EXPERT WITNESS:
-1. Identify the single most important factual or technical dispute between the two sides.
-2. Provide your expert analysis of THAT SPECIFIC DISPUTE based on the evidence.
-3. Do NOT simply restate what the counsels have already argued.
-4. Do NOT give a broad overview of all evidence — be targeted and specific.
-5. If the evidence is sufficient to resolve the dispute, say so clearly and explain why.
-6. If the evidence is genuinely insufficient on a specific point, say exactly WHAT is missing.
+YOUR TASK AS EXPERT WITNESS — follow these rules strictly:
+
+RULE 1 — CONFIRMED SUB-CLAIMS FIRST:
+Before discussing any evidentiary gaps, explicitly list which sub-claims of the
+claim ARE directly confirmed by the admitted evidence. A sub-claim is confirmed
+if a named evidence source directly states the fact. Do this even if your overall
+conclusion will be NOT SUPPORTED — you must acknowledge confirmed sub-claims first.
+
+RULE 2 — DERIVE WITH CAUTION:
+If you need to reconstruct a number, record, or statistic by calculation from
+match/event data (e.g. computing a win-loss record from individual results),
+label this explicitly as a "RECONSTRUCTED ESTIMATE — not directly stated in
+evidence". Do NOT present a calculated reconstruction as if it were directly
+confirmed. The Court treats reconstructed figures as moderate evidence only.
+
+RULE 3 — WIKIPEDIA IS SUFFICIENT:
+This proceeding uses Wikipedia-grounded evidence. Do NOT demand primary archival
+sources (registry documents, raw timing sheets, institutional records) that are
+not part of the retrieval corpus. A named Wikipedia article that directly states
+a fact IS sufficient verification. Focus on whether the cited passage actually
+says what it is claimed to say.
+
+RULE 4 — BE TARGETED:
+Respond to the SPECIFIC DISPUTE between the two sides. Do not summarise the
+entire evidence set from scratch. Add analytical value beyond what the counsels
+have already argued.
+
+RULE 5 — STATE GAPS PRECISELY:
+If evidence is missing on a specific point, state exactly WHAT is missing (e.g.
+"No admitted source states the qualifying lap time of 1:35.220 — only pole
+position is confirmed"). Do not overstate the gap as refuting the whole claim.
 
 Address the Court directly. Be concise (3–5 paragraphs maximum)."""
 

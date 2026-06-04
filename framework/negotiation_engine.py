@@ -7,10 +7,10 @@ from llm_client import LLMClient
 
 class EvidenceNegotiator:
     def __init__(self, retriever, miner_llm: LLMClient,
-                 admissibility_threshold: float = 0.20,   # LOWERED from 0.35
+                 admissibility_threshold: float = 0.30,   # LOWERED from 0.35
                  dispute_threshold: float = 0.05):
         """
-        admissibility_threshold lowered from 0.35 → 0.20.
+        admissibility_threshold lowered from 0.35 → 0.30.
 
         Rationale: FEVEROUS claims are verified against Wikipedia. Evidence
         chunks are 100-word windows; even a directly relevant chunk on the

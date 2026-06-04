@@ -1,0 +1,26 @@
+Processing Claim ID  : 91237
+Claim Text           : In 1979, Pat Bunch co-wrote the song Ten Thousand and One recorded by Connie Smith (born Constance June Meador; August 14, 1941), an American country music singer.
+  [ArgumentMiner] Extracted 1 premises from content (0 chars)
+
+Extracted Premises (1):
+  1. In 1979, Pat Bunch co-wrote the song Ten Thousand and One recorded by Connie Smith (born Constance June Meador; August 14, 1941), an American country music singer.
+
+Retrieved 5 unique evidence documents. Retrieval calls: 2
+  - Ev 1 [ID: 34910121_tbl0_row0]: [Wikipedia: Pat Bunch [Table]] Year: 1979 | Single Title: Ten Thousand and One | Recording Artist: C...
+  - Ev 2 [ID: 34910121_infobox0_0]: [Wikipedia: Pat Bunch [Infobox]] name: Pat Bunch | birth_name: Patricia Karen Bunch | death_place: C...
+  - Ev 3 [ID: 1089717_0]: [Wikipedia: Connie Smith] Constance June Stuart (née Meador; born August 14, 1941), known profession...
+  - Ev 4 [ID: 34910121_0]: [Wikipedia: Pat Bunch] Patricia Karen Bunch (June 22, 1939 – January 30, 2023) was an American count...
+  - Ev 5 [ID: 63740178_4]: [Wikipedia: Greatest Hits on Monument (Connie Smith album)] "Coming Around." The additional singles ...
+
+Sending to Verdict LLM (GPT via OpenRouter)...
+
+LLM Response:
+Evidence shows Pat Bunch is credited with the song "Ten Thousand and One" as a 1979 single recorded by Connie Smith, and Connie Smith's identity and birth details match the claim. Pat Bunch's Wikipedia entries identify her as a country songwriter active during that period. A Connie Smith album listing also references "Ten Thousand and One" as one of her singles.
+
+FINAL VERDICT: SUPPORT
+CONFIDENCE: 0.85
+REASONING: Pat Bunch's song table lists "Ten Thousand and One" as a 1979 single recorded by Connie Smith, supporting authorship credit and year [34910121_tbl0_row0]. Pat Bunch is documented as an American country music songwriter active from 1976 onward, consistent with co-writing credits for late-1970s singles [34910121_0] and [34910121_infobox0_0]. Connie Smith's page confirms her identity (born Constance June Meador; August 14, 1941), matching the artist named in the claim [1089717_0]. The Connie Smith album/singles summary also notes "Ten Thousand and One" among singles that charted, corroborating that she recorded the song [63740178_4]. Together, these entries support the claim that Pat Bunch co-wrote "Ten Thousand and One" recorded by Connie Smith in 1979 [34910121_tbl0_row0; 34910121_0; 1089717_0; 63740178_4].
+
+GROUND TRUTH : SUPPORT
+VERDICT      : SUPPORT  (correct=True)
+METRICS      : tok=1592 retr=2 ev=5 conf=0.85 time=252.28s

@@ -16,20 +16,45 @@ class JudicialPanel:
         "coherence of advocacy, and reliability of the sources and expert "
         "testimonies — regardless of whether the claim concerns medicine, "
         "sports, history, politics, or any other domain.\n\n"
-        "CRITICAL VERDICT RULE — INCONCLUSIVE USAGE:\n"
-        "INCONCLUSIVE is only permitted when evidence is genuinely absent from "
-        "the record OR when the evidence is fundamentally contradictory with no "
-        "clear preponderance for either side.\n"
-        "If you can identify which side has presented the stronger case from "
-        "the evidence before you, you MUST return SUPPORTED or NOT SUPPORTED "
-        "even if you are not perfectly certain. Reserve INCONCLUSIVE for cases "
-        "where it is truly impossible to determine which argument is stronger.\n\n"
-        "WIKIPEDIA SOURCE RULE:\n"
-        "For encyclopaedic fact-checking proceedings (sports records, biographical "
-        "facts, taxonomic classification, historical events, geographical facts), "
-        "Wikipedia articles ARE the primary authoritative source. Do NOT penalise "
-        "evidence solely because it originates from Wikipedia. Evaluate whether the "
-        "Wikipedia article is specific, named, and provides relevant factual content."
+
+        "EVIDENTIARY STANDARD FOR ENCYCLOPAEDIC CLAIMS:\n"
+        "This system operates over Wikipedia-grounded datasets (FEVEROUS, KILT "
+        "etc.). The admitted evidence is retrieved FROM Wikipedia. "
+        "Wikipedia articles ARE the authoritative primary source for encyclopaedic "
+        "fact-checking. A passage from a named Wikipedia article that directly "
+        "states a fact IS sufficient verification — do NOT penalise evidence solely "
+        "because it originates from Wikipedia, and do NOT demand primary archival "
+        "sources (registry documents, raw FIA timing sheets, institutional branding "
+        "manuals, etc.) that are not part of the retrieval corpus. "
+        "Evaluate whether the cited Wikipedia passage is specific, named, and "
+        "directly addresses the claim — if yes, treat it as strong evidence.\n\n"
+
+        "PARTIAL CLAIM VERIFICATION RULE:\n"
+        "When a claim contains multiple sub-claims (e.g. A AND B AND C), evaluate "
+        "the overall balance of evidence across ALL sub-claims:\n"
+        "  - If 2+ sub-claims are directly confirmed and 1 is merely unverified "
+        "    (not contradicted), the preponderance of evidence favours SUPPORTED.\n"
+        "  - Only return NOT SUPPORTED if at least one sub-claim is actively "
+        "    contradicted by evidence, or if the unverified sub-claim is the sole "
+        "    central factual assertion of the claim.\n"
+        "  - 'We could not find a source for X' is different from 'X is false'. "
+        "    Absence of evidence for one component does not automatically refute "
+        "    a claim where the other components are confirmed.\n\n"
+
+        "INCONCLUSIVE USAGE:\n"
+"INCONCLUSIVE should be used when the available evidence does not allow a "
+"confident determination in either direction. This may occur when:\n"
+"  - Relevant evidence is absent from the record.\n"
+"  - The retrieved evidence addresses the topic generally but does not "
+"    directly verify or contradict the the claim.\n"
+"  - The evidence presented by both sides is conflicting and neither side "
+"    clearly outweighs the other.\n"
+"  - The claim involves areas where expert interpretation or scientific "
+"    consensus is genuinely uncertain.\n"
+"Don't use INCONCLUSIVE just because evidence is imperfect or incomplete." 
+"If one side presents clearly stronger, more specific, "
+"or more directly relevant evidence on the core factual assertion of the claim, "
+"prefer SUPPORTED or NOT SUPPORTED accordingly."
     )
 
     def __init__(self):
@@ -81,8 +106,7 @@ class JudicialPanel:
         evidence_summary = self._extract_evidence_summary(
             debate_transcript, admitted_evidence)
         role_switch_summary = (self._format_role_switch(role_switch_history)
-                                if role_switch_history
-                                else "No role-switching performed.")
+                                if role_switch_history else "No role-switching performed.")
 
         judge_verdicts = []
         for judge in self.judges:
@@ -166,15 +190,28 @@ EVALUATION STAGES
 
 STAGE 1 – CASE RECONSTRUCTION
 Identify:
-- Core factual claim being adjudicated
+- Core factual claim being adjudicated (all sub-claims if compound)
+- Which sub-claims are directly confirmed by evidence
+- Which sub-claims are unverified (absent from evidence) vs actively contradicted
 - Main supporting arguments (Plaintiff)
 - Main counterarguments (Defense)
 
 STAGE 2 – EVIDENCE & TESTIMONY WEIGHTING
 Score: Evidence Strength (0–10)
-  7–10: Strong, specific, directly verifiable evidence
-  4–6 : Moderate evidence with some gaps or ambiguity
-  0–3 : Weak, irrelevant, or missing evidence
+  7–10: Named Wikipedia article directly states the fact; or multiple
+        independent sources converge on the same conclusion
+  4–6 : Evidence covers the general topic but the specific datum is not
+        explicitly stated; or a single source with minor ambiguity
+  0–3 : Evidence is missing, irrelevant, or only tangentially related
+
+WIKIPEDIA EVIDENCE NOTE: A passage from a named Wikipedia article that
+directly states a fact IS strong evidence (score 7–10 range). Do not
+score Wikipedia evidence as 4–6 or below solely because it is Wikipedia.
+
+DERIVED-STATISTIC NOTE: If standings, records, or numerical results were
+reconstructed by calculation from match/event data rather than quoted from
+an explicit table or official record, treat the reconstruction as MODERATE
+evidence (4–6) unless it is independently corroborated.
 
 STAGE 3 – LOGICAL COHERENCE
 Score: Argument Validity (0–10)
@@ -183,42 +220,52 @@ Score: Argument Validity (0–10)
   0–3 : Multiple fallacies or unsupported inferences
 
 STAGE 4 – SOURCE RELIABILITY
-(Applies to ALL domains, not just medical/scientific claims.)
-
 Score: Source Reliability (0–10)
-  7–10: Named, verifiable sources with specific facts (official records,
-        contemporary news, university archives, peer-reviewed papers,
-        government records, specific named Wikipedia articles with facts)
-  4–6 : General reference sources, secondary summaries, or sources lacking
-        specific details
-  0–3 : Unsourced assertions, anonymous content, or clearly speculative claims
+  7–10: Named Wikipedia articles with specific, directly relevant content;
+        official records; peer-reviewed papers; government records
+  4–6 : General summaries; secondary sources lacking specific details;
+        reconstructed/computed figures not directly quoted from a source
+  0–3 : Unsourced assertions; speculative claims; anonymous content
 
-IMPORTANT SOURCE NOTE: For encyclopaedic fact-checking (sports records,
-biographical facts, taxonomy, historical events), Wikipedia IS the primary
-authoritative source. Do NOT score Wikipedia evidence as low-reliability
-solely because it is Wikipedia. Score based on whether the cited Wikipedia
-article is specific, named, and provides relevant factual content.
+STAGE 5 – PARTIAL CLAIM VERIFICATION
+For compound claims (A AND B AND C):
+- List each sub-claim and its verification status: CONFIRMED / UNVERIFIED / CONTRADICTED
+- A sub-claim is CONFIRMED if a named Wikipedia passage directly states it
+- A sub-claim is UNVERIFIED if the evidence does not address it (absence ≠ contradiction)
+- A sub-claim is CONTRADICTED if evidence explicitly states the opposite
 
-STAGE 5 – DISCOVERY RIGOR & TRANSPARENCY
-Analyse P-RAG metrics:
-- Query evolution and evidence novelty over rounds
-- Court query refinement impact on evidence quality
+Apply the following decision rule:
+  - 2+ CONFIRMED, 0 CONTRADICTED → favour SUPPORTED
+  - 1+ CONTRADICTED → favour NOT SUPPORTED
+  - All UNVERIFIED → INCONCLUSIVE or NOT SUPPORTED depending on evidence strength
 
 STAGE 6 – JUDICIAL VERDICT
 
-MANDATORY DECISION RULE:
-  SUPPORTED     : Claim is supported by the available evidence and arguments
-  NOT SUPPORTED : Claim is not adequately supported or is refuted
-  INCONCLUSIVE  : Use ONLY if evidence is genuinely absent OR if evidence is
-                  fundamentally contradictory with no clear preponderance.
-                  If one side has clearly presented stronger evidence or
-                  arguments, you MUST choose SUPPORTED or NOT SUPPORTED.
-                  Do NOT use INCONCLUSIVE as a hedge when the evidence
-                  points in one direction, even imperfectly.
+MANDATORY DECISION RULES:
+
+  SUPPORTED     : The preponderance of directly admitted Wikipedia evidence
+                  supports the claim. For compound claims: most sub-claims
+                  confirmed, none contradicted.
+
+  NOT SUPPORTED : Evidence directly contradicts at least one key sub-claim, OR
+                  the evidence pool entirely fails to address the claim, OR
+                  a reconstructed statistic is the sole basis and the Defense
+                  has challenged its arithmetic without rebuttal.
+
+  INCONCLUSIVE  : Use when (a) evidence covers the topic but the specific
+                  datum is absent from the entire evidence pool; OR (b) the claim
+                  involves scientific uncertainty where expert consensus is
+                  itself divided; OR (c) evidence is contradictory with 
+                  no clear preponderance. Do NOT use INCONCLUSIVE if one side clearly has stronger
+                  evidence — choose SUPPORTED or NOT SUPPORTED instead.
 
 Respond ONLY in valid JSON — no markdown, no preamble:
 {{
-  "claim_summary": "Brief summary of the core claim and debate",
+  "claim_summary": "Brief summary of the core claim",
+  "sub_claim_verification": {{
+    "sub_claim_1": "CONFIRMED / UNVERIFIED / CONTRADICTED — brief note",
+    "sub_claim_2": "CONFIRMED / UNVERIFIED / CONTRADICTED — brief note"
+  }},
   "evidence_strength": <integer 0-10>,
   "argument_validity": <integer 0-10>,
   "source_reliability": <integer 0-10>,
@@ -253,12 +300,13 @@ Respond ONLY in valid JSON — no markdown, no preamble:
         except Exception as e:
             print(f"  [WARNING] Failed to parse judge response: {e}")
             vd = {
-                "claim_summary":     f"Evaluation of: {claim}",
-                "evidence_strength": 5,
-                "argument_validity": 5,
-                "source_reliability":5,
-                "verdict":           "INCONCLUSIVE",
-                "reasoning":         "Unable to parse structured evaluation.",
+                "claim_summary":          f"Evaluation of: {claim}",
+                "sub_claim_verification": {},
+                "evidence_strength":      5,
+                "argument_validity":      5,
+                "source_reliability":     5,
+                "verdict":                "INCONCLUSIVE",
+                "reasoning":              "Unable to parse structured evaluation.",
             }
 
         vd['judge_name'] = judge['name']
@@ -272,8 +320,8 @@ Respond ONLY in valid JSON — no markdown, no preamble:
     def _aggregate_verdicts(self, judge_verdicts: List[Dict]) -> Dict:
         vote_counts    = Counter(v['verdict'] for v in judge_verdicts)
         final_verdict  = vote_counts.most_common(1)[0][0]
-        majority_judges  = [v for v in judge_verdicts if v['verdict'] == final_verdict]
-        dissenting_judges= [v for v in judge_verdicts if v['verdict'] != final_verdict]
+        majority_judges   = [v for v in judge_verdicts if v['verdict'] == final_verdict]
+        dissenting_judges = [v for v in judge_verdicts if v['verdict'] != final_verdict]
 
         return {
             "final_verdict":      final_verdict,

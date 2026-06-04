@@ -66,10 +66,26 @@ class OpenRouterLLMClient(LLMClient):
                 if kwargs.get('reasoning_enabled', False) or "deepseek" in self.model_name.lower():
                      data["reasoning"] = {"enabled": True}
 
+                # Reasoning models (gpt-5-mini, o1, o3-mini, etc.) consume reasoning tokens
+                # BEFORE producing output. A 512-token limit means 0 tokens left for content.
+                # Enforce a minimum of 8192 completion tokens for these models.
+                _is_reasoning_model = any(tag in self.model_name.lower()
+                                          for tag in ["gpt-5", "o1", "o3", "o4"])
                 if 'max_completion_tokens' in kwargs:
-                    data['max_completion_tokens'] = kwargs['max_completion_tokens']
+                    tok_val = kwargs['max_completion_tokens']
+                    if _is_reasoning_model:
+                        tok_val = max(tok_val, 8192)
+                    data['max_completion_tokens'] = tok_val
                 elif 'max_tokens' in kwargs:
-                    data['max_tokens'] = kwargs['max_tokens']
+                    tok_val = kwargs['max_tokens']
+                    if _is_reasoning_model:
+                        # Reasoning models use max_completion_tokens, not max_tokens
+                        data['max_completion_tokens'] = max(tok_val, 8192)
+                    else:
+                        data['max_tokens'] = tok_val
+                elif _is_reasoning_model:
+                    # No limit specified at all — still set a safe floor for reasoning models
+                    data['max_completion_tokens'] = 8192
 
                 response = requests.post(
                     url=self.api_url,

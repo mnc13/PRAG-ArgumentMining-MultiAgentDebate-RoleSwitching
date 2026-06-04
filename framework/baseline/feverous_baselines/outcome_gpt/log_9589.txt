@@ -1,0 +1,27 @@
+Processing Claim ID  : 9589
+Claim Text           : The actors of Tv Series Aifric were Barry Barnes who was the lead role, Gráinne Bleasdale who played Aifric's best friend and Sláine Hutchinson was Aifric's rival.
+  [ArgumentMiner] Extracted 1 premises from content (0 chars)
+
+Extracted Premises (1):
+  1. The actors of Tv Series Aifric were Barry Barnes who was the lead role, Gráinne Bleasdale who played Aifric's best friend and Sláine Hutchinson was Aifric's rival.
+
+Retrieved 6 unique evidence documents. Retrieval calls: 2
+  - Ev 1 [ID: 49211472_sec_filmography_1]: [Wikipedia: Paul Mercier (playwright) § Filmography] (2015), We Ourselves (2018) He was the director...
+  - Ev 2 [ID: 49211472_sec_career_1]: [Wikipedia: Paul Mercier (playwright) § Career] and an Edinburgh Fringe First Award. His 1998 Dublin...
+  - Ev 3 [ID: 7892299_3]: [Wikipedia: Aifric] He is an intelligent and quirky child with a keen interest in Eastern philosophy...
+  - Ev 4 [ID: 7892299_sec_cast_and_characters_0]: [Wikipedia: Aifric § Cast and characters] Clíona Ní Chiosáin as Aifric de Spáinn, a shy and quirky t...
+  - Ev 5 [ID: 49211472_8]: [Wikipedia: Paul Mercier (playwright)] We Ourselves (2018) He was the director and co-creator of the...
+  - Ev 6 [ID: 46194440_tbl0_row7]: [Wikipedia: Nunawading Spectres [Table]] NBL Coach of the Year: | Barry Barnes (1980)...
+
+Sending to Verdict LLM (GPT via OpenRouter)...
+
+LLM Response:
+Evidence shows that Barry Barnes is credited as Tom de Spáinn (Aifric’s father), not the title character; Clíona Ní Chiosáin is listed as Aifric, the lead (ID: 7892299_sec_cast_and_characters_0). The entries also list Gráinne Bleasdale as Sophie, Aifric’s best friend, and Sláine Hutchinson as Claudia, Aifric’s rival (ID: 7892299_3).
+
+FINAL VERDICT: REFUTE
+CONFIDENCE: 0.85
+REASONING: Clíona Ní Chiosáin is identified as Aifric, the show's lead character (ID: 7892299_sec_cast_and_characters_0). Barry Barnes is credited as Tom de Spáinn, Aifric and Traolach's father, not the lead (ID: 7892299_3; ID: 7892299_sec_cast_and_characters_0). Gráinne Bleasdale is explicitly listed as Sophie, Aifric's best friend (ID: 7892299_3). Sláine Hutchinson is listed as Claudia, described as Aifric's blonde rival (ID: 7892299_3). Because the claim incorrectly identifies Barry Barnes as the lead while the sources credit Clíona Ní Chiosáin as Aifric, the overall claim is refuted (ID: 7892299_sec_cast_and_characters_0; ID: 7892299_3).
+
+GROUND TRUTH : REFUTE
+VERDICT      : REFUTE  (correct=True)
+METRICS      : tok=1659 retr=2 ev=6 conf=0.85 time=123.96s

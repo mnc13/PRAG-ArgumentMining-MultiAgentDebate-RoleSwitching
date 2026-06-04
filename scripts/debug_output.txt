@@ -1,0 +1,43 @@
+﻿python : Traceback (most recent call last):
+At line:1 char:1
++ python scripts\debug_eval.py 2>&1 | Out-File -Encoding utf8 
+scripts\d ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most re 
+   cent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "E:\thesis(feverous)\PRAG-ArgumentMining-MultiAgentDebate
+-RoleSwitching\scripts\debug_eval.py", line 19, in <module>
+    print(f"  [{c['claim_id']}] '{c['gold_title']}'{flag}")
+  File "C:\Users\Asus\AppData\Local\Programs\Python\Python312\Li
+b\encodings\cp1252.py", line 19, in encode
+    return 
+codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character 
+'\u0304' in position 13: character maps to <undefined>
+HITS (11):
+  [17372] '1959 Florida State Seminoles football team'
+  [34375] '4902 Thessandrus'
+  [91237] 'Pat Bunch'
+  [34479] 'Tramore'
+  [12757] 'Pixies (band)'
+  [5738] 'Trent Reznor discography'
+  [73457] 'Monroeville Mall'
+  [25417] 'Amanda Barrie'
+  [26097] 'Idaho High School Activities Association'
+  [49335] 'Richie Burnett'
+  [31224] 'Germany in the Eurovision Song Contest 2007'
+
+MISSES (53):
+  [85464] 'Lifson�Roig model' *** NEAR MISS ***
+         retrieved: ['lifson', 'roig', 'theory', 'dicom']
+  [81823] 'Erasmus Quellinus I'
+  [9589] 'Aifric' *** NEAR MISS ***
+         retrieved: ['dicom', 'aifric campbell', 'sophie', 'aifric (name)']
+  [69702] 'Duane Laflin'
+  [48413] '2001 Malaysian Grand Prix'
+  [46230] 'Madura State Polytechnic'
+  [69329] '2005 Montana Grizzlies football team'
